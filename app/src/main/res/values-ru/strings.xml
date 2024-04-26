@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">ReminderApp</string>
+    <string name="enter_reminder_name">Введите напоминание</string>
+    <string name="enter_reminder_description">Введите описание напоминания</string>
+    <string name="periodic_reminder">Периодическое напоминание</string>
+    <string name="onetime_reminder">Единоразовое напоминание</string>
+    <string name="choose_time">Выбрать время</string>
+    <string name="save">Сохранить</string>
+</resources>

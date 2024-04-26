@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">ReminderApp</string>
+    <string name="enter_reminder_name">Enter reminder</string>
+    <string name="stub" translatable="false">STUB!</string>
+    <string name="enter_reminder_description">Enter reminder description</string>
+    <string name="periodic_reminder">Periodic reminder</string>
+    <string name="onetime_reminder">One time reminder</string>
+    <string name="choose_time">Choose a time</string>
+    <string name="save">Save</string>
 </resources>
