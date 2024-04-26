@@ -10,18 +10,18 @@ import android.widget.RadioButton
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import com.example.reminderapp.databinding.ReminderCreaterScreenBinding
+import com.example.reminderapp.databinding.ReminderCreatorScreenBinding
 
 class TempFragment(private val actContext: Context) : Fragment() {
 
-    private lateinit var binding: ReminderCreaterScreenBinding
+    private lateinit var binding: ReminderCreatorScreenBinding
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = ReminderCreaterScreenBinding.inflate(inflater, container, false)
+        binding = ReminderCreatorScreenBinding.inflate(inflater, container, false)
 
         val testColors = listOf(
             SpinnerColor(ContextCompat.getColor(actContext, R.color.red)),
