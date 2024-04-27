@@ -3,9 +3,6 @@ pluginManagement {
         google()
         mavenCentral()
         gradlePluginPortal()
-
-        // dependency for MPAndroidChart
-        maven { url 'https://jitpack.io' }
     }
 }
 dependencyResolutionManagement {
@@ -13,9 +10,6 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
-
-        // Same as upper url usage
-        maven { url 'https://jitpack.io' }
     }
 }
 
