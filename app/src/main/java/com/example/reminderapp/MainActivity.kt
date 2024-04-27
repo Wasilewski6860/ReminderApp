@@ -15,8 +15,12 @@ class MainActivity : AppCompatActivity() {
 
         binding.apply {
 
+//            supportFragmentManager.beginTransaction()
+//                .replace(R.id.mainHolder, TempCreatorFragment(this@MainActivity))
+//                .commit()
+
             supportFragmentManager.beginTransaction()
-                .replace(R.id.mainHolder, TempFragment(this@MainActivity))
+                .replace(R.id.mainHolder, TempStatisticFragment(this@MainActivity))
                 .commit()
 
         }
