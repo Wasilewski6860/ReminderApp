@@ -15,3 +15,5 @@ dependencyResolutionManagement {
 
 rootProject.name = "ReminderApp"
 include ':app'
+include ':data'
+include ':domain'
