@@ -1,4 +1,11 @@
 package com.example.domain.repository
 
-class TaskRepository {
+import com.example.domain.model.Task
+
+interface TaskRepository {
+
+    fun saveTask(task: Task)
+
+    suspend fun getAllTasks(): MutableList<Task>
+
 }

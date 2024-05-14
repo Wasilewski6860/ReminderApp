@@ -1,4 +1,4 @@
-package com.example.reminderapp
+package com.example.reminderapp.fragments
 
 import android.content.Context
 import android.os.Bundle
@@ -8,15 +8,19 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.RadioButton
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import com.example.reminderapp.R
 import com.example.reminderapp.databinding.ReminderCreatorScreenBinding
-import com.example.reminderapp.fragments.SpinnerColor
-import com.example.reminderapp.fragments.SpinnerTimeText
+import com.example.reminderapp.viewmodels.creatorscreen.CreatorViewModel
 
-class TempFragment(private val actContext: Context) : Fragment() {
+class TaskCreatorFragment(private val actContext: Context) : Fragment() {
 
     private lateinit var binding: ReminderCreatorScreenBinding
+
+    private lateinit var viewModel: CreatorViewModel // solution without di
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -24,6 +28,8 @@ class TempFragment(private val actContext: Context) : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = ReminderCreatorScreenBinding.inflate(inflater, container, false)
+
+        viewModel = ViewModelProvider(this)[CreatorViewModel::class.java]
 
         val testColors = listOf(
             SpinnerColor(ContextCompat.getColor(actContext, R.color.red)),
@@ -60,6 +66,17 @@ class TempFragment(private val actContext: Context) : Fragment() {
                         reminderTimeSpinnerHolder.visibility = View.GONE
                         reminderDateAndTimePickersButton.visibility = View.VISIBLE
                     }
+                }
+            }
+
+            reminderSaveButton.setOnClickListener {
+                // Temp condition check (need add time and date condition checkers)
+                if (reminderNameEditTextView.text == null) {
+                    Toast.makeText(
+                        actContext, "Reminder name field cannot be empty", Toast.LENGTH_SHORT
+                    ).show()
+                } else {
+                    viewModel.saveTask()
                 }
             }
 
@@ -130,10 +147,10 @@ class TempFragment(private val actContext: Context) : Fragment() {
 
 }
 
-//data class SpinnerColor(
-//    val color: Int
-//)
-//
-//data class SpinnerTimeText(
-//    val time: String
-//)
+data class SpinnerColor(
+    val color: Int
+)
+
+data class SpinnerTimeText(
+    val time: String
+)
