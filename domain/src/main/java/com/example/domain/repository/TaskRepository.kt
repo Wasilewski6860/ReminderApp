@@ -8,4 +8,10 @@ interface TaskRepository {
 
     suspend fun getAllTasks(): MutableList<Task>
 
+    fun getTask(/*some params here i guess*/): Task
+
+    fun deleteTask(task: Task)
+
+    fun deleteAllCurrentTasks()
+
 }

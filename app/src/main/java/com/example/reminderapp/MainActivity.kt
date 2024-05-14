@@ -3,10 +3,8 @@ package com.example.reminderapp
 import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.example.domain.repository.TaskRepository
-import com.example.domain.use_case.SaveTaskUseCase
 import com.example.reminderapp.databinding.ActivityMainBinding
-import com.example.reminderapp.fragments.MainFragment
+import com.example.reminderapp.fragments.mainfragment.MainFragment
 
 class MainActivity : AppCompatActivity() {
 

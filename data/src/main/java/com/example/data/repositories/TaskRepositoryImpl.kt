@@ -14,4 +14,20 @@ class TaskRepositoryImpl : TaskRepository {
         return mutableListOf() // <-- temp code string nvm
     }
 
+    override fun getTask(): Task {
+        return Task(
+            reminderName = "",
+            reminderDescription = "",
+            reminderCardBackgroundColor = 0
+        ) // <-- temp code tho
+    }
+
+    override fun deleteTask(task: Task) {
+
+    }
+
+    override fun deleteAllCurrentTasks() {
+
+    }
+
 }
