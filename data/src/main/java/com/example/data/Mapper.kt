@@ -1,4 +1,8 @@
 package com.example.data
 
-interface Mapper {
+interface Mapper<E, D> {
+
+    fun mapFromEntity(type: E): D
+
+    fun mapToEntity(type: D): E
 }

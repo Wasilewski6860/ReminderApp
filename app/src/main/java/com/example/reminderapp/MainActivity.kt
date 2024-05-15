@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.example.reminderapp.databinding.ActivityMainBinding
-import com.example.reminderapp.fragments.mainfragment.MainFragment
 
 class MainActivity : AppCompatActivity() {
 
@@ -18,10 +17,9 @@ class MainActivity : AppCompatActivity() {
 
         binding.apply {
 
-            supportFragmentManager
-                .beginTransaction()
-                .replace(R.id.mainHolder, MainFragment())
-                .commit()
+//            supportFragmentManager.beginTransaction()
+//                .replace(R.id.mainHolder, TempFragment(this@MainActivity))
+//                .commit()
 
         }
     }
