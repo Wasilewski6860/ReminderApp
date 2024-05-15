@@ -1,12 +1,5 @@
 package com.example.domain.use_case
 
-import com.example.domain.model.Task
-import com.example.domain.repository.TaskRepository
-
-class DeleteTaskUseCase(private val taskRepository: TaskRepository) {
-
-    fun execute(task: Task) {
-        taskRepository.deleteTask(task = task)
-    }
+class DeleteTaskUseCase() {
 
 }
