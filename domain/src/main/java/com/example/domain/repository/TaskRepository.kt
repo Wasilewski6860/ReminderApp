@@ -1,17 +1,17 @@
 package com.example.domain.repository
 
 import com.example.domain.model.Task
+import com.example.domain.model.TaskPeriodType
 
 interface TaskRepository {
 
-    fun saveTask(task: Task)
+    suspend fun addTask(task : Task)
+    suspend fun editTask(task : Task)
+    suspend fun deleteTask(task : Task)
+    suspend fun deleteAll()
+    suspend fun getTask(id : Int) : Task
+    suspend fun getAllTasksByPeriodType(period: TaskPeriodType)  : List<Task>
+    suspend fun getAllTasks()  : List<Task>
 
-    suspend fun getAllTasks(): MutableList<Task>
-
-    fun getTask(/*some params here i guess*/): Task
-
-    fun deleteTask(task: Task)
-
-    fun deleteAllCurrentTasks()
 
 }

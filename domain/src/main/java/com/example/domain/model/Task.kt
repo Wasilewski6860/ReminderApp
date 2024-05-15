@@ -1,9 +1,12 @@
 package com.example.domain.model
 
-data class Task(
-    var reminderName: String,
-    var reminderDescription: String = "",
-    var reminderCardBackgroundColor: Int
-)
 
-// Need add time and date as args here somehow
+data class Task(
+    val id: Int,
+    val name: String,
+    val description: String,
+    val timestamp: Long,
+    val timeTarget: Long,
+    val type: TaskPeriodType,
+    val color: Int,
+)

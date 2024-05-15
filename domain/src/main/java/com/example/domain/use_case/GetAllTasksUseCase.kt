@@ -1,5 +1,9 @@
 package com.example.domain.use_case
 
-class GetAllTasksUseCase() {
+import com.example.domain.model.TaskPeriodType
+import com.example.domain.repository.TaskRepository
 
+class GetAllTasksUseCase(private val taskRepository: TaskRepository) {
+
+    suspend fun execute() = taskRepository.getAllTasks()
 }

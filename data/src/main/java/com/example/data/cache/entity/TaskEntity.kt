@@ -1,4 +1,17 @@
 package com.example.data.cache.entity
 
-class TaskEntity {
-}
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import androidx.room.TypeConverters
+
+@Entity(tableName = "task")
+data class TaskEntity(
+    @PrimaryKey(autoGenerate = false) val id: Int,
+    @ColumnInfo(name = "name") val name: String,
+    @ColumnInfo(name = "description") val description: String,
+    @ColumnInfo(name = "timestamp") val timestamp: Long,
+    @ColumnInfo(name = "time_target") val timeTarget: Long,
+    @ColumnInfo(name = "periodic_type") val periodicType: String,
+    @ColumnInfo(name = "color") val color: Int,
+)
