@@ -22,7 +22,7 @@ interface TaskDao {
     @Query("SELECT * FROM task WHERE id =:id")
     suspend fun getTask(id: Int): TaskEntity
 
-    @Query("SELECT * FROM task WHERE type =:period")
+    @Query("SELECT * FROM task WHERE periodic_type =:period")
     suspend fun getAllTasksByPeriodType(period: String): List<TaskEntity>
 
     @Query("DELETE FROM task")
