@@ -5,13 +5,18 @@ import com.example.domain.model.TaskPeriodType
 
 interface TaskRepository {
 
-    suspend fun addTask(task : Task)
-    suspend fun editTask(task : Task)
-    suspend fun deleteTask(task : Task)
-    suspend fun deleteAll()
-    suspend fun getTask(id : Int) : Task
-    suspend fun getAllTasksByPeriodType(period: TaskPeriodType)  : List<Task>
-    suspend fun getAllTasks()  : List<Task>
+    suspend fun addTask(task: Task)
 
+    suspend fun editTask(task: Task)
+
+    suspend fun deleteTask(task: Task)
+
+    suspend fun deleteAll()
+
+    suspend fun getTask(id: Int): Task
+
+    suspend fun getAllTasksByPeriodType(period: TaskPeriodType): List<Task>
+
+    suspend fun getAllTasks(): List<Task>
 
 }

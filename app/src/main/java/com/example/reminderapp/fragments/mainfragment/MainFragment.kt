@@ -5,18 +5,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.reminderapp.databinding.MainFragmentBinding
 import com.example.reminderapp.fragments.mainfragment.recyclerview.MainScreenRecyclerViewAdapter
 import com.example.reminderapp.viewmodels.mainscreen.MainViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainFragment : Fragment(), MainScreenRecyclerViewAdapter.OnItemClickListener {
 
     private lateinit var binding: MainFragmentBinding
     private val adapter = MainScreenRecyclerViewAdapter(this)
 
-    private lateinit var viewModel: MainViewModel // solution without di
+    private val viewModel by viewModel<MainViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -25,16 +25,13 @@ class MainFragment : Fragment(), MainScreenRecyclerViewAdapter.OnItemClickListen
     ): View {
         binding = MainFragmentBinding.inflate(inflater, container, false)
 
-        viewModel = ViewModelProvider(this)[MainViewModel::class.java] // temp solution
         // viewModel.getAllTasks() <-- ??
 
         binding.apply {
 
-            // Not sure about context here tbh (may be we can transmit context from activity)
             mainScreenRecyclerView.layoutManager = GridLayoutManager(context, 1)
             mainScreenRecyclerView.adapter = adapter
 
-            // idk about 'viewLifecycleOwner'
             viewModel.getTasksListLiveData().observe(viewLifecycleOwner) { itemsList ->
                 // Recycler view adding element process here
                 adapter.fillRecyclerWithFullItemsList(itemsList)

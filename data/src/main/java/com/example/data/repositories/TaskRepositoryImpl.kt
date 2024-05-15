@@ -5,7 +5,8 @@ import com.example.domain.model.Task
 import com.example.domain.model.TaskPeriodType
 import com.example.domain.repository.TaskRepository
 
-class TaskRepositoryImpl(private val taskStorage: TaskStorage): TaskRepository {
+class TaskRepositoryImpl(private val taskStorage: TaskStorage) : TaskRepository {
+
     override suspend fun addTask(task: Task) = taskStorage.addTask(task)
 
     override suspend fun editTask(task: Task) = taskStorage.editTask(task)
@@ -16,6 +17,9 @@ class TaskRepositoryImpl(private val taskStorage: TaskStorage): TaskRepository {
 
     override suspend fun getTask(id: Int): Task = taskStorage.getTask(id)
 
-    override suspend fun getAllTasksByPeriodType(period: TaskPeriodType): List<Task>  = taskStorage.getAllTasksByPeriodType(period.name)
+    override suspend fun getAllTasksByPeriodType(period: TaskPeriodType): List<Task> =
+        taskStorage.getAllTasksByPeriodType(period.name)
+
     override suspend fun getAllTasks(): List<Task> = taskStorage.getAllTasks()
+
 }

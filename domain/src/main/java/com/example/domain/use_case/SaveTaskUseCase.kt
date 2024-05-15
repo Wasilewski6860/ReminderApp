@@ -5,8 +5,8 @@ import com.example.domain.repository.TaskRepository
 
 class SaveTaskUseCase(private val taskRepository: TaskRepository) {
     
-    fun execute(task: Task) {
-        taskRepository.saveTask(task = task)
+    suspend fun execute(task: Task) {
+        taskRepository.addTask(task)
     }
     
 }

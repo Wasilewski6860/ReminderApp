@@ -17,9 +17,7 @@ class MainActivity : AppCompatActivity() {
 
         binding.apply {
 
-//            supportFragmentManager.beginTransaction()
-//                .replace(R.id.mainHolder, TempFragment(this@MainActivity))
-//                .commit()
+
 
         }
     }

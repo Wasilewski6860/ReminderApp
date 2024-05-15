@@ -8,5 +8,5 @@ data class Task(
     val timestamp: Long,
     val timeTarget: Long,
     val type: TaskPeriodType,
-    val color: Int,
+    val color: Int
 )

@@ -3,9 +3,7 @@ package com.example.data.cache
 import com.example.data.Mapper
 import com.example.data.cache.entity.TaskEntity
 import com.example.data.toPeriodicType
-import com.example.domain.model.Exception
 import com.example.domain.model.Task
-import com.example.domain.model.TaskPeriodType
 
 class TaskCacheMapper: Mapper<TaskEntity, Task> {
     override fun mapFromEntity(type: TaskEntity): Task {

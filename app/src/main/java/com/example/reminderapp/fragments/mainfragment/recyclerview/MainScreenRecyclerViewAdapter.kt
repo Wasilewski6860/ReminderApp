@@ -29,7 +29,7 @@ class MainScreenRecyclerViewAdapter(
         }
 
         fun bind(item: Task) = with(binding) {
-            reminderRcItemName.text = item.reminderName
+            reminderRcItemName.text = item.name // add other
             // reminderRcItemTime.text = 'somehow add time'
         }
     }

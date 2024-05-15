@@ -1,4 +1,4 @@
-package com.example.reminderapp.fragments
+package com.example.reminderapp.fragments.creatorfragment
 
 import android.content.Context
 import android.os.Bundle
@@ -11,16 +11,16 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import com.example.reminderapp.R
 import com.example.reminderapp.databinding.ReminderCreatorScreenBinding
 import com.example.reminderapp.viewmodels.creatorscreen.CreatorViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class TaskCreatorFragment(private val actContext: Context) : Fragment() {
 
     private lateinit var binding: ReminderCreatorScreenBinding
 
-    private lateinit var viewModel: CreatorViewModel // solution without di
+    private val viewModel by viewModel<CreatorViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -28,8 +28,6 @@ class TaskCreatorFragment(private val actContext: Context) : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = ReminderCreatorScreenBinding.inflate(inflater, container, false)
-
-        viewModel = ViewModelProvider(this)[CreatorViewModel::class.java]
 
         val testColors = listOf(
             SpinnerColor(ContextCompat.getColor(actContext, R.color.red)),
