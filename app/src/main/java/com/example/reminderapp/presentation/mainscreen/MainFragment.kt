@@ -1,4 +1,4 @@
-package com.example.reminderapp.fragments.mainfragment
+package com.example.reminderapp.presentation.mainscreen
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,8 +7,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.reminderapp.databinding.MainFragmentBinding
-import com.example.reminderapp.fragments.mainfragment.recyclerview.MainScreenRecyclerViewAdapter
-import com.example.reminderapp.viewmodels.mainscreen.MainViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainFragment : Fragment(), MainScreenRecyclerViewAdapter.OnItemClickListener {

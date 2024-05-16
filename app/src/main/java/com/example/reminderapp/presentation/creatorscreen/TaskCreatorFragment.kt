@@ -1,4 +1,4 @@
-package com.example.reminderapp.fragments.creatorfragment
+package com.example.reminderapp.presentation.creatorscreen
 
 import android.content.Context
 import android.os.Bundle
@@ -13,7 +13,6 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.example.reminderapp.R
 import com.example.reminderapp.databinding.ReminderCreatorScreenBinding
-import com.example.reminderapp.viewmodels.creatorscreen.CreatorViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class TaskCreatorFragment(private val actContext: Context) : Fragment() {
