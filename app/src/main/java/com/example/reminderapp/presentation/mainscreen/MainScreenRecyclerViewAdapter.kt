@@ -1,4 +1,4 @@
-package com.example.reminderapp.fragments.mainfragment.recyclerview
+package com.example.reminderapp.presentation.mainscreen
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
