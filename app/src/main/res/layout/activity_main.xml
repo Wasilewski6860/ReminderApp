@@ -7,17 +7,22 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
+
+
     <FrameLayout
         android:id="@+id/flMainFragment"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginBottom="15dp"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        android:layout_marginBottom="15dp">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/mainScreenRecyclerView"
+        <fragment
+            android:id="@+id/navHostFragment"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:name="androidx.navigation.fragment.NavHostFragment"
+            app:defaultNavHost="true"
+            app:navGraph="@navigation/nav_graph" />
 
     </FrameLayout>
 
@@ -32,20 +37,22 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            app:backgroundTint="@color/white"
+            app:fabCradleRoundedCornerRadius="50dp"
             app:fabCradleMargin="10dp"
-            app:fabCradleRoundedCornerRadius="50dp">
+            app:backgroundTint="@color/white"
+            >
 
             <com.google.android.material.bottomnavigation.BottomNavigationView
                 android:id="@+id/navigationView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="14dp"
+                app:menu="@menu/bottom_nav_menu"
                 android:background="@android:color/transparent"
+                android:layout_marginEnd="14dp"
                 app:itemIconTint="@color/bottom_item_color"
                 app:itemTextColor="@color/bottom_item_color"
                 app:labelVisibilityMode="unlabeled"
-                app:menu="@menu/bottom_nav_menu" />
+                />
 
         </com.google.android.material.bottomappbar.BottomAppBar>
 
@@ -53,10 +60,10 @@
             android:id="@+id/floatingButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:contentDescription="Fourth Floating Button"
+            app:layout_anchor="@id/appBar"
             android:src="@drawable/add_icon"
             app:backgroundTint="@color/white"
-            app:layout_anchor="@id/appBar" />
+            android:contentDescription="Fourth Floating Button"/>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 

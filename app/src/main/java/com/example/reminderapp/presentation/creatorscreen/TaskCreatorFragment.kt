@@ -12,13 +12,13 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.example.reminderapp.R
-import com.example.reminderapp.databinding.ReminderCreatorScreenBinding
+import com.example.reminderapp.databinding.ReminderCreatorFragmentBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class TaskCreatorFragment(private val actContext: Context) : Fragment() {
+class TaskCreatorFragment : Fragment() {
 
-    private lateinit var binding: ReminderCreatorScreenBinding
-
+    private lateinit var binding: ReminderCreatorFragmentBinding
+    private lateinit var activityContext: Context
     private val viewModel by viewModel<CreatorViewModel>()
 
     override fun onCreateView(
@@ -26,12 +26,14 @@ class TaskCreatorFragment(private val actContext: Context) : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = ReminderCreatorScreenBinding.inflate(inflater, container, false)
+        binding = ReminderCreatorFragmentBinding.inflate(inflater, container, false)
+
+        activityContext = requireActivity().applicationContext
 
         val testColors = listOf(
-            SpinnerColor(ContextCompat.getColor(actContext, R.color.red)),
-            SpinnerColor(ContextCompat.getColor(actContext, R.color.green)),
-            SpinnerColor(ContextCompat.getColor(actContext, R.color.blue))
+            SpinnerColor(ContextCompat.getColor(activityContext, R.color.red)),
+            SpinnerColor(ContextCompat.getColor(activityContext, R.color.green)),
+            SpinnerColor(ContextCompat.getColor(activityContext, R.color.blue))
         )
 
         val testTime = listOf(
@@ -70,7 +72,7 @@ class TaskCreatorFragment(private val actContext: Context) : Fragment() {
                 // Temp condition check (need add time and date condition checkers)
                 if (reminderNameEditTextView.text == null) {
                     Toast.makeText(
-                        actContext, "Reminder name field cannot be empty", Toast.LENGTH_SHORT
+                        activityContext, "Reminder name field cannot be empty", Toast.LENGTH_SHORT
                     ).show()
                 } else {
                     viewModel.saveTask()
@@ -86,18 +88,18 @@ class TaskCreatorFragment(private val actContext: Context) : Fragment() {
         timesList: List<SpinnerTimeText>
     ): ArrayAdapter<SpinnerTimeText> {
         return object : ArrayAdapter<SpinnerTimeText>(
-            actContext,
+            activityContext,
             R.layout.spinner_time_item,
             timesList
         ) {
             override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
                 val view = convertView ?: LayoutInflater
-                    .from(actContext)
+                    .from(activityContext)
                     .inflate(R.layout.spinner_time_item, parent, false)
                 val timeItem = getItem(position)
 
                 val timeView = view.findViewById<TextView>(R.id.spinnerTimeItemView)
-                timeView.text = timeItem?.time ?: actContext.getString(R.string.stub)
+                timeView.text = timeItem?.time ?: activityContext.getString(R.string.stub)
 
                 return view
             }
@@ -116,13 +118,13 @@ class TaskCreatorFragment(private val actContext: Context) : Fragment() {
         colorsList: List<SpinnerColor>
     ): ArrayAdapter<SpinnerColor> {
         return object : ArrayAdapter<SpinnerColor>(
-            actContext,
+            activityContext,
             R.layout.spinner_color_item,
             colorsList
         ) {
             override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
                 val view = convertView ?: LayoutInflater
-                    .from(actContext)
+                    .from(activityContext)
                     .inflate(R.layout.spinner_color_item, parent, false)
                 val colorItem = getItem(position)
 
