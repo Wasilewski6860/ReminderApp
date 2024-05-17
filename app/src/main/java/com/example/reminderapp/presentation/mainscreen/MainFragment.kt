@@ -13,8 +13,11 @@ class MainFragment : Fragment(), MainScreenRecyclerViewAdapter.OnItemClickListen
 
     private lateinit var binding: MainFragmentBinding
     private val adapter = MainScreenRecyclerViewAdapter(this)
-
     private val viewModel by viewModel<MainViewModel>()
+
+    init {
+        // LiveData observing here (for now one i guess)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -43,6 +46,5 @@ class MainFragment : Fragment(), MainScreenRecyclerViewAdapter.OnItemClickListen
     override fun onRcItemClick(position: Int) {
         // Transition on creator screen with current rcItem data to edit it
     }
-
 
 }

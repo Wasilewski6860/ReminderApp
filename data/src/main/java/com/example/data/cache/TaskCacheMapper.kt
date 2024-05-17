@@ -34,5 +34,4 @@ class TaskCacheMapper: Mapper<TaskEntity, Task> {
         }
     }
 
-
 }

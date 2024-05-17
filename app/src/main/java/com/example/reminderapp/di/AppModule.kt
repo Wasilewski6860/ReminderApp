@@ -1,5 +1,8 @@
 package com.example.reminderapp.di
 
+import androidx.navigation.NavController
+import androidx.navigation.Navigation
+import com.example.reminderapp.R
 import com.example.reminderapp.presentation.creatorscreen.CreatorViewModel
 import com.example.reminderapp.presentation.mainscreen.MainViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -20,5 +23,9 @@ val appModule = module {
             getTaskUseCase = get()
         )
     }
+
+//    single<NavController> {
+//        Navigation.findNavController(get(), R.id.nav_host_fragment)
+//    }
 
 }
