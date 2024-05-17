@@ -20,5 +20,11 @@
         android:name="com.example.reminderapp.presentation.creatorscreen.TaskCreatorFragment"
         android:label="fragment_creator"
         tools:layout="@layout/reminder_creator_fragment" >
+
+        <argument
+            android:name="taskId"
+            android:defaultValue="-1"
+            app:argType="integer" />
+
     </fragment>
 </navigation>
