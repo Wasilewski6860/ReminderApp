@@ -1,5 +1,6 @@
-package com.example.reminderapp.viewmodels.mainscreen
+package com.example.reminderapp.presentation.mainscreen
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.domain.model.Task
@@ -13,7 +14,7 @@ class MainViewModel(
 
     private val tasksListLiveData = MutableLiveData<MutableList<Task>>()
 
-    fun getTasksListLiveData(): MutableLiveData<MutableList<Task>> {
+    fun getTasksListLiveData(): LiveData<MutableList<Task>> {
         return tasksListLiveData
     }
 

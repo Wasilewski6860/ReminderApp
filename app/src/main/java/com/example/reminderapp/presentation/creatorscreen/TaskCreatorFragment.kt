@@ -1,4 +1,4 @@
-package com.example.reminderapp.fragments.creatorfragment
+package com.example.reminderapp.presentation.creatorscreen
 
 import android.content.Context
 import android.os.Bundle
@@ -11,28 +11,34 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.navigation.NavController
+import androidx.navigation.NavOptions
+import androidx.navigation.fragment.findNavController
 import com.example.reminderapp.R
-import com.example.reminderapp.databinding.ReminderCreatorScreenBinding
-import com.example.reminderapp.viewmodels.creatorscreen.CreatorViewModel
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import com.example.reminderapp.databinding.ReminderCreatorFragmentBinding
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
-class TaskCreatorFragment(private val actContext: Context) : Fragment() {
+class TaskCreatorFragment : Fragment() {
 
-    private lateinit var binding: ReminderCreatorScreenBinding
-
-    private val viewModel by viewModel<CreatorViewModel>()
+    private lateinit var binding: ReminderCreatorFragmentBinding
+    private lateinit var activityContext: Context
+    private lateinit var navController: NavController
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = ReminderCreatorScreenBinding.inflate(inflater, container, false)
+        binding = ReminderCreatorFragmentBinding.inflate(inflater, container, false)
+
+        navController = findNavController()
+
+        activityContext = requireActivity().applicationContext
 
         val testColors = listOf(
-            SpinnerColor(ContextCompat.getColor(actContext, R.color.red)),
-            SpinnerColor(ContextCompat.getColor(actContext, R.color.green)),
-            SpinnerColor(ContextCompat.getColor(actContext, R.color.blue))
+            SpinnerColor(ContextCompat.getColor(activityContext, R.color.red)),
+            SpinnerColor(ContextCompat.getColor(activityContext, R.color.green)),
+            SpinnerColor(ContextCompat.getColor(activityContext, R.color.blue))
         )
 
         val testTime = listOf(
@@ -67,38 +73,45 @@ class TaskCreatorFragment(private val actContext: Context) : Fragment() {
                 }
             }
 
-            reminderSaveButton.setOnClickListener {
-                // Temp condition check (need add time and date condition checkers)
-                if (reminderNameEditTextView.text == null) {
-                    Toast.makeText(
-                        actContext, "Reminder name field cannot be empty", Toast.LENGTH_SHORT
-                    ).show()
-                } else {
-                    viewModel.saveTask()
-                }
-            }
+        }
 
+        requireActivity().findViewById<FloatingActionButton>(R.id.floatingButton).setOnClickListener {
+            if (checkForCompletenessOfDataEntry()) {
+                navController.navigate(
+                    resId = R.id.mainFragment,
+                    args = null,
+                    navOptions = NavOptions.Builder().setExitAnim(R.anim.slide_out_anim).build()
+                )
+            } else {
+                Toast.makeText(
+                    activityContext, "Fields is empty HARDCODE", Toast.LENGTH_SHORT
+                ).show()
+            }
         }
 
         return binding.root
+    }
+
+    private fun checkForCompletenessOfDataEntry(): Boolean {
+        return !binding.reminderNameEditTextView.text.isNullOrBlank() // temp condition check
     }
 
     private fun createTimeSpinnerAdapter(
         timesList: List<SpinnerTimeText>
     ): ArrayAdapter<SpinnerTimeText> {
         return object : ArrayAdapter<SpinnerTimeText>(
-            actContext,
+            activityContext,
             R.layout.spinner_time_item,
             timesList
         ) {
             override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
                 val view = convertView ?: LayoutInflater
-                    .from(actContext)
+                    .from(activityContext)
                     .inflate(R.layout.spinner_time_item, parent, false)
                 val timeItem = getItem(position)
 
                 val timeView = view.findViewById<TextView>(R.id.spinnerTimeItemView)
-                timeView.text = timeItem?.time ?: actContext.getString(R.string.stub)
+                timeView.text = timeItem?.time ?: activityContext.getString(R.string.stub)
 
                 return view
             }
@@ -117,13 +130,13 @@ class TaskCreatorFragment(private val actContext: Context) : Fragment() {
         colorsList: List<SpinnerColor>
     ): ArrayAdapter<SpinnerColor> {
         return object : ArrayAdapter<SpinnerColor>(
-            actContext,
+            activityContext,
             R.layout.spinner_color_item,
             colorsList
         ) {
             override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
                 val view = convertView ?: LayoutInflater
-                    .from(actContext)
+                    .from(activityContext)
                     .inflate(R.layout.spinner_color_item, parent, false)
                 val colorItem = getItem(position)
 

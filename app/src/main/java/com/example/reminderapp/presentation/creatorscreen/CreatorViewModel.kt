@@ -1,4 +1,4 @@
-package com.example.reminderapp.viewmodels.creatorscreen
+package com.example.reminderapp.presentation.creatorscreen
 
 import androidx.lifecycle.ViewModel
 import com.example.domain.use_case.GetTaskUseCase

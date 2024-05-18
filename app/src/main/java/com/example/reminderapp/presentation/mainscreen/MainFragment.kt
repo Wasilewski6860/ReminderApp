@@ -1,4 +1,4 @@
-package com.example.reminderapp.fragments.mainfragment
+package com.example.reminderapp.presentation.mainscreen
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,16 +7,17 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.reminderapp.databinding.MainFragmentBinding
-import com.example.reminderapp.fragments.mainfragment.recyclerview.MainScreenRecyclerViewAdapter
-import com.example.reminderapp.viewmodels.mainscreen.MainViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainFragment : Fragment(), MainScreenRecyclerViewAdapter.OnItemClickListener {
 
     private lateinit var binding: MainFragmentBinding
     private val adapter = MainScreenRecyclerViewAdapter(this)
-
     private val viewModel by viewModel<MainViewModel>()
+
+    init {
+        // LiveData observing here (for now one i guess)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -45,6 +46,5 @@ class MainFragment : Fragment(), MainScreenRecyclerViewAdapter.OnItemClickListen
     override fun onRcItemClick(position: Int) {
         // Transition on creator screen with current rcItem data to edit it
     }
-
 
 }

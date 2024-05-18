@@ -7,7 +7,18 @@
 
     <fragment
         android:id="@+id/mainFragment"
-        android:name="com.example.reminderapp.presentation.main.MainFragment"
+        android:name="com.example.reminderapp.presentation.mainscreen.MainFragment"
         android:label="fragment_main"
-        tools:layout="@layout/fragment_main" />
+        tools:layout="@layout/main_fragment" >
+        <action
+            android:id="@+id/action_mainFragment_to_creatorFragment"
+            app:destination="@id/creatorFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/creatorFragment"
+        android:name="com.example.reminderapp.presentation.creatorscreen.TaskCreatorFragment"
+        android:label="fragment_creator"
+        tools:layout="@layout/reminder_creator_fragment" >
+    </fragment>
 </navigation>
