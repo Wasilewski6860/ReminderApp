@@ -18,6 +18,8 @@ import com.example.reminderapp.R
 import com.example.reminderapp.work.RemindWorkManager
 import com.example.reminderapp.databinding.ReminderCreatorFragmentBinding
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class TaskCreatorFragment : Fragment() {
 
