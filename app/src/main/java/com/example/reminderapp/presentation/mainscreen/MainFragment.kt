@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.reminderapp.databinding.MainFragmentBinding
-import com.example.reminderapp.presentation.SharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainFragment : Fragment(), MainScreenRecyclerViewAdapter.OnItemClickListener {
@@ -15,7 +14,6 @@ class MainFragment : Fragment(), MainScreenRecyclerViewAdapter.OnItemClickListen
     private lateinit var binding: MainFragmentBinding
     private val adapter = MainScreenRecyclerViewAdapter(this)
     private val viewModel by viewModel<MainViewModel>()
-    private val sharedViewModel by viewModel<SharedViewModel>()
 
     init {
         // LiveData observing here (for now one i guess)

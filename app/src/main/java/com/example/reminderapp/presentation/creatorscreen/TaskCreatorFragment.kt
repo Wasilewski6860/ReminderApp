@@ -11,21 +11,17 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.example.reminderapp.R
 import com.example.reminderapp.databinding.ReminderCreatorFragmentBinding
-import com.example.reminderapp.presentation.SharedViewModel
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class TaskCreatorFragment : Fragment() {
 
     private lateinit var binding: ReminderCreatorFragmentBinding
     private lateinit var activityContext: Context
-    private val viewModel by viewModel<CreatorViewModel>()
-    private lateinit var sharedViewModel: SharedViewModel
     private lateinit var navController: NavController
 
     override fun onCreateView(
@@ -36,7 +32,6 @@ class TaskCreatorFragment : Fragment() {
         binding = ReminderCreatorFragmentBinding.inflate(inflater, container, false)
 
         navController = findNavController()
-        sharedViewModel = ViewModelProvider(requireActivity())[SharedViewModel::class.java]
 
         activityContext = requireActivity().applicationContext
 
@@ -80,21 +75,17 @@ class TaskCreatorFragment : Fragment() {
 
         }
 
-        sharedViewModel.buttonClicked.observe(viewLifecycleOwner) { clicked ->
-            if (clicked == true) {
-                if (checkForCompletenessOfDataEntry()) {
-                    sharedViewModel.passTransition()
-                    sharedViewModel.onClickSuccess()
-                    navController.navigate(
-                        resId = R.id.mainFragment,
-                        args = null,
-                        navOptions = NavOptions.Builder().setExitAnim(R.anim.slide_out_anim).build()
-                    )
-                } else {
-                    Toast.makeText(
-                        activityContext, "Fields is empty HARDCODE", Toast.LENGTH_SHORT
-                    ).show()
-                }
+        requireActivity().findViewById<FloatingActionButton>(R.id.floatingButton).setOnClickListener {
+            if (checkForCompletenessOfDataEntry()) {
+                navController.navigate(
+                    resId = R.id.mainFragment,
+                    args = null,
+                    navOptions = NavOptions.Builder().setExitAnim(R.anim.slide_out_anim).build()
+                )
+            } else {
+                Toast.makeText(
+                    activityContext, "Fields is empty HARDCODE", Toast.LENGTH_SHORT
+                ).show()
             }
         }
 
