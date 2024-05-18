@@ -1,13 +1,17 @@
 package com.example.reminderapp
 
 import android.annotation.SuppressLint
+import android.graphics.Rect
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.MotionEvent
+import android.widget.EditText
 import androidx.navigation.NavController
 import androidx.navigation.NavOptions
 import androidx.navigation.Navigation
 import com.example.reminderapp.databinding.ActivityMainBinding
 import com.example.reminderapp.presentation.SharedViewModel
+import com.example.reminderapp.presentation.creatorscreen.KeyboardUtils
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity() {
@@ -55,6 +59,20 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
+        if (ev?.action == MotionEvent.ACTION_DOWN) {
+            val focus = currentFocus
+            if (focus is EditText) {
+                val outRect = Rect()
+                focus.getGlobalVisibleRect(outRect)
+                if (!outRect.contains(ev.rawX.toInt(), ev.rawY.toInt())) {
+                    KeyboardUtils.hideKeyboard(this)
+                }
+            }
+        }
+        return super.dispatchTouchEvent(ev)
     }
 
 }
