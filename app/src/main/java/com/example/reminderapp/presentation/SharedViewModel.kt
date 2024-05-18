@@ -20,4 +20,9 @@ class SharedViewModel : ViewModel() {
         _isTransitionValid.value = true
     }
 
+    fun onClickSuccess() {
+        _buttonClicked.value = false
+        _isTransitionValid.value = false
+    }
+
 }
