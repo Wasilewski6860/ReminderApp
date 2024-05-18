@@ -15,14 +15,43 @@ import androidx.navigation.NavController
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.example.reminderapp.R
+import com.example.reminderapp.work.RemindWorkManager
 import com.example.reminderapp.databinding.ReminderCreatorFragmentBinding
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class TaskCreatorFragment : Fragment() {
 
     private lateinit var binding: ReminderCreatorFragmentBinding
     private lateinit var activityContext: Context
     private lateinit var navController: NavController
+
+    /**
+     * Использовать при создании, изменении и удалении напоминаний
+     */
+    private val remindWorkManager: RemindWorkManager by inject()
+
+    private val viewModel by viewModel<CreatorViewModel>()
+
+    /**
+        Айдишник таска, передаваемый как аргумент в action навигации
+        Например:
+        val action =
+            MainFragmentDirections.actionMainFragmentToCreateTaskFragment(
+                id = task.taskId, isSaved = false
+            )
+        findNavController().navigate(action)
+
+        Если taskId!=-1, значит нужно взять таск с бд и заполнить соотв.поля. фрагмента
+     */
+    private  var taskId: Int = -1
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        arguments?.let {
+            taskId = it.getInt("taskId")
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
