@@ -1,8 +1,6 @@
 package com.example.reminderapp
 
-import android.annotation.SuppressLint
 import android.graphics.Rect
-import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -14,11 +12,8 @@ import androidx.navigation.Navigation
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
-import androidx.navigation.fragment.findNavController
 import com.example.reminderapp.databinding.ActivityMainBinding
 import com.example.reminderapp.presentation.creatorscreen.KeyboardUtils
-import org.koin.androidx.viewmodel.ext.android.viewModel
-import com.google.android.material.bottomnavigation.BottomNavigationItemView
 import com.example.reminderapp.notification.Constants.ACTION_SHOW_TASK
 
 class MainActivity : AppCompatActivity() {
@@ -32,8 +27,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         navController = Navigation.findNavController(this, R.id.navHostFragment)
-
-        bottomNavigationViewInitListeners()
 
         val navHostFragment = supportFragmentManager
             .findFragmentById(R.id.navHostFragment) as NavHostFragment
@@ -59,60 +52,20 @@ class MainActivity : AppCompatActivity() {
                 when(destination.id) {
                     R.id.mainFragment -> {
                         floatingButton.setImageResource(R.drawable.add_icon)
+                        floatingButton.setOnClickListener {
+                            val action = R.id.action_mainFragment_to_creatorFragment
+                            navController.navigate(
+                                resId = action,
+                                args = null,
+                                navOptions = NavOptions.Builder().setEnterAnim(R.anim.slide_in_anim).build()
+                            )
+                        }
                     }
                     R.id.creatorFragment -> {
                         floatingButton.setImageResource(R.drawable.check_save_icon)
                     }
                 }
             }
-    }
-
-    @SuppressLint("Recycle")
-    private fun bottomNavigationViewInitListeners() = with(binding) {
-        floatingButton.setOnClickListener {
-            val action = R.id.action_mainFragment_to_creatorFragment
-
-            navController.navigate(
-                resId = action,
-                args = null,
-                navOptions = NavOptions.Builder().setEnterAnim(R.anim.slide_in_anim).build()
-            )
-            when (screenState) {
-                ScreenState.MainScreen -> {
-                    screenState = ScreenState.CreatorScreen
-                    navController.navigate(
-                        resId = action,
-                        args = null,
-                        navOptions = NavOptions.Builder().setEnterAnim(R.anim.slide_in_anim).build()
-                    )
-                    floatingButton.setImageResource(R.drawable.check_save_icon)
-                }
-                ScreenState.CreatorScreen -> {
-                    sharedViewModel.isTransitionValid.observe(this@MainActivity) {
-                        if (it == true) {
-                            screenState = ScreenState.MainScreen
-                            floatingButton.setImageResource(R.drawable.add_icon)
-                        }
-                    }
-                    sharedViewModel.onButtonClicked()
-                }
-            }
-            navController.navigate(R.id.creatorFragment)
-        }
-    }
-
-    override fun onNewIntent(intent: Intent?) {
-        super.onNewIntent(intent)
-        navigateToTaskIfNeeded(intent)
-    }
-
-    private fun navigateToTaskIfNeeded(intent: Intent?) {
-        if(intent?.action == ACTION_SHOW_TASK) {
-//            navHostFragment.findNavController().navigate(R.id.some_action)
-        }
-        navigationView.findViewById<BottomNavigationItemView>(R.id.statisticFragment).setOnClickListener {
-            navController.popBackStack()
-        }
     }
 
     override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
