@@ -11,8 +11,12 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavController
+import androidx.navigation.fragment.findNavController
 import com.example.reminderapp.R
 import com.example.reminderapp.databinding.ReminderCreatorFragmentBinding
+import com.example.reminderapp.presentation.SharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class TaskCreatorFragment : Fragment() {
@@ -20,6 +24,8 @@ class TaskCreatorFragment : Fragment() {
     private lateinit var binding: ReminderCreatorFragmentBinding
     private lateinit var activityContext: Context
     private val viewModel by viewModel<CreatorViewModel>()
+    private lateinit var sharedViewModel: SharedViewModel
+    private lateinit var navController: NavController
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -27,6 +33,9 @@ class TaskCreatorFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = ReminderCreatorFragmentBinding.inflate(inflater, container, false)
+
+        navController = findNavController()
+        sharedViewModel = ViewModelProvider(requireActivity())[SharedViewModel::class.java]
 
         activityContext = requireActivity().applicationContext
 
@@ -68,20 +77,26 @@ class TaskCreatorFragment : Fragment() {
                 }
             }
 
-            reminderSaveButton.setOnClickListener {
-                // Temp condition check (need add time and date condition checkers)
-                if (reminderNameEditTextView.text == null) {
-                    Toast.makeText(
-                        activityContext, "Reminder name field cannot be empty", Toast.LENGTH_SHORT
-                    ).show()
+        }
+
+        sharedViewModel.buttonClicked.observe(viewLifecycleOwner) { clicked ->
+            if (clicked == true) {
+                if (checkForCompletenessOfDataEntry()) {
+                    sharedViewModel.passTransition()
+                    navController.navigate(R.id.mainFragment)
                 } else {
-                    viewModel.saveTask()
+                    Toast.makeText(
+                        activityContext, "Fields is empty HARDCODE", Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
-
         }
 
         return binding.root
+    }
+
+    private fun checkForCompletenessOfDataEntry(): Boolean {
+        return !binding.reminderNameEditTextView.text.isNullOrBlank() // temp condition check
     }
 
     private fun createTimeSpinnerAdapter(
