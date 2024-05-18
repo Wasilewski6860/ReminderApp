@@ -20,8 +20,5 @@
         android:name="com.example.reminderapp.presentation.creatorscreen.TaskCreatorFragment"
         android:label="fragment_creator"
         tools:layout="@layout/reminder_creator_fragment" >
-        <action
-            android:id="@+id/action_creatorFragment_to_mainFragment"
-            app:destination="@id/mainFragment" />
     </fragment>
 </navigation>

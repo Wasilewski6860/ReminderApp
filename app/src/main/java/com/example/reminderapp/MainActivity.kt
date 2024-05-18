@@ -1,8 +1,10 @@
 package com.example.reminderapp
 
+import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.navigation.NavController
+import androidx.navigation.NavOptions
 import androidx.navigation.Navigation
 import com.example.reminderapp.databinding.ActivityMainBinding
 import com.example.reminderapp.presentation.SharedViewModel
@@ -26,12 +28,20 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    @SuppressLint("Recycle")
     private fun bottomNavigationViewInitListeners() = with(binding) {
         floatingButton.setOnClickListener {
+
+            val action = R.id.action_mainFragment_to_creatorFragment
+
             when (screenState) {
                 ScreenState.MainScreen -> {
                     screenState = ScreenState.CreatorScreen
-                    navController.navigate(R.id.creatorFragment)
+                    navController.navigate(
+                        resId = action,
+                        args = null,
+                        navOptions = NavOptions.Builder().setEnterAnim(R.anim.slide_in_anim).build()
+                    )
                     floatingButton.setImageResource(R.drawable.check_save_icon)
                 }
                 ScreenState.CreatorScreen -> {
