@@ -11,9 +11,11 @@ import android.widget.EditText
 import androidx.navigation.NavController
 import androidx.navigation.NavOptions
 import androidx.navigation.Navigation
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.setupWithNavController
 import androidx.navigation.fragment.findNavController
 import com.example.reminderapp.databinding.ActivityMainBinding
-import com.example.reminderapp.presentation.SharedViewModel
 import com.example.reminderapp.presentation.creatorscreen.KeyboardUtils
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import com.google.android.material.bottomnavigation.BottomNavigationItemView
@@ -23,8 +25,6 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var navController: NavController
-    private var screenState: ScreenState = ScreenState.MainScreen
-    private val sharedViewModel by viewModel<SharedViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,14 +35,37 @@ class MainActivity : AppCompatActivity() {
 
         bottomNavigationViewInitListeners()
 
+        val navHostFragment = supportFragmentManager
+            .findFragmentById(R.id.navHostFragment) as NavHostFragment
+        binding.navigationView.setupWithNavController(navHostFragment.findNavController())
+
+        initListener(navHostFragment)
+    }
+
+    private fun initListener(navHostFragment: NavHostFragment) = with(binding) {
+        navHostFragment.findNavController()
+            .addOnDestinationChangedListener { _, destination, _  ->
+                when(destination.id) {
+                    R.id.mainFragment -> {
+                        floatingButton.setImageResource(R.drawable.add_icon)
+                    }
+                    R.id.creatorFragment -> {
+                        floatingButton.setImageResource(R.drawable.check_save_icon)
+                    }
+                }
+            }
     }
 
     @SuppressLint("Recycle")
     private fun bottomNavigationViewInitListeners() = with(binding) {
         floatingButton.setOnClickListener {
-
             val action = R.id.action_mainFragment_to_creatorFragment
 
+            navController.navigate(
+                resId = action,
+                args = null,
+                navOptions = NavOptions.Builder().setEnterAnim(R.anim.slide_in_anim).build()
+            )
             when (screenState) {
                 ScreenState.MainScreen -> {
                     screenState = ScreenState.CreatorScreen
@@ -95,9 +118,4 @@ class MainActivity : AppCompatActivity() {
         return super.dispatchTouchEvent(ev)
     }
 
-}
-
-sealed class ScreenState {
-    object MainScreen : ScreenState()
-    object CreatorScreen : ScreenState()
 }

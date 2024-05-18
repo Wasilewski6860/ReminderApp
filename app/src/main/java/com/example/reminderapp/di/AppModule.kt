@@ -1,6 +1,5 @@
 package com.example.reminderapp.di
 
-import com.example.reminderapp.presentation.SharedViewModel
 import com.example.reminderapp.presentation.creatorscreen.CreatorViewModel
 import com.example.reminderapp.presentation.mainscreen.MainViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -20,10 +19,6 @@ val appModule = module {
             saveTaskUseCase = get(),
             getTaskUseCase = get()
         )
-    }
-
-    viewModel<SharedViewModel> {
-        SharedViewModel()
     }
 
 }
