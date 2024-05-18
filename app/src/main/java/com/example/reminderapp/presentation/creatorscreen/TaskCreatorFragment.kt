@@ -83,6 +83,7 @@ class TaskCreatorFragment : Fragment() {
             if (clicked == true) {
                 if (checkForCompletenessOfDataEntry()) {
                     sharedViewModel.passTransition()
+                    sharedViewModel.onClickSuccess()
                     navController.navigate(R.id.mainFragment)
                 } else {
                     Toast.makeText(
