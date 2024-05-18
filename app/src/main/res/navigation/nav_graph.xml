@@ -9,11 +9,19 @@
         android:id="@+id/mainFragment"
         android:name="com.example.reminderapp.presentation.mainscreen.MainFragment"
         android:label="fragment_main"
-        tools:layout="@layout/main_fragment" />
+        tools:layout="@layout/main_fragment" >
+        <action
+            android:id="@+id/action_mainFragment_to_creatorFragment"
+            app:destination="@id/creatorFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/creatorFragment"
         android:name="com.example.reminderapp.presentation.creatorscreen.TaskCreatorFragment"
         android:label="fragment_creator"
-        tools:layout="@layout/reminder_creator_fragment" />
+        tools:layout="@layout/reminder_creator_fragment" >
+        <action
+            android:id="@+id/action_creatorFragment_to_mainFragment"
+            app:destination="@id/mainFragment" />
+    </fragment>
 </navigation>
