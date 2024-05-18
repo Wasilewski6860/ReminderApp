@@ -42,6 +42,17 @@ class MainActivity : AppCompatActivity() {
         initListener(navHostFragment)
     }
 
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        navigateToTaskIfNeeded(intent)
+    }
+
+    private fun navigateToTaskIfNeeded(intent: Intent?) {
+        if(intent?.action == ACTION_SHOW_TASK) {
+//            navHostFragment.findNavController().navigate(R.id.some_action)
+        }
+    }
+
     private fun initListener(navHostFragment: NavHostFragment) = with(binding) {
         navHostFragment.findNavController()
             .addOnDestinationChangedListener { _, destination, _  ->
