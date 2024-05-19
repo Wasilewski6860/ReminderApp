@@ -76,7 +76,7 @@ class MainActivity : AppCompatActivity() {
                 val outRect = Rect()
                 focus.getGlobalVisibleRect(outRect)
                 if (!outRect.contains(ev.rawX.toInt(), ev.rawY.toInt())) {
-                    KeyboardUtils.hideKeyboard(this)
+                    KeyboardUtils.hideKeyboard(this, binding.flMainFragment)
                 }
             }
         }

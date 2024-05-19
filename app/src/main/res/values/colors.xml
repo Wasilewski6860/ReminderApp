@@ -6,6 +6,11 @@
     <color name="purple_500">#FF6200EE</color>
 <!--  Temp colors for spinner tests  -->
     <color name="red">#F80000</color>
-    <color name="green">#00FF38</color>
     <color name="blue">#005EFF</color>
+
+    <color name="grey">#808080</color>
+    <color name="green">#008000</color>
+    <color name="light_blue">#0000CD</color>
+    <color name="orange">#FFA500</color>
+    <color name="pink">#FFC0CB</color>
 </resources>

@@ -9,7 +9,6 @@ import android.widget.ArrayAdapter
 import android.widget.RadioButton
 import android.widget.TextView
 import android.widget.Toast
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.NavOptions
@@ -21,8 +20,9 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 class TaskCreatorFragment : Fragment() {
 
     private lateinit var binding: ReminderCreatorFragmentBinding
-    private lateinit var activityContext: Context
-    private lateinit var navController: NavController
+
+    private val spinnerColorsList = SpinnerColors.getColorsList()
+    private val spinnerTimeTextList = SpinnerPeriodicTimeText.getTimesList()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -31,50 +31,22 @@ class TaskCreatorFragment : Fragment() {
     ): View {
         binding = ReminderCreatorFragmentBinding.inflate(inflater, container, false)
 
-        navController = findNavController()
-
-        activityContext = requireActivity().applicationContext
-
-        val testColors = listOf(
-            SpinnerColor(ContextCompat.getColor(activityContext, R.color.red)),
-            SpinnerColor(ContextCompat.getColor(activityContext, R.color.green)),
-            SpinnerColor(ContextCompat.getColor(activityContext, R.color.blue))
-        )
-
-        val testTime = listOf(
-            SpinnerTimeText("5 минут"),
-            SpinnerTimeText("10 минут"),
-            SpinnerTimeText("15 минут"),
-            SpinnerTimeText("30 минут"),
-            SpinnerTimeText("1 час"),
-            SpinnerTimeText("2 часа")
-        )
-
         binding.apply {
 
-            val colorSpinnerAdapter = createColorSpinnerAdapter(testColors)
+            val colorSpinnerAdapter = createColorSpinnerAdapter(spinnerColorsList)
             reminderColorSpinner.adapter = colorSpinnerAdapter
 
-            val timeSpinnerAdapter = createTimeSpinnerAdapter(testTime)
+            val timeSpinnerAdapter = createTimeSpinnerAdapter(spinnerTimeTextList)
             reminderTimePickerSpinner.adapter = timeSpinnerAdapter
-
-            reminderTypeRadioGroup.setOnCheckedChangeListener { _, checkedId ->
-                reminderSpinnerOrButtonPlaceHolder.visibility = View.VISIBLE
-                val checkedButton = binding.root.findViewById<RadioButton>(checkedId)
-                when (checkedButton) {
-                    periodicReminderRadioButton -> {
-                        reminderDateAndTimePickersButton.visibility = View.GONE
-                        reminderTimeSpinnerHolder.visibility = View.VISIBLE
-                    }
-                    onetimeReminderRadioButton -> {
-                        reminderTimeSpinnerHolder.visibility = View.GONE
-                        reminderDateAndTimePickersButton.visibility = View.VISIBLE
-                    }
-                }
-            }
 
         }
 
+        initListeners(findNavController())
+
+        return binding.root
+    }
+
+    private fun initListeners(navController: NavController) = with(binding) {
         requireActivity().findViewById<FloatingActionButton>(R.id.floatingButton).setOnClickListener {
             if (checkForCompletenessOfDataEntry()) {
                 navController.navigate(
@@ -84,12 +56,25 @@ class TaskCreatorFragment : Fragment() {
                 )
             } else {
                 Toast.makeText(
-                    activityContext, "Fields is empty HARDCODE", Toast.LENGTH_SHORT
+                    requireActivity().applicationContext, "Fields is empty HARDCODE", Toast.LENGTH_SHORT
                 ).show()
             }
         }
 
-        return binding.root
+        reminderTypeRadioGroup.setOnCheckedChangeListener { _, checkedId ->
+            reminderSpinnerOrButtonPlaceHolder.visibility = View.VISIBLE
+            val checkedButton = binding.root.findViewById<RadioButton>(checkedId)
+            when (checkedButton) {
+                periodicReminderRadioButton -> {
+                    reminderDateAndTimePickersButton.visibility = View.GONE
+                    reminderTimeSpinnerHolder.visibility = View.VISIBLE
+                }
+                onetimeReminderRadioButton -> {
+                    reminderTimeSpinnerHolder.visibility = View.GONE
+                    reminderDateAndTimePickersButton.visibility = View.VISIBLE
+                }
+            }
+        }
     }
 
     private fun checkForCompletenessOfDataEntry(): Boolean {
@@ -97,21 +82,21 @@ class TaskCreatorFragment : Fragment() {
     }
 
     private fun createTimeSpinnerAdapter(
-        timesList: List<SpinnerTimeText>
-    ): ArrayAdapter<SpinnerTimeText> {
-        return object : ArrayAdapter<SpinnerTimeText>(
-            activityContext,
+        timesList: List<String>
+    ): ArrayAdapter<String> {
+        return object : ArrayAdapter<String>(
+            requireActivity().applicationContext,
             R.layout.spinner_time_item,
             timesList
         ) {
             override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
                 val view = convertView ?: LayoutInflater
-                    .from(activityContext)
+                    .from(this@TaskCreatorFragment.context)
                     .inflate(R.layout.spinner_time_item, parent, false)
                 val timeItem = getItem(position)
 
                 val timeView = view.findViewById<TextView>(R.id.spinnerTimeItemView)
-                timeView.text = timeItem?.time ?: activityContext.getString(R.string.stub)
+                timeView.text = timeItem ?: requireActivity().applicationContext.getString(R.string.stub)
 
                 return view
             }
@@ -127,21 +112,21 @@ class TaskCreatorFragment : Fragment() {
     }
 
     private fun createColorSpinnerAdapter(
-        colorsList: List<SpinnerColor>
-    ): ArrayAdapter<SpinnerColor> {
-        return object : ArrayAdapter<SpinnerColor>(
-            activityContext,
+        colorsList: List<Int>
+    ): ArrayAdapter<Int> {
+        return object : ArrayAdapter<Int>(
+            requireActivity().applicationContext,
             R.layout.spinner_color_item,
             colorsList
         ) {
             override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
                 val view = convertView ?: LayoutInflater
-                    .from(activityContext)
+                    .from(this@TaskCreatorFragment.context)
                     .inflate(R.layout.spinner_color_item, parent, false)
                 val colorItem = getItem(position)
 
                 val colorView = view.findViewById<View>(R.id.spinnerItemColorView)
-                colorView.setBackgroundColor(colorItem?.color ?: 0)
+                colorView.setBackgroundColor(colorItem ?: 0)
 
                 return view
             }
