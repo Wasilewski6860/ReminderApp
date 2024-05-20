@@ -1,4 +1,4 @@
-package com.example.reminderapp.work
+package com.example.reminderapp.reminder.work
 
 import android.content.Context
 import androidx.work.ExistingWorkPolicy
@@ -22,9 +22,9 @@ class RemindWorkManager(val context: Context) {
      *
      * Для изменения существующего периодического напоминания сначала вызвать cancelWork(taskId), а потом этот метод
      */
-    private fun createPeriodicWorkRequest(title: String,text: String,startTimeDelayInSeconds: Long, timeDelayInSeconds: Long, taskId: Int) {
-        val workRequest =  PeriodicWorkRequestBuilder<RemindWorker>(timeDelayInSeconds, TimeUnit.SECONDS)
-            .setInitialDelay(startTimeDelayInSeconds, TimeUnit.SECONDS)
+    fun createPeriodicWorkRequest(title: String,text: String,startTimeDelayInSeconds: Long, timeDelayInMilliSeconds: Long, taskId: Int) {
+        val workRequest =  PeriodicWorkRequestBuilder<RemindWorker>(timeDelayInMilliSeconds, TimeUnit.MILLISECONDS)
+            .setInitialDelay(startTimeDelayInSeconds, TimeUnit.MILLISECONDS)
             .addTag(taskId.toString())
             .setInputData(
                 workDataOf(
@@ -47,9 +47,9 @@ class RemindWorkManager(val context: Context) {
      *
      * Для изменения существующего напоминания достаточно вызвать этот метод с правильным taskId, тогда cancelWork(taskId) вызывать не нужно
      */
-    private fun createOneTimeWorkRequest(title: String,text: String,timeDelayInSeconds: Long, taskId: Int) {
+    fun createOneTimeWorkRequest(title: String,text: String,timeDelayInMilliSeconds: Long, taskId: Int) {
         val workRequest = OneTimeWorkRequestBuilder<RemindWorker>()
-            .setInitialDelay(timeDelayInSeconds, TimeUnit.SECONDS)
+            .setInitialDelay(timeDelayInMilliSeconds, TimeUnit.MILLISECONDS)
             .addTag(taskId.toString())
             .setInputData(
                 workDataOf(
@@ -63,11 +63,24 @@ class RemindWorkManager(val context: Context) {
             ExistingWorkPolicy.REPLACE, workRequest)
     }
 
+    fun createCancelWorkRequest(taskId: Int) {
+        val workRequest = OneTimeWorkRequestBuilder<CancelTaskWorker>()
+            .addTag(taskId.toString())
+            .setInputData(
+                workDataOf(
+                    "id" to taskId,
+                )
+            )
+            .build()
+        WorkManager.getInstance(context).enqueueUniqueWork(taskId.toString(),
+            ExistingWorkPolicy.REPLACE, workRequest)
+    }
+
     /**
      * Использовать для отмены напоминания
      * @param taskId Это id напоминания(id таска), который отменяется
      */
-    private fun cancelWork(taskId: Int){
+    fun cancelWork(taskId: Int){
         WorkManager.getInstance(context).cancelAllWorkByTag(taskId.toString())
     }
 }

@@ -28,7 +28,7 @@ class TaskCacheMapper: Mapper<TaskEntity, Task> {
                 description = description,
                 timestamp = timestamp,
                 timeTarget = timeTarget,
-                periodicType = type.toString(),
+                periodicType = type.type.toString(),
                 color
             )
         }

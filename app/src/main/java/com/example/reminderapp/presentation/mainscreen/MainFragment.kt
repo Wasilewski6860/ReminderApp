@@ -1,12 +1,19 @@
 package com.example.reminderapp.presentation.mainscreen
 
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat.registerReceiver
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.reminderapp.databinding.MainFragmentBinding
+import com.example.reminderapp.notification.Constants
+import com.example.reminderapp.notification.Constants.DELETE_TASK
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainFragment : Fragment(), MainScreenRecyclerViewAdapter.OnItemClickListener {
@@ -15,6 +22,13 @@ class MainFragment : Fragment(), MainScreenRecyclerViewAdapter.OnItemClickListen
     private val adapter = MainScreenRecyclerViewAdapter(this)
     private val viewModel by viewModel<MainViewModel>()
 
+    private val deleteReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            val bundle = intent?.extras ?: return
+            val id = bundle.getInt("id")
+            viewModel.deleteTask(id)
+        }
+    }
     init {
         // LiveData observing here (for now one i guess)
     }
@@ -28,6 +42,7 @@ class MainFragment : Fragment(), MainScreenRecyclerViewAdapter.OnItemClickListen
 
         // viewModel.getAllTasks() <-- ??
 
+        viewModel.getAllTasks()
         binding.apply {
 
             mainScreenRecyclerView.layoutManager = GridLayoutManager(context, 1)
@@ -47,4 +62,14 @@ class MainFragment : Fragment(), MainScreenRecyclerViewAdapter.OnItemClickListen
         // Transition on creator screen with current rcItem data to edit it
     }
 
+    override fun onResume() {
+        super.onResume()
+        val intentFilter = IntentFilter(DELETE_TASK)
+        context?.registerReceiver(deleteReceiver, intentFilter, Context.RECEIVER_NOT_EXPORTED)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        context?.unregisterReceiver(deleteReceiver)
+    }
 }

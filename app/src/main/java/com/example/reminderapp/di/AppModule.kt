@@ -2,7 +2,7 @@ package com.example.reminderapp.di
 
 import com.example.reminderapp.presentation.creatorscreen.CreatorViewModel
 import com.example.reminderapp.presentation.mainscreen.MainViewModel
-import com.example.reminderapp.work.RemindWorkManager
+import com.example.reminderapp.reminder.work.RemindWorkManager
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
