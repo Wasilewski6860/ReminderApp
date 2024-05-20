@@ -42,26 +42,28 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initNavigationListener(navHostFragment: NavHostFragment) = with(binding) {
+        var action = R.id.action_mainFragment_to_creatorFragment
+
         navHostFragment.findNavController()
             .addOnDestinationChangedListener { _, destination, _ ->
                 when (destination.id) {
                     R.id.mainFragment -> {
+                        action = R.id.action_mainFragment_to_creatorFragment
                         floatingButton.setImageResource(R.drawable.add_icon)
-                        floatingButton.setOnClickListener {
-                            val action = R.id.action_mainFragment_to_creatorFragment
-                            navHostFragment.findNavController().navigate(
-                                resId = action,
-                                args = null,
-                                navOptions = NavOptions.Builder().setEnterAnim(R.anim.slide_in_anim)
-                                    .build()
-                            )
-                        }
                     }
                     R.id.creatorFragment -> {
                         floatingButton.setImageResource(R.drawable.check_save_icon)
                     }
                 }
             }
+        floatingButton.setOnClickListener {
+            navHostFragment.findNavController().navigate(
+                resId = action,
+                args = null,
+                navOptions = NavOptions.Builder().setEnterAnim(R.anim.slide_in_anim)
+                    .build()
+            )
+        }
     }
 
     override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {

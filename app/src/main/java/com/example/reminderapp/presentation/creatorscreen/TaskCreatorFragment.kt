@@ -2,7 +2,6 @@ package com.example.reminderapp.presentation.creatorscreen
 
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
-import android.content.Context
 import android.icu.text.SimpleDateFormat
 import android.icu.util.Calendar
 import android.os.Bundle
@@ -17,15 +16,26 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
+import com.example.domain.model.Task
 import com.example.reminderapp.R
 import com.example.reminderapp.databinding.ReminderCreatorFragmentBinding
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.Locale
 
 class TaskCreatorFragment : Fragment() {
 
+    companion object {
+        const val BOTH = "both"
+        const val DATE_AND_TIME = "date and time"
+        const val REMINDER_NAME = "reminder name"
+    }
+
     private lateinit var binding: ReminderCreatorFragmentBinding
+    private val viewModel by viewModel<CreatorViewModel>()
     private val spinnerTimeTextList = SpinnerPeriodicTimeText.getTimesList()
+    private var incompletenessOfTheEnteredData: String = BOTH
+    private var isTimeHasChosen = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -52,15 +62,25 @@ class TaskCreatorFragment : Fragment() {
     private fun initListeners(navController: NavController) = with(binding) {
         requireActivity().findViewById<FloatingActionButton>(R.id.floatingButton).setOnClickListener {
             if (checkForCompletenessOfDataEntry()) {
+                // viewModel.saveTaskInDatabase()
+
                 navController.navigate(
                     resId = R.id.mainFragment,
                     args = null,
                     navOptions = NavOptions.Builder().setExitAnim(R.anim.slide_out_anim).build()
                 )
             } else {
-                Toast.makeText(
-                    requireActivity().applicationContext, "Fields is empty HARDCODE", Toast.LENGTH_SHORT
-                ).show()
+                when (incompletenessOfTheEnteredData) {
+                    BOTH -> Toast.makeText(
+                        requireActivity().applicationContext, "Enter reminder name and choose time HARDCODE", Toast.LENGTH_SHORT
+                    ).show()
+                    REMINDER_NAME -> Toast.makeText(
+                        requireActivity().applicationContext, "Enter reminder name HARDCODE", Toast.LENGTH_SHORT
+                    ).show()
+                    DATE_AND_TIME -> Toast.makeText(
+                        requireActivity().applicationContext, "Choose time HARDCODE", Toast.LENGTH_SHORT
+                    ).show()
+                }
             }
         }
 
@@ -69,23 +89,34 @@ class TaskCreatorFragment : Fragment() {
             val checkedButton = binding.root.findViewById<RadioButton>(checkedId)
             when (checkedButton) {
                 periodicReminderRadioButton -> {
-                    reminderDateAndTimePickersButton.visibility = View.GONE
+                    isTimeHasChosen = true
+                    reminderDateAndTimeTextView.visibility = View.GONE
                     reminderTimeSpinnerHolder.visibility = View.VISIBLE
                 }
                 onetimeReminderRadioButton -> {
+                    isTimeHasChosen = false
                     reminderTimeSpinnerHolder.visibility = View.GONE
-                    reminderDateAndTimePickersButton.visibility = View.VISIBLE
+                    showDateAndTimePickers()
                 }
             }
         }
-
-        reminderDateAndTimePickersButton.setOnClickListener {
-            showDateTimePicker()
-        }
     }
 
+//    private fun collectionOfInformation(): Task {
+//        return Task(
+//
+//        )
+//    }
+
     private fun checkForCompletenessOfDataEntry(): Boolean {
-        return !binding.reminderNameEditTextView.text.isNullOrBlank() // temp condition check
+        incompletenessOfTheEnteredData = if (binding.reminderNameEditTextView.text.isNullOrBlank() && !isTimeHasChosen) {
+            BOTH
+        } else if (binding.reminderNameEditTextView.text.isNullOrBlank()) {
+            REMINDER_NAME
+        } else {
+            DATE_AND_TIME
+        }
+        return !(binding.reminderNameEditTextView.text.isNullOrBlank() || !isTimeHasChosen)
     }
 
     private fun createTimeSpinnerAdapter(
@@ -98,7 +129,7 @@ class TaskCreatorFragment : Fragment() {
         ) {
             override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
                 val view = convertView ?: LayoutInflater
-                    .from(this@TaskCreatorFragment.context)
+                    .from(requireContext())
                     .inflate(R.layout.spinner_time_item, parent, false)
                 val timeItem = getItem(position)
 
@@ -128,7 +159,7 @@ class TaskCreatorFragment : Fragment() {
         ) {
             override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
                 val view = convertView ?: LayoutInflater
-                    .from(this@TaskCreatorFragment.context)
+                    .from(requireContext())
                     .inflate(R.layout.spinner_color_item, parent, false)
                 val colorItem = getItem(position)
 
@@ -149,8 +180,8 @@ class TaskCreatorFragment : Fragment() {
     }
 
     // Temp date and time picker variant for one time reminder
-    private fun showDateTimePicker() {
-        // val formatDate = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
+    private fun showDateAndTimePickers() {
+        val formatDate = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
         val getDate = Calendar.getInstance()
 
         // Date Picker
@@ -170,7 +201,10 @@ class TaskCreatorFragment : Fragment() {
                         selectedDate.set(Calendar.MINUTE, minute)
 
                         // Format and display the selected date-time
-                        // dob.text = formatDate.format(selectedDate.time)
+                        binding.reminderDateAndTimeTextView.text =
+                            formatDate.format(selectedDate.time)
+                        binding.reminderDateAndTimeTextView.visibility = View.VISIBLE
+                        isTimeHasChosen = true
                     },
                     getDate.get(Calendar.HOUR_OF_DAY),
                     getDate.get(Calendar.MINUTE),
