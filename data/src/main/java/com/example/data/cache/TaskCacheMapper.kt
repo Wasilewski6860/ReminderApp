@@ -12,8 +12,8 @@ class TaskCacheMapper: Mapper<TaskEntity, Task> {
                 id= id,
                 name = name,
                 description = description,
-                timestamp = timestamp,
-                timeTarget = timeTarget,
+                reminderCreationTime = timestamp,
+                reminderTimeTarget = timeTarget,
                 type = periodicType.toPeriodicType(),
                 color
             )
@@ -26,8 +26,8 @@ class TaskCacheMapper: Mapper<TaskEntity, Task> {
                 id= id,
                 name = name,
                 description = description,
-                timestamp = timestamp,
-                timeTarget = timeTarget,
+                timestamp = reminderCreationTime,
+                timeTarget = reminderTimeTarget,
                 periodicType = type.toString(),
                 color
             )

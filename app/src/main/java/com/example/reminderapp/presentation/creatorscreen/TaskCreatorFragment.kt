@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.RadioButton
 import android.widget.TextView
@@ -17,6 +18,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.example.domain.model.Task
+import com.example.domain.model.TaskPeriodType
 import com.example.reminderapp.R
 import com.example.reminderapp.databinding.ReminderCreatorFragmentBinding
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -36,6 +38,8 @@ class TaskCreatorFragment : Fragment() {
     private val spinnerTimeTextList = SpinnerPeriodicTimeText.getTimesList()
     private var incompletenessOfTheEnteredData: String = BOTH
     private var isTimeHasChosen = false
+    private var isReminderPeriodic = false
+    private var spinnerSelectedColor = 0
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -60,29 +64,37 @@ class TaskCreatorFragment : Fragment() {
     }
 
     private fun initListeners(navController: NavController) = with(binding) {
-        requireActivity().findViewById<FloatingActionButton>(R.id.floatingButton).setOnClickListener {
-            if (checkForCompletenessOfDataEntry()) {
-                // viewModel.saveTaskInDatabase()
+        requireActivity().findViewById<FloatingActionButton>(R.id.floatingButton)
+            .setOnClickListener {
+                if (checkForCompletenessOfDataEntry()) {
+                    viewModel.saveTaskInDatabase(collectInformation())
+                    navController.navigate(
+                        resId = R.id.mainFragment,
+                        args = null,
+                        navOptions = NavOptions.Builder().setExitAnim(R.anim.slide_out_anim).build()
+                    )
+                } else {
+                    when (incompletenessOfTheEnteredData) {
+                        BOTH -> Toast.makeText(
+                            requireActivity().applicationContext,
+                            "Enter reminder name and choose time HARDCODE",
+                            Toast.LENGTH_SHORT
+                        ).show()
 
-                navController.navigate(
-                    resId = R.id.mainFragment,
-                    args = null,
-                    navOptions = NavOptions.Builder().setExitAnim(R.anim.slide_out_anim).build()
-                )
-            } else {
-                when (incompletenessOfTheEnteredData) {
-                    BOTH -> Toast.makeText(
-                        requireActivity().applicationContext, "Enter reminder name and choose time HARDCODE", Toast.LENGTH_SHORT
-                    ).show()
-                    REMINDER_NAME -> Toast.makeText(
-                        requireActivity().applicationContext, "Enter reminder name HARDCODE", Toast.LENGTH_SHORT
-                    ).show()
-                    DATE_AND_TIME -> Toast.makeText(
-                        requireActivity().applicationContext, "Choose time HARDCODE", Toast.LENGTH_SHORT
-                    ).show()
+                        REMINDER_NAME -> Toast.makeText(
+                            requireActivity().applicationContext,
+                            "Enter reminder name HARDCODE",
+                            Toast.LENGTH_SHORT
+                        ).show()
+
+                        DATE_AND_TIME -> Toast.makeText(
+                            requireActivity().applicationContext,
+                            "Choose time HARDCODE",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
                 }
             }
-        }
 
         reminderTypeRadioGroup.setOnCheckedChangeListener { _, checkedId ->
             reminderSpinnerOrButtonPlaceHolder.visibility = View.VISIBLE
@@ -90,32 +102,57 @@ class TaskCreatorFragment : Fragment() {
             when (checkedButton) {
                 periodicReminderRadioButton -> {
                     isTimeHasChosen = true
+                    isReminderPeriodic = true
                     reminderDateAndTimeTextView.visibility = View.GONE
                     reminderTimeSpinnerHolder.visibility = View.VISIBLE
                 }
+
                 onetimeReminderRadioButton -> {
                     isTimeHasChosen = false
+                    isReminderPeriodic = false
                     reminderTimeSpinnerHolder.visibility = View.GONE
                     showDateAndTimePickers()
                 }
             }
         }
+
+        reminderColorSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                spinnerSelectedColor = parent?.getItemAtPosition(position) as Int
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+        }
     }
 
-//    private fun collectionOfInformation(): Task {
-//        return Task(
-//
-//        )
-//    }
+    private fun collectInformation(): Task {
+        return Task(
+            id = 0,
+            name = binding.reminderNameEditTextView.text.toString(),
+            description = if (!binding.reminderDescriptionEditTextView.text.isNullOrBlank())
+                binding.reminderDescriptionEditTextView.text.toString()
+            else "",
+            reminderCreationTime = 0, // temp code string
+            reminderTimeTarget = 0, // temp too
+            type = if (isReminderPeriodic) TaskPeriodType.PERIODIC else TaskPeriodType.ONE_TIME,
+            color = spinnerSelectedColor
+            )
+    }
 
     private fun checkForCompletenessOfDataEntry(): Boolean {
-        incompletenessOfTheEnteredData = if (binding.reminderNameEditTextView.text.isNullOrBlank() && !isTimeHasChosen) {
-            BOTH
-        } else if (binding.reminderNameEditTextView.text.isNullOrBlank()) {
-            REMINDER_NAME
-        } else {
-            DATE_AND_TIME
-        }
+        incompletenessOfTheEnteredData =
+            if (binding.reminderNameEditTextView.text.isNullOrBlank() && !isTimeHasChosen) {
+                BOTH
+            } else if (binding.reminderNameEditTextView.text.isNullOrBlank()) {
+                REMINDER_NAME
+            } else {
+                DATE_AND_TIME
+            }
         return !(binding.reminderNameEditTextView.text.isNullOrBlank() || !isTimeHasChosen)
     }
 
@@ -134,7 +171,8 @@ class TaskCreatorFragment : Fragment() {
                 val timeItem = getItem(position)
 
                 val timeView = view.findViewById<TextView>(R.id.spinnerTimeItemView)
-                timeView.text = timeItem ?: requireActivity().applicationContext.getString(R.string.stub)
+                timeView.text =
+                    timeItem ?: requireActivity().applicationContext.getString(R.string.stub)
 
                 return view
             }
@@ -220,11 +258,3 @@ class TaskCreatorFragment : Fragment() {
     }
 
 }
-
-data class SpinnerColor(
-    val color: Int
-)
-
-data class SpinnerTimeText(
-    val time: String
-)

@@ -10,7 +10,6 @@ object SpinnerColors {
         Color.parseColor("#FFA500"),
         Color.parseColor("#FFC0CB")
     )
-
 }
 
 object SpinnerPeriodicTimeText {

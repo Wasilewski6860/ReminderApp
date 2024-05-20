@@ -42,13 +42,19 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initNavigationListener(navHostFragment: NavHostFragment) = with(binding) {
-        var action = R.id.action_mainFragment_to_creatorFragment
-
         navHostFragment.findNavController()
             .addOnDestinationChangedListener { _, destination, _ ->
+                floatingButton.setOnClickListener {
+                    val action = R.id.action_mainFragment_to_creatorFragment
+                    navHostFragment.findNavController().navigate(
+                        resId = action,
+                        args = null,
+                        navOptions = NavOptions.Builder().setEnterAnim(R.anim.slide_in_anim)
+                            .build()
+                    )
+                }
                 when (destination.id) {
                     R.id.mainFragment -> {
-                        action = R.id.action_mainFragment_to_creatorFragment
                         floatingButton.setImageResource(R.drawable.add_icon)
                     }
                     R.id.creatorFragment -> {
@@ -56,14 +62,6 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
             }
-        floatingButton.setOnClickListener {
-            navHostFragment.findNavController().navigate(
-                resId = action,
-                args = null,
-                navOptions = NavOptions.Builder().setEnterAnim(R.anim.slide_in_anim)
-                    .build()
-            )
-        }
     }
 
     override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
