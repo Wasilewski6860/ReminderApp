@@ -5,7 +5,7 @@ import com.example.data.cache.TaskDatabase
 import com.example.data.cache.TaskStorage
 import com.example.domain.model.Task
 
-class TaskStorageImpl(val mapper: TaskCacheMapper, taskDatabase: TaskDatabase): TaskStorage {
+class TaskStorageImpl(val mapper: TaskCacheMapper, taskDatabase: TaskDatabase) : TaskStorage {
 
     private val taskDao = taskDatabase.dao
 
@@ -16,13 +16,13 @@ class TaskStorageImpl(val mapper: TaskCacheMapper, taskDatabase: TaskDatabase): 
     override suspend fun deleteTask(task: Task) = taskDao.deleteTask(mapper.mapToEntity(task))
 
     override suspend fun getAllTasks(): List<Task> {
-        return taskDao.getAllTasks().map {taskEntity ->
+        return taskDao.getAllTasks().map { taskEntity ->
             mapper.mapFromEntity(taskEntity)
         }
     }
 
     override suspend fun getAllTasksByPeriodType(period: String): List<Task> {
-        return taskDao.getAllTasksByPeriodType(period).map {taskEntity ->
+        return taskDao.getAllTasksByPeriodType(period).map { taskEntity ->
             mapper.mapFromEntity(taskEntity)
         }
     }

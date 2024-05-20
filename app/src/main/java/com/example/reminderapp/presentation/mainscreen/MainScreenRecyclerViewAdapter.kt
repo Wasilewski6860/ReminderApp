@@ -62,7 +62,7 @@ class MainScreenRecyclerViewAdapter(
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    fun fillRecyclerWithFullItemsList(itemsMutableList: MutableList<Task>) {
+    fun fillRecyclerWithFullItemsList(itemsMutableList: List<Task>) {
         for (item in itemsMutableList) {
             itemsList.add(item)
             notifyDataSetChanged()

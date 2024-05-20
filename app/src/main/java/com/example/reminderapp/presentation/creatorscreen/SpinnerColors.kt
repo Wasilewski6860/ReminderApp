@@ -1,13 +1,16 @@
 package com.example.reminderapp.presentation.creatorscreen
 
-import com.example.reminderapp.R
+import android.graphics.Color
 
 object SpinnerColors {
-    fun getColorsList(): List<Int> {
-        return listOf(
-            R.color.grey, R.color.green, R.color.light_blue, R.color.orange, R.color.pink
-        )
-    }
+    val spinnerColorsList get() = listOf(
+        Color.parseColor("#808080"),
+        Color.parseColor("#008000"),
+        Color.parseColor("#0000CD"),
+        Color.parseColor("#FFA500"),
+        Color.parseColor("#FFC0CB")
+    )
+
 }
 
 object SpinnerPeriodicTimeText {

@@ -1,6 +1,10 @@
 package com.example.reminderapp.presentation.creatorscreen
 
+import android.app.DatePickerDialog
+import android.app.TimePickerDialog
 import android.content.Context
+import android.icu.text.SimpleDateFormat
+import android.icu.util.Calendar
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -16,12 +20,11 @@ import androidx.navigation.fragment.findNavController
 import com.example.reminderapp.R
 import com.example.reminderapp.databinding.ReminderCreatorFragmentBinding
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import java.util.Locale
 
 class TaskCreatorFragment : Fragment() {
 
     private lateinit var binding: ReminderCreatorFragmentBinding
-
-    private val spinnerColorsList = SpinnerColors.getColorsList()
     private val spinnerTimeTextList = SpinnerPeriodicTimeText.getTimesList()
 
     override fun onCreateView(
@@ -33,7 +36,7 @@ class TaskCreatorFragment : Fragment() {
 
         binding.apply {
 
-            val colorSpinnerAdapter = createColorSpinnerAdapter(spinnerColorsList)
+            val colorSpinnerAdapter = createColorSpinnerAdapter(SpinnerColors.spinnerColorsList)
             reminderColorSpinner.adapter = colorSpinnerAdapter
 
             val timeSpinnerAdapter = createTimeSpinnerAdapter(spinnerTimeTextList)
@@ -74,6 +77,10 @@ class TaskCreatorFragment : Fragment() {
                     reminderDateAndTimePickersButton.visibility = View.VISIBLE
                 }
             }
+        }
+
+        reminderDateAndTimePickersButton.setOnClickListener {
+            showDateTimePicker()
         }
     }
 
@@ -139,6 +146,43 @@ class TaskCreatorFragment : Fragment() {
                 return getView(position, convertView, parent)
             }
         }
+    }
+
+    // Temp date and time picker variant for one time reminder
+    private fun showDateTimePicker() {
+        // val formatDate = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
+        val getDate = Calendar.getInstance()
+
+        // Date Picker
+        val datePicker = DatePickerDialog(
+            requireContext(),
+            { _, year, monthOfYear, dayOfMonth ->
+                val selectedDate = Calendar.getInstance()
+                selectedDate.set(Calendar.YEAR, year)
+                selectedDate.set(Calendar.MONTH, monthOfYear)
+                selectedDate.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+
+                // Time Picker
+                val timePicker = TimePickerDialog(
+                    requireContext(),
+                    { _, hourOfDay, minute ->
+                        selectedDate.set(Calendar.HOUR_OF_DAY, hourOfDay)
+                        selectedDate.set(Calendar.MINUTE, minute)
+
+                        // Format and display the selected date-time
+                        // dob.text = formatDate.format(selectedDate.time)
+                    },
+                    getDate.get(Calendar.HOUR_OF_DAY),
+                    getDate.get(Calendar.MINUTE),
+                    true // set true for 24-hour format
+                )
+                timePicker.show()
+            },
+            getDate.get(Calendar.YEAR),
+            getDate.get(Calendar.MONTH),
+            getDate.get(Calendar.DAY_OF_MONTH)
+        )
+        datePicker.show()
     }
 
 }

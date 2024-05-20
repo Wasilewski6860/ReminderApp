@@ -26,8 +26,6 @@ class MainFragment : Fragment(), MainScreenRecyclerViewAdapter.OnItemClickListen
     ): View {
         binding = MainFragmentBinding.inflate(inflater, container, false)
 
-        // viewModel.getAllTasks() <-- ??
-
         binding.apply {
 
             mainScreenRecyclerView.layoutManager = GridLayoutManager(context, 1)
