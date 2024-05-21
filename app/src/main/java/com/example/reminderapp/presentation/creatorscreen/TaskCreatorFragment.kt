@@ -1,6 +1,7 @@
 package com.example.reminderapp.presentation.creatorscreen
 
 import android.content.Context
+import android.icu.text.SimpleDateFormat
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -14,12 +15,14 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
+import com.example.domain.model.TaskPeriodType
 import com.example.reminderapp.R
-import com.example.reminderapp.work.RemindWorkManager
+import com.example.reminderapp.reminder.work.RemindWorkManager
 import com.example.reminderapp.databinding.ReminderCreatorFragmentBinding
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import java.util.Locale
 
 class TaskCreatorFragment : Fragment() {
 
@@ -35,15 +38,15 @@ class TaskCreatorFragment : Fragment() {
     private val viewModel by viewModel<CreatorViewModel>()
 
     /**
-        Айдишник таска, передаваемый как аргумент в action навигации
-        Например:
-        val action =
-            MainFragmentDirections.actionMainFragmentToCreateTaskFragment(
-                id = task.taskId, isSaved = false
-            )
-        findNavController().navigate(action)
+    Айдишник таска, передаваемый как аргумент в action навигации
+    Например:
+    val action =
+    MainFragmentDirections.actionMainFragmentToCreateTaskFragment(
+    id = task.taskId, isSaved = false
+    )
+    findNavController().navigate(action)
 
-        Если taskId!=-1, значит нужно взять таск с бд и заполнить соотв.поля. фрагмента
+    Если taskId!=-1, значит нужно взять таск с бд и заполнить соотв.поля. фрагмента
      */
     private  var taskId: Int = -1
     override fun onCreate(savedInstanceState: Bundle?) {

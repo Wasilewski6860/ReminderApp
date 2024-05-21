@@ -1,4 +1,4 @@
-package com.example.reminderapp.work
+package com.example.reminderapp.reminder.work
 
 import android.content.Context
 import androidx.work.Worker
@@ -9,7 +9,7 @@ class RemindWorker(val context: Context, val workerParams: WorkerParameters) : W
     workerParams) {
     override fun doWork(): Result {
 
-        NotificationManager(context).createNotification(
+        NotificationManager(applicationContext).createNotification(
             inputData.getString("title").toString()!!,
             inputData.getString("text").toString()!!,
             inputData.getInt("id",1)

@@ -12,6 +12,9 @@ class TaskRepositoryImpl(private val taskStorage: TaskStorage) : TaskRepository 
     override suspend fun editTask(task: Task) = taskStorage.editTask(task)
 
     override suspend fun deleteTask(task: Task) = taskStorage.deleteTask(task)
+    override suspend fun deleteTask(id: Int) {
+        taskStorage.deleteTask(id)
+    }
 
     override suspend fun deleteAll() = taskStorage.clearAll()
 

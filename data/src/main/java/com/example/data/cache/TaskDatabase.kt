@@ -11,7 +11,7 @@ import com.example.data.cache.entity.TaskEntity
     entities = [
         TaskEntity::class
     ],
-    version = 1
+    version = 2
 )
 abstract class TaskDatabase : RoomDatabase() {
 

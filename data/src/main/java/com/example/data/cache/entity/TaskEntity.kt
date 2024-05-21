@@ -7,7 +7,7 @@ import androidx.room.TypeConverters
 
 @Entity(tableName = "task")
 data class TaskEntity(
-    @PrimaryKey(autoGenerate = false) val id: Int,
+    @PrimaryKey(autoGenerate = true) val id: Int,
     @ColumnInfo(name = "name") val name: String,
     @ColumnInfo(name = "description") val description: String,
     @ColumnInfo(name = "timestamp") val timestamp: Long,

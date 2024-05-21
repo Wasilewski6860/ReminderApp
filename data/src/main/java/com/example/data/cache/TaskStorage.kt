@@ -9,6 +9,7 @@ interface TaskStorage {
     suspend fun editTask(task: Task)
 
     suspend fun deleteTask(task: Task)
+    suspend fun deleteTask(id: Int)
 
     suspend fun getAllTasks(): List<Task>
 
