@@ -26,7 +26,7 @@ class MainViewModel(
             try {
                 tasksListLiveData.postValue(getAllTasksUseCase.execute())
             } catch (e: Exception) {
-                Log.e("loading tasks from room process", e.toString())
+                Log.e("loading tasks from database process", e.toString())
             }
         }
     }

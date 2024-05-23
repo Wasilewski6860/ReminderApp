@@ -31,7 +31,7 @@ class MainFragment : Fragment(), MainScreenRecyclerViewAdapter.OnItemClickListen
             mainScreenRecyclerView.layoutManager = GridLayoutManager(context, 1)
             mainScreenRecyclerView.adapter = adapter
 
-            // viewModel.fetchTasksFromDatabase()
+            viewModel.fetchTasksFromDatabase()
             viewModel.getTasksListLiveData().observe(viewLifecycleOwner) { itemsList ->
                 // Recycler view adding element process here
                 adapter.fillRecyclerWithFullItemsList(itemsList)

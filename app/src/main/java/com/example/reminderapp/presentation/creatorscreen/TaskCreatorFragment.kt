@@ -5,6 +5,9 @@ import android.app.TimePickerDialog
 import android.icu.text.SimpleDateFormat
 import android.icu.util.Calendar
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -48,6 +51,8 @@ class TaskCreatorFragment : Fragment() {
     ): View {
         binding = ReminderCreatorFragmentBinding.inflate(inflater, container, false)
 
+        val handler = Handler(Looper.getMainLooper())
+
         binding.apply {
 
             val colorSpinnerAdapter = createColorSpinnerAdapter(SpinnerColors.spinnerColorsList)
@@ -58,12 +63,12 @@ class TaskCreatorFragment : Fragment() {
 
         }
 
-        initListeners(findNavController())
+        initListeners(findNavController(), handler)
 
         return binding.root
     }
 
-    private fun initListeners(navController: NavController) = with(binding) {
+    private fun initListeners(navController: NavController, handler: Handler) = with(binding) {
         requireActivity().findViewById<FloatingActionButton>(R.id.floatingButton)
             .setOnClickListener {
                 if (checkForCompletenessOfDataEntry()) {
@@ -74,25 +79,41 @@ class TaskCreatorFragment : Fragment() {
                         navOptions = NavOptions.Builder().setExitAnim(R.anim.slide_out_anim).build()
                     )
                 } else {
+                    val defaultHintColor = reminderNameEditTextView.currentHintTextColor
+                    val defaultRadioGroupTextColor = periodicReminderRadioButton.currentTextColor
+                    highlightFields(
+                        incompletenessOfTheEnteredData,
+                        defaultHintColor,
+                        defaultRadioGroupTextColor,
+                        handler
+                    )
                     when (incompletenessOfTheEnteredData) {
-                        BOTH -> Toast.makeText(
-                            requireActivity().applicationContext,
-                            "Enter reminder name and choose time HARDCODE",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        BOTH -> {
+                            Toast.makeText(
+                                requireActivity().applicationContext,
+                                "Enter reminder name and choose time HARDCODE",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
 
-                        REMINDER_NAME -> Toast.makeText(
-                            requireActivity().applicationContext,
-                            "Enter reminder name HARDCODE",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        REMINDER_NAME -> {
+                            Toast.makeText(
+                                requireActivity().applicationContext,
+                                "Enter reminder name HARDCODE",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
 
-                        DATE_AND_TIME -> Toast.makeText(
-                            requireActivity().applicationContext,
-                            "Choose time HARDCODE",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        DATE_AND_TIME -> {
+                            Toast.makeText(
+                                requireActivity().applicationContext,
+                                "Choose time HARDCODE",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
                     }
+
+
                 }
             }
 
@@ -130,6 +151,50 @@ class TaskCreatorFragment : Fragment() {
         }
     }
 
+    private fun highlightFields(
+        type: String,
+        defaultHintColor: Int,
+        defaultRadioGroupTextColor: Int,
+        handler: Handler
+    ) = with(binding) {
+        when (type) {
+            BOTH -> {
+                reminderNameEditTextView.setHintTextColor(android.graphics.Color.RED)
+                periodicReminderRadioButton.setTextColor(android.graphics.Color.RED)
+                onetimeReminderRadioButton.setTextColor(android.graphics.Color.RED)
+                handler.postDelayed({
+                    reminderNameEditTextView.clearFocus()
+                    reminderNameEditTextView.setHintTextColor(defaultHintColor)
+                    periodicReminderRadioButton.clearFocus()
+                    onetimeReminderRadioButton.clearFocus()
+                    periodicReminderRadioButton.setTextColor(defaultRadioGroupTextColor)
+                    onetimeReminderRadioButton.setTextColor(defaultRadioGroupTextColor)
+                }, 1000)
+            }
+
+            REMINDER_NAME -> {
+                reminderNameEditTextView.setHintTextColor(android.graphics.Color.RED)
+                handler.postDelayed({
+                    reminderNameEditTextView.clearFocus()
+                    reminderNameEditTextView.setHintTextColor(defaultHintColor)
+                }, 1000)
+            }
+
+            DATE_AND_TIME -> {
+                periodicReminderRadioButton.setTextColor(android.graphics.Color.RED)
+                onetimeReminderRadioButton.setTextColor(android.graphics.Color.RED)
+                handler.postDelayed({
+                    periodicReminderRadioButton.clearFocus()
+                    onetimeReminderRadioButton.clearFocus()
+                    periodicReminderRadioButton.setTextColor(defaultRadioGroupTextColor)
+                    onetimeReminderRadioButton.setTextColor(defaultRadioGroupTextColor)
+                }, 1000)
+            }
+
+            else -> {}
+        }
+    }
+
     private fun collectInformation(): Task {
         return Task(
             id = 0,
@@ -137,11 +202,11 @@ class TaskCreatorFragment : Fragment() {
             description = if (!binding.reminderDescriptionEditTextView.text.isNullOrBlank())
                 binding.reminderDescriptionEditTextView.text.toString()
             else "",
-            reminderCreationTime = 0, // temp code string
+            reminderCreationTime = System.currentTimeMillis(),
             reminderTimeTarget = 0, // temp too
             type = if (isReminderPeriodic) TaskPeriodType.PERIODIC else TaskPeriodType.ONE_TIME,
             color = spinnerSelectedColor
-            )
+        )
     }
 
     private fun checkForCompletenessOfDataEntry(): Boolean {
@@ -243,6 +308,8 @@ class TaskCreatorFragment : Fragment() {
                             formatDate.format(selectedDate.time)
                         binding.reminderDateAndTimeTextView.visibility = View.VISIBLE
                         isTimeHasChosen = true
+                        Log.d("test", formatDate.format(selectedDate.time))
+                        // formatDate - getDate and parse that in millisec and store in some value
                     },
                     getDate.get(Calendar.HOUR_OF_DAY),
                     getDate.get(Calendar.MINUTE),
