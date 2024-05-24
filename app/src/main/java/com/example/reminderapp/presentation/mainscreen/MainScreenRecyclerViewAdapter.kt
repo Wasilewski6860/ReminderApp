@@ -22,15 +22,18 @@ class MainScreenRecyclerViewAdapter(
 
         init {
             // add change cardView backgroundTint color method here
-
-            cardViewHolder.setOnClickListener {
-                listener.onRcItemClick(adapterPosition)
+            cardViewHolder.apply {
+                setOnClickListener {
+                    listener.onRcItemClick(adapterPosition)
+                }
+                setBackgroundResource(R.drawable.rounded_corners_cardview)
             }
         }
 
         fun bind(item: Task) = with(binding) {
             reminderRcItemName.text = item.name // add other
             reminderRcItemTime.text = item.reminderTimeTarget.toString()
+            cardViewHolder.setBackgroundColor(item.color) // set card corners radius somehow
             // reminderRcItemTime.text = 'somehow add time'
         }
     }

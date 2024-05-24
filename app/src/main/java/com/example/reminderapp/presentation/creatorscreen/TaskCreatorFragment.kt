@@ -43,6 +43,7 @@ class TaskCreatorFragment : Fragment() {
     private var isTimeHasChosen = false
     private var isReminderPeriodic = false
     private var spinnerSelectedColor = 0
+    private var timeDifference: Long = 0
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -203,7 +204,7 @@ class TaskCreatorFragment : Fragment() {
                 binding.reminderDescriptionEditTextView.text.toString()
             else "",
             reminderCreationTime = System.currentTimeMillis(),
-            reminderTimeTarget = 0, // temp too
+            reminderTimeTarget = timeDifference,
             type = if (isReminderPeriodic) TaskPeriodType.PERIODIC else TaskPeriodType.ONE_TIME,
             color = spinnerSelectedColor
         )
@@ -308,8 +309,10 @@ class TaskCreatorFragment : Fragment() {
                             formatDate.format(selectedDate.time)
                         binding.reminderDateAndTimeTextView.visibility = View.VISIBLE
                         isTimeHasChosen = true
-                        Log.d("test", formatDate.format(selectedDate.time))
-                        // formatDate - getDate and parse that in millisec and store in some value
+                        timeDifference = viewModel.getTimeDifferenceInMilliseconds(
+                            formatDate.format(getDate.time),
+                            formatDate.format(selectedDate.time)
+                        )
                     },
                     getDate.get(Calendar.HOUR_OF_DAY),
                     getDate.get(Calendar.MINUTE),

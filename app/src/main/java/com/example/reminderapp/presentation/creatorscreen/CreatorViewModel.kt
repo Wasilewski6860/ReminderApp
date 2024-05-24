@@ -7,6 +7,9 @@ import com.example.domain.model.Task
 import com.example.domain.use_case.GetTaskUseCase
 import com.example.domain.use_case.SaveTaskUseCase
 import kotlinx.coroutines.launch
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.time.temporal.ChronoUnit
 
 class CreatorViewModel(
     private val saveTaskUseCase: SaveTaskUseCase,
@@ -31,6 +34,17 @@ class CreatorViewModel(
                 Log.e("getting task from room process", e.toString())
             }
         }
+    }
+
+    fun getTimeDifferenceInMilliseconds(time1: String, time2: String): Long {
+        var difference: Long = 0
+        viewModelScope.launch {
+            val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")
+            val dateTime1 = LocalDateTime.parse(time1, formatter)
+            val dateTime2 = LocalDateTime.parse(time2, formatter)
+            difference = ChronoUnit.MILLIS.between(dateTime1, dateTime2)
+        }
+        return difference
     }
 
 }
