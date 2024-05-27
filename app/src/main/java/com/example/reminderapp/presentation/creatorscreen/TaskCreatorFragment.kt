@@ -7,7 +7,6 @@ import android.icu.util.Calendar
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -38,7 +37,9 @@ class TaskCreatorFragment : Fragment() {
 
     private lateinit var binding: ReminderCreatorFragmentBinding
     private val viewModel by viewModel<CreatorViewModel>()
-    private val spinnerTimeTextList = SpinnerPeriodicTimeText.getTimesList()
+    private lateinit var spinnerTimeTextList: List<String>
+    private lateinit var timesDict: Map<Long, String>
+    private var selectedTime: String = ""
     private var incompletenessOfTheEnteredData: String = BOTH
     private var isTimeHasChosen = false
     private var isReminderPeriodic = false
@@ -52,6 +53,8 @@ class TaskCreatorFragment : Fragment() {
     ): View {
         binding = ReminderCreatorFragmentBinding.inflate(inflater, container, false)
 
+        spinnerTimeTextList = SpinnerPeriodicTime.getTimesList(requireActivity().applicationContext)
+        timesDict = SpinnerPeriodicTime.getTimesDict(requireActivity().applicationContext)
         val handler = Handler(Looper.getMainLooper())
 
         binding.apply {
@@ -150,6 +153,21 @@ class TaskCreatorFragment : Fragment() {
 
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
+
+        reminderTimePickerSpinner.onItemSelectedListener =
+            object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(
+                    parent: AdapterView<*>?,
+                    view: View?,
+                    position: Int,
+                    id: Long
+                ) {
+                    selectedTime = parent?.getItemAtPosition(position) as String
+                }
+
+                override fun onNothingSelected(parent: AdapterView<*>?) {}
+            }
+
     }
 
     private fun highlightFields(
@@ -204,10 +222,19 @@ class TaskCreatorFragment : Fragment() {
                 binding.reminderDescriptionEditTextView.text.toString()
             else "",
             reminderCreationTime = System.currentTimeMillis(),
-            reminderTimeTarget = timeDifference,
+            reminderTimeTarget = (
+                    if (!isReminderPeriodic)
+                        timeDifference
+                    else
+                        getKeyByValue(timesDict, selectedTime)
+                    )!!,
             type = if (isReminderPeriodic) TaskPeriodType.PERIODIC else TaskPeriodType.ONE_TIME,
             color = spinnerSelectedColor
         )
+    }
+
+    private fun getKeyByValue(map: Map<Long, String>, value: String): Long? {
+        return map.entries.firstOrNull { it.value == value }?.key
     }
 
     private fun checkForCompletenessOfDataEntry(): Boolean {

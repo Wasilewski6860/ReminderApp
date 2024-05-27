@@ -12,7 +12,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class MainFragment : Fragment(), MainScreenRecyclerViewAdapter.OnItemClickListener {
 
     private lateinit var binding: MainFragmentBinding
-    private val adapter = MainScreenRecyclerViewAdapter(this)
+    private lateinit var adapter: MainScreenRecyclerViewAdapter
     private val viewModel by viewModel<MainViewModel>()
 
     init {
@@ -27,6 +27,12 @@ class MainFragment : Fragment(), MainScreenRecyclerViewAdapter.OnItemClickListen
         binding = MainFragmentBinding.inflate(inflater, container, false)
 
         binding.apply {
+
+            adapter = MainScreenRecyclerViewAdapter(object : MainScreenRecyclerViewAdapter.OnItemClickListener {
+                override fun onRcItemClick(position: Int) {
+
+                }
+            }, requireContext())
 
             mainScreenRecyclerView.layoutManager = GridLayoutManager(context, 1)
             mainScreenRecyclerView.adapter = adapter
