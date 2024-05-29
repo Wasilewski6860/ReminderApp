@@ -22,13 +22,6 @@ class MainFragment : Fragment(), MainScreenRecyclerViewAdapter.OnItemClickListen
     private val adapter = MainScreenRecyclerViewAdapter(this)
     private val viewModel by viewModel<MainViewModel>()
 
-    private val deleteReceiver = object : BroadcastReceiver() {
-        override fun onReceive(context: Context?, intent: Intent?) {
-            val bundle = intent?.extras ?: return
-            val id = bundle.getInt("id")
-            viewModel.deleteTask(id)
-        }
-    }
     init {
         // LiveData observing here (for now one i guess)
     }
@@ -62,14 +55,4 @@ class MainFragment : Fragment(), MainScreenRecyclerViewAdapter.OnItemClickListen
         // Transition on creator screen with current rcItem data to edit it
     }
 
-    override fun onResume() {
-        super.onResume()
-        val intentFilter = IntentFilter(DELETE_TASK)
-        context?.registerReceiver(deleteReceiver, intentFilter, Context.RECEIVER_NOT_EXPORTED)
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        context?.unregisterReceiver(deleteReceiver)
-    }
 }

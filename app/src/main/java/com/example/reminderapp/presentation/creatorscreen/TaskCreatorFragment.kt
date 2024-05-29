@@ -19,10 +19,12 @@ import com.example.domain.model.TaskPeriodType
 import com.example.reminderapp.R
 import com.example.reminderapp.reminder.work.RemindWorkManager
 import com.example.reminderapp.databinding.ReminderCreatorFragmentBinding
+import com.example.reminderapp.reminder.RemindAlarmManager
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.Locale
+import kotlin.random.Random
 
 class TaskCreatorFragment : Fragment() {
 
@@ -34,6 +36,10 @@ class TaskCreatorFragment : Fragment() {
      * Использовать при создании, изменении и удалении напоминаний
      */
     private val remindWorkManager: RemindWorkManager by inject()
+    private val remindAlarmManager: RemindAlarmManager by inject()
+    val name = Random.nextInt(20).toString()
+    val description = Random.nextInt(20).toString()
+
 
     private val viewModel by viewModel<CreatorViewModel>()
 
@@ -104,16 +110,22 @@ class TaskCreatorFragment : Fragment() {
                     }
                 }
             }
+        }
 
+        viewModel.result.observe(viewLifecycleOwner) {
+            remindWorkManager.createPeriodicWorkRequest(name, description, System.currentTimeMillis(), 2*60*1000, it.toInt())
+//            remindAlarmManager.createAlarmPeriodic(name, description, System.currentTimeMillis(), 2*60*1000, it.toInt())
+            navController.navigate(
+                resId = R.id.mainFragment,
+                args = null,
+                navOptions = NavOptions.Builder().setExitAnim(R.anim.slide_out_anim).build()
+            )
         }
 
         requireActivity().findViewById<FloatingActionButton>(R.id.floatingButton).setOnClickListener {
             if (checkForCompletenessOfDataEntry()) {
-                navController.navigate(
-                    resId = R.id.mainFragment,
-                    args = null,
-                    navOptions = NavOptions.Builder().setExitAnim(R.anim.slide_out_anim).build()
-                )
+                viewModel.saveTask(name, description)
+
             } else {
                 Toast.makeText(
                     activityContext, "Fields is empty HARDCODE", Toast.LENGTH_SHORT
