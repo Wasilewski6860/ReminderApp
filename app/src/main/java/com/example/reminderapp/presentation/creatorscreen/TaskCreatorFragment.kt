@@ -15,6 +15,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
+import com.example.domain.model.Task
 import com.example.domain.model.TaskPeriodType
 import com.example.reminderapp.R
 import com.example.reminderapp.reminder.work.RemindWorkManager
@@ -23,10 +24,11 @@ import com.example.reminderapp.reminder.RemindAlarmManager
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.component.KoinComponent
 import java.util.Locale
 import kotlin.random.Random
 
-class TaskCreatorFragment : Fragment() {
+class TaskCreatorFragment : Fragment(), KoinComponent {
 
     private lateinit var binding: ReminderCreatorFragmentBinding
     private lateinit var activityContext: Context
@@ -113,8 +115,8 @@ class TaskCreatorFragment : Fragment() {
         }
 
         viewModel.result.observe(viewLifecycleOwner) {
-            remindWorkManager.createPeriodicWorkRequest(name, description, System.currentTimeMillis(), 2*60*1000, it.toInt())
-//            remindAlarmManager.createAlarmPeriodic(name, description, System.currentTimeMillis(), 2*60*1000, it.toInt())
+//            remindWorkManager.createPeriodicWorkRequest(name, description, System.currentTimeMillis(), 2*60*1000, it.toInt())
+            remindAlarmManager.createAlarm(Task(it.toInt(),name, description, System.currentTimeMillis(), 2*60*1000, TaskPeriodType.PERIODIC,0))
             navController.navigate(
                 resId = R.id.mainFragment,
                 args = null,

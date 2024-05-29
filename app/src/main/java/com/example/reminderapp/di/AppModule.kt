@@ -2,6 +2,7 @@ package com.example.reminderapp.di
 
 import android.app.AlarmManager
 import android.content.Context
+import com.example.reminderapp.notification.NotificationManager
 import com.example.reminderapp.presentation.creatorscreen.CreatorViewModel
 import com.example.reminderapp.presentation.mainscreen.MainViewModel
 import com.example.reminderapp.reminder.RemindAlarmManager
@@ -17,12 +18,16 @@ val appModule = module {
     }
 
     single<RemindAlarmManager> {
-        RemindAlarmManager(alarmManager = get(), context = androidContext())
+        RemindAlarmManager(context = androidContext())
     }
 
     single<AlarmManager> {
         val context: Context = get()
         context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+    }
+
+    single<NotificationManager> {
+        NotificationManager(androidContext())
     }
 
     viewModel<MainViewModel> {

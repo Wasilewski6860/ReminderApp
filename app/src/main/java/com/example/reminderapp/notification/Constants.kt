@@ -3,6 +3,8 @@ package com.example.reminderapp.notification
 object Constants {
     const val DELETE_TASK = "ACTION_SHOW_TASK"
     const val ACTION_SHOW_TASK = "ACTION_SHOW_TASK"
+    const val ACTION_DISMISS = "ACTION_DISMISS"
+    const val ACTION_POSTPONE = "ACTION_POSTPONE"
     const val TASK_NAME_EXTRA = "TASK_NAME_EXTRA"
     const val TASK_DESCRIPTION_EXTRA = "TASK_DESCRIPTION_EXTRA"
     const val TASK_ID_EXTRA = "TASK_ID_EXTRA"

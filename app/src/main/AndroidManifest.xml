@@ -4,6 +4,8 @@
 
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <application
         android:name=".app.App"
@@ -26,8 +28,22 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name=".reminder.ReminderBroadcast"/>
-        <receiver android:name=".reminder.AlarmBroadcastReceiver"/>
+        <receiver android:name=".receivers.ReminderBroadcast"/>
+        <receiver
+            android:name=".receivers.AlarmBroadcastReceiver"
+            android:directBootAware="true">
+        </receiver>
+
+        <receiver android:name=".receivers.DeviceBootReceiver"
+            android:exported="true"
+            android:directBootAware="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+                <action android:name="android.intent.action.LOCKED_BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
 
     </application>
 
