@@ -15,16 +15,20 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
+import com.example.domain.model.Task
 import com.example.domain.model.TaskPeriodType
 import com.example.reminderapp.R
 import com.example.reminderapp.reminder.work.RemindWorkManager
 import com.example.reminderapp.databinding.ReminderCreatorFragmentBinding
+import com.example.reminderapp.reminder.RemindAlarmManager
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.component.KoinComponent
 import java.util.Locale
+import kotlin.random.Random
 
-class TaskCreatorFragment : Fragment() {
+class TaskCreatorFragment : Fragment(), KoinComponent {
 
     private lateinit var binding: ReminderCreatorFragmentBinding
     private lateinit var activityContext: Context
@@ -34,6 +38,10 @@ class TaskCreatorFragment : Fragment() {
      * Использовать при создании, изменении и удалении напоминаний
      */
     private val remindWorkManager: RemindWorkManager by inject()
+    private val remindAlarmManager: RemindAlarmManager by inject()
+    val name = Random.nextInt(20).toString()
+    val description = Random.nextInt(20).toString()
+
 
     private val viewModel by viewModel<CreatorViewModel>()
 
