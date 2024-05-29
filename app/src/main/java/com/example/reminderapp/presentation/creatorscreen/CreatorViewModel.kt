@@ -14,30 +14,11 @@ import kotlin.random.Random
 
 class CreatorViewModel(
     private val saveTaskUseCase: SaveTaskUseCase,
-    private val getTaskUseCase: GetTaskUseCase,
+    private val getTaskUseCase: GetTaskUseCase
 ) : ViewModel() {
 
-    val result: MutableLiveData<Long> = MutableLiveData<Long>()
-    fun saveTask(
-        name: String,
-        description: String
-    ) {
+    fun saveTask() {
         // Saving process here
-        viewModelScope.launch {
-            val res = saveTaskUseCase.execute(
-                task = Task(
-                    id = 0,
-                    name = name,
-                    description = description,
-                    timestamp = System.currentTimeMillis(),
-                    timeTarget = 2 * 60 * 1000,
-                    type = TaskPeriodType.PERIODIC,
-                    color = 0
-                )
-            )
-            result.postValue(res)
-
-        }
     }
 
 }

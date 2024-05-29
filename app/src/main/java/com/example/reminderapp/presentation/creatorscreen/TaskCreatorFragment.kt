@@ -112,22 +112,16 @@ class TaskCreatorFragment : Fragment(), KoinComponent {
                     }
                 }
             }
-        }
 
-        viewModel.result.observe(viewLifecycleOwner) {
-//            remindWorkManager.createPeriodicWorkRequest(name, description, System.currentTimeMillis(), 2*60*1000, it.toInt())
-            remindAlarmManager.createAlarm(Task(it.toInt(),name, description, System.currentTimeMillis(), 2*60*1000, TaskPeriodType.PERIODIC,0))
-            navController.navigate(
-                resId = R.id.mainFragment,
-                args = null,
-                navOptions = NavOptions.Builder().setExitAnim(R.anim.slide_out_anim).build()
-            )
         }
 
         requireActivity().findViewById<FloatingActionButton>(R.id.floatingButton).setOnClickListener {
             if (checkForCompletenessOfDataEntry()) {
-                viewModel.saveTask(name, description)
-
+                navController.navigate(
+                    resId = R.id.mainFragment,
+                    args = null,
+                    navOptions = NavOptions.Builder().setExitAnim(R.anim.slide_out_anim).build()
+                )
             } else {
                 Toast.makeText(
                     activityContext, "Fields is empty HARDCODE", Toast.LENGTH_SHORT
