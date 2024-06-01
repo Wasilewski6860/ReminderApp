@@ -1,45 +1,60 @@
 package com.example.reminderapp.presentation.mainscreen
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.icu.text.SimpleDateFormat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.domain.model.Task
+import com.example.domain.model.TaskPeriodType
 import com.example.reminderapp.R
 import com.example.reminderapp.databinding.ReminderRecyclerViewItemBinding
+import com.example.reminderapp.presentation.creatorscreen.SpinnerPeriodicTime
+import java.util.Date
+import java.util.Locale
 
 class MainScreenRecyclerViewAdapter(
-    private var listener: OnItemClickListener
+    private var listener: OnItemClickListener,
+    context: Context
 ) : RecyclerView.Adapter<MainScreenRecyclerViewAdapter.ItemHolder>() {
 
     private val itemsList = mutableListOf<Task>()
+    private val timesDict = SpinnerPeriodicTime.getTimesDict(context)
 
     inner class ItemHolder(view: View) : RecyclerView.ViewHolder(view) {
         private val binding = ReminderRecyclerViewItemBinding.bind(view)
-        private val cardViewHolder: CardView = binding.reminderRcItemCardViewMainHolder
-
-        init {
-            // add change cardView backgroundTint color method here
-
-            cardViewHolder.setOnClickListener {
-                listener.onRcItemClick(adapterPosition)
-            }
-        }
 
         fun bind(item: Task) = with(binding) {
             reminderRcItemName.text = item.name // add other
-            // reminderRcItemTime.text = 'somehow add time'
+            reminderRcItemTime.text = changeTimeFormat(item) ?: "ERROR"
+            reminderRcItemCardViewMainHolder.apply {
+                setOnClickListener { listener.onRcItemClick(position = adapterPosition) }
+                setBackgroundResource(R.drawable.rounded_corners_cardview)
+                setBackgroundColor(item.color)
+            }
+            // set card corners radius somehow
         }
+
+        private fun changeTimeFormat(task: Task): String? {
+            when (task.type) {
+                TaskPeriodType.ONE_TIME -> {
+                    val formatDate = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
+                    val date = Date(task.reminderCreationTime + task.reminderTimeTarget)
+                    return formatDate.format(date)
+                }
+                TaskPeriodType.PERIODIC -> {
+                    return timesDict[task.reminderTimeTarget]
+                }
+            }
+        }
+
     }
 
     interface OnItemClickListener {
         fun onRcItemClick(position: Int)
-    }
-
-    fun setOnItemClickListener(listener: OnItemClickListener) {
-        this.listener = listener
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemHolder {
@@ -55,6 +70,10 @@ class MainScreenRecyclerViewAdapter(
         holder.bind(itemsList[position])
     }
 
+    fun getItemByPosition(position: Int): Task {
+        return itemsList[position]
+    }
+
     @SuppressLint("NotifyDataSetChanged")
     fun addItem(item: Task) {
         itemsList.add(item)
@@ -62,7 +81,7 @@ class MainScreenRecyclerViewAdapter(
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    fun fillRecyclerWithFullItemsList(itemsMutableList: MutableList<Task>) {
+    fun fillRecyclerWithFullItemsList(itemsMutableList: List<Task>) {
         for (item in itemsMutableList) {
             itemsList.add(item)
             notifyDataSetChanged()

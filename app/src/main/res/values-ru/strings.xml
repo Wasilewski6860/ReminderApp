@@ -7,4 +7,15 @@
     <string name="onetime_reminder">Единоразовое напоминание</string>
     <string name="choose_time">Выбрать время</string>
     <string name="save">Сохранить</string>
+
+    <!--  Time here  -->
+    <string name="min_15">15 Мин</string>
+    <string name="min_30">30 Мин</string>
+    <string name="hour_1">1 Час</string>
+    <string name="day_1">1 День</string>
+    <string name="day_2">2 Дня</string>
+    <string name="day_3">3 Дня</string>
+    <string name="week">Неделя</string>
+    <string name="month">Месяц</string>
+    <!--    -->
 </resources>

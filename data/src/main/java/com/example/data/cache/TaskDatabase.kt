@@ -4,7 +4,6 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import androidx.room.TypeConverters
 import com.example.data.cache.entity.TaskEntity
 
 @Database(
@@ -22,7 +21,6 @@ abstract class TaskDatabase : RoomDatabase() {
         private var INSTANCE: TaskDatabase? = null
 
         fun getDataBase(context: Context): TaskDatabase {
-
             return INSTANCE ?: synchronized(this) {
                 val instance = Room.databaseBuilder(
                     context,

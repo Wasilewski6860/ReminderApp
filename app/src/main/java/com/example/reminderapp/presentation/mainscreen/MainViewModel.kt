@@ -1,5 +1,6 @@
 package com.example.reminderapp.presentation.mainscreen
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -14,14 +15,21 @@ class MainViewModel(
     private val deleteTaskUseCase: DeleteTaskUseCase
 ) : ViewModel() {
 
-    private val tasksListLiveData = MutableLiveData<MutableList<Task>>()
+    private val tasksListLiveData = MutableLiveData<List<Task>>()
+    val tasksListData get() = tasksListLiveData
 
-    fun getTasksListLiveData(): LiveData<MutableList<Task>> {
-        return tasksListLiveData
+    fun fetchTasksFromDatabase() {
+        viewModelScope.launch {
+            try {
+                tasksListLiveData.postValue(getAllTasksUseCase.execute())
+            } catch (e: Exception) {
+                Log.e("loading tasks from database process", e.toString())
+            }
+        }
     }
 
-    fun getAllTasks() {
+    fun deleteTask(task: Task) {
 
     }
-
+    
 }

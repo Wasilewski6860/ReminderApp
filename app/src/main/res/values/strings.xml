@@ -7,4 +7,15 @@
     <string name="onetime_reminder">One time reminder</string>
     <string name="choose_time">Choose a time</string>
     <string name="save">Save</string>
+
+    <!--  Time here  -->
+    <string name="min_15">15 Min</string>
+    <string name="min_30">30 Min</string>
+    <string name="hour_1">1 Hour</string>
+    <string name="day_1">1 Day</string>
+    <string name="day_2">2 Days</string>
+    <string name="day_3">3 Days</string>
+    <string name="week">Week</string>
+    <string name="month">Month</string>
+    <!--    -->
 </resources>

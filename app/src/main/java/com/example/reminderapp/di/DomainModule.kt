@@ -2,6 +2,7 @@ package com.example.reminderapp.di
 
 import com.example.domain.use_case.ClearAllTasksUseCase
 import com.example.domain.use_case.DeleteTaskUseCase
+import com.example.domain.use_case.EditTaskUseCase
 import com.example.domain.use_case.GetAllOneTimeTasksUseCase
 import com.example.domain.use_case.GetAllPeriodicTasksUseCase
 import com.example.domain.use_case.GetAllTasksUseCase
@@ -37,6 +38,10 @@ val domainModule = module {
 
     factory<SaveTaskUseCase> {
         SaveTaskUseCase(taskRepository = get())
+    }
+
+    factory<EditTaskUseCase> {
+        EditTaskUseCase(taskRepository = get())
     }
 
 }
