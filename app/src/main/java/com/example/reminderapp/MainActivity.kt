@@ -4,13 +4,17 @@ import android.graphics.Rect
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.MotionEvent
 import android.widget.EditText
+import androidx.core.os.bundleOf
+import androidx.navigation.NavController
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.reminderapp.databinding.ActivityMainBinding
+import com.example.reminderapp.notification.Constants
 import com.example.reminderapp.notification.Constants.ACTION_SHOW_TASK
 import com.example.reminderapp.presentation.creatorscreen.KeyboardUtils
 
@@ -26,8 +30,17 @@ class MainActivity : AppCompatActivity() {
         val navHostFragment = supportFragmentManager
             .findFragmentById(R.id.navHostFragment) as NavHostFragment
         binding.navigationView.setupWithNavController(navHostFragment.findNavController())
+        
+        initListener(navHostFragment)
 
-        initNavigationListener(navHostFragment)
+        if (intent?.action == ACTION_SHOW_TASK) {
+
+            Log.d("MY LOG","MainActivity navigateToTaskIfNeeded ACTION_SHOW_TASK")
+            val id = intent?.extras?.getInt(Constants.TASK_ID_EXTRA)
+            val args = bundleOf("taskId" to id)
+            navController.navigate(R.id.action_global_creatorScreen, args)
+        }
+        
     }
 
     override fun onNewIntent(intent: Intent?) {
@@ -36,8 +49,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun navigateToTaskIfNeeded(intent: Intent?) {
+        Log.d("MY LOG","MainActivity navigateToTaskIfNeeded")
+
         if (intent?.action == ACTION_SHOW_TASK) {
-//            navHostFragment.findNavController().navigate(R.id.some_action)
+
+            Log.d("MY LOG","MainActivity navigateToTaskIfNeeded ACTION_SHOW_TASK")
+            val id = intent?.extras?.getInt(Constants.TASK_ID_EXTRA)
+            val args = bundleOf("taskId" to id)
+            navController.navigate(R.id.action_global_creatorScreen, args)
         }
     }
 

@@ -5,6 +5,8 @@ import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.icu.text.SimpleDateFormat
 import android.icu.util.Calendar
+import android.content.Context
+import android.icu.text.SimpleDateFormat
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -23,14 +25,22 @@ import androidx.navigation.fragment.findNavController
 import com.example.domain.model.Task
 import com.example.domain.model.TaskPeriodType
 import com.example.reminderapp.R
+import com.example.reminderapp.reminder.work.RemindWorkManager
 import com.example.reminderapp.databinding.ReminderCreatorFragmentBinding
 import com.example.reminderapp.presentation.mainscreen.MainFragment
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.gson.Gson
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.Locale
+import com.example.reminderapp.reminder.RemindAlarmManager
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.component.KoinComponent
+import java.util.Locale
+import kotlin.random.Random
 
-class TaskCreatorFragment : Fragment() {
+class TaskCreatorFragment : Fragment(), KoinComponent {
 
     companion object {
         const val BOTH = "both"
@@ -48,6 +58,36 @@ class TaskCreatorFragment : Fragment() {
     private var isReminderPeriodic = false
     private var spinnerSelectedColor = 0
     private var timeDifference: Long = 0
+
+    /**
+     * Использовать при создании, изменении и удалении напоминаний
+     */
+    private val remindWorkManager: RemindWorkManager by inject()
+    private val remindAlarmManager: RemindAlarmManager by inject()
+    val name = Random.nextInt(20).toString()
+    val description = Random.nextInt(20).toString()
+
+
+    private val viewModel by viewModel<CreatorViewModel>()
+
+    /**
+    Айдишник таска, передаваемый как аргумент в action навигации
+    Например:
+    val action =
+    MainFragmentDirections.actionMainFragmentToCreateTaskFragment(
+    id = task.taskId, isSaved = false
+    )
+    findNavController().navigate(action)
+
+    Если taskId!=-1, значит нужно взять таск с бд и заполнить соотв.поля. фрагмента
+     */
+    private  var taskId: Int = -1
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        arguments?.let {
+            taskId = it.getInt("taskId")
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,

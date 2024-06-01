@@ -1,6 +1,7 @@
 package com.example.reminderapp.app
 
 import android.app.Application
+import android.util.Log
 import com.example.reminderapp.di.appModule
 import com.example.reminderapp.di.dataModule
 import com.example.reminderapp.di.domainModule
@@ -21,6 +22,7 @@ class App : Application() {
                 appModule, dataModule, domainModule
             ))
         }
+        Log.d("Application","Application created")
     }
 
 }

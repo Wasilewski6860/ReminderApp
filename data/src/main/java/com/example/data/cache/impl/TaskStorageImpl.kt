@@ -14,6 +14,9 @@ class TaskStorageImpl(val mapper: TaskCacheMapper, taskDatabase: TaskDatabase) :
     override suspend fun editTask(task: Task) = taskDao.editTask(mapper.mapToEntity(task))
 
     override suspend fun deleteTask(task: Task) = taskDao.deleteTask(mapper.mapToEntity(task))
+    override suspend fun deleteTask(id: Int) {
+        taskDao.deleteById(id)
+    }
 
     override suspend fun getAllTasks(): List<Task> {
         return taskDao.getAllTasks().map { taskEntity ->

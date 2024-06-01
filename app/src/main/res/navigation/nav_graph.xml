@@ -5,6 +5,10 @@
     android:id="@+id/nav_graph"
     app:startDestination="@id/mainFragment">
 
+    <action android:id="@+id/action_global_creatorScreen"
+        app:destination="@id/creatorFragment"
+        app:launchSingleTop="true" />
+
     <fragment
         android:id="@+id/mainFragment"
         android:name="com.example.reminderapp.presentation.mainscreen.MainFragment"
@@ -20,5 +24,11 @@
         android:name="com.example.reminderapp.presentation.creatorscreen.TaskCreatorFragment"
         android:label="fragment_creator"
         tools:layout="@layout/reminder_creator_fragment" >
+
+        <argument
+            android:name="taskId"
+            android:defaultValue="-1"
+            app:argType="integer" />
+
     </fragment>
 </navigation>

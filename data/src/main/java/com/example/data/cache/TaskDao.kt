@@ -12,11 +12,15 @@ import com.example.data.cache.entity.TaskEntity
 interface TaskDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun addTask(taskEntity: TaskEntity)
+    suspend fun addTask(taskEntity: TaskEntity): Long
     @Update
     suspend fun editTask(taskEntity: TaskEntity)
     @Delete
     suspend fun deleteTask(taskEntity: TaskEntity)
+
+    @Query("DELETE FROM task WHERE id = :id")
+    suspend fun deleteById(id: Int)
+
     @Query("SELECT * FROM task")
     suspend fun getAllTasks(): List<TaskEntity>
     @Query("SELECT * FROM task WHERE id =:id")
