@@ -28,17 +28,32 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name=".receivers.ReminderBroadcast"/>
+        <activity
+            android:name=".presentation.reminder.ReminderActivity"
+            android:configChanges="orientation|screenSize|screenLayout"
+            android:excludeFromRecents="true"
+            android:exported="false"
+            android:launchMode="singleTask"
+            android:showOnLockScreen="true"
+            android:taskAffinity=".ReminderActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.SNOOZE_ALARM" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <receiver android:name=".receivers.ReminderBroadcast" />
         <receiver
             android:name=".receivers.AlarmBroadcastReceiver"
-            android:directBootAware="true">
-        </receiver>
+            android:directBootAware="true"></receiver>
 
-        <receiver android:name=".receivers.DeviceBootReceiver"
-            android:exported="true"
-            android:directBootAware="true">
+        <receiver
+            android:name=".receivers.DeviceBootReceiver"
+            android:directBootAware="true"
+            android:exported="true">
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.QUICKBOOT_POWERON" />
                 <action android:name="android.intent.action.LOCKED_BOOT_COMPLETED" />
             </intent-filter>

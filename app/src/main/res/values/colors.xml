@@ -7,4 +7,7 @@
 <!--  Temp colors for spinner tests  -->
     <color name="red">#F80000</color>
     <color name="blue">#005EFF</color>
+
+    <color name="activated_item_foreground">#44888888</color>
+    <color name="pressed_item_foreground">#08000000</color>
 </resources>

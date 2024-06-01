@@ -20,31 +20,65 @@ import com.example.reminderapp.notification.Constants.ACTION_DISMISS
 import com.example.reminderapp.notification.Constants.ACTION_POSTPONE
 import com.example.reminderapp.notification.Constants.ACTION_POSTPONE_PENDING_INTENT_ID
 import com.example.reminderapp.notification.Constants.TASK_ID_EXTRA
+import com.example.reminderapp.presentation.reminder.ReminderActivity
 import com.example.reminderapp.receivers.ReminderBroadcast
 import org.koin.core.component.KoinComponent
 
 class NotificationManager(val context: Context) : KoinComponent {
 
-    private val CHANNEL_ID = "REMINDER_CHANNEL"
+    private val CHANNEL_ID = "NOTIFICATION_CHANNEL"
     private val CHANNEL_NAME = context.getString(R.string.app_name)
+
+    private val CHANNEL_REMINDER_ID = "REMINDER_CHANNEL"
+    private val CHANNEL_REMINDER_NAME = context.getString(R.string.app_name)
 
     private val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
     init {
         createNotificationChannel()
+        createNotificationReminderChannel()
     }
 
     fun createNotificationChannel() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val importance = NotificationManager.IMPORTANCE_HIGH
-            val channel = NotificationChannel(CHANNEL_ID, CHANNEL_NAME, importance )
-            channel.lockscreenVisibility = Notification.VISIBILITY_PUBLIC
-            notificationManager.createNotificationChannel(channel)
-        }
+        val importance = NotificationManager.IMPORTANCE_HIGH
+        val channel = NotificationChannel(CHANNEL_ID, CHANNEL_NAME, importance )
+        channel.lockscreenVisibility = Notification.VISIBILITY_PUBLIC
+        notificationManager.createNotificationChannel(channel)
     }
 
+    fun createNotificationReminderChannel() {
+        val importance = NotificationManager.IMPORTANCE_HIGH
+        val channel = NotificationChannel(CHANNEL_REMINDER_ID, CHANNEL_REMINDER_NAME, importance )
+        channel.setBypassDnd(true)
+        channel.setSound(null, null)
+        channel.lockscreenVisibility = Notification.VISIBILITY_PUBLIC
+        notificationManager.createNotificationChannel(channel)
+    }
 
+    fun createNotificationReminder(contentTitle: String, contextText: String, taskId: Int) {
+        val builder = NotificationCompat.Builder(context, CHANNEL_REMINDER_ID)
+            .setSmallIcon(R.drawable.logo)
+            .setContentTitle(contentTitle)
+            .setContentText(contextText)
+            .setAutoCancel(true)
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setCategory(NotificationCompat.CATEGORY_ALARM)
+            .setFullScreenIntent(
+                PendingIntent.getActivity(context, 0, Intent(context, ReminderActivity::class.java).apply {
+                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    putExtra(TASK_ID_EXTRA, taskId)
+                }, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE),
+                true
+            )
 
+        if (ActivityCompat.checkSelfPermission(
+                context,
+                Manifest.permission.POST_NOTIFICATIONS
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
+            NotificationManagerCompat.from(context).notify(taskId,builder.build())
+        }
+    }
     fun createNotification(contentTitle: String, contextText: String, taskId: Int) {
         val builder = NotificationCompat.Builder(context, CHANNEL_ID)
             .setSmallIcon(R.drawable.logo)
