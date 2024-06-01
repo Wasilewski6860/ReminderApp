@@ -4,6 +4,8 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.domain.model.Task
+import com.example.domain.use_case.DeleteTaskUseCase
+import com.example.domain.use_case.EditTaskUseCase
 import com.example.domain.use_case.GetTaskUseCase
 import com.example.domain.use_case.SaveTaskUseCase
 import kotlinx.coroutines.launch
@@ -13,7 +15,9 @@ import java.time.temporal.ChronoUnit
 
 class CreatorViewModel(
     private val saveTaskUseCase: SaveTaskUseCase,
-    private val getTaskUseCase: GetTaskUseCase
+    private val getTaskUseCase: GetTaskUseCase,
+    private val editTaskUseCase: EditTaskUseCase,
+    private val deleteTaskUseCase: DeleteTaskUseCase
 ) : ViewModel() {
 
     fun saveTaskInDatabase(task: Task) {
@@ -32,6 +36,26 @@ class CreatorViewModel(
                 // getTaskUseCase execute method here
             } catch (e: Exception) {
                 Log.e("getting task from room process", e.toString())
+            }
+        }
+    }
+
+    fun editTaskInDatabase(task: Task) {
+        viewModelScope.launch {
+            try {
+                editTaskUseCase.execute(task)
+            } catch (e: Exception) {
+                Log.e("editing task process", e.toString())
+            }
+        }
+    }
+
+    fun deleteTask(task: Task) {
+        viewModelScope.launch {
+            try {
+                deleteTaskUseCase.execute(task)
+            } catch (e: Exception) {
+                Log.e("deleting task process", e.toString())
             }
         }
     }

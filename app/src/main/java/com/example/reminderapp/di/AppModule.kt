@@ -17,7 +17,9 @@ val appModule = module {
     viewModel<CreatorViewModel> {
         CreatorViewModel(
             saveTaskUseCase = get(),
-            getTaskUseCase = get()
+            getTaskUseCase = get(),
+            editTaskUseCase = get(),
+            deleteTaskUseCase = get()
         )
     }
 

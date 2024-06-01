@@ -1,5 +1,6 @@
 package com.example.reminderapp.presentation.creatorscreen
 
+import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.icu.text.SimpleDateFormat
@@ -23,7 +24,9 @@ import com.example.domain.model.Task
 import com.example.domain.model.TaskPeriodType
 import com.example.reminderapp.R
 import com.example.reminderapp.databinding.ReminderCreatorFragmentBinding
+import com.example.reminderapp.presentation.mainscreen.MainFragment
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.gson.Gson
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.Locale
 
@@ -37,7 +40,7 @@ class TaskCreatorFragment : Fragment() {
 
     private lateinit var binding: ReminderCreatorFragmentBinding
     private val viewModel by viewModel<CreatorViewModel>()
-    private lateinit var spinnerTimeTextList: List<String>
+    private lateinit var spinnerTimeTextList: List<String> // in future need delete lateinit from this
     private lateinit var timesDict: Map<Long, String>
     private var selectedTime: String = ""
     private var incompletenessOfTheEnteredData: String = BOTH
@@ -67,6 +70,7 @@ class TaskCreatorFragment : Fragment() {
 
         }
 
+        receivingInformation()
         initListeners(findNavController(), handler)
 
         return binding.root
@@ -76,12 +80,11 @@ class TaskCreatorFragment : Fragment() {
         requireActivity().findViewById<FloatingActionButton>(R.id.floatingButton)
             .setOnClickListener {
                 if (checkForCompletenessOfDataEntry()) {
-                    viewModel.saveTaskInDatabase(collectInformation())
-                    navController.navigate(
-                        resId = R.id.mainFragment,
-                        args = null,
-                        navOptions = NavOptions.Builder().setExitAnim(R.anim.slide_out_anim).build()
-                    )
+                    when (arguments) {
+                        null -> viewModel.saveTaskInDatabase(collectInformation())
+                        else -> viewModel.editTaskInDatabase(collectInformation())
+                    }
+                    goBack(navController)
                 } else {
                     val defaultHintColor = reminderNameEditTextView.currentHintTextColor
                     val defaultRadioGroupTextColor = periodicReminderRadioButton.currentTextColor
@@ -168,6 +171,43 @@ class TaskCreatorFragment : Fragment() {
                 override fun onNothingSelected(parent: AdapterView<*>?) {}
             }
 
+        backToMainScreenButton.setOnClickListener { goBack(navController) }
+
+        deleteTaskButton.setOnClickListener {
+            when (arguments) {
+                null -> { goBack(navController) }
+                else -> {
+                    arguments?.getString(MainFragment.TASK_DATA)?.let {
+                        Gson().fromJson(it, Task::class.java)
+                    }?.let { task -> viewModel.deleteTask(task) }
+                    goBack(navController)
+                }
+            }
+        }
+
+    }
+
+    private fun goBack(navController: NavController) {
+        navController.navigate(
+            resId = R.id.mainFragment,
+            args = null,
+            navOptions = NavOptions.Builder().setExitAnim(R.anim.slide_out_anim).build()
+        )
+    }
+
+    @SuppressLint("ResourceType")
+    private fun receivingInformation() = with(binding) {
+        arguments?.getString(MainFragment.TASK_DATA)?.let { data ->
+            val receivedData = Gson().fromJson(data, Task::class.java)
+            reminderNameEditTextView.setText(receivedData.name)
+            reminderDescriptionEditTextView.setText(receivedData.description)
+            // set color
+            if (receivedData.type == TaskPeriodType.ONE_TIME) {
+                reminderTypeRadioGroup.check(0) // do something with that
+            } else {
+
+            }
+        }
     }
 
     private fun highlightFields(
@@ -182,20 +222,28 @@ class TaskCreatorFragment : Fragment() {
                 periodicReminderRadioButton.setTextColor(android.graphics.Color.RED)
                 onetimeReminderRadioButton.setTextColor(android.graphics.Color.RED)
                 handler.postDelayed({
-                    reminderNameEditTextView.clearFocus()
-                    reminderNameEditTextView.setHintTextColor(defaultHintColor)
-                    periodicReminderRadioButton.clearFocus()
-                    onetimeReminderRadioButton.clearFocus()
-                    periodicReminderRadioButton.setTextColor(defaultRadioGroupTextColor)
-                    onetimeReminderRadioButton.setTextColor(defaultRadioGroupTextColor)
+                    reminderNameEditTextView.apply {
+                        clearFocus()
+                        setHintTextColor(defaultHintColor)
+                    }
+                    periodicReminderRadioButton.apply {
+                        clearFocus()
+                        setTextColor(defaultRadioGroupTextColor)
+                    }
+                    onetimeReminderRadioButton.apply {
+                        clearFocus()
+                        setTextColor(defaultRadioGroupTextColor)
+                    }
                 }, 1000)
             }
 
             REMINDER_NAME -> {
                 reminderNameEditTextView.setHintTextColor(android.graphics.Color.RED)
                 handler.postDelayed({
-                    reminderNameEditTextView.clearFocus()
-                    reminderNameEditTextView.setHintTextColor(defaultHintColor)
+                    reminderNameEditTextView.apply {
+                        clearFocus()
+                        setHintTextColor(defaultHintColor)
+                    }
                 }, 1000)
             }
 
@@ -203,10 +251,14 @@ class TaskCreatorFragment : Fragment() {
                 periodicReminderRadioButton.setTextColor(android.graphics.Color.RED)
                 onetimeReminderRadioButton.setTextColor(android.graphics.Color.RED)
                 handler.postDelayed({
-                    periodicReminderRadioButton.clearFocus()
-                    onetimeReminderRadioButton.clearFocus()
-                    periodicReminderRadioButton.setTextColor(defaultRadioGroupTextColor)
-                    onetimeReminderRadioButton.setTextColor(defaultRadioGroupTextColor)
+                    periodicReminderRadioButton.apply {
+                        clearFocus()
+                        setTextColor(defaultRadioGroupTextColor)
+                    }
+                    onetimeReminderRadioButton.apply {
+                        clearFocus()
+                        setTextColor(defaultRadioGroupTextColor)
+                    }
                 }, 1000)
             }
 
@@ -215,8 +267,14 @@ class TaskCreatorFragment : Fragment() {
     }
 
     private fun collectInformation(): Task {
+        val id = if (arguments == null)
+            0
+        else
+            arguments?.getString(MainFragment.TASK_DATA)
+                ?.let { Gson().fromJson(it, Task::class.java).id }
+
         return Task(
-            id = 0,
+            id = id!!,
             name = binding.reminderNameEditTextView.text.toString(),
             description = if (!binding.reminderDescriptionEditTextView.text.isNullOrBlank())
                 binding.reminderDescriptionEditTextView.text.toString()

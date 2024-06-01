@@ -26,22 +26,16 @@ class MainScreenRecyclerViewAdapter(
 
     inner class ItemHolder(view: View) : RecyclerView.ViewHolder(view) {
         private val binding = ReminderRecyclerViewItemBinding.bind(view)
-        private val cardViewHolder: CardView = binding.reminderRcItemCardViewMainHolder
-
-        init {
-            // add change cardView backgroundTint color method here
-            cardViewHolder.apply {
-                setOnClickListener {
-                    listener.onRcItemClick(adapterPosition)
-                }
-                setBackgroundResource(R.drawable.rounded_corners_cardview)
-            }
-        }
 
         fun bind(item: Task) = with(binding) {
             reminderRcItemName.text = item.name // add other
             reminderRcItemTime.text = changeTimeFormat(item) ?: "ERROR"
-            cardViewHolder.setBackgroundColor(item.color) // set card corners radius somehow
+            reminderRcItemCardViewMainHolder.apply {
+                setOnClickListener { listener.onRcItemClick(position = adapterPosition) }
+                setBackgroundResource(R.drawable.rounded_corners_cardview)
+                setBackgroundColor(item.color)
+            }
+            // set card corners radius somehow
         }
 
         private fun changeTimeFormat(task: Task): String? {
@@ -56,14 +50,11 @@ class MainScreenRecyclerViewAdapter(
                 }
             }
         }
+
     }
 
     interface OnItemClickListener {
         fun onRcItemClick(position: Int)
-    }
-
-    fun setOnItemClickListener(listener: OnItemClickListener) {
-        this.listener = listener
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemHolder {
@@ -77,6 +68,10 @@ class MainScreenRecyclerViewAdapter(
 
     override fun onBindViewHolder(holder: ItemHolder, position: Int) {
         holder.bind(itemsList[position])
+    }
+
+    fun getItemByPosition(position: Int): Task {
+        return itemsList[position]
     }
 
     @SuppressLint("NotifyDataSetChanged")

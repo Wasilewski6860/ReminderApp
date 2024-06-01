@@ -16,10 +16,7 @@ class MainViewModel(
 ) : ViewModel() {
 
     private val tasksListLiveData = MutableLiveData<List<Task>>()
-
-    fun getTasksListLiveData(): LiveData<List<Task>> {
-        return tasksListLiveData
-    }
+    val tasksListData get() = tasksListLiveData
 
     fun fetchTasksFromDatabase() {
         viewModelScope.launch {

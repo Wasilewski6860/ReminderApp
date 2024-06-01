@@ -6,63 +6,131 @@
     android:orientation="vertical">
 
     <LinearLayout
-        android:id="@+id/upperContainer"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:orientation="vertical">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingVertical="6dp">
 
         <ImageButton
             android:id="@+id/backToMainScreenButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="14dp"
-            android:src="@drawable/arrow_back" />
+            android:layout_gravity="start"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="100dp"
+            android:layout_weight="1"
+            android:src="@drawable/back_arrow_icon" />
 
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/reminderNamePlaceHolder"
+        <ImageButton
+            android:id="@+id/deleteTaskButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginStart="100dp"
+            android:layout_marginEnd="20dp"
+            android:layout_weight="1"
+            android:src="@drawable/delete_trash_can_icon" />
+
+    </LinearLayout>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/reminderNamePlaceHolder"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginVertical="10dp">
+
+        <EditText
+            android:id="@+id/reminderNameEditTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
-            android:layout_marginVertical="10dp">
+            android:layout_marginHorizontal="14dp"
+            android:layout_marginVertical="4dp"
+            android:hint="@string/enter_reminder_name" />
 
-            <EditText
-                android:id="@+id/reminderNameEditTextView"
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/reminderDescriptionPlaceHolder"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginVertical="10dp">
+
+        <EditText
+            android:id="@+id/reminderDescriptionEditTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="14dp"
+            android:layout_marginVertical="4dp"
+            android:hint="@string/enter_reminder_description"
+            android:inputType="textMultiLine" />
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/reminderColorSpinnerPlaceHolder"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginVertical="10dp">
+
+        <Spinner
+            android:id="@+id/reminderColorSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginVertical="10dp" />
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/reminderTypeRadioGroupPlaceHolder"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginVertical="10dp">
+
+        <RadioGroup
+            android:id="@+id/reminderTypeRadioGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginVertical="10dp"
+            android:orientation="vertical">
+
+            <RadioButton
+                android:id="@+id/periodicReminderRadioButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="14dp"
-                android:layout_marginVertical="4dp"
-                android:hint="@string/enter_reminder_name" />
+                android:text="@string/periodic_reminder" />
 
-        </com.google.android.material.card.MaterialCardView>
-
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/reminderDescriptionPlaceHolder"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
-            android:layout_marginVertical="10dp">
-
-            <EditText
-                android:id="@+id/reminderDescriptionEditTextView"
+            <RadioButton
+                android:id="@+id/onetimeReminderRadioButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="14dp"
-                android:layout_marginVertical="4dp"
-                android:hint="@string/enter_reminder_description"
-                android:inputType="textMultiLine" />
+                android:text="@string/onetime_reminder" />
 
-        </com.google.android.material.card.MaterialCardView>
+        </RadioGroup>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <FrameLayout
+        android:id="@+id/reminderSpinnerOrButtonPlaceHolder"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="visible">
 
         <com.google.android.material.card.MaterialCardView
-            android:id="@+id/reminderColorSpinnerPlaceHolder"
+            android:id="@+id/reminderTimeSpinnerHolder"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="20dp"
-            android:layout_marginVertical="10dp">
+            android:layout_marginVertical="10dp"
+            android:visibility="gone">
 
             <Spinner
-                android:id="@+id/reminderColorSpinner"
+                android:id="@+id/reminderTimePickerSpinner"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="10dp"
@@ -70,73 +138,17 @@
 
         </com.google.android.material.card.MaterialCardView>
 
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/reminderTypeRadioGroupPlaceHolder"
+        <TextView
+            android:id="@+id/reminderDateAndTimeTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
-            android:layout_marginVertical="10dp">
+            android:layout_marginVertical="10dp"
+            android:gravity="center"
+            android:text="@string/stub"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:visibility="gone" />
 
-            <RadioGroup
-                android:id="@+id/reminderTypeRadioGroup"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="10dp"
-                android:layout_marginVertical="10dp"
-                android:orientation="vertical">
-
-                <RadioButton
-                    android:id="@+id/periodicReminderRadioButton"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/periodic_reminder" />
-
-                <RadioButton
-                    android:id="@+id/onetimeReminderRadioButton"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/onetime_reminder" />
-
-            </RadioGroup>
-
-        </com.google.android.material.card.MaterialCardView>
-
-        <FrameLayout
-            android:id="@+id/reminderSpinnerOrButtonPlaceHolder"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="visible">
-
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/reminderTimeSpinnerHolder"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="20dp"
-                android:layout_marginVertical="10dp"
-                android:visibility="gone">
-
-                <Spinner
-                    android:id="@+id/reminderTimePickerSpinner"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="10dp"
-                    android:layout_marginVertical="10dp" />
-
-            </com.google.android.material.card.MaterialCardView>
-
-            <TextView
-                android:id="@+id/reminderDateAndTimeTextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginVertical="10dp"
-                android:gravity="center"
-                android:text="@string/stub"
-                android:textSize="24sp"
-                android:textStyle="bold"
-                android:visibility="gone" />
-
-        </FrameLayout>
-
-    </LinearLayout>
+    </FrameLayout>
 
 </LinearLayout>
