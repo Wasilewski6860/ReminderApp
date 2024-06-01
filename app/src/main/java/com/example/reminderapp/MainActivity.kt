@@ -1,14 +1,16 @@
 package com.example.reminderapp
 
+import android.animation.AnimatorSet
+import android.animation.ObjectAnimator
 import android.graphics.Rect
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.MotionEvent
+import android.view.animation.DecelerateInterpolator
 import android.widget.EditText
 import androidx.core.os.bundleOf
-import androidx.navigation.NavController
 import androidx.navigation.NavOptions
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
@@ -54,7 +56,7 @@ class MainActivity : AppCompatActivity() {
         if (intent?.action == ACTION_SHOW_TASK) {
 
             Log.d("MY LOG","MainActivity navigateToTaskIfNeeded ACTION_SHOW_TASK")
-            val id = intent?.extras?.getInt(Constants.TASK_ID_EXTRA)
+            val id = intent.extras?.getInt(Constants.TASK_ID_EXTRA)
             val args = bundleOf("taskId" to id)
             binding.navHostFragment.findNavController().navigate(R.id.action_global_creatorScreen, args)
         }
@@ -72,6 +74,7 @@ class MainActivity : AppCompatActivity() {
                             .build()
                     )
                 }
+                playButtonAnimation()
                 when (destination.id) {
                     R.id.mainFragment -> {
                         floatingButton.setImageResource(R.drawable.add_icon)
@@ -84,6 +87,7 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
             }
+
         navigationView.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.statisticFragment -> {
@@ -94,12 +98,23 @@ class MainActivity : AppCompatActivity() {
                         navOptions = NavOptions.Builder().setEnterAnim(R.anim.slide_in_anim)
                             .build()
                     )
-
                     true
                 }
                 else -> false
             }
         }
+    }
+
+    private fun playButtonAnimation() = with(binding) {
+        val scaleXAnimator = ObjectAnimator.ofFloat(floatingButton, "scaleX", 1f, 1.2f)
+        val scaleYAnimator = ObjectAnimator.ofFloat(floatingButton, "scaleY", 1f, 1.2f)
+
+        val combinedAnimator = AnimatorSet()
+        combinedAnimator.playTogether(scaleXAnimator, scaleYAnimator)
+
+        combinedAnimator.duration = 1000
+        combinedAnimator.interpolator = DecelerateInterpolator()
+        combinedAnimator.start()
     }
 
     override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {

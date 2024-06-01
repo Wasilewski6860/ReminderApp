@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
 import com.example.reminderapp.R
 import com.example.reminderapp.databinding.StatisticFragmentBinding
 import com.github.mikephil.charting.data.BarData
@@ -20,6 +21,7 @@ class StatisticFragment : Fragment() {
 
     private lateinit var binding: StatisticFragmentBinding
     private val viewModel by viewModel<StatisticViewModel>()
+    private val adapter = StatisticScreenRecyclerViewAdapter()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -30,9 +32,12 @@ class StatisticFragment : Fragment() {
 
         binding.apply {
 
+            statisticRecyclerView.layoutManager = GridLayoutManager(context, 1)
+            statisticRecyclerView.adapter = adapter
+
             viewModel.fetchTasksFromDatabase()
             viewModel.tasksListLiveData.observe(viewLifecycleOwner) { tasksList ->
-                // display that list in rcView and chart
+                adapter.fillRecyclerViewWithItems(tasksList)
             }
 
         }
