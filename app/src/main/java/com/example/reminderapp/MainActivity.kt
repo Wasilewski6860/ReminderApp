@@ -10,6 +10,7 @@ import android.widget.EditText
 import androidx.core.os.bundleOf
 import androidx.navigation.NavController
 import androidx.navigation.NavOptions
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
@@ -34,11 +35,10 @@ class MainActivity : AppCompatActivity() {
         initListener(navHostFragment)
 
         if (intent?.action == ACTION_SHOW_TASK) {
-
             Log.d("MY LOG","MainActivity navigateToTaskIfNeeded ACTION_SHOW_TASK")
             val id = intent?.extras?.getInt(Constants.TASK_ID_EXTRA)
             val args = bundleOf("taskId" to id)
-            navController.navigate(R.id.action_global_creatorScreen, args)
+            binding.navHostFragment.findNavController().navigate(R.id.action_global_creatorScreen, args)
         }
         
     }
@@ -56,11 +56,11 @@ class MainActivity : AppCompatActivity() {
             Log.d("MY LOG","MainActivity navigateToTaskIfNeeded ACTION_SHOW_TASK")
             val id = intent?.extras?.getInt(Constants.TASK_ID_EXTRA)
             val args = bundleOf("taskId" to id)
-            navController.navigate(R.id.action_global_creatorScreen, args)
+            binding.navHostFragment.findNavController().navigate(R.id.action_global_creatorScreen, args)
         }
     }
 
-    private fun initNavigationListener(navHostFragment: NavHostFragment) = with(binding) {
+    private fun initListener(navHostFragment: NavHostFragment) = with(binding) {
         navHostFragment.findNavController()
             .addOnDestinationChangedListener { _, destination, _ ->
                 floatingButton.setOnClickListener {

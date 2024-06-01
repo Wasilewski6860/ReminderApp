@@ -5,8 +5,6 @@ import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.icu.text.SimpleDateFormat
 import android.icu.util.Calendar
-import android.content.Context
-import android.icu.text.SimpleDateFormat
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -33,11 +31,8 @@ import com.google.gson.Gson
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.Locale
 import com.example.reminderapp.reminder.RemindAlarmManager
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import org.koin.android.ext.android.inject
-import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.component.KoinComponent
-import java.util.Locale
 import kotlin.random.Random
 
 class TaskCreatorFragment : Fragment(), KoinComponent {
@@ -67,9 +62,6 @@ class TaskCreatorFragment : Fragment(), KoinComponent {
     val name = Random.nextInt(20).toString()
     val description = Random.nextInt(20).toString()
 
-
-    private val viewModel by viewModel<CreatorViewModel>()
-
     /**
     Айдишник таска, передаваемый как аргумент в action навигации
     Например:
@@ -82,12 +74,12 @@ class TaskCreatorFragment : Fragment(), KoinComponent {
     Если taskId!=-1, значит нужно взять таск с бд и заполнить соотв.поля. фрагмента
      */
     private  var taskId: Int = -1
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            taskId = it.getInt("taskId")
-        }
-    }
+//    override fun onCreate(savedInstanceState: Bundle?) {
+//        super.onCreate(savedInstanceState)
+//        arguments?.let {
+//            taskId = it.getInt("taskId")
+//        }
+//    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
