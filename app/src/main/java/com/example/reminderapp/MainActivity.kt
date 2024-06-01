@@ -31,7 +31,7 @@ class MainActivity : AppCompatActivity() {
         val navHostFragment = supportFragmentManager
             .findFragmentById(R.id.navHostFragment) as NavHostFragment
         binding.navigationView.setupWithNavController(navHostFragment.findNavController())
-        
+
         initListener(navHostFragment)
 
         if (intent?.action == ACTION_SHOW_TASK) {
@@ -40,7 +40,7 @@ class MainActivity : AppCompatActivity() {
             val args = bundleOf("taskId" to id)
             binding.navHostFragment.findNavController().navigate(R.id.action_global_creatorScreen, args)
         }
-        
+
     }
 
     override fun onNewIntent(intent: Intent?) {
@@ -79,8 +79,27 @@ class MainActivity : AppCompatActivity() {
                     R.id.creatorFragment -> {
                         floatingButton.setImageResource(R.drawable.check_save_icon)
                     }
+                    R.id.statisticFragment -> {
+                        floatingButton.setImageResource(R.drawable.back_arrow_icon)
+                    }
                 }
             }
+        navigationView.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.statisticFragment -> {
+                    val action = R.id.action_mainFragment_to_statisticFragment
+                    navHostFragment.findNavController().navigate(
+                        resId = action,
+                        args = null,
+                        navOptions = NavOptions.Builder().setEnterAnim(R.anim.slide_in_anim)
+                            .build()
+                    )
+
+                    true
+                }
+                else -> false
+            }
+        }
     }
 
     override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {

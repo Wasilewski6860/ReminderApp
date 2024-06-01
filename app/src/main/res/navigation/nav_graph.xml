@@ -17,6 +17,9 @@
         <action
             android:id="@+id/action_mainFragment_to_creatorFragment"
             app:destination="@id/creatorFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_statisticFragment"
+            app:destination="@id/statisticFragment"/>
     </fragment>
 
     <fragment
@@ -31,4 +34,12 @@
 <!--            app:argType="integer" />-->
 
     </fragment>
+
+    <fragment
+        android:id="@+id/statisticFragment"
+        android:name="com.example.reminderapp.presentation.statisticscreen.StatisticFragment"
+        android:label="fragment_statistic"
+        tools:layout="@layout/statistic_fragment">
+    </fragment>
+
 </navigation>
