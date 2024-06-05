@@ -4,7 +4,7 @@
     android:id="@+id/statisticRcItemCardViewMainHolder"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginHorizontal="20dp"
+    android:layout_marginHorizontal="10dp"
     android:layout_marginVertical="10dp"
     app:cardCornerRadius="15dp">
 
@@ -22,8 +22,6 @@
             android:layout_height="wrap_content"
             android:layout_gravity="start"
             android:layout_weight="1"
-            android:paddingHorizontal="20dp"
-            android:paddingVertical="10dp"
             android:text="@string/stub"
             android:textSize="20sp"
             android:textStyle="bold" />
@@ -34,8 +32,6 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="end"
-            android:paddingHorizontal="20dp"
-            android:paddingVertical="10dp"
             android:text="@string/stub"
             android:textSize="20sp"
             android:textStyle="bold" />

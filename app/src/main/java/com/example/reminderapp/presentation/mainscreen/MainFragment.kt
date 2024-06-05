@@ -38,7 +38,6 @@ class MainFragment : Fragment() {
 
             adapter = MainScreenRecyclerViewAdapter(object : MainScreenRecyclerViewAdapter.OnItemClickListener {
                 override fun onRcItemClick(position: Int) {
-                    // Transition on creator screen here
                     val data = Gson().toJson(adapter.getItemByPosition(position))
                     val bundle = Bundle().apply {
                         putString(TASK_DATA, data)

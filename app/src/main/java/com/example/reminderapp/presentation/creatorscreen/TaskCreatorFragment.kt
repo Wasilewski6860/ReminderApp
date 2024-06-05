@@ -23,8 +23,10 @@ import androidx.navigation.fragment.findNavController
 import com.example.domain.model.Task
 import com.example.domain.model.TaskPeriodType
 import com.example.reminderapp.R
+import com.example.reminderapp.animations.playFloatingButtonAnimation
 import com.example.reminderapp.reminder.work.RemindWorkManager
 import com.example.reminderapp.databinding.ReminderCreatorFragmentBinding
+import com.example.reminderapp.presentation.BackActionInterface
 import com.example.reminderapp.presentation.mainscreen.MainFragment
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.gson.Gson
@@ -35,7 +37,7 @@ import org.koin.android.ext.android.inject
 import org.koin.core.component.KoinComponent
 import kotlin.random.Random
 
-class TaskCreatorFragment : Fragment(), KoinComponent {
+class TaskCreatorFragment : Fragment(), KoinComponent, BackActionInterface {
 
     companion object {
         const val BOTH = "both"
@@ -111,6 +113,7 @@ class TaskCreatorFragment : Fragment(), KoinComponent {
     private fun initListeners(navController: NavController, handler: Handler) = with(binding) {
         requireActivity().findViewById<FloatingActionButton>(R.id.floatingButton)
             .setOnClickListener {
+                playFloatingButtonAnimation(requireActivity().findViewById(R.id.floatingButton))
                 if (checkForCompletenessOfDataEntry()) {
                     when (arguments) {
                         null -> viewModel.saveTaskInDatabase(collectInformation())
@@ -219,7 +222,7 @@ class TaskCreatorFragment : Fragment(), KoinComponent {
 
     }
 
-    private fun goBack(navController: NavController) {
+    override fun goBack(navController: NavController) {
         navController.navigate(
             resId = R.id.mainFragment,
             args = null,

@@ -11,13 +11,15 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.reminderapp.R
 import com.example.reminderapp.databinding.StatisticFragmentBinding
+import com.example.reminderapp.presentation.BackActionInterface
+import com.github.mikephil.charting.components.YAxis
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class StatisticFragment : Fragment() {
+class StatisticFragment : Fragment(), BackActionInterface {
 
     private lateinit var binding: StatisticFragmentBinding
     private val viewModel by viewModel<StatisticViewModel>()
@@ -43,7 +45,7 @@ class StatisticFragment : Fragment() {
         }
 
         initListeners(findNavController())
-        initChart() // test method
+        initChart()
 
         return binding.root
     }
@@ -55,7 +57,7 @@ class StatisticFragment : Fragment() {
             }
     }
 
-    private fun goBack(navController: NavController) {
+    override fun goBack(navController: NavController) {
         navController.navigate(
             resId = R.id.mainFragment,
             args = null,
@@ -77,19 +79,40 @@ class StatisticFragment : Fragment() {
             barEntries.add(entry)
         }
 
-        val dataSet = BarDataSet(barEntries, "Items")
-
+        val dataSet = BarDataSet(barEntries, "Items").apply {
+            axisDependency = YAxis.AxisDependency.LEFT
+        }
         val barData = BarData(dataSet)
 
         statisticChartView.apply {
             data = barData
             setFitBars(true)
+            animateY(1300)
+
+//            legend.apply {
+//                isEnabled = true
+//                horizontalAlignment = Legend.LegendHorizontalAlignment.LEFT
+//                verticalAlignment = Legend.LegendVerticalAlignment.TOP
+//                form = Legend.LegendForm.DEFAULT
+//                textSize = 50f
+//                textColor = Color.BLACK
+//            }
+
+            xAxis.apply {
+                isGranularityEnabled = true
+                granularity = 1f
+                setLabelCount(itemsList.size, true)
+            }
+
+            axisRight.setDrawLabels(false)
+
             invalidate()
         }
     }
 
 }
 
+// temp data class for chart testing
 private data class Item(
     val name: String,
     val counter: Int

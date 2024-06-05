@@ -16,6 +16,7 @@ import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
+import com.example.reminderapp.animations.playFloatingButtonAnimation
 import com.example.reminderapp.databinding.ActivityMainBinding
 import com.example.reminderapp.notification.Constants
 import com.example.reminderapp.notification.Constants.ACTION_SHOW_TASK
@@ -37,10 +38,11 @@ class MainActivity : AppCompatActivity() {
         initListener(navHostFragment)
 
         if (intent?.action == ACTION_SHOW_TASK) {
-            Log.d("MY LOG","MainActivity navigateToTaskIfNeeded ACTION_SHOW_TASK")
+            Log.d("MY LOG", "MainActivity navigateToTaskIfNeeded ACTION_SHOW_TASK")
             val id = intent?.extras?.getInt(Constants.TASK_ID_EXTRA)
             val args = bundleOf("taskId" to id)
-            binding.navHostFragment.findNavController().navigate(R.id.action_global_creatorScreen, args)
+            binding.navHostFragment.findNavController()
+                .navigate(R.id.action_global_creatorScreen, args)
         }
 
     }
@@ -51,14 +53,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun navigateToTaskIfNeeded(intent: Intent?) {
-        Log.d("MY LOG","MainActivity navigateToTaskIfNeeded")
+        Log.d("MY LOG", "MainActivity navigateToTaskIfNeeded")
 
         if (intent?.action == ACTION_SHOW_TASK) {
-
-            Log.d("MY LOG","MainActivity navigateToTaskIfNeeded ACTION_SHOW_TASK")
+            Log.d("MY LOG", "MainActivity navigateToTaskIfNeeded ACTION_SHOW_TASK")
             val id = intent.extras?.getInt(Constants.TASK_ID_EXTRA)
             val args = bundleOf("taskId" to id)
-            binding.navHostFragment.findNavController().navigate(R.id.action_global_creatorScreen, args)
+            binding.navHostFragment.findNavController()
+                .navigate(R.id.action_global_creatorScreen, args)
         }
     }
 
@@ -66,6 +68,7 @@ class MainActivity : AppCompatActivity() {
         navHostFragment.findNavController()
             .addOnDestinationChangedListener { _, destination, _ ->
                 floatingButton.setOnClickListener {
+                    playFloatingButtonAnimation(floatingButton)
                     val action = R.id.action_mainFragment_to_creatorFragment
                     navHostFragment.findNavController().navigate(
                         resId = action,
@@ -74,14 +77,16 @@ class MainActivity : AppCompatActivity() {
                             .build()
                     )
                 }
-                playButtonAnimation()
                 when (destination.id) {
                     R.id.mainFragment -> {
                         floatingButton.setImageResource(R.drawable.add_icon)
                     }
+
                     R.id.creatorFragment -> {
                         floatingButton.setImageResource(R.drawable.check_save_icon)
+                        // Hide bottom navigation view elements here
                     }
+
                     R.id.statisticFragment -> {
                         floatingButton.setImageResource(R.drawable.back_arrow_icon)
                     }
@@ -100,21 +105,10 @@ class MainActivity : AppCompatActivity() {
                     )
                     true
                 }
+
                 else -> false
             }
         }
-    }
-
-    private fun playButtonAnimation() = with(binding) {
-        val scaleXAnimator = ObjectAnimator.ofFloat(floatingButton, "scaleX", 1f, 1.2f)
-        val scaleYAnimator = ObjectAnimator.ofFloat(floatingButton, "scaleY", 1f, 1.2f)
-
-        val combinedAnimator = AnimatorSet()
-        combinedAnimator.playTogether(scaleXAnimator, scaleYAnimator)
-
-        combinedAnimator.duration = 1000
-        combinedAnimator.interpolator = DecelerateInterpolator()
-        combinedAnimator.start()
     }
 
     override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
