@@ -17,7 +17,9 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-
+//        supportFragmentManager.beginTransaction()
+//            .replace(R.id.fragmentContainerView, MainFragment())
+//            .commit()
     }
 
     override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
@@ -27,7 +29,7 @@ class MainActivity : AppCompatActivity() {
                 val outRect = Rect()
                 focus.getGlobalVisibleRect(outRect)
                 if (!outRect.contains(ev.rawX.toInt(), ev.rawY.toInt())) {
-                    KeyboardUtils.hideKeyboard(this, binding.navHostFragment)
+                    KeyboardUtils.hideKeyboard(this, binding.fragmentContainerView)
                 }
             }
         }

@@ -4,24 +4,21 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.domain.model.Task
-import com.example.domain.use_case.DeleteTaskUseCase
-import com.example.domain.use_case.GetAllTasksUseCase
+import com.example.domain.model.Group
+import com.example.domain.use_case.GetAllGroupsUseCase
 import kotlinx.coroutines.launch
 
 class MainViewModel(
-    private val getAllTasksUseCase: GetAllTasksUseCase,
-    private val deleteTaskUseCase: DeleteTaskUseCase
-    /** Get all Task lists UseCase param here */
+    private val getAllGroupsUseCase: GetAllGroupsUseCase
 ) : ViewModel() {
 
-    private val tasksListLiveData = MutableLiveData<List<Task>>()
-    val tasksListData get() = tasksListLiveData
+    private val groupsListLiveData = MutableLiveData<List<Group>>()
+    val groupsListData get() = groupsListLiveData
 
     fun fetchTaskGroups() {
         viewModelScope.launch {
             try {
-                // Use case execute method here
+                groupsListLiveData.postValue(getAllGroupsUseCase.execute())
                 /** tasksListLiveData.postValue(...execute()) */
             } catch (e: Exception) {
                 Log.e("FETCHING INFO FROM DATABASE", e.toString())

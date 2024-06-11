@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context=".presentation.mainscreen.MainFragment">
 
     <ScrollView
         android:id="@+id/topItemsScrollViewHolder"
@@ -14,7 +16,10 @@
             android:id="@+id/topGridLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:columnCount="2" />
+            android:columnCount="2">
+
+
+        </GridLayout>
 
     </ScrollView>
 
@@ -26,10 +31,11 @@
         android:orientation="vertical">
 
         <LinearLayout
+            android:id="@+id/listTitleHolder"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingVertical="6dp"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:paddingVertical="6dp">
 
             <TextView
                 android:id="@+id/myListsTextView"
@@ -45,7 +51,6 @@
                 android:id="@+id/showRecyclerViewButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
                 android:layout_marginHorizontal="20dp"
                 android:src="@drawable/arrow_drop_down" />
 
@@ -54,7 +59,7 @@
         <FrameLayout
             android:id="@+id/mainScreenRecyclerViewHolder"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" >
+            android:layout_height="match_parent">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/customListsRecyclerView"
@@ -90,8 +95,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginHorizontal="20dp"
-            android:layout_weight="1"
             android:layout_marginVertical="10dp"
+            android:layout_weight="1"
             android:src="@drawable/add_icon" />
 
         <TextView
@@ -99,8 +104,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="start|center_vertical"
-            android:gravity="end"
             android:layout_weight="1"
+            android:gravity="end"
             android:paddingHorizontal="20dp"
             android:paddingVertical="10dp"
             android:text="Add list"

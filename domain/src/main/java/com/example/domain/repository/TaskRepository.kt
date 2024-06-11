@@ -23,8 +23,10 @@ interface TaskRepository {
 
     suspend fun getAllTasks(): List<Task>
 
-
     suspend fun getAllGroups(): List<Group>
+
     suspend fun getGroup(id: Int): Group
+
     suspend fun getGroupWithTasks(id: Int): GroupWithTasks
+
 }

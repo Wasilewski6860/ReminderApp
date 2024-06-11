@@ -5,7 +5,6 @@ import android.content.Context
 import com.example.reminderapp.notification.NotificationManager
 import com.example.reminderapp.presentation.creatorscreen.CreatorViewModel
 import com.example.reminderapp.presentation.mainscreen.MainViewModel
-import com.example.reminderapp.presentation.statisticscreen.StatisticViewModel
 import com.example.reminderapp.reminder.RemindAlarmManager
 import com.example.reminderapp.reminder.work.RemindWorkManager
 import org.koin.android.ext.koin.androidContext
@@ -33,9 +32,7 @@ val appModule = module {
 
     viewModel<MainViewModel> {
         MainViewModel(
-            getAllTasksUseCase = get(),
-            deleteTaskUseCase = get(),
-            editTaskUseCase = get()
+            getAllGroupsUseCase = get()
         )
     }
 
@@ -45,12 +42,6 @@ val appModule = module {
             getTaskUseCase = get(),
             editTaskUseCase = get(),
             deleteTaskUseCase = get()
-        )
-    }
-
-    viewModel<StatisticViewModel> {
-        StatisticViewModel(
-            getAllTasksUseCase = get()
         )
     }
 

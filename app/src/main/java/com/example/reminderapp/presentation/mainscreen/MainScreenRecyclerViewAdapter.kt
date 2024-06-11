@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.domain.model.Group
 import com.example.domain.model.Task
 import com.example.reminderapp.R
 import com.example.reminderapp.databinding.ListItemRecyclerBinding
@@ -13,18 +14,16 @@ class MainScreenRecyclerViewAdapter(
     private var listener: OnItemClickListener
 ) : RecyclerView.Adapter<MainScreenRecyclerViewAdapter.ItemHolder>() {
 
-    private val itemsList = mutableListOf<Task>() /** change this on TaskGroup model item later */
+    private val itemsList = mutableListOf<Group>() /** change this on TaskGroup model item later */
     // private val timesDict = SpinnerPeriodicTime.getTimesDict(context)
 
     inner class ItemHolder(view: View) : RecyclerView.ViewHolder(view) {
         private val binding = ListItemRecyclerBinding.bind(view)
 
-        fun bind(item: Task) = with(binding) {
-            /**
-             * Some test code strings
-            // listNameTextView.text = item.groupName
-            // listItemsCounterTextView.text = item.itemsInGroupCounter
-            */
+        fun bind(item: Group) = with(binding) {
+            listNameTextView.text = item.groupName
+            // Somehow get quantity of tasks in this group
+            colorCircleItem.circleColor = item.groupColor
 
             // reminderRcItemTime.text = changeTimeFormat(item) ?: "ERROR" <- can use something like this later
             mainRecyclerViewItemHolder.setOnClickListener {
@@ -67,27 +66,27 @@ class MainScreenRecyclerViewAdapter(
         holder.bind(itemsList[position])
     }
 
-    fun getItemByPosition(position: Int): Task {
+    fun getItemByPosition(position: Int): Group {
         return itemsList[position]
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    fun addItem(item: Task) {
+    fun addItem(item: Group) {
         itemsList.add(item)
         notifyDataSetChanged()
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    fun fillRecyclerWithFullItemsList(itemsMutableList: List<Task>) {
-        for (item in itemsMutableList) {
-            itemsList.add(item)
+    fun fillRecyclerWithFullItemsList(itemsList: List<Group>) {
+        for (item in itemsList) {
+            this.itemsList.add(item)
             notifyDataSetChanged()
         }
     }
 
-    fun getItemPosition(item: Task): Int = itemsList.indexOf(item)
+    fun getItemPosition(item: Group): Int = itemsList.indexOf(item)
 
-    fun changeItem(position: Int, item: Task) {
+    fun changeItem(position: Int, item: Group) {
         itemsList[position] = item
         notifyItemChanged(position)
     }

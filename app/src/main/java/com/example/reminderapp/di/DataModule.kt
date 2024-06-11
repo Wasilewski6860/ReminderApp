@@ -1,5 +1,7 @@
 package com.example.reminderapp.di
 
+import com.example.data.cache.GroupCacheMapper
+import com.example.data.cache.GroupWithTasksCacheMapper
 import com.example.data.cache.TaskCacheMapper
 import com.example.data.cache.TaskDatabase
 import com.example.data.cache.TaskStorage
@@ -15,7 +17,12 @@ val dataModule = module {
     }
 
     single<TaskStorage> {
-        TaskStorageImpl( taskCacheMapper = get(), taskDatabase = get())
+        TaskStorageImpl(
+            taskCacheMapper = get(),
+            taskDatabase = get(),
+            groupWithTasksCacheMapper = get(),
+            groupCacheMapper = get()
+        )
     }
 
     single<TaskRepository> {
@@ -24,6 +31,14 @@ val dataModule = module {
 
     single<TaskCacheMapper> {
         TaskCacheMapper()
+    }
+
+    single<GroupWithTasksCacheMapper> {
+        GroupWithTasksCacheMapper(get(), get())
+    }
+
+    single<GroupCacheMapper> {
+        GroupCacheMapper()
     }
 
 }
