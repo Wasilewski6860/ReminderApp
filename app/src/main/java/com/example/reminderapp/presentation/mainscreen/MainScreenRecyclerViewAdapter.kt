@@ -1,52 +1,52 @@
 package com.example.reminderapp.presentation.mainscreen
 
 import android.annotation.SuppressLint
-import android.content.Context
-import android.icu.text.SimpleDateFormat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.domain.model.Task
-import com.example.domain.model.TaskPeriodType
 import com.example.reminderapp.R
-import com.example.reminderapp.databinding.ReminderRecyclerViewItemBinding
-import com.example.reminderapp.presentation.creatorscreen.SpinnerPeriodicTime
-import java.util.Date
-import java.util.Locale
+import com.example.reminderapp.databinding.ListItemRecyclerBinding
 
 class MainScreenRecyclerViewAdapter(
-    private var listener: OnItemClickListener,
-    context: Context
+    private var listener: OnItemClickListener
 ) : RecyclerView.Adapter<MainScreenRecyclerViewAdapter.ItemHolder>() {
 
-    private val itemsList = mutableListOf<Task>()
-    private val timesDict = SpinnerPeriodicTime.getTimesDict(context)
+    private val itemsList = mutableListOf<Task>() /** change this on TaskGroup model item later */
+    // private val timesDict = SpinnerPeriodicTime.getTimesDict(context)
 
     inner class ItemHolder(view: View) : RecyclerView.ViewHolder(view) {
-        private val binding = ReminderRecyclerViewItemBinding.bind(view)
+        private val binding = ListItemRecyclerBinding.bind(view)
 
         fun bind(item: Task) = with(binding) {
-            reminderRcItemName.text = item.name
-            reminderRcItemTime.text = changeTimeFormat(item) ?: "ERROR"
-            reminderRcItemCardViewMainHolder.apply {
-                setOnClickListener { listener.onRcItemClick(position = adapterPosition) }
-                setCardBackgroundColor(item.color)
+            /**
+             * Some test code strings
+            // listNameTextView.text = item.groupName
+            // listItemsCounterTextView.text = item.itemsInGroupCounter
+            */
+
+            // reminderRcItemTime.text = changeTimeFormat(item) ?: "ERROR" <- can use something like this later
+            mainRecyclerViewItemHolder.setOnClickListener {
+                listener.onRcItemClick(position = adapterPosition)
             }
         }
 
-        private fun changeTimeFormat(task: Task): String? {
-            when (task.type) {
-                TaskPeriodType.ONE_TIME -> {
-                    val formatDate = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
-                    val date = Date(task.reminderCreationTime + task.reminderTimeTarget)
-                    return formatDate.format(date)
-                }
-                TaskPeriodType.PERIODIC -> {
-                    return timesDict[task.reminderTimeTarget]
-                }
-            }
-        }
+        /**
+         * Need this in another adapter
+//        private fun changeTimeFormat(task: Task): String? {
+//            when (task.type) {
+//                TaskPeriodType.ONE_TIME -> {
+//                    val formatDate = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
+//                    val date = Date(task.reminderCreationTime + task.reminderTimeTarget)
+//                    return formatDate.format(date)
+//                }
+//                TaskPeriodType.PERIODIC -> {
+//                    return timesDict[task.reminderTimeTarget]
+//                }
+//            }
+//        }
+         */
 
     }
 
@@ -56,7 +56,7 @@ class MainScreenRecyclerViewAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemHolder {
         val view = LayoutInflater.from(parent.context).inflate(
-            R.layout.reminder_recycler_view_item, parent, false
+            R.layout.list_item_recycler, parent, false
         )
         return ItemHolder(view)
     }

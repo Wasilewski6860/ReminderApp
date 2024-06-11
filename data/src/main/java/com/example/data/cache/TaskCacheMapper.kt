@@ -5,11 +5,11 @@ import com.example.data.cache.entity.TaskEntity
 import com.example.data.toPeriodicType
 import com.example.domain.model.Task
 
-class TaskCacheMapper: Mapper<TaskEntity, Task> {
+class TaskCacheMapper : Mapper<TaskEntity, Task> {
     override fun mapFromEntity(type: TaskEntity): Task {
         with(type) {
             return Task(
-                id= id,
+                id = id,
                 name = name,
                 description = description,
                 reminderCreationTime = timestamp,
@@ -24,7 +24,7 @@ class TaskCacheMapper: Mapper<TaskEntity, Task> {
     override fun mapToEntity(type: Task): TaskEntity {
         with(type) {
             return TaskEntity(
-                id= id,
+                id = id,
                 name = name,
                 description = description,
                 timestamp = reminderCreationTime,
