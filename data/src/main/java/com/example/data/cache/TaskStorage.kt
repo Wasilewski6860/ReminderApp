@@ -1,5 +1,7 @@
 package com.example.data.cache
 
+import com.example.domain.model.Group
+import com.example.domain.model.GroupWithTasks
 import com.example.domain.model.Task
 
 interface TaskStorage {
@@ -16,6 +18,11 @@ interface TaskStorage {
     suspend fun getAllTasksByPeriodType(period: String): List<Task>
 
     suspend fun getTask(id: Int): Task
+
+    suspend fun getAllGroups(): List<Group>
+    suspend fun getGroup(id: Int): Group
+    suspend fun getGroupWithTasks(id: Int): GroupWithTasks
+
 
     suspend fun clearAll()
 

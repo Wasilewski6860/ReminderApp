@@ -9,5 +9,6 @@ data class Task(
     val reminderTimeTarget: Long,
     val type: TaskPeriodType,
     var isActive: Boolean,
+    var groupId: Int,
     val color: Int
 )
