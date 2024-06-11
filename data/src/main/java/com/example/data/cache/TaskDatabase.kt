@@ -5,12 +5,14 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.data.cache.entity.TaskEntity
+import com.example.data.cache.entity.TaskGroupEntity
 
 @Database(
     entities = [
-        TaskEntity::class
+        TaskEntity::class,
+        TaskGroupEntity::class
     ],
-    version = 3
+    version = 4
 )
 abstract class TaskDatabase : RoomDatabase() {
 

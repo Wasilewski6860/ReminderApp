@@ -1,5 +1,7 @@
 package com.example.domain.repository
 
+import com.example.domain.model.Group
+import com.example.domain.model.GroupWithTasks
 import com.example.domain.model.Task
 import com.example.domain.model.TaskPeriodType
 
@@ -21,4 +23,8 @@ interface TaskRepository {
 
     suspend fun getAllTasks(): List<Task>
 
+
+    suspend fun getAllGroups(): List<Group>
+    suspend fun getGroup(id: Int): Group
+    suspend fun getGroupWithTasks(id: Int): GroupWithTasks
 }
