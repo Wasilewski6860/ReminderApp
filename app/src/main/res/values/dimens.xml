@@ -15,4 +15,8 @@
     <dimen name="reminder_activity_text_size">22sp</dimen>
     <dimen name="stopwatch_button_size">64dp</dimen>
     <dimen name="big_margin">24dp</dimen>
+
+    <dimen name="margin_start_text">10dp</dimen>
+    <dimen name="padding_start_text">10dp</dimen>
+    <dimen name="padding_text_vertical">20dp</dimen>
 </resources>

@@ -1,6 +1,7 @@
 package com.example.reminderapp.presentation.creatorscreen
 
 import android.util.Log
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.domain.model.Task
@@ -20,10 +21,14 @@ class CreatorViewModel(
     private val deleteTaskUseCase: DeleteTaskUseCase
 ) : ViewModel() {
 
+    val result = MutableLiveData<Task>()
+
     fun saveTaskInDatabase(task: Task) {
         viewModelScope.launch {
             try {
-                saveTaskUseCase.execute(task)
+                val res = saveTaskUseCase.execute(task)
+                task.id = res.toInt()
+                result.postValue(task)
             } catch (e: Exception) {
                 Log.e("saving task in room process", e.toString())
             }
