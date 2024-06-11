@@ -7,6 +7,7 @@ enum class TaskPeriodType(name: String) {
     override fun toString(): String {
         return name
     }
+
 }
 
 object Exception {

@@ -31,7 +31,7 @@ class DeviceBootReceiver : BroadcastReceiver(), KoinComponent {
         scope.launch(Dispatchers.Main) {
             val tasks = getAllTasksUseCase.execute()
             tasks.forEach { task ->
-                remindAlarmManager.createAlarm(task)
+                if(task.isActive) remindAlarmManager.createAlarm(task)
             }
         }
     }

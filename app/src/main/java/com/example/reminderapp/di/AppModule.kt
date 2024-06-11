@@ -34,7 +34,8 @@ val appModule = module {
     viewModel<MainViewModel> {
         MainViewModel(
             getAllTasksUseCase = get(),
-            deleteTaskUseCase = get()
+            deleteTaskUseCase = get(),
+            editTaskUseCase = get()
         )
     }
 

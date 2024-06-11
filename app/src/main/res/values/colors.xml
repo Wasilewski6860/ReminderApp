@@ -3,8 +3,14 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
+    <color name="windowBackgroundDay">#DCDCDC</color>
+
     <color name="purple_500">#FF6200EE</color>
 <!--  Temp colors for spinner tests  -->
     <color name="red">#F80000</color>
     <color name="blue">#005EFF</color>
+    <color name="link_color">#00CCFF</color>
+
+    <color name="activated_item_foreground">#44888888</color>
+    <color name="pressed_item_foreground">#08000000</color>
 </resources>

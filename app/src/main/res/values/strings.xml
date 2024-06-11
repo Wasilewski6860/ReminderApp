@@ -7,6 +7,10 @@
     <string name="onetime_reminder">One time reminder</string>
     <string name="choose_time">Choose a time</string>
     <string name="save">Save</string>
+    <string name="time_expired" translatable="false">Time expired</string>
+    <string name="postpone" translatable="false">Postpone</string>
+    <string name="dismiss" translatable="false">Dismiss</string>
+    <string name="swipe_right_to_dismiss" translatable="false">Swipe right to Dismiss, or left to Snooze.</string>
 
     <!--  Time here  -->
     <string name="min_15">15 Min</string>
