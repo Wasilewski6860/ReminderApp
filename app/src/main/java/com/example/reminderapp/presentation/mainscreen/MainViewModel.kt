@@ -18,18 +18,6 @@ class MainViewModel(
     private val tasksListLiveData = MutableLiveData<List<Task>>()
     val tasksListData get() = tasksListLiveData
 
-    fun fetchTasksFromDatabase() {
-        viewModelScope.launch {
-            try {
-                tasksListLiveData.postValue(getAllTasksUseCase.execute())
-            } catch (e: Exception) {
-                Log.e("loading tasks from database process", e.toString())
-            }
-        }
-    }
 
-    fun deleteTask(task: Task) {
-
-    }
     
 }

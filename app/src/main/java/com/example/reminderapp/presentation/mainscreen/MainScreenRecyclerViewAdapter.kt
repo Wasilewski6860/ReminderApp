@@ -6,7 +6,6 @@ import android.icu.text.SimpleDateFormat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.domain.model.Task
 import com.example.domain.model.TaskPeriodType
@@ -28,14 +27,12 @@ class MainScreenRecyclerViewAdapter(
         private val binding = ReminderRecyclerViewItemBinding.bind(view)
 
         fun bind(item: Task) = with(binding) {
-            reminderRcItemName.text = item.name // add other
+            reminderRcItemName.text = item.name
             reminderRcItemTime.text = changeTimeFormat(item) ?: "ERROR"
             reminderRcItemCardViewMainHolder.apply {
                 setOnClickListener { listener.onRcItemClick(position = adapterPosition) }
-                setBackgroundResource(R.drawable.rounded_corners_cardview)
-                setBackgroundColor(item.color)
+                setCardBackgroundColor(item.color)
             }
-            // set card corners radius somehow
         }
 
         private fun changeTimeFormat(task: Task): String? {
