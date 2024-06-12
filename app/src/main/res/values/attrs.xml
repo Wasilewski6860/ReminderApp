@@ -3,4 +3,10 @@
     <declare-styleable name="CircleCustomView">
         <attr name="circleColor" format="reference|color"/>
     </declare-styleable>
+
+    <declare-styleable name="GridItemCustomView">
+        <attr name="gridImage" format="reference"/>
+        <attr name="gridCounterText" format="reference"/>
+        <attr name="gridTitleText" format="reference"/>
+    </declare-styleable>
 </resources>

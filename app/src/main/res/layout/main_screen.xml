@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     tools:context=".presentation.mainscreen.MainFragment">
 
@@ -16,8 +17,49 @@
             android:id="@+id/topGridLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:columnCount="2">
+            android:useDefaultMargins="false"
+            android:columnCount="2"
+            android:rowCount="2">
 
+            <com.example.reminderapp.custom_view.GridItemCustomView
+                android:id="@+id/first"
+                android:layout_margin="0dp"
+                android:layout_row="0"
+                android:layout_column="0"
+                android:layout_columnWeight="1"
+                app:gridCounterText="@string/stub"
+                app:gridImage="@drawable/sand_clock_icon"
+                app:gridTitleText="@string/stub" />
+
+            <com.example.reminderapp.custom_view.GridItemCustomView
+                android:id="@+id/second"
+                android:layout_margin="0dp"
+                android:layout_row="0"
+                android:layout_column="1"
+                android:layout_columnWeight="1"
+                app:gridCounterText="@string/stub"
+                app:gridImage="@drawable/clock_icon"
+                app:gridTitleText="@string/stub" />
+
+            <com.example.reminderapp.custom_view.GridItemCustomView
+                android:id="@+id/third"
+                android:layout_margin="0dp"
+                android:layout_row="1"
+                android:layout_column="0"
+                android:layout_columnWeight="1"
+                app:gridCounterText="@string/stub"
+                app:gridImage="@drawable/folder_icon"
+                app:gridTitleText="@string/stub" />
+
+            <com.example.reminderapp.custom_view.GridItemCustomView
+                android:id="@+id/fourth"
+                android:layout_margin="0dp"
+                android:layout_row="1"
+                android:layout_column="1"
+                android:layout_columnWeight="1"
+                app:gridCounterText="@string/stub"
+                app:gridImage="@drawable/flag_icon_black"
+                app:gridTitleText="@string/stub" />
 
         </GridLayout>
 
