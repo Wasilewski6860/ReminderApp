@@ -27,7 +27,7 @@ class CreatorViewModel(
         viewModelScope.launch {
             try {
                 val res = saveTaskUseCase.execute(task)
-                task.id = res.toInt()
+//                task.id = res.toInt()
                 result.postValue(task)
             } catch (e: Exception) {
                 Log.e("saving task in room process", e.toString())

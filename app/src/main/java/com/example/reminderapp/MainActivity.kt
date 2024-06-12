@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MotionEvent
 import android.widget.EditText
+import androidx.appcompat.widget.Toolbar
 import com.example.reminderapp.databinding.ActivityMainBinding
 import com.example.reminderapp.presentation.creatorscreen.KeyboardUtils
 
@@ -17,7 +18,8 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-
+        val toolbar = findViewById<Toolbar>(R.id.toolbar)
+        setSupportActionBar(toolbar)
     }
 
     override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
@@ -27,11 +29,17 @@ class MainActivity : AppCompatActivity() {
                 val outRect = Rect()
                 focus.getGlobalVisibleRect(outRect)
                 if (!outRect.contains(ev.rawX.toInt(), ev.rawY.toInt())) {
-                    KeyboardUtils.hideKeyboard(this, binding.navHostFragment)
+                    KeyboardUtils.hideKeyboard(this, binding.fragmentContainerView)
                 }
             }
         }
         return super.dispatchTouchEvent(ev)
+    }
+
+
+    fun setToolbarMenu(menuResId: Int) {
+        binding.toolbar.menu.clear()
+        binding.toolbar.inflateMenu(menuResId)
     }
 
 }

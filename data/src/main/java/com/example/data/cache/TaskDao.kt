@@ -10,6 +10,7 @@ import androidx.room.Update
 import com.example.data.cache.entity.TaskEntity
 import com.example.data.cache.entity.TaskGroupEntity
 import com.example.data.cache.relation.GroupWithTasks
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface TaskDao {
@@ -30,13 +31,12 @@ interface TaskDao {
     suspend fun getTask(id: Int): TaskEntity
 
     @Query("SELECT * FROM task_group")
-    suspend fun getAllGroups(): List<TaskGroupEntity>
+    fun getAllGroups(): Flow<List<TaskGroupEntity>>
     @Query("SELECT * FROM task_group WHERE groupId =:id")
-    suspend fun getGroup(id: Int): TaskGroupEntity
-
+    fun getGroup(id: Int): Flow<TaskGroupEntity>
     @Transaction
     @Query("SELECT * FROM task_group WHERE groupId = :groupId LIMIT 1")
-    suspend fun getGroupWithTasks(groupId: Int): GroupWithTasks
+    fun getGroupWithTasks(groupId: Int): Flow<GroupWithTasks>
 
     @Query("SELECT * FROM task WHERE periodic_type =:period")
     suspend fun getAllTasksByPeriodType(period: String): List<TaskEntity>

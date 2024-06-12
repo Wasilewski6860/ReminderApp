@@ -66,11 +66,13 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.8.0"
 
     // Coroutines
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3"
-
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.1"
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0-RC'
     // GSON
     implementation "com.google.code.gson:gson:2.10.1"
 
     //MpAndroidChart
     implementation "com.github.PhilJay:MPAndroidChart:v3.1.0"
+
+
 }

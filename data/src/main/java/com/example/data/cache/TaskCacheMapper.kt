@@ -13,11 +13,13 @@ class TaskCacheMapper: Mapper<TaskEntity, Task> {
                 name = name,
                 description = description,
                 reminderCreationTime = timestamp,
-                reminderTimeTarget = timeTarget,
+                reminderTime = startTime,
+                reminderTimePeriod = timePeriod,
                 type = periodicType.toPeriodicType(),
                 color = color,
                 isActive = isActive,
-                groupId = groupId
+                groupId = groupId,
+                isMarkedWithFlag = flag
             )
         }
     }
@@ -29,11 +31,13 @@ class TaskCacheMapper: Mapper<TaskEntity, Task> {
                 name = name,
                 description = description,
                 timestamp = reminderCreationTime,
-                timeTarget = reminderTimeTarget,
+                startTime = reminderTime,
+                timePeriod = reminderTimePeriod,
                 periodicType = type.type.toString(),
                 color = color,
                 isActive = isActive,
-                groupId = groupId
+                groupId = groupId,
+                flag = isMarkedWithFlag
             )
         }
     }

@@ -4,10 +4,11 @@ import com.example.domain.model.Group
 import com.example.domain.model.GroupWithTasks
 import com.example.domain.model.Task
 import com.example.domain.model.TaskPeriodType
+import kotlinx.coroutines.flow.Flow
 
 interface TaskRepository {
 
-    suspend fun addTask(task: Task): Long
+    suspend fun addTask(task: Task): Flow<Long>
 
     suspend fun editTask(task: Task)
 
@@ -23,8 +24,7 @@ interface TaskRepository {
 
     suspend fun getAllTasks(): List<Task>
 
-
-    suspend fun getAllGroups(): List<Group>
-    suspend fun getGroup(id: Int): Group
-    suspend fun getGroupWithTasks(id: Int): GroupWithTasks
+    suspend fun getAllGroups(): Flow<List<Group>>
+    suspend fun getGroup(id: Int): Flow<Group>
+    suspend fun getGroupWithTasks(id: Int): Flow<GroupWithTasks>
 }

@@ -44,7 +44,9 @@ dependencies {
     implementation "androidx.room:room-ktx:$room_version"
     //Kotlin symbol processing for Room
     ksp "androidx.room:room-compiler:$room_version"
-
+    // Coroutines
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3"
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0-RC'
     //Koin
     implementation "io.insert-koin:koin-core:$koin_version "
     implementation "io.insert-koin:koin-android:$koin_version"

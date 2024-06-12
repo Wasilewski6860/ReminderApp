@@ -3,9 +3,9 @@ package com.example.reminderapp.di
 import android.app.AlarmManager
 import android.content.Context
 import com.example.reminderapp.notification.NotificationManager
+import com.example.reminderapp.presentation.create_reminder.CreateReminderViewModel
 import com.example.reminderapp.presentation.creatorscreen.CreatorViewModel
 import com.example.reminderapp.presentation.mainscreen.MainViewModel
-import com.example.reminderapp.presentation.statisticscreen.StatisticViewModel
 import com.example.reminderapp.reminder.RemindAlarmManager
 import com.example.reminderapp.reminder.work.RemindWorkManager
 import org.koin.android.ext.koin.androidContext
@@ -35,7 +35,6 @@ val appModule = module {
         MainViewModel(
             getAllTasksUseCase = get(),
             deleteTaskUseCase = get(),
-            editTaskUseCase = get()
         )
     }
 
@@ -48,10 +47,12 @@ val appModule = module {
         )
     }
 
-    viewModel<StatisticViewModel> {
-        StatisticViewModel(
-            getAllTasksUseCase = get()
+    viewModel<CreateReminderViewModel> {
+        CreateReminderViewModel(
+            createTaskUseCase = get(),
+            getAllGroupsUseCase = get()
         )
     }
+
 
 }

@@ -5,6 +5,7 @@
         <item name="windowActionBar">false</item>
 
         <item name="colorPrimaryVariant">@color/white</item>
+        <item name="colorPrimary">@color/white</item>
         <item name="android:windowBackground">@color/windowBackgroundDay</item>
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
