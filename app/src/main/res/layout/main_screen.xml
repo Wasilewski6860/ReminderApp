@@ -22,44 +22,44 @@
             android:rowCount="2">
 
             <com.example.reminderapp.custom_view.GridItemCustomView
-                android:id="@+id/first"
+                android:id="@+id/currentDayTasksItem"
                 android:layout_margin="0dp"
                 android:layout_row="0"
                 android:layout_column="0"
                 android:layout_columnWeight="1"
                 app:gridCounterText="@string/stub"
                 app:gridImage="@drawable/sand_clock_icon"
-                app:gridTitleText="@string/stub" />
+                app:gridTitleText="@string/current_day" />
 
             <com.example.reminderapp.custom_view.GridItemCustomView
-                android:id="@+id/second"
+                android:id="@+id/plannedTasksItem"
                 android:layout_margin="0dp"
                 android:layout_row="0"
                 android:layout_column="1"
                 android:layout_columnWeight="1"
                 app:gridCounterText="@string/stub"
                 app:gridImage="@drawable/clock_icon"
-                app:gridTitleText="@string/stub" />
+                app:gridTitleText="@string/planned" />
 
             <com.example.reminderapp.custom_view.GridItemCustomView
-                android:id="@+id/third"
+                android:id="@+id/allTasksItem"
                 android:layout_margin="0dp"
                 android:layout_row="1"
                 android:layout_column="0"
                 android:layout_columnWeight="1"
                 app:gridCounterText="@string/stub"
                 app:gridImage="@drawable/folder_icon"
-                app:gridTitleText="@string/stub" />
+                app:gridTitleText="@string/all" />
 
             <com.example.reminderapp.custom_view.GridItemCustomView
-                android:id="@+id/fourth"
+                android:id="@+id/tasksWithFlagItem"
                 android:layout_margin="0dp"
                 android:layout_row="1"
                 android:layout_column="1"
                 android:layout_columnWeight="1"
                 app:gridCounterText="@string/stub"
                 app:gridImage="@drawable/flag_icon_black"
-                app:gridTitleText="@string/stub" />
+                app:gridTitleText="@string/with_flag" />
 
         </GridLayout>
 
@@ -86,8 +86,7 @@
                 android:layout_weight="1"
                 android:paddingHorizontal="10dp"
                 android:text="My lists"
-                android:textSize="20sp"
-                android:textStyle="bold" />
+                android:textSize="20sp" />
 
             <ImageView
                 android:id="@+id/showRecyclerViewButton"
@@ -129,8 +128,7 @@
             android:paddingHorizontal="20dp"
             android:paddingVertical="10dp"
             android:text="Change"
-            android:textSize="20sp"
-            android:textStyle="bold" />
+            android:textSize="20sp" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/addFloatingActionButton"
@@ -152,8 +150,7 @@
             android:paddingHorizontal="20dp"
             android:paddingVertical="10dp"
             android:text="Add list"
-            android:textSize="20sp"
-            android:textStyle="bold" />
+            android:textSize="20sp" />
 
     </LinearLayout>
 

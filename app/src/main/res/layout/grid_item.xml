@@ -36,11 +36,12 @@
                 android:textSize="26sp"
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/mainGridItemHolder"
     android:layout_height="wrap_content"
     android:layout_width="match_parent">
 
     <com.google.android.material.card.MaterialCardView
-    android:id="@+id/mainGridItemHolder"
+    android:id="@+id/gridItemCardView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginHorizontal="10dp"
@@ -71,9 +72,9 @@
                     android:layout_gravity="center_vertical"
                     android:gravity="end"
                     android:paddingEnd="10dp"
+                    android:paddingStart="0dp"
                     android:text="1"
-                    android:textSize="26sp"
-                    android:textStyle="bold" />
+                    android:textSize="26sp" />
 
             </LinearLayout>
 
@@ -84,8 +85,7 @@
                 android:paddingHorizontal="10dp"
                 android:paddingVertical="6dp"
                 android:text="@string/stub"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+                android:textSize="18sp" />
 
         </LinearLayout>
 

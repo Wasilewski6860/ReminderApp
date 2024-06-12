@@ -6,7 +6,7 @@ import android.os.Bundle
 import android.view.MotionEvent
 import android.widget.EditText
 import com.example.reminderapp.databinding.ActivityMainBinding
-import com.example.reminderapp.presentation.creatorscreen.KeyboardUtils
+import com.example.reminderapp.objects.KeyboardUtils
 
 class MainActivity : AppCompatActivity() {
 

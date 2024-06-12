@@ -33,6 +33,7 @@ interface TaskDao {
     suspend fun getTask(id: Int): TaskEntity
 
     @Query("SELECT * FROM task_group")
+    fun getAllGroups(): Flow<List<TaskGroupEntity>>
     suspend fun getAllGroups(): List<TaskGroupEntity>
 
     @Query("SELECT * FROM task_group WHERE groupId =:id")

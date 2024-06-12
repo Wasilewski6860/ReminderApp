@@ -1,44 +1,8 @@
-//package com.example.reminderapp.presentation.creatorscreen
-//
-//import android.app.DatePickerDialog
-//import android.app.TimePickerDialog
-//import android.icu.text.SimpleDateFormat
-//import android.icu.util.Calendar
-//import android.os.Bundle
-//import android.view.LayoutInflater
-//import android.view.View
-//import android.view.ViewGroup
-//import androidx.fragment.app.Fragment
-//import androidx.navigation.NavController
-//import com.example.reminderapp.databinding.FragmentAddReminderBinding
-//import com.example.reminderapp.presentation.BackActionInterface
-//import org.koin.androidx.viewmodel.ext.android.viewModel
-//import java.util.Locale
-//import org.koin.core.component.KoinComponent
-//
-//class TaskCreatorFragment : Fragment(), KoinComponent, BackActionInterface {
-//
-//    private lateinit var binding: FragmentAddReminderBinding
-//    private val viewModel by viewModel<CreatorViewModel>()
-//
-//    override fun onCreateView(
-//        inflater: LayoutInflater,
-//        container: ViewGroup?,
-//        savedInstanceState: Bundle?
-//    ): View {
-//        binding = FragmentAddReminderBinding.inflate(inflater, container, false)
-//
-//        return binding.root
-//    }
-//
-//    override fun goBack(navController: NavController) {
-//
-//    }
-//
 //    private fun getKeyByValue(map: Map<Long, String>, value: String): Long? {
 //        return map.entries.firstOrNull { it.value == value }?.key
 //    }
 //
+//    /** Use that in new creator fragment */
 //    // Temp date and time picker variant for one time reminder
 //    private fun showDateAndTimePickers() {
 //        val formatDate = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())

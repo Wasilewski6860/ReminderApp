@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.domain.model.Group
 import com.example.domain.model.Task
-import com.example.domain.model.TaskPeriodType
 import com.example.domain.use_case.GetAllGroupsUseCase
 import com.example.domain.use_case.SaveTaskUseCase
 import com.example.reminderapp.presentation.base.UiState
@@ -21,8 +20,8 @@ class CreateReminderViewModel(
     private val _uiState = MutableStateFlow<UiState<List<Group>>>(UiState.Loading)
     val uiState: StateFlow<UiState<List<Group>>> = _uiState
 
-    private val _saveRusult = MutableStateFlow<Long>(-1)
-    val saveRusult: StateFlow<Long> = _saveRusult
+    private val _saveResult = MutableStateFlow<Long>(-1)
+    val saveResult: StateFlow<Long> = _saveResult
 
     fun fetchGroups() {
         viewModelScope.launch {
@@ -57,7 +56,7 @@ class CreateReminderViewModel(
             ).catch { e ->
                 _uiState.value = UiState.Error(e.toString())
             }.collect {
-                _saveRusult.value = it
+                _saveResult.value = it
             }
         }
     }

@@ -1,4 +1,4 @@
-package com.example.reminderapp.presentation.creatorscreen
+package com.example.reminderapp.objects
 
 import android.app.Activity
 import android.view.View

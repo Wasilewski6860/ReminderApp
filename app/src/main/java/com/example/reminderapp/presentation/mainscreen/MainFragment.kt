@@ -53,6 +53,15 @@ class MainFragment : Fragment() {
             adapter.fillRecyclerWithFullItemsList(
                 Test.getTestList()
             )
+        setupRecyclerAndAdapter()
+        setupObserver()
+        initListeners()
+        gridLayoutItemsInit()
+
+        /** For testing */
+        adapter.fillRecyclerWithFullItemsList(
+            Test.getTestList()
+        )
 
         }
 
@@ -67,11 +76,11 @@ class MainFragment : Fragment() {
             toggleImageRotation(showRecyclerViewButton)
             when (customListsRecyclerView.visibility) {
                 View.VISIBLE -> {
-                    customListsRecyclerView.visibility = View.GONE
+                    hideRecyclerAnimation(customListsRecyclerView)
                 }
 
                 View.GONE -> {
-                    customListsRecyclerView.visibility = View.VISIBLE
+                    showRecyclerAnimation(customListsRecyclerView)
                 }
 
                 else -> {}
@@ -80,7 +89,20 @@ class MainFragment : Fragment() {
     }
 
     private fun gridLayoutItemsInit() = with(binding) {
+        topGridLayout.apply {
+            currentDayTasksItem.setOnClickListener {
 
+            }
+            plannedTasksItem.setOnClickListener {
+
+            }
+            allTasksItem.setOnClickListener {
+
+            }
+            tasksWithFlagItem.setOnClickListener {
+
+            }
+        }
     }
 
     private fun toggleImageRotation(imageView: ImageView) {
@@ -89,6 +111,76 @@ class MainFragment : Fragment() {
             currentArrowRotation -= 360f
         }
         animateImageViewRotation(imageView, currentArrowRotation)
+    }
+
+    private fun setupRecyclerAndAdapter() = with(binding) {
+        adapter = MainScreenRecyclerViewAdapter(object :
+            MainScreenRecyclerViewAdapter.OnItemClickListener {
+            override fun onRcItemClick(position: Int) {
+                /** Transition on CreateReminderFragment */
+                /** And add data to this transaction */
+            }
+        })
+
+        customListsRecyclerView.layoutManager = GridLayoutManager(context, 1)
+        customListsRecyclerView.adapter = adapter
+    }
+
+    private fun setupObserver() {
+        viewModel.fetchTaskGroups()
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.groupsListData.collect {
+                    adapter.fillRecyclerWithFullItemsList(it)
+                }
+            }
+        }
+    }
+
+    private fun hideRecyclerAnimation(recyclerView: RecyclerView) {
+        val alphaAnimation = ObjectAnimator.ofFloat(
+            recyclerView, "alpha", 1f, 0f
+        )
+        val translateXAnimation = ObjectAnimator.ofFloat(
+            recyclerView, "translationX", 0f, -recyclerView.width.toFloat()
+        )
+
+        val animatorSet = AnimatorSet()
+        animatorSet.playTogether(alphaAnimation, translateXAnimation)
+
+        animatorSet.duration = 500
+
+        animatorSet.addListener(object : AnimatorListenerAdapter() {
+            override fun onAnimationEnd(animation: Animator) {
+                super.onAnimationEnd(animation)
+                recyclerView.visibility = View.GONE
+            }
+        })
+
+        animatorSet.start()
+    }
+
+    private fun showRecyclerAnimation(recyclerView: RecyclerView) {
+        val alphaAnimation = ObjectAnimator.ofFloat(
+            recyclerView, "alpha", 0f, 1f
+        )
+        val translateXAnimation = ObjectAnimator.ofFloat(
+            recyclerView, "translationX", recyclerView.height.toFloat(), 0f
+        )
+
+        val animatorSet = AnimatorSet()
+        animatorSet.playTogether(alphaAnimation, translateXAnimation)
+
+        animatorSet.duration = 500
+
+        animatorSet.addListener(object : AnimatorListenerAdapter() {
+            override fun onAnimationStart(animation: Animator) {
+                super.onAnimationStart(animation)
+                recyclerView.visibility = View.VISIBLE
+            }
+        })
+
+        animatorSet.start()
     }
 
 }

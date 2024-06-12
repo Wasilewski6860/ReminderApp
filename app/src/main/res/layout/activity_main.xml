@@ -12,22 +12,6 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:title=""
-        android:background="?attr/colorPrimary"/>
-
-    <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/fragmentContainerView"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:name="com.example.reminderapp.presentation.create_reminder.CreateReminderFragment"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
-        android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -36,12 +20,13 @@
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragmentContainerView"
+        android:name="com.example.reminderapp.presentation.mainscreen.MainFragment"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:name="com.example.reminderapp.presentation.mainscreen.MainFragment"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

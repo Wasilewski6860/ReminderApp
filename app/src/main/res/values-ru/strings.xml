@@ -18,4 +18,11 @@
     <string name="week">Неделя</string>
     <string name="month">Месяц</string>
     <!--    -->
+
+    <!--  Strings for grid items  -->
+    <string name="current_day">Сегодня</string>
+    <string name="planned">Запланировано</string>
+    <string name="all">Все</string>
+    <string name="with_flag">С флагом</string>
+
 </resources>

@@ -16,7 +16,6 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -157,7 +156,8 @@ class CreateReminderFragment : Fragment() {
             binding.flagIv.visibility = if(isChecked) View.VISIBLE else View.GONE
         }
     }
-    fun setupObservers() {
+
+    private fun setupObservers() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiState.collect {
@@ -184,7 +184,7 @@ class CreateReminderFragment : Fragment() {
 
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.saveRusult.collect {
+                viewModel.saveResult.collect {
                     if (it != (-1).toLong()) {
                         task.id = it.toInt()
                         remindAlarmManager.createAlarm(task)
@@ -223,7 +223,7 @@ class CreateReminderFragment : Fragment() {
         return super.onOptionsItemSelected(item)
     }
 
-    fun setSpinnerPeriod() {
+    private fun setSpinnerPeriod() {
         val repeatTimeSpinnerItems = TimeDateUtils.timeDates.map { timeDate -> timeDate.name }
         val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, repeatTimeSpinnerItems)
         val spinner = binding.selectedPeriodSpinner
@@ -238,7 +238,7 @@ class CreateReminderFragment : Fragment() {
         }
     }
 
-    fun setSpinnerGroup(groups: List<Group>) {
+    private fun setSpinnerGroup(groups: List<Group>) {
         val groupSpinnerItems = groups.map { group -> group.groupName }
         val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, groupSpinnerItems)
         val spinner = binding.selectedListSpinner
@@ -254,7 +254,7 @@ class CreateReminderFragment : Fragment() {
         }
     }
 
-    fun setSpinnerColor() {
+    private fun setSpinnerColor() {
         val groupSpinnerItems = ColorsUtils(requireContext()).colors
 
         val adapter = object: ArrayAdapter<ColorItem>(requireContext(), R.layout.spinner_color_item_layout, groupSpinnerItems) {
@@ -284,7 +284,7 @@ class CreateReminderFragment : Fragment() {
         }
     }
     //TODO переделать
-    fun saveTask() = with(binding){
+    private fun saveTask() = with(binding){
         if (isInputValid()) {
             val name = reminderNameEt.text.toString()
             val description = reminderNameEt.text.toString()
@@ -347,7 +347,7 @@ class CreateReminderFragment : Fragment() {
         datePicker.show()
     }
 
-    fun isInputValid(): Boolean {
+    private fun isInputValid(): Boolean {
         with(binding) {
             val name = reminderNameEt.text.toString()
             val description = reminderNameEt.text.toString()
@@ -373,7 +373,8 @@ class CreateReminderFragment : Fragment() {
         }
         return true
     }
-    fun getContentHeight(linearLayout: LinearLayout): Int {
+
+    private fun getContentHeight(linearLayout: LinearLayout): Int {
         var height = 0
         for (i in 0 until linearLayout.childCount) {
             val child = linearLayout.getChildAt(i)

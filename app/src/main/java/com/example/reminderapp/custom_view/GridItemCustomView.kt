@@ -1,19 +1,14 @@
 package com.example.reminderapp.custom_view
 
+import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Paint
-import android.graphics.drawable.Drawable
 import android.util.AttributeSet
-import android.view.View
 import android.widget.FrameLayout
-import android.widget.GridView
 import android.widget.ImageView
 import android.widget.TextView
 import com.example.reminderapp.R
-import com.google.android.material.card.MaterialCardView
 
+@SuppressLint("UseCompatLoadingForDrawables")
 class GridItemCustomView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
@@ -51,7 +46,6 @@ class GridItemCustomView @JvmOverloads constructor(
             imageView.setImageDrawable(context.getDrawable(image))
             counterTextView.text = context.getString(counterText)
             titleTextView.text = context.getString(titleText)
-            // this.setCardBackgroundColor(Color.TRANSPARENT)
         }
     }
 
