@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.example.domain.model.Group
 import com.example.reminderapp.R
 import com.example.reminderapp.animations.animateImageViewRotation
+import androidx.recyclerview.widget.GridLayoutManager
 import com.example.reminderapp.databinding.MainScreenBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
 

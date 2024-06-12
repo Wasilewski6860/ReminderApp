@@ -3,6 +3,7 @@ package com.example.reminderapp.di
 import android.app.AlarmManager
 import android.content.Context
 import com.example.reminderapp.notification.NotificationManager
+import com.example.reminderapp.presentation.create_reminder.CreateReminderViewModel
 import com.example.reminderapp.presentation.creatorscreen.CreatorViewModel
 import com.example.reminderapp.presentation.mainscreen.MainViewModel
 import com.example.reminderapp.reminder.RemindAlarmManager
@@ -33,6 +34,8 @@ val appModule = module {
     viewModel<MainViewModel> {
         MainViewModel(
             getAllGroupsUseCase = get()
+            getAllTasksUseCase = get(),
+            deleteTaskUseCase = get(),
         )
     }
 
@@ -44,5 +47,13 @@ val appModule = module {
             deleteTaskUseCase = get()
         )
     }
+
+    viewModel<CreateReminderViewModel> {
+        CreateReminderViewModel(
+            createTaskUseCase = get(),
+            getAllGroupsUseCase = get()
+        )
+    }
+
 
 }

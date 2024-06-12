@@ -6,6 +6,7 @@ import com.example.domain.model.GroupWithTasks
 import com.example.domain.model.Task
 import com.example.domain.model.TaskPeriodType
 import com.example.domain.repository.TaskRepository
+import kotlinx.coroutines.flow.Flow
 
 class TaskRepositoryImpl(private val taskStorage: TaskStorage) : TaskRepository {
 
@@ -26,8 +27,8 @@ class TaskRepositoryImpl(private val taskStorage: TaskStorage) : TaskRepository 
         taskStorage.getAllTasksByPeriodType(period.name)
 
     override suspend fun getAllTasks(): List<Task> = taskStorage.getAllTasks()
-    override suspend fun getAllGroups(): List<Group> = taskStorage.getAllGroups()
-    override suspend fun getGroup(id: Int): Group = taskStorage.getGroup(id)
-    override suspend fun getGroupWithTasks(id: Int): GroupWithTasks = taskStorage.getGroupWithTasks(id)
+    override suspend fun getAllGroups(): Flow<List<Group>> = taskStorage.getAllGroups()
+    override suspend fun getGroup(id: Int): Flow<Group> = taskStorage.getGroup(id)
+    override suspend fun getGroupWithTasks(id: Int): Flow<GroupWithTasks> = taskStorage.getGroupWithTasks(id)
 
 }

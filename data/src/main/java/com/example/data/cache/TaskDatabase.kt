@@ -12,7 +12,7 @@ import com.example.data.cache.entity.TaskGroupEntity
         TaskEntity::class,
         TaskGroupEntity::class
     ],
-    version = 4
+    version = 5
 )
 abstract class TaskDatabase : RoomDatabase() {
 

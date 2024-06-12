@@ -41,4 +41,12 @@ val dataModule = module {
         GroupCacheMapper()
     }
 
+    single<GroupWithTasksCacheMapper> {
+        GroupWithTasksCacheMapper(get(),get())
+    }
+
+    single<GroupCacheMapper> {
+        GroupCacheMapper()
+    }
+
 }

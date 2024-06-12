@@ -22,4 +22,20 @@
     <string name="week">Week</string>
     <string name="month">Month</string>
     <!--    -->
+
+    <string-array name="time_options">
+        <item>Никогда</item>
+        <item>Каждые 5 минут</item>
+        <item>Каждые 15 минут</item>
+        <item>Каждые полчаса</item>
+        <item>Каждый час</item>
+        <item>Каждые 12 часов</item>
+        <item>Ежедневно</item>
+        <item>Еженедельно</item>
+        <item>Ежемесячно</item>
+        <item>Каждые полгода</item>
+        <item>Ежегодно</item>
+
+    </string-array>
+
 </resources>

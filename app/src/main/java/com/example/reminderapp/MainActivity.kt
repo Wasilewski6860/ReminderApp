@@ -17,9 +17,8 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-//        supportFragmentManager.beginTransaction()
-//            .replace(R.id.fragmentContainerView, MainFragment())
-//            .commit()
+        val toolbar = findViewById<Toolbar>(R.id.toolbar)
+        setSupportActionBar(toolbar)
     }
 
     override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
