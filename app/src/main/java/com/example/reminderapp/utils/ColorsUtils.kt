@@ -8,27 +8,27 @@ class ColorsUtils(context: Context) {
 
     val colors: List<ColorItem> = listOf(
         ColorItem(
-            "Не выбран",
+            context.getString(R.string.not_selected_color_list_item),
             null
         ),
         ColorItem(
-            "Красный",
+            context.getString(R.string.red_color_list_item),
             ContextCompat.getColor(context, R.color.red)
         ),
         ColorItem(
-            "Синий",
+            context.getString(R.string.blue_color_list_item),
             ContextCompat.getColor(context, R.color.blue)
         ),
         ColorItem(
-            "Зеленый",
+            context.getString(R.string.green_color_list_item),
             ContextCompat.getColor(context, R.color.green)
         ),
         ColorItem(
-            "Желтый",
+            context.getString(R.string.yellow_color_list_item),
             ContextCompat.getColor(context, R.color.yellow)
         ),
         ColorItem(
-            "Фиолетовый",
+            context.getString(R.string.violet_color_list_item),
             ContextCompat.getColor(context, R.color.violet)
         ),
     )

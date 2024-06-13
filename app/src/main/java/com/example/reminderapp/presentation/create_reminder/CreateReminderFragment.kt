@@ -224,7 +224,7 @@ class CreateReminderFragment : Fragment() {
     }
 
     fun setSpinnerPeriod() {
-        val repeatTimeSpinnerItems = TimeDateUtils.timeDates.map { timeDate -> timeDate.name }
+        val repeatTimeSpinnerItems = TimeDateUtils(requireContext()).timeDates.map { timeDate -> timeDate.name }
         val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, repeatTimeSpinnerItems)
         val spinner = binding.selectedPeriodSpinner
         spinner.adapter = adapter
@@ -233,7 +233,7 @@ class CreateReminderFragment : Fragment() {
             override fun onNothingSelected(p0: AdapterView<*>?) {}
 
             override fun onItemSelected(adapterView: AdapterView<*>?, view: View?, pos: Int, id: Long) {
-                selectedPeriod = TimeDateUtils.timeDates[pos].time
+                selectedPeriod = TimeDateUtils(requireContext()).timeDates[pos].time
             }
         }
     }
