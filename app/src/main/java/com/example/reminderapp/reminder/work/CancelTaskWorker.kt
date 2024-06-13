@@ -24,10 +24,11 @@ class CancelTaskWorker(val context: Context, val workerParams: WorkerParameters)
         Log.d("MY LOG","CancelTaskWorker doWork")
         val id = inputData.getInt("id",-1)
         if (id != -1) {
-            val task = getTaskUseCase.execute(id)
-            remindAlarmManager.clearAlarm(task)
-            deleteTaskUseCase.execute(id)
-            notificationManager.clearNotification(id)
+            getTaskUseCase.execute(id).collect{
+                remindAlarmManager.clearAlarm(it)
+                deleteTaskUseCase.execute(id)
+                notificationManager.clearNotification(id)
+            }
         }
 
         return Result.success()

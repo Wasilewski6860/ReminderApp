@@ -18,13 +18,13 @@ interface TaskRepository {
 
     suspend fun deleteAll()
 
-    suspend fun getTask(id: Int): Task
+    fun getTask(id: Int): Flow<Task>
 
-    suspend fun getAllTasksByPeriodType(period: TaskPeriodType): List<Task>
+    fun getAllTasksByPeriodType(period: TaskPeriodType): Flow<List<Task>>
 
-    suspend fun getAllTasks(): List<Task>
+    fun getAllTasks(): Flow<List<Task>>
 
-    suspend fun getAllGroups(): Flow<List<Group>>
-    suspend fun getGroup(id: Int): Flow<Group>
-    suspend fun getGroupWithTasks(id: Int): Flow<GroupWithTasks>
+    fun getAllGroups(): Flow<List<Group>>
+    fun getGroup(id: Int): Flow<Group>
+    fun getGroupWithTasks(id: Int): Flow<GroupWithTasks>
 }

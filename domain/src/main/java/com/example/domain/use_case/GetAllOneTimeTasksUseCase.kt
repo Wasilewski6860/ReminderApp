@@ -6,5 +6,5 @@ import com.example.domain.repository.TaskRepository
 
 class GetAllOneTimeTasksUseCase(private val taskRepository: TaskRepository) {
 
-    suspend fun execute() = taskRepository.getAllTasksByPeriodType(TaskPeriodType.ONE_TIME)
+    fun execute() = taskRepository.getAllTasksByPeriodType(TaskPeriodType.ONE_TIME)
 }
