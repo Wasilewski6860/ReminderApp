@@ -19,4 +19,9 @@
     <dimen name="margin_start_text">10dp</dimen>
     <dimen name="padding_start_text">10dp</dimen>
     <dimen name="padding_text_vertical">20dp</dimen>
+    <dimen name="normal_card_elevation">4dp</dimen>
+    <dimen name="little_card_corner_radius">6dp</dimen>
+    <dimen name="divider_padding">3dp</dimen>
+    <dimen name="create_screen_containers_space">30dp</dimen>
+    <dimen name="small_icon_size">20dp</dimen>
 </resources>

@@ -20,4 +20,19 @@
     <style name="ClickableTextStyle">
         <item name="android:textColor">@color/link_color</item>
     </style>
+
+    <style name="LayoutWithMiddleDividers">
+        <item name="android:dividerPadding">@dimen/divider_padding</item>
+        <item name="android:showDividers">middle</item>
+        <item name="android:divider">@drawable/separator</item>
+    </style>
+
+    <style name="LayoutWithMiddleDividersMainContainer" parent="MainContainerStyle">
+        <item name="android:paddingHorizontal">@dimen/margin_start_text</item>
+    </style>
+
+    <style name="LayoutWithDividersContainer" parent="LayoutWithMiddleDividersMainContainer">
+        <item name="android:orientation">vertical</item>
+    </style>
+
 </resources>
