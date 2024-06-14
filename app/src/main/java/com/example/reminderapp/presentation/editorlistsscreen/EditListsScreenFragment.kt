@@ -10,10 +10,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.reminderapp.databinding.ListEditorScreenBinding
-import com.example.reminderapp.databinding.ListItemRecyclerBinding
-import com.example.reminderapp.presentation.mainscreen.MainScreenRecyclerViewAdapter
 import com.example.reminderapp.presentation.recycleradapter.GroupListRecyclerViewAdapter
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
