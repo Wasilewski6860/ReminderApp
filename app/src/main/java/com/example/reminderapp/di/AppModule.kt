@@ -35,15 +35,8 @@ val appModule = module {
     viewModel<MainViewModel> {
         MainViewModel(
             getAllGroupsUseCase = get()
-        )
-    }
-
-    viewModel<CreatorViewModel> {
-        CreatorViewModel(
-            saveTaskUseCase = get(),
-            getTaskUseCase = get(),
-            editTaskUseCase = get(),
-            deleteTaskUseCase = get()
+            getAllTasksUseCase = get(),
+            deleteTaskUseCase = get(),
         )
     }
 
@@ -59,5 +52,6 @@ val appModule = module {
             getAllGroupsUseCase = get()
         )
     }
+
 
 }

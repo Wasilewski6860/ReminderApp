@@ -1,4 +1,3 @@
-
 package com.example.reminderapp.utils
 
 import android.content.Context
@@ -59,3 +58,4 @@ data class TimePeriodItem(
     val name: String,
     val time: Long?
 )
+

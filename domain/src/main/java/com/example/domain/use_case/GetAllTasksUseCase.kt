@@ -4,6 +4,6 @@ import com.example.domain.repository.TaskRepository
 
 class GetAllTasksUseCase(private val taskRepository: TaskRepository) {
 
-    suspend fun execute() = taskRepository.getAllTasks()
+    fun execute() = taskRepository.getAllTasks()
 
 }
