@@ -17,8 +17,10 @@ interface TaskDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addTask(taskEntity: TaskEntity): Long
+
     @Update
     suspend fun editTask(taskEntity: TaskEntity)
+
     @Delete
     suspend fun deleteTask(taskEntity: TaskEntity)
 
@@ -27,13 +29,16 @@ interface TaskDao {
 
     @Query("SELECT * FROM task")
     fun getAllTasks(): Flow<List<TaskEntity>>
+
     @Query("SELECT * FROM task WHERE id =:id")
     fun getTask(id: Int): Flow<TaskEntity>
 
     @Query("SELECT * FROM task_group")
     fun getAllGroups(): Flow<List<TaskGroupEntity>>
+
     @Query("SELECT * FROM task_group WHERE groupId =:id")
     fun getGroup(id: Int): Flow<TaskGroupEntity>
+
     @Transaction
     @Query("SELECT * FROM task_group WHERE groupId = :groupId LIMIT 1")
     fun getGroupWithTasks(groupId: Int): Flow<GroupWithTasks>

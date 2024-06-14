@@ -17,7 +17,12 @@ val dataModule = module {
     }
 
     single<TaskStorage> {
-        TaskStorageImpl( taskCacheMapper = get(), taskDatabase = get(), groupWithTasksCacheMapper = get(), groupCacheMapper = get())
+        TaskStorageImpl(
+            taskCacheMapper = get(),
+            taskDatabase = get(),
+            groupWithTasksCacheMapper = get(),
+            groupCacheMapper = get()
+        )
     }
 
     single<TaskRepository> {
@@ -29,7 +34,7 @@ val dataModule = module {
     }
 
     single<GroupWithTasksCacheMapper> {
-        GroupWithTasksCacheMapper(get(),get())
+        GroupWithTasksCacheMapper(get(), get())
     }
 
     single<GroupCacheMapper> {

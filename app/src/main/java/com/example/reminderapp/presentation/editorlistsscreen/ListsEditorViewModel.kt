@@ -1,4 +1,4 @@
-package com.example.reminderapp.presentation.mainscreen
+package com.example.reminderapp.presentation.editorlistsscreen
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
@@ -9,14 +9,15 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 
-class MainViewModel(
+class ListsEditorViewModel(
     private val getAllGroupsUseCase: GetAllGroupsUseCase
+    /** delete group use case params here */
 ) : ViewModel() {
 
     private val groupsListFlowData = MutableStateFlow<List<Group>>(emptyList())
     val groupsListData get() = groupsListFlowData
 
-    fun fetchTaskGroups() {
+    fun fetchGroupsFromDatabase() {
         viewModelScope.launch {
             getAllGroupsUseCase.execute()
                 .catch { e ->
@@ -27,5 +28,11 @@ class MainViewModel(
                 }
         }
     }
-    
+
+    fun deleteGroup(group: Group) {
+        viewModelScope.launch {
+            /** use case execute method here */
+        }
+    }
+
 }

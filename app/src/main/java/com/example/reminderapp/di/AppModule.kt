@@ -5,6 +5,7 @@ import android.content.Context
 import com.example.reminderapp.notification.NotificationManager
 import com.example.reminderapp.presentation.create_reminder.CreateReminderViewModel
 import com.example.reminderapp.presentation.creatorscreen.CreatorViewModel
+import com.example.reminderapp.presentation.editorlistsscreen.ListsEditorViewModel
 import com.example.reminderapp.presentation.mainscreen.MainViewModel
 import com.example.reminderapp.reminder.RemindAlarmManager
 import com.example.reminderapp.reminder.work.RemindWorkManager
@@ -33,23 +34,21 @@ val appModule = module {
 
     viewModel<MainViewModel> {
         MainViewModel(
+            getAllGroupsUseCase = get()
             getAllTasksUseCase = get(),
             deleteTaskUseCase = get(),
-        )
-    }
-
-    viewModel<CreatorViewModel> {
-        CreatorViewModel(
-            saveTaskUseCase = get(),
-            getTaskUseCase = get(),
-            editTaskUseCase = get(),
-            deleteTaskUseCase = get()
         )
     }
 
     viewModel<CreateReminderViewModel> {
         CreateReminderViewModel(
             createTaskUseCase = get(),
+            getAllGroupsUseCase = get()
+        )
+    }
+
+    viewModel<ListsEditorViewModel> {
+        ListsEditorViewModel(
             getAllGroupsUseCase = get()
         )
     }

@@ -61,7 +61,12 @@
         <item>Ежемесячно</item>
         <item>Каждые полгода</item>
         <item>Ежегодно</item>
-
     </string-array>
+
+    <!--  Strings for grid items  -->
+    <string name="current_day">Today</string>
+    <string name="planned">Planned</string>
+    <string name="all">All</string>
+    <string name="with_flag">With flag</string>
 
 </resources>

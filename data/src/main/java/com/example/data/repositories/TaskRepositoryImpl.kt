@@ -29,6 +29,7 @@ class TaskRepositoryImpl(private val taskStorage: TaskStorage) : TaskRepository 
     override fun getAllTasks(): Flow<List<Task>> = taskStorage.getAllTasks()
     override fun getAllGroups(): Flow<List<Group>> = taskStorage.getAllGroups()
     override fun getGroup(id: Int): Flow<Group> = taskStorage.getGroup(id)
-    override fun getGroupWithTasks(id: Int): Flow<GroupWithTasks> = taskStorage.getGroupWithTasks(id)
+    override fun getGroupWithTasks(id: Int): Flow<GroupWithTasks> =
+        taskStorage.getGroupWithTasks(id)
 
 }
