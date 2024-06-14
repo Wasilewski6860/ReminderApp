@@ -8,6 +8,7 @@ import android.widget.EditText
 import androidx.appcompat.widget.Toolbar
 import com.example.reminderapp.databinding.ActivityMainBinding
 import com.example.reminderapp.presentation.creatorscreen.KeyboardUtils
+import com.google.android.material.appbar.MaterialToolbar
 
 class MainActivity : AppCompatActivity() {
 
@@ -17,8 +18,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        val toolbar = findViewById<Toolbar>(R.id.toolbar)
+        val toolbar: MaterialToolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
     }
 
@@ -37,9 +37,5 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    fun setToolbarMenu(menuResId: Int) {
-        binding.toolbar.menu.clear()
-        binding.toolbar.inflateMenu(menuResId)
-    }
 
 }
