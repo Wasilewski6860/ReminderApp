@@ -15,12 +15,14 @@ import com.example.reminderapp.R
 import com.example.reminderapp.animations.animateImageViewRotation
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.reminderapp.databinding.MainScreenBinding
+import com.example.reminderapp.presentation.recycleradapter.GroupListRecyclerViewAdapter
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainFragment : Fragment() {
 
     private lateinit var binding: MainScreenBinding
-    private lateinit var adapter: MainScreenRecyclerViewAdapter
+    private lateinit var adapter: GroupListRecyclerViewAdapter
     private val viewModel by viewModel<MainViewModel>()
 
     private var currentArrowRotation = 0f
@@ -114,13 +116,16 @@ class MainFragment : Fragment() {
     }
 
     private fun setupRecyclerAndAdapter() = with(binding) {
-        adapter = MainScreenRecyclerViewAdapter(object :
-            MainScreenRecyclerViewAdapter.OnItemClickListener {
+        adapter = GroupListRecyclerViewAdapter(object :
+            GroupListRecyclerViewAdapter.OnItemClickListener {
             override fun onRcItemClick(position: Int) {
                 /** Transition on CreateReminderFragment */
                 /** And add data to this transaction */
             }
-        })
+            override fun onDeleteIconClick(position: Int) {
+                /** I guess nothing here */
+            }
+        }, isAdapterForMainScreen = true)
 
         customListsRecyclerView.layoutManager = GridLayoutManager(context, 1)
         customListsRecyclerView.adapter = adapter
@@ -141,12 +146,12 @@ class MainFragment : Fragment() {
         val alphaAnimation = ObjectAnimator.ofFloat(
             recyclerView, "alpha", 1f, 0f
         )
-        val translateXAnimation = ObjectAnimator.ofFloat(
-            recyclerView, "translationX", 0f, -recyclerView.width.toFloat()
+        val translateYAnimation = ObjectAnimator.ofFloat(
+            recyclerView, "translationY", 0f, -recyclerView.width.toFloat()
         )
 
         val animatorSet = AnimatorSet()
-        animatorSet.playTogether(alphaAnimation, translateXAnimation)
+        animatorSet.playTogether(alphaAnimation, translateYAnimation)
 
         animatorSet.duration = 500
 
@@ -164,12 +169,12 @@ class MainFragment : Fragment() {
         val alphaAnimation = ObjectAnimator.ofFloat(
             recyclerView, "alpha", 0f, 1f
         )
-        val translateXAnimation = ObjectAnimator.ofFloat(
-            recyclerView, "translationX", recyclerView.height.toFloat(), 0f
+        val translateYAnimation = ObjectAnimator.ofFloat(
+            recyclerView, "translationY", -recyclerView.height.toFloat(), 0f
         )
 
         val animatorSet = AnimatorSet()
-        animatorSet.playTogether(alphaAnimation, translateXAnimation)
+        animatorSet.playTogether(alphaAnimation, translateYAnimation)
 
         animatorSet.duration = 500
 

@@ -15,6 +15,14 @@
         android:orientation="horizontal"
         android:paddingVertical="10dp">
 
+        <ImageView
+            android:id="@+id/trashImageView"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:src="@drawable/trash_delete_icon"
+            android:paddingHorizontal="10dp"
+            android:visibility="gone"/>
+
         <com.example.reminderapp.custom_view.CircleCustomView
             android:id="@+id/colorCircleItem"
             android:layout_width="0dp"
