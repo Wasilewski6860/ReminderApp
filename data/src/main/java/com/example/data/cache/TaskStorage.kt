@@ -14,15 +14,15 @@ interface TaskStorage {
     suspend fun deleteTask(task: Task)
     suspend fun deleteTask(id: Int)
 
-    suspend fun getAllTasks(): List<Task>
+    fun getAllTasks(): Flow<List<Task>>
 
-    suspend fun getAllTasksByPeriodType(period: String): List<Task>
+    fun getAllTasksByPeriodType(period: String): Flow<List<Task>>
 
-    suspend fun getTask(id: Int): Task
+    fun getTask(id: Int): Flow<Task>
 
-    suspend fun getAllGroups(): Flow<List<Group>>
-    suspend fun getGroup(id: Int): Flow<Group>
-    suspend fun getGroupWithTasks(id: Int): Flow<GroupWithTasks>
+    fun getAllGroups(): Flow<List<Group>>
+    fun getGroup(id: Int): Flow<Group>
+    fun getGroupWithTasks(id: Int): Flow<GroupWithTasks>
 
 
     suspend fun clearAll()

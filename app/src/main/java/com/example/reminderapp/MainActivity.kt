@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MotionEvent
 import android.widget.EditText
+import androidx.appcompat.widget.Toolbar
 import com.example.reminderapp.databinding.ActivityMainBinding
 import com.example.reminderapp.objects.KeyboardUtils
 

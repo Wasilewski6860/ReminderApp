@@ -10,6 +10,7 @@ import androidx.room.Update
 import com.example.data.cache.entity.TaskEntity
 import com.example.data.cache.entity.TaskGroupEntity
 import com.example.data.cache.relation.GroupWithTasks
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface TaskDao {
@@ -27,24 +28,23 @@ interface TaskDao {
     suspend fun deleteById(id: Int)
 
     @Query("SELECT * FROM task")
-    suspend fun getAllTasks(): List<TaskEntity>
+    fun getAllTasks(): Flow<List<TaskEntity>>
 
     @Query("SELECT * FROM task WHERE id =:id")
-    suspend fun getTask(id: Int): TaskEntity
+    fun getTask(id: Int): Flow<TaskEntity>
 
     @Query("SELECT * FROM task_group")
     fun getAllGroups(): Flow<List<TaskGroupEntity>>
-    suspend fun getAllGroups(): List<TaskGroupEntity>
 
     @Query("SELECT * FROM task_group WHERE groupId =:id")
-    suspend fun getGroup(id: Int): TaskGroupEntity
+    fun getGroup(id: Int): Flow<TaskGroupEntity>
 
     @Transaction
     @Query("SELECT * FROM task_group WHERE groupId = :groupId LIMIT 1")
-    suspend fun getGroupWithTasks(groupId: Int): GroupWithTasks
+    fun getGroupWithTasks(groupId: Int): Flow<GroupWithTasks>
 
     @Query("SELECT * FROM task WHERE periodic_type =:period")
-    suspend fun getAllTasksByPeriodType(period: String): List<TaskEntity>
+    fun getAllTasksByPeriodType(period: String): Flow<List<TaskEntity>>
 
     @Query("DELETE FROM task")
     suspend fun clearAll()

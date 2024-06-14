@@ -7,6 +7,8 @@ import android.icu.text.SimpleDateFormat
 import android.icu.util.Calendar
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
@@ -14,11 +16,15 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import com.example.domain.model.Group
 import com.example.domain.model.Task
 import com.example.domain.model.TaskPeriodType
@@ -31,13 +37,15 @@ import com.example.reminderapp.reminder.RemindAlarmManager
 import com.example.reminderapp.utils.ColorItem
 import com.example.reminderapp.utils.ColorsUtils
 import com.example.reminderapp.utils.TimeDateUtils
+import com.example.reminderapp.utils.setFocus
 import com.example.reminderapp.utils.showSnackbar
+import com.google.android.material.appbar.MaterialToolbar
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.Locale
 
-class CreateReminderFragment : Fragment() {
+class CreateReminderFragment : Fragment(), MenuProvider {
 
     companion object {
         fun newInstance() = CreateReminderFragment()
@@ -57,7 +65,7 @@ class CreateReminderFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        setHasOptionsMenu(true);
         selectedGroup = arguments?.getSerializable("selected_group") as Group?
     }
 
@@ -66,15 +74,17 @@ class CreateReminderFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentCreateReminderBinding.inflate(layoutInflater, container, false)
+        val activity = (activity as MainActivity)
+        activity.getSupportActionBar()?.setDisplayShowTitleEnabled(false);
+        activity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        (activity as MainActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        (activity as MainActivity).setToolbarMenu(R.menu.create_task_menu)
+        requireActivity().addMenuProvider(this, viewLifecycleOwner)
     }
+
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -90,13 +100,20 @@ class CreateReminderFragment : Fragment() {
         binding.selectedDateTv.setOnClickListener {
             showDateAndTimePickers()
         }
+
+
+
     }
 
     fun setupSwitches() {
         binding.remindSwitch.setOnCheckedChangeListener { _, isChecked ->
+            val constraintLayout = binding.dateContainer
+            val linearLayout = binding.dateAndPeriodLl
             if (isChecked) {
-                val constraintLayout = binding.dateContainer
-                val linearLayout = binding.dateAndPeriodLl
+//                AnimationUtils.expandLayoutToBottom(
+//                    baseContainer = constraintLayout,
+//                    neededToExpandContainer = linearLayout
+//                )
                 // устанавливаем высоту LinearLayout в 0dp в начале
                 val layoutParams = linearLayout.layoutParams as ConstraintLayout.LayoutParams
                 layoutParams.height = 0
@@ -124,9 +141,12 @@ class CreateReminderFragment : Fragment() {
                 binding.selectedDateTv.text = "не установлено"
             }
             else {
-                val constraintLayout = binding.dateContainer
-                val linearLayout = binding.dateAndPeriodLl
 
+//                AnimationUtils.collapseLayoutToTop(
+//                    baseContainer = constraintLayout,
+//                    neededToCollapseContainer = linearLayout
+//                )
+//
                 // устанавливаем высоту LinearLayout в заданную величину в начале
                 val layoutParams = linearLayout.layoutParams as ConstraintLayout.LayoutParams
                 layoutParams.height = getContentHeight(binding.dateAndPeriodLl)
@@ -147,7 +167,6 @@ class CreateReminderFragment : Fragment() {
                     }
                 }
 
-                // запускаем анимацию
                 animator.start()
             }
         }
@@ -156,8 +175,7 @@ class CreateReminderFragment : Fragment() {
             binding.flagIv.visibility = if(isChecked) View.VISIBLE else View.GONE
         }
     }
-
-    private fun setupObservers() {
+    fun setupObservers() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiState.collect {
@@ -202,29 +220,8 @@ class CreateReminderFragment : Fragment() {
 
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when(item.itemId) {
-            android.R.id.home -> {
-                requireActivity().supportFragmentManager.popBackStack()
-                return true
-            }
-            R.id.action_save -> {
-//                //TODO добавить сохранение
-//                val fragment = MainFragment()
-//                val transaction = requireActivity().supportFragmentManager.beginTransaction()
-//                transaction.replace(R.id.fragmentContainerView, fragment)
-//                transaction.addToBackStack(null)
-//                transaction.commit()
-                saveTask()
-                return true
-            }
-        }
-
-        return super.onOptionsItemSelected(item)
-    }
-
-    private fun setSpinnerPeriod() {
-        val repeatTimeSpinnerItems = TimeDateUtils.timeDates.map { timeDate -> timeDate.name }
+    fun setSpinnerPeriod() {
+        val repeatTimeSpinnerItems = TimeDateUtils(requireContext()).timeDates.map { timeDate -> timeDate.name }
         val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, repeatTimeSpinnerItems)
         val spinner = binding.selectedPeriodSpinner
         spinner.adapter = adapter
@@ -233,12 +230,12 @@ class CreateReminderFragment : Fragment() {
             override fun onNothingSelected(p0: AdapterView<*>?) {}
 
             override fun onItemSelected(adapterView: AdapterView<*>?, view: View?, pos: Int, id: Long) {
-                selectedPeriod = TimeDateUtils.timeDates[pos].time
+                selectedPeriod = TimeDateUtils(requireContext()).timeDates[pos].time
             }
         }
     }
 
-    private fun setSpinnerGroup(groups: List<Group>) {
+    fun setSpinnerGroup(groups: List<Group>) {
         val groupSpinnerItems = groups.map { group -> group.groupName }
         val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, groupSpinnerItems)
         val spinner = binding.selectedListSpinner
@@ -254,7 +251,7 @@ class CreateReminderFragment : Fragment() {
         }
     }
 
-    private fun setSpinnerColor() {
+    fun setSpinnerColor() {
         val groupSpinnerItems = ColorsUtils(requireContext()).colors
 
         val adapter = object: ArrayAdapter<ColorItem>(requireContext(), R.layout.spinner_color_item_layout, groupSpinnerItems) {
@@ -347,13 +344,12 @@ class CreateReminderFragment : Fragment() {
         datePicker.show()
     }
 
-    private fun isInputValid(): Boolean {
+    fun isInputValid(): Boolean {
         with(binding) {
             val name = reminderNameEt.text.toString()
-            val description = reminderNameEt.text.toString()
-            val isFlag = flagSwitch.isChecked
 
             if (name.isNullOrEmpty()){
+                reminderNameEt.setFocus(requireContext())
                 reminderNameEt.setError("Имя не может быть пустым")
                 return false
             }
@@ -374,7 +370,7 @@ class CreateReminderFragment : Fragment() {
         return true
     }
 
-    private fun getContentHeight(linearLayout: LinearLayout): Int {
+    fun getContentHeight(linearLayout: LinearLayout): Int {
         var height = 0
         for (i in 0 until linearLayout.childCount) {
             val child = linearLayout.getChildAt(i)
@@ -382,5 +378,30 @@ class CreateReminderFragment : Fragment() {
             height += child.measuredHeight
         }
         return height
+    }
+
+    override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+        menuInflater.inflate(R.menu.create_task_menu, menu)
+    }
+
+    override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+        when(menuItem.itemId){
+            android.R.id.home -> {
+                requireActivity().onBackPressed()
+                requireActivity().supportFragmentManager.popBackStack()
+                return true
+            }
+            R.id.action_save -> {
+//                //TODO добавить сохранение
+//                val fragment = MainFragment()
+//                val transaction = requireActivity().supportFragmentManager.beginTransaction()
+//                transaction.replace(R.id.fragmentContainerView, fragment)
+//                transaction.addToBackStack(null)
+//                transaction.commit()
+                saveTask()
+                return true
+            }
+        }
+        return true
     }
 }

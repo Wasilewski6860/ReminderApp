@@ -1,93 +1,130 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     tools:context=".presentation.create_reminder.CreateReminderFragment">
 
+
+
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/content_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
 
         <androidx.cardview.widget.CardView
             android:id="@+id/name_description_cv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/margin_start_text"
-            app:cardCornerRadius="6dp"
-            app:cardElevation="4dp"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_margin="@dimen/margin_start_text"
+            app:cardCornerRadius="@dimen/little_card_corner_radius"
+            app:cardElevation="@dimen/normal_card_elevation"
+            >
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:divider="@drawable/separator"
-                android:dividerPadding="3dp"
+                android:padding="@dimen/padding_start_text"
                 android:orientation="vertical"
-                android:padding="10dp"
-                android:showDividers="middle">
+                style="@style/LayoutWithMiddleDividers"
+                >
+                <!--                <com.google.android.material.textfield.TextInputLayout-->
+                <!--                    android:id="@+id/reminder_name_input_layout"-->
+                <!--                    android:layout_width="match_parent"-->
+                <!--                    android:layout_height="wrap_content"-->
+                <!--                    style="@style/TextInputLayoutStyle"-->
+                <!--                    app:errorEnabled="true">-->
 
+                <!--                    <com.google.android.material.textfield.TextInputEditText-->
+                <!--                        android:id="@+id/reminder_name_et"-->
+                <!--                        android:layout_width="match_parent"-->
+                <!--                        android:layout_height="wrap_content"-->
+                <!--                        style="@style/TextInputLayoutStyle"-->
+                <!--                        android:hint="@string/reminder_name_et_hint" />-->
+
+                <!--                </com.google.android.material.textfield.TextInputLayout>-->
                 <EditText
                     android:id="@+id/reminder_name_et"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@android:color/transparent"
-                    android:hint="Название" />
-
+                    android:hint="@string/reminder_name_et_hint"
+                    />
                 <EditText
                     android:id="@+id/reminder_description_et"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@android:color/transparent"
-                    android:hint="Описание" />
+                    android:hint="@string/reminder_desc_et_hint"
+                    />
+
+                <!--                <com.google.android.material.textfield.TextInputLayout-->
+                <!--                    android:id="@+id/reminder_description_input_layout"-->
+                <!--                    android:layout_width="match_parent"-->
+                <!--                    android:layout_height="wrap_content"-->
+                <!--                    style="@style/TextInputLayoutStyle"-->
+                <!--                    app:errorEnabled="true">-->
+
+                <!--                    <com.google.android.material.textfield.TextInputEditText-->
+                <!--                        android:id="@+id/reminder_description_et"-->
+                <!--                        android:layout_width="match_parent"-->
+                <!--                        android:layout_height="wrap_content"-->
+                <!--                        style="@style/TextInputLayoutStyle"-->
+                <!--                        android:hint="@string/reminder_desc_et_hint" />-->
+                <!--                </com.google.android.material.textfield.TextInputLayout>-->
 
             </LinearLayout>
-
         </androidx.cardview.widget.CardView>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/date_container"
-            style="@style/MainContainerStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:paddingHorizontal="@dimen/margin_start_text"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/name_description_cv">
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/name_description_cv"
+            android:layout_marginTop="@dimen/create_screen_containers_space"
+            android:paddingHorizontal="@dimen/margin_start_text"
+            style="@style/MainContainerStyle">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingHorizontal="@dimen/padding_start_text"
-                android:paddingVertical="@dimen/padding_text_vertical"
-                android:text="Напомнить в день"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                android:text="@string/reminder_remind_time_text"
+                android:paddingHorizontal="@dimen/padding_start_text"
+                android:paddingVertical="@dimen/padding_text_vertical"/>
 
             <Switch
                 android:id="@+id/remind_switch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingHorizontal="@dimen/padding_start_text"
-                android:paddingVertical="@dimen/padding_text_vertical"
+                app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:paddingHorizontal="@dimen/padding_start_text"
+                android:paddingVertical="@dimen/padding_text_vertical"/>
 
             <LinearLayout
+                android:id="@+id/date_and_period_ll"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:divider="@drawable/separator"
+                android:layout_height="0dp"
+                android:visibility="visible"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/remind_switch"
                 android:dividerPadding="3dp"
                 android:orientation="vertical"
                 android:showDividers="middle|beginning"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/remind_switch">
+                android:divider="@drawable/separator">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -96,21 +133,21 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:padding="@dimen/padding_start_text"
-                        android:text="Дата"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:text="@string/reminder_date_tv_text"
+                        android:padding="@dimen/padding_start_text"/>
 
                     <TextView
                         android:id="@+id/selected_date_tv"
-                        style="@style/ClickableTextStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:padding="@dimen/margin_start_text"
-                        android:text="вт 18 июн. 2024 г. 8:25 AM"
-                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        android:padding="@dimen/margin_start_text"
+                        style="@style/ClickableTextStyle"
+                        android:text="@string/reminder_date_value_tv_text"/>
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -121,29 +158,20 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:padding="@dimen/padding_start_text"
-                        android:text="Повтор"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:text="@string/reminder_repeat_tv_text"
+                        android:padding="@dimen/padding_start_text"/>
 
-                    <TextView
-                        android:id="@+id/selected_period_tv"
+                    <Spinner
+                        android:id="@+id/selected_period_spinner"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:padding="@dimen/margin_start_text"
-                        android:text="Никогда"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/right_arrow_iv"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <ImageView
-                        android:id="@+id/right_arrow_iv"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/ic_right_arrow"
-                        app:layout_constraintBottom_toBottomOf="parent"
+                        android:entries="@array/time_options"
+                        app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintBottom_toBottomOf="parent" />
+
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -154,18 +182,18 @@
 
 
         <LinearLayout
-            style="@style/MainContainerStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:divider="@drawable/separator"
-            android:dividerPadding="3dp"
-            android:orientation="vertical"
-            android:paddingHorizontal="@dimen/margin_start_text"
-            android:showDividers="middle"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/date_container">
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/date_container"
+            android:orientation="vertical"
+            android:layout_marginTop="@dimen/create_screen_containers_space"
+            android:paddingHorizontal="@dimen/margin_start_text"
+            android:dividerPadding="3dp"
+            android:showDividers="middle"
+            android:divider="@drawable/separator"
+            style="@style/MainContainerStyle">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -175,28 +203,30 @@
                     android:id="@+id/flag_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingHorizontal="@dimen/padding_start_text"
-                    android:paddingVertical="@dimen/padding_text_vertical"
-                    android:text="Флаг"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:text="@string/reminder_flag_tv_text"
+                    android:paddingHorizontal="@dimen/padding_start_text"
+                    android:paddingVertical="@dimen/padding_text_vertical"/>
 
                 <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:src="@drawable/flag_icon"
-                    app:layout_constraintBottom_toBottomOf="@+id/flag_tv"
+                    android:id="@+id/flag_iv"
+                    android:layout_width="@dimen/small_icon_size"
+                    android:layout_height="@dimen/small_icon_size"
+                    android:visibility="gone"
                     app:layout_constraintStart_toEndOf="@+id/flag_tv"
-                    app:layout_constraintTop_toTopOf="@+id/flag_tv" />
+                    app:layout_constraintTop_toTopOf="@+id/flag_tv"
+                    app:layout_constraintBottom_toBottomOf="@+id/flag_tv"
+                    android:src="@drawable/flag_icon"/>
 
                 <Switch
                     android:id="@+id/flag_switch"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingHorizontal="@dimen/padding_start_text"
-                    android:paddingVertical="@dimen/padding_text_vertical"
+                    app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:paddingHorizontal="@dimen/padding_start_text"
+                    android:paddingVertical="@dimen/padding_text_vertical"/>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -208,31 +238,43 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:padding="@dimen/padding_start_text"
-                    android:text="Список"
-                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:text="@string/remider_list_text"
+                    android:padding="@dimen/padding_start_text"/>
+
+                <Spinner
+                    android:id="@+id/selected_list_spinner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
                 <TextView
-                    android:id="@+id/selected_list_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingHorizontal="@dimen/padding_start_text"
-                    android:paddingVertical="@dimen/padding_text_vertical"
-                    android:text="Напоминания"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/right_arrow_list_iv"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:text="@string/reminder_color_text"
+                    android:padding="@dimen/padding_start_text"/>
 
-                <ImageView
-                    android:id="@id/right_arrow_list_iv"
+                <Spinner
+                    android:id="@+id/selected_color_spinner"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_right_arrow"
-                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:layout="@layout/spinner_color_item_layout"
+                    app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintBottom_toBottomOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -240,5 +282,22 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/loading_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
 
-</ScrollView>
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_gravity="center"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

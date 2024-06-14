@@ -1,3 +1,4 @@
+
 package com.example.data.cache.impl
 
 import com.example.data.cache.GroupCacheMapper
@@ -33,30 +34,35 @@ class TaskStorageImpl(
         taskDao.deleteById(id)
     }
 
-    override suspend fun getAllTasks(): List<Task> {
-        return taskDao.getAllTasks().map { taskEntity ->
-           taskCacheMapper.mapFromEntity(taskEntity)
+    override fun getAllTasks(): Flow<List<Task>> {
+        return taskDao.getAllTasks().map { list ->
+            list.map {  taskEntity ->
+                taskCacheMapper.mapFromEntity(taskEntity)
+            }
         }
     }
 
-    override suspend fun getAllTasksByPeriodType(period: String): List<Task> {
-        return taskDao.getAllTasksByPeriodType(period).map { taskEntity ->
-            taskCacheMapper.mapFromEntity(taskEntity)
+    override fun getAllTasksByPeriodType(period: String): Flow<List<Task>> {
+        return taskDao.getAllTasksByPeriodType(period).map { list ->
+            list.map {  taskEntity ->
+                taskCacheMapper.mapFromEntity(taskEntity)
+            }
         }
     }
 
-    override suspend fun getTask(id: Int): Task = taskCacheMapper.mapFromEntity(taskDao.getTask(id))
-    override suspend fun getAllGroups(): Flow<List<Group>> {
+    override fun getTask(id: Int): Flow<Task> = taskDao.getTask(id).map { taskEntity -> taskCacheMapper.mapFromEntity(taskEntity) }
+
+    override fun getAllGroups(): Flow<List<Group>> {
         return taskDao.getAllGroups().map { groupEntities ->
             groupEntities.map { taskEntity ->  groupCacheMapper.mapFromEntity(taskEntity) }
         }
     }
 
-    override suspend fun getGroup(id: Int): Flow<Group> = taskDao.getGroup(id).map {
+    override fun getGroup(id: Int): Flow<Group> = taskDao.getGroup(id).map {
         groupCacheMapper.mapFromEntity(it)
     }
 
-    override suspend fun getGroupWithTasks(id: Int): Flow<GroupWithTasks> = taskDao.getGroupWithTasks(id).map {
+    override fun getGroupWithTasks(id: Int): Flow<GroupWithTasks> = taskDao.getGroupWithTasks(id).map {
         groupWithTasksCacheMapper.mapFromEntity(it)
     }
 

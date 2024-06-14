@@ -1,3 +1,4 @@
+
 package com.example.reminderapp.receivers
 
 import android.content.BroadcastReceiver
@@ -5,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.util.Log
 import com.example.domain.use_case.GetAllTasksUseCase
+import com.example.reminderapp.presentation.base.UiState
 import com.example.reminderapp.reminder.RemindAlarmManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -29,10 +31,12 @@ class DeviceBootReceiver : BroadcastReceiver(), KoinComponent {
 
     private fun resetAlarm() {
         scope.launch(Dispatchers.Main) {
-            val tasks = getAllTasksUseCase.execute()
-            tasks.forEach { task ->
-                if(task.isActive) remindAlarmManager.createAlarm(task)
-            }
+            getAllTasksUseCase.execute()
+                .collect { tasks ->
+                    tasks.forEach { task ->
+                        if(task.isActive) remindAlarmManager.createAlarm(task)
+                    }
+                }
         }
     }
 

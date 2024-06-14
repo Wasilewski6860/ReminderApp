@@ -1,19 +1,24 @@
 package com.example.reminderapp.presentation.mainscreen
 
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
+import android.animation.AnimatorSet
+import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.domain.model.Group
 import com.example.reminderapp.R
 import com.example.reminderapp.animations.animateImageViewRotation
-import androidx.recyclerview.widget.GridLayoutManager
 import com.example.reminderapp.databinding.MainScreenBinding
 import com.example.reminderapp.presentation.recycleradapter.GroupListRecyclerViewAdapter
 import kotlinx.coroutines.launch
@@ -36,34 +41,15 @@ class MainFragment : Fragment() {
 
         binding.apply {
 
-            adapter = MainScreenRecyclerViewAdapter(object :
-                MainScreenRecyclerViewAdapter.OnItemClickListener {
-                override fun onRcItemClick(position: Int) {
-                    /** Transition on CreateReminderFragment */
-                    /** And add data to this transaction */
-                }
-            })
+            setupRecyclerAndAdapter()
+            setupObserver()
+            initListeners()
+            gridLayoutItemsInit()
 
-            customListsRecyclerView.layoutManager = GridLayoutManager(context, 1)
-            customListsRecyclerView.adapter = adapter
-
-            viewModel.fetchTaskGroups()
-            viewModel.groupsListData.observe(viewLifecycleOwner) {
-                adapter.fillRecyclerWithFullItemsList(it)
-            }
-
+            /** For testing */
             adapter.fillRecyclerWithFullItemsList(
                 Test.getTestList()
             )
-        setupRecyclerAndAdapter()
-        setupObserver()
-        initListeners()
-        gridLayoutItemsInit()
-
-        /** For testing */
-        adapter.fillRecyclerWithFullItemsList(
-            Test.getTestList()
-        )
 
         }
 
@@ -122,6 +108,7 @@ class MainFragment : Fragment() {
                 /** Transition on CreateReminderFragment */
                 /** And add data to this transaction */
             }
+
             override fun onDeleteIconClick(position: Int) {
                 /** I guess nothing here */
             }
