@@ -25,6 +25,7 @@
     <string name="reminder_desc_et_hint">Описание</string>
     <string name="reminder_remind_time_text">Напомнить в день</string>
     <string name="reminder_date_tv_text">Дата</string>
+    <string name="remider_list_text">Список</string>
     <string name="reminder_date_value_tv_text">вт 18 июн. 2024 г. 8:25 AM</string>
     <string name="reminder_repeat_tv_text">Повтор</string>
     <string name="reminder_flag_tv_text">Флаг</string>
