@@ -51,4 +51,11 @@
         <item name="android:textColor">@color/subheadTextColorDay</item>
     </style>
 
+    <style name="MainFabStyle" parent="Widget.MaterialComponents.FloatingActionButton">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="backgroundTint">@color/blue</item>
+        <item name="srcCompat">@drawable/add_icon</item>
+    </style>
+
 </resources>

@@ -5,10 +5,8 @@ import android.content.Context
 import android.content.Intent
 import android.os.PowerManager
 import android.util.Log
-import com.example.reminderapp.notification.Constants
+import com.example.reminderapp.utils.Constants
 import com.example.reminderapp.notification.NotificationManager
-import com.example.reminderapp.reminder.work.RemindWorkManager
-import java.io.Closeable
 
 class AlarmBroadcastReceiver: BroadcastReceiver() {
 
@@ -18,7 +16,6 @@ class AlarmBroadcastReceiver: BroadcastReceiver() {
         val title = Intent?.extras?.getString(Constants.TASK_NAME_EXTRA)
         val description = Intent?.extras?.getString(Constants.TASK_DESCRIPTION_EXTRA)
         if (context != null && id != null && title != null && description != null) {
-
 
             if ((context.getSystemService(Context.POWER_SERVICE) as PowerManager).isScreenOn) {
                 Log.d("MY LOG", "AlarmBroadcastReceiver onReceive success")

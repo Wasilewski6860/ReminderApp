@@ -33,6 +33,8 @@ import com.example.reminderapp.presentation.mainscreen.MainFragment
 import com.example.reminderapp.reminder.RemindAlarmManager
 import com.example.reminderapp.utils.ColorItem
 import com.example.reminderapp.utils.ColorsUtils
+import com.example.reminderapp.utils.Constants
+import com.example.reminderapp.utils.Constants.GROUP_KEY
 import com.example.reminderapp.utils.TimeDateUtils
 import com.example.reminderapp.utils.setFocus
 import com.example.reminderapp.utils.showSnackbar
@@ -61,8 +63,7 @@ class CreateReminderFragment : Fragment(), MenuProvider {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true);
-        selectedGroup = arguments?.getSerializable("selected_group") as Group?
+        selectedGroup = arguments?.getSerializable(Constants.TASK_KEY) as Group?
     }
 
     override fun onCreateView(
@@ -213,8 +214,6 @@ class CreateReminderFragment : Fragment(), MenuProvider {
 
             }
         }
-
-
     }
 
     fun setSpinnerPeriod() {
@@ -289,7 +288,7 @@ class CreateReminderFragment : Fragment(), MenuProvider {
                 description = description,
                 reminderCreationTime = Calendar.getInstance().timeInMillis,
                 reminderTime = selectedTime!!,
-                reminderTimePeriod = selectedPeriod!!,
+                reminderTimePeriod = selectedPeriod?:0,
                 type = if (selectedPeriod != null) TaskPeriodType.ONE_TIME else TaskPeriodType.PERIODIC,
                 isActive = true,
                 isMarkedWithFlag = flagSwitch.isChecked,
@@ -384,7 +383,6 @@ class CreateReminderFragment : Fragment(), MenuProvider {
     override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
         when(menuItem.itemId){
             android.R.id.home -> {
-                requireActivity().onBackPressed()
                 requireActivity().supportFragmentManager.popBackStack()
                 return true
             }

@@ -2,6 +2,9 @@ package com.example.reminderapp.utils
 
 import android.content.Context
 import com.example.reminderapp.R
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class TimeDateUtils(context: Context) {
 
@@ -51,6 +54,18 @@ class TimeDateUtils(context: Context) {
             31557600000
         ),
     )
+
+    fun getPeriod(ms: Long) : TimePeriodItem? = timeDates.firstOrNull { it.time == ms }
+
+    fun getFormattedTime(ms: Long, period: Long? = null): String {
+        val date = Date(ms)
+        val sdf = SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.getDefault())
+        var formattedDateTime = sdf.format(date)
+        period?.let {
+            formattedDateTime += getPeriod(ms)?.name
+        }
+        return formattedDateTime
+    }
 
 }
 
