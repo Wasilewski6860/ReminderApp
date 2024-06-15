@@ -107,6 +107,7 @@ class NewListFragment : Fragment(), MenuProvider, BackActionInterface, DataRecei
         menuInflater.inflate(R.menu.create_task_menu, menu)
     }
 
+
     override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
         when (menuItem.itemId) {
             android.R.id.home -> {
