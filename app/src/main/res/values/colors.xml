@@ -3,16 +3,25 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
-    <color name="windowBackgroundDay">#DCDCDC</color>
+    <color name="windowBackgroundDay">#F0F0F0</color>
     <color name="subheadTextColorDay">#39403F3F</color>
+    <color name="boxStrokeColor">#DCDCDC</color>
 
     <color name="purple_500">#FF6200EE</color>
 <!--  Temp colors for spinner tests  -->
     <color name="red">#F80000</color>
-    <color name="blue">#2F8FFF</color>
-    <color name="green">#558B2F</color>
+    <color name="orange">#EF6C00</color>
+    <color name="light_blue">#2F8FFF</color>
+    <color name="blue">#2F6AFF</color>
+    <color name="dark_blue">#3D2FFF</color>
+    <color name="light_green">#729541</color>
+    <color name="green">#278A1C</color>
+    <color name="dark_green">#068020</color>
     <color name="yellow">#F9A825</color>
     <color name="violet">#4527A0</color>
+    <color name="light_purple">#813FA5</color>
+    <color name="purple">#5D15A5</color>
+    <color name="dark_purple">#4F21A3</color>
     <color name="link_color">#00CCFF</color>
 
     <color name="activated_item_foreground">#6E6E6E</color>

@@ -55,9 +55,6 @@ class MainFragment : Fragment() {
 
         initListeners()
 
-        val activity = (activity as MainActivity)
-        activity.getSupportActionBar()?.setDisplayShowTitleEnabled(false);
-
         return binding.root
     }
 
