@@ -78,6 +78,7 @@ class CreateReminderFragment : Fragment(), MenuProvider, BackActionInterface, Da
 
         val activity = (activity as MainActivity)
         activity.supportActionBar?.setDisplayShowTitleEnabled(false)
+        activity.setToolbarTitleAndTitleColor("")
         activity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         callback = object : OnBackPressedCallback(true) {
@@ -104,7 +105,7 @@ class CreateReminderFragment : Fragment(), MenuProvider, BackActionInterface, Da
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        requireActivity().addMenuProvider(this, viewLifecycleOwner)
+        requireActivity().addMenuProvider(this, viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
 
     override fun onDestroyView() {
@@ -188,7 +189,7 @@ class CreateReminderFragment : Fragment(), MenuProvider, BackActionInterface, Da
             binding.flagIv.visibility = if(isChecked) View.VISIBLE else View.GONE
         }
     }
-    
+
     private fun setupObservers() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {

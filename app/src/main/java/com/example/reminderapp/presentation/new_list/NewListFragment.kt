@@ -10,7 +10,9 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
+import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
+import androidx.lifecycle.Lifecycle
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.reminderapp.MainActivity
 import com.example.reminderapp.R
@@ -62,7 +64,7 @@ class NewListFragment : Fragment(), MenuProvider, BackActionInterface, DataRecei
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        requireActivity().addMenuProvider(this, viewLifecycleOwner)
+        requireActivity().addMenuProvider(this, viewLifecycleOwner , Lifecycle.State.RESUMED)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -91,6 +93,9 @@ class NewListFragment : Fragment(), MenuProvider, BackActionInterface, DataRecei
 
     override fun onDestroyView() {
         super.onDestroyView()
+        val menuHost: MenuHost = requireActivity()
+        menuHost.removeMenuProvider(this)
+        (activity as MainActivity).setToolbarTitleAndTitleColor("")
         callback.remove()
     }
 
@@ -103,6 +108,7 @@ class NewListFragment : Fragment(), MenuProvider, BackActionInterface, DataRecei
             // TODO fill all fields with that data
         }
     }
+
 
     override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
         menuInflater.inflate(R.menu.create_task_menu, menu)

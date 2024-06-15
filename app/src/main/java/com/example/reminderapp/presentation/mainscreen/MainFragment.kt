@@ -41,6 +41,8 @@ class MainFragment : Fragment() {
     ): View {
         binding = MainScreenBinding.inflate(inflater, container, false)
 
+        (activity as MainActivity).setToolbarTitleAndTitleColor("")
+
         binding.apply {
 
             setupRecyclerAndAdapter()
