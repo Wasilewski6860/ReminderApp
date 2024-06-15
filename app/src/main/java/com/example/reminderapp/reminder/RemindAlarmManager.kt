@@ -8,9 +8,9 @@ import android.os.Build
 import android.util.Log
 import com.example.domain.model.Task
 import com.example.domain.model.TaskPeriodType
-import com.example.reminderapp.notification.Constants.TASK_DESCRIPTION_EXTRA
-import com.example.reminderapp.notification.Constants.TASK_ID_EXTRA
-import com.example.reminderapp.notification.Constants.TASK_NAME_EXTRA
+import com.example.reminderapp.utils.Constants.TASK_DESCRIPTION_EXTRA
+import com.example.reminderapp.utils.Constants.TASK_ID_EXTRA
+import com.example.reminderapp.utils.Constants.TASK_NAME_EXTRA
 import com.example.reminderapp.receivers.AlarmBroadcastReceiver
 
 class RemindAlarmManager(

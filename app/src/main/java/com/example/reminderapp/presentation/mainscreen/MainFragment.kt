@@ -12,6 +12,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.domain.model.Group
+import com.example.reminderapp.MainActivity
 import com.example.reminderapp.R
 import com.example.reminderapp.animations.animateImageViewRotation
 import com.example.reminderapp.animations.hideRecyclerAnimation
@@ -53,6 +54,9 @@ class MainFragment : Fragment() {
         }
 
         initListeners()
+
+        val activity = (activity as MainActivity)
+        activity.getSupportActionBar()?.setDisplayShowTitleEnabled(false);
 
         return binding.root
     }

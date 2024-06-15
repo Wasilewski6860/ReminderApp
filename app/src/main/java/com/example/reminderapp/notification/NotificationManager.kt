@@ -8,20 +8,20 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.os.Build
 import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.example.reminderapp.MainActivity
 import com.example.reminderapp.R
-import com.example.reminderapp.notification.Constants.ACTION_CANCEL_PENDING_INTENT_ID
-import com.example.reminderapp.notification.Constants.ACTION_DISMISS
-import com.example.reminderapp.notification.Constants.ACTION_POSTPONE
-import com.example.reminderapp.notification.Constants.ACTION_POSTPONE_PENDING_INTENT_ID
-import com.example.reminderapp.notification.Constants.TASK_ID_EXTRA
+import com.example.reminderapp.utils.Constants.ACTION_CANCEL_PENDING_INTENT_ID
+import com.example.reminderapp.utils.Constants.ACTION_DISMISS
+import com.example.reminderapp.utils.Constants.ACTION_POSTPONE
+import com.example.reminderapp.utils.Constants.ACTION_POSTPONE_PENDING_INTENT_ID
+import com.example.reminderapp.utils.Constants.TASK_ID_EXTRA
 import com.example.reminderapp.presentation.reminder.ReminderActivity
 import com.example.reminderapp.receivers.ReminderBroadcast
+import com.example.reminderapp.utils.Constants
 import org.koin.core.component.KoinComponent
 
 class NotificationManager(val context: Context) : KoinComponent {

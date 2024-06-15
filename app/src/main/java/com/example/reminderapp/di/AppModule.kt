@@ -7,8 +7,10 @@ import com.example.reminderapp.presentation.create_reminder.CreateReminderViewMo
 import com.example.reminderapp.presentation.creatorscreen.CreatorViewModel
 import com.example.reminderapp.presentation.editorlistsscreen.ListsEditorViewModel
 import com.example.reminderapp.presentation.mainscreen.MainViewModel
+import com.example.reminderapp.presentation.reminder_list.ReminderListViewModel
 import com.example.reminderapp.reminder.RemindAlarmManager
 import com.example.reminderapp.reminder.work.RemindWorkManager
+import com.example.reminderapp.utils.TimeDateUtils
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
@@ -32,6 +34,10 @@ val appModule = module {
         NotificationManager(androidContext())
     }
 
+    single<TimeDateUtils> {
+        TimeDateUtils(get())
+    }
+
     viewModel<MainViewModel> {
         MainViewModel(
             getAllGroupsUseCase = get()
@@ -52,5 +58,10 @@ val appModule = module {
         )
     }
 
+    viewModel<ReminderListViewModel> {
+        ReminderListViewModel(
+            getGroupWithTasksUseCase = get()
+        )
+    }
 
 }
