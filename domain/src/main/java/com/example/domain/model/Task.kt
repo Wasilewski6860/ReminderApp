@@ -1,5 +1,7 @@
 package com.example.domain.model
 
+import java.io.Serializable
+
 
 data class Task(
     var id: Int = 0,
@@ -13,4 +15,4 @@ data class Task(
     var isMarkedWithFlag: Boolean,
     var groupId: Int,
     val color: Int
-)
+): Serializable

@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MotionEvent
 import android.widget.EditText
+import androidx.activity.enableEdgeToEdge
 import com.example.reminderapp.databinding.ActivityMainBinding
 import com.example.reminderapp.objects.KeyboardUtils
 import com.google.android.material.appbar.MaterialToolbar
@@ -20,6 +21,8 @@ class MainActivity : AppCompatActivity() {
 
         val toolbar: MaterialToolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
+
+        enableEdgeToEdge()
     }
 
     override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
