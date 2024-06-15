@@ -8,6 +8,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
+import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
@@ -61,17 +62,21 @@ class EditListsScreenFragment : Fragment(), MenuProvider, BackActionInterface {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        requireActivity().addMenuProvider(this, viewLifecycleOwner)
+        requireActivity().addMenuProvider(this, viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
+        val menuHost: MenuHost = requireActivity()
+        menuHost.removeMenuProvider(this)
+        //TODO Чет не так, вызывается при работающем фрагменте
+//        (activity as MainActivity).setToolbarTitleAndTitleColor("")
         callback.remove()
     }
 
     private fun setupAdapterAndRecycler() = with(binding) {
         adapter = GroupListRecyclerViewAdapter(object :
-        GroupListRecyclerViewAdapter.OnItemClickListener {
+            GroupListRecyclerViewAdapter.OnItemClickListener {
             override fun onRcItemClick(position: Int) {
                 /** Editing list info process here */
                 val data = adapter.collectInfo(position)

@@ -92,7 +92,7 @@ class ReminderListFragment : Fragment() {
                             reminderAdapter.submitList(it.data.tasks)
                             it.data.group.apply {
                                 val activity = (activity as MainActivity)
-                                activity.setToolbarTitleAndTitleColor("Добавить список", this.groupColor)
+                                activity.setToolbarTitleAndTitleColor(this.groupName, this.groupColor)
                             }
                         }
                         is UiState.Loading -> {
