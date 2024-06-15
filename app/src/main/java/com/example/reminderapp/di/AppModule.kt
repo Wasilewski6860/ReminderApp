@@ -7,6 +7,7 @@ import com.example.reminderapp.presentation.create_reminder.CreateReminderViewMo
 import com.example.reminderapp.presentation.creatorscreen.CreatorViewModel
 import com.example.reminderapp.presentation.editorlistsscreen.ListsEditorViewModel
 import com.example.reminderapp.presentation.mainscreen.MainViewModel
+import com.example.reminderapp.presentation.new_list.NewListViewModel
 import com.example.reminderapp.presentation.reminder_list.ReminderListViewModel
 import com.example.reminderapp.reminder.RemindAlarmManager
 import com.example.reminderapp.reminder.work.RemindWorkManager
@@ -64,4 +65,9 @@ val appModule = module {
         )
     }
 
+    viewModel<NewListViewModel> {
+        NewListViewModel(
+
+        )
+    }
 }

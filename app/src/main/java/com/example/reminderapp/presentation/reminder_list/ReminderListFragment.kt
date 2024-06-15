@@ -69,8 +69,6 @@ class ReminderListFragment : Fragment() {
         _binding = FragmentReminderListBinding.inflate(layoutInflater, container, false)
 
         val activity = (activity as MainActivity)
-        activity.supportActionBar?.setDisplayShowTitleEnabled(true)
-
         return binding.root
     }
 
@@ -94,9 +92,7 @@ class ReminderListFragment : Fragment() {
                             reminderAdapter.submitList(it.data.tasks)
                             it.data.group.apply {
                                 val activity = (activity as MainActivity)
-                                val toolbar = activity.findViewById<MaterialToolbar>(R.id.toolbar)
-                                toolbar.setTitleTextColor(this.groupColor)
-                                toolbar.title = this.groupName
+                                activity.setToolbarTitleAndTitleColor("Добавить список", this.groupColor)
                             }
                         }
                         is UiState.Loading -> {

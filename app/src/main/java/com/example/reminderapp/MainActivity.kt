@@ -21,7 +21,7 @@ class MainActivity : AppCompatActivity() {
 
         val toolbar: MaterialToolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
-
+        supportActionBar?.setDisplayShowTitleEnabled(false)
         enableEdgeToEdge()
     }
 
@@ -37,6 +37,14 @@ class MainActivity : AppCompatActivity() {
             }
         }
         return super.dispatchTouchEvent(ev)
+    }
+
+    fun setToolbarTitleAndTitleColor(title: String,color: Int? = null) {
+        val toolbar: MaterialToolbar = findViewById(R.id.toolbar)
+        toolbar.title = title
+        color?.let {
+            toolbar.setTitleTextColor(it)
+        }
     }
 
 }
