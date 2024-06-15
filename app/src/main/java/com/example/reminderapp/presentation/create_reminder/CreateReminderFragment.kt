@@ -16,6 +16,7 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.activity.OnBackPressedCallback
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
@@ -28,8 +29,8 @@ import com.example.domain.model.TaskPeriodType
 import com.example.reminderapp.MainActivity
 import com.example.reminderapp.R
 import com.example.reminderapp.databinding.FragmentCreateReminderBinding
+import com.example.reminderapp.presentation.BackActionInterface
 import com.example.reminderapp.presentation.base.UiState
-import com.example.reminderapp.presentation.mainscreen.MainFragment
 import com.example.reminderapp.reminder.RemindAlarmManager
 import com.example.reminderapp.utils.ColorItem
 import com.example.reminderapp.utils.ColorsUtils
@@ -41,7 +42,7 @@ import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.Locale
 
-class CreateReminderFragment : Fragment(), MenuProvider {
+class CreateReminderFragment : Fragment(), MenuProvider, BackActionInterface {
 
     companion object {
         fun newInstance() = CreateReminderFragment()
@@ -59,6 +60,8 @@ class CreateReminderFragment : Fragment(), MenuProvider {
     var selectedColor: Int? = null
     lateinit var task: Task
 
+    private lateinit var callback: OnBackPressedCallback
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true);
@@ -68,22 +71,19 @@ class CreateReminderFragment : Fragment(), MenuProvider {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentCreateReminderBinding.inflate(layoutInflater, container, false)
+
         val activity = (activity as MainActivity)
-        activity.getSupportActionBar()?.setDisplayShowTitleEnabled(false);
+        activity.supportActionBar?.setDisplayShowTitleEnabled(false)
         activity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        return binding.root
-    }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        requireActivity().addMenuProvider(this, viewLifecycleOwner)
-    }
-
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+        callback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                navigateBack()
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
 
         viewModel.fetchGroups()
         setupObservers()
@@ -97,11 +97,20 @@ class CreateReminderFragment : Fragment(), MenuProvider {
             showDateAndTimePickers()
         }
 
-
-
+        return binding.root
     }
 
-    fun setupSwitches() {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        requireActivity().addMenuProvider(this, viewLifecycleOwner)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        callback.remove()
+    }
+
+    private fun setupSwitches() {
         binding.remindSwitch.setOnCheckedChangeListener { _, isChecked ->
             val constraintLayout = binding.dateContainer
             val linearLayout = binding.dateAndPeriodLl
@@ -172,7 +181,7 @@ class CreateReminderFragment : Fragment(), MenuProvider {
         }
     }
     
-    fun setupObservers() {
+    private fun setupObservers() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiState.collect {
@@ -193,7 +202,6 @@ class CreateReminderFragment : Fragment(), MenuProvider {
                         }
                     }
                 }
-
             }
         }
 
@@ -203,21 +211,19 @@ class CreateReminderFragment : Fragment(), MenuProvider {
                     if (it != (-1).toLong()) {
                         task.id = it.toInt()
                         remindAlarmManager.createAlarm(task)
-                        val fragment = MainFragment()
-                        val transaction = requireActivity().supportFragmentManager.beginTransaction()
-                        transaction.replace(R.id.fragmentContainerView, fragment)
-                        transaction.addToBackStack(null)
-                        transaction.commit()
+                        navigateBack()
+//                        val fragment = MainFragment()
+//                        val transaction = requireActivity().supportFragmentManager.beginTransaction()
+//                        transaction.replace(R.id.fragmentContainerView, fragment)
+//                        transaction.addToBackStack(null)
+//                        transaction.commit()
                     }
                 }
-
             }
         }
-
-
     }
 
-    fun setSpinnerPeriod() {
+    private fun setSpinnerPeriod() {
         val repeatTimeSpinnerItems = TimeDateUtils(requireContext()).timeDates.map { timeDate -> timeDate.name }
         val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, repeatTimeSpinnerItems)
         val spinner = binding.selectedPeriodSpinner
@@ -232,7 +238,7 @@ class CreateReminderFragment : Fragment(), MenuProvider {
         }
     }
 
-    fun setSpinnerGroup(groups: List<Group>) {
+    private fun setSpinnerGroup(groups: List<Group>) {
         val groupSpinnerItems = groups.map { group -> group.groupName }
         val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, groupSpinnerItems)
         val spinner = binding.selectedListSpinner
@@ -248,7 +254,7 @@ class CreateReminderFragment : Fragment(), MenuProvider {
         }
     }
 
-    fun setSpinnerColor() {
+    private fun setSpinnerColor() {
         val groupSpinnerItems = ColorsUtils(requireContext()).colors
 
         val adapter = object: ArrayAdapter<ColorItem>(requireContext(), R.layout.spinner_color_item_layout, groupSpinnerItems) {
@@ -341,7 +347,7 @@ class CreateReminderFragment : Fragment(), MenuProvider {
         datePicker.show()
     }
 
-    fun isInputValid(): Boolean {
+    private fun isInputValid(): Boolean {
         with(binding) {
             val name = reminderNameEt.text.toString()
 
@@ -367,7 +373,7 @@ class CreateReminderFragment : Fragment(), MenuProvider {
         return true
     }
 
-    fun getContentHeight(linearLayout: LinearLayout): Int {
+    private fun getContentHeight(linearLayout: LinearLayout): Int {
         var height = 0
         for (i in 0 until linearLayout.childCount) {
             val child = linearLayout.getChildAt(i)
@@ -384,8 +390,7 @@ class CreateReminderFragment : Fragment(), MenuProvider {
     override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
         when(menuItem.itemId){
             android.R.id.home -> {
-                requireActivity().onBackPressed()
-                requireActivity().supportFragmentManager.popBackStack()
+                navigateBack()
                 return true
             }
             R.id.action_save -> {
@@ -401,4 +406,9 @@ class CreateReminderFragment : Fragment(), MenuProvider {
         }
         return true
     }
+
+    override fun navigateBack() {
+        parentFragmentManager.popBackStack()
+    }
+
 }
