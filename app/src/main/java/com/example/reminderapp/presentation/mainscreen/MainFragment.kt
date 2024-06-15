@@ -1,9 +1,5 @@
 package com.example.reminderapp.presentation.mainscreen
 
-import android.animation.Animator
-import android.animation.AnimatorListenerAdapter
-import android.animation.AnimatorSet
-import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -15,12 +11,17 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.domain.model.Group
 import com.example.reminderapp.MainActivity
 import com.example.reminderapp.R
 import com.example.reminderapp.animations.animateImageViewRotation
+import com.example.reminderapp.animations.hideRecyclerAnimation
+import com.example.reminderapp.animations.showRecyclerAnimation
 import com.example.reminderapp.databinding.MainScreenBinding
+import com.example.reminderapp.presentation.create_reminder.CreateReminderFragment
+import com.example.reminderapp.presentation.editorlistsscreen.EditListsScreenFragment
+import com.example.reminderapp.presentation.navigation.FragmentNavigationConstants
+import com.example.reminderapp.presentation.new_list.NewListFragment
 import com.example.reminderapp.presentation.recycleradapter.GroupListRecyclerViewAdapter
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -48,9 +49,7 @@ class MainFragment : Fragment() {
             gridLayoutItemsInit()
 
             /** For testing */
-            adapter.fillRecyclerWithFullItemsList(
-                Test.getTestList()
-            )
+            adapter.fillRecyclerWithFullItemsList(Test.getTestList())
 
         }
 
@@ -78,22 +77,58 @@ class MainFragment : Fragment() {
                 else -> {}
             }
         }
+
+        addTaskButton.setOnClickListener {
+            navigate(Navigation.ToCreateReminderFragment)
+        }
+
+        changeListsButton.setOnClickListener {
+            navigate(Navigation.ToEditListsFragment)
+        }
+
+        addListButton.setOnClickListener {
+            navigate(Navigation.ToNewListFragment)
+        }
+    }
+
+    private fun navigate(destination: Navigation, args: Bundle? = null) {
+        parentFragmentManager.beginTransaction()
+            .setCustomAnimations(
+                R.anim.slide_in_anim,
+                R.anim.slide_out_anim,
+                R.anim.slide_in_anim,
+                R.anim.slide_out_anim
+            )
+            .replace(
+                R.id.fragmentContainerView,
+                when (destination) {
+                    Navigation.ToCreateReminderFragment -> CreateReminderFragment()
+                    Navigation.ToNewListFragment -> NewListFragment()
+                    Navigation.ToEditListsFragment -> EditListsScreenFragment()
+                    Navigation.ToTasksListFragment -> MainFragment() // TODO replace this with needed fragment
+                }
+            )
+            .apply {
+                args?.let { arguments = it }
+            }
+            .addToBackStack(FragmentNavigationConstants.TO_MAIN_FRAGMENT_BACKSTACK)
+            .commit()
     }
 
     private fun gridLayoutItemsInit() = with(binding) {
         topGridLayout.apply {
             currentDayTasksItem.setOnClickListener {
-
+                navigate(Navigation.ToTasksListFragment)
             }
             plannedTasksItem.setOnClickListener {
-
+                navigate(Navigation.ToTasksListFragment)
             }
             allTasksItem.setOnClickListener {
-
+                navigate(Navigation.ToTasksListFragment)
             }
             tasksWithFlagItem.setOnClickListener {
-
-            }
+                navigate(Navigation.ToTasksListFragment)
+            } // TODO add data collection methods
         }
     }
 
@@ -109,14 +144,14 @@ class MainFragment : Fragment() {
         adapter = GroupListRecyclerViewAdapter(object :
             GroupListRecyclerViewAdapter.OnItemClickListener {
             override fun onRcItemClick(position: Int) {
-                /** Transition on CreateReminderFragment */
+                /** Transition on TasksListFragment */
                 /** And add data to this transaction */
+                navigate(Navigation.ToTasksListFragment)
             }
-
             override fun onDeleteIconClick(position: Int) {
-                /** I guess nothing here */
+                /** STUB **/
             }
-        }, isAdapterForMainScreen = true)
+        }, isDeleteIconVisible = false)
 
         customListsRecyclerView.layoutManager = GridLayoutManager(context, 1)
         customListsRecyclerView.adapter = adapter
@@ -133,51 +168,17 @@ class MainFragment : Fragment() {
         }
     }
 
-    private fun hideRecyclerAnimation(recyclerView: RecyclerView) {
-        val alphaAnimation = ObjectAnimator.ofFloat(
-            recyclerView, "alpha", 1f, 0f
-        )
-        val translateYAnimation = ObjectAnimator.ofFloat(
-            recyclerView, "translationY", 0f, -recyclerView.width.toFloat()
-        )
+}
 
-        val animatorSet = AnimatorSet()
-        animatorSet.playTogether(alphaAnimation, translateYAnimation)
+private sealed class Navigation {
 
-        animatorSet.duration = 500
+    object ToCreateReminderFragment : Navigation()
 
-        animatorSet.addListener(object : AnimatorListenerAdapter() {
-            override fun onAnimationEnd(animation: Animator) {
-                super.onAnimationEnd(animation)
-                recyclerView.visibility = View.GONE
-            }
-        })
+    object ToEditListsFragment : Navigation()
 
-        animatorSet.start()
-    }
+    object ToNewListFragment : Navigation()
 
-    private fun showRecyclerAnimation(recyclerView: RecyclerView) {
-        val alphaAnimation = ObjectAnimator.ofFloat(
-            recyclerView, "alpha", 0f, 1f
-        )
-        val translateYAnimation = ObjectAnimator.ofFloat(
-            recyclerView, "translationY", -recyclerView.height.toFloat(), 0f
-        )
-
-        val animatorSet = AnimatorSet()
-        animatorSet.playTogether(alphaAnimation, translateYAnimation)
-
-        animatorSet.duration = 500
-
-        animatorSet.addListener(object : AnimatorListenerAdapter() {
-            override fun onAnimationStart(animation: Animator) {
-                super.onAnimationStart(animation)
-                recyclerView.visibility = View.VISIBLE
-            }
-        })
-
-        animatorSet.start()
-    }
+    object ToTasksListFragment : Navigation()
 
 }
 

@@ -15,6 +15,7 @@ class TaskRepositoryImpl(private val taskStorage: TaskStorage) : TaskRepository 
     override suspend fun editTask(task: Task) = taskStorage.editTask(task)
 
     override suspend fun deleteTask(task: Task) = taskStorage.deleteTask(task)
+
     override suspend fun deleteTask(id: Int) {
         taskStorage.deleteTask(id)
     }
@@ -27,9 +28,16 @@ class TaskRepositoryImpl(private val taskStorage: TaskStorage) : TaskRepository 
         taskStorage.getAllTasksByPeriodType(period.name)
 
     override fun getAllTasks(): Flow<List<Task>> = taskStorage.getAllTasks()
+
     override fun getAllGroups(): Flow<List<Group>> = taskStorage.getAllGroups()
+
     override fun getGroup(id: Int): Flow<Group> = taskStorage.getGroup(id)
+
     override fun getGroupWithTasks(id: Int): Flow<GroupWithTasks> =
         taskStorage.getGroupWithTasks(id)
+
+    override suspend fun deleteGroup(groupId: Int) {
+        taskStorage.deleteGroup(groupId)
+    }
 
 }

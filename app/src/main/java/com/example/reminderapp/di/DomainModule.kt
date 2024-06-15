@@ -1,6 +1,7 @@
 package com.example.reminderapp.di
 
 import com.example.domain.use_case.ClearAllTasksUseCase
+import com.example.domain.use_case.DeleteGroupUseCase
 import com.example.domain.use_case.DeleteTaskUseCase
 import com.example.domain.use_case.EditTaskUseCase
 import com.example.domain.use_case.GetAllGroupsUseCase
@@ -59,6 +60,8 @@ val domainModule = module {
         GetGroupWithTasksUseCase(taskRepository = get())
     }
 
-
+    factory<DeleteGroupUseCase> {
+        DeleteGroupUseCase(taskRepository = get())
+    }
 
 }

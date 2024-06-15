@@ -68,4 +68,8 @@ class TaskStorageImpl(
 
     override suspend fun clearAll() = taskDao.clearAll()
 
+    override suspend fun deleteGroup(groupId: Int) {
+        taskDao.deleteGroup(groupId)
+    }
+
 }

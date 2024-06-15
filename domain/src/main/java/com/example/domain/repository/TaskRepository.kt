@@ -25,6 +25,11 @@ interface TaskRepository {
     fun getAllTasks(): Flow<List<Task>>
 
     fun getAllGroups(): Flow<List<Group>>
+
     fun getGroup(id: Int): Flow<Group>
+
     fun getGroupWithTasks(id: Int): Flow<GroupWithTasks>
+
+    suspend fun deleteGroup(groupId: Int)
+
 }

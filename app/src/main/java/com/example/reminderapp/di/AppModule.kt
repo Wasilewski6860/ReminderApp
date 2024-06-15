@@ -53,7 +53,8 @@ val appModule = module {
 
     viewModel<ListsEditorViewModel> {
         ListsEditorViewModel(
-            getAllGroupsUseCase = get()
+            getAllGroupsUseCase = get(),
+            deleteGroupUseCase = get()
         )
     }
 

@@ -36,17 +36,20 @@ interface TaskDao {
     @Query("SELECT * FROM task_group")
     fun getAllGroups(): Flow<List<TaskGroupEntity>>
 
-    @Query("SELECT * FROM task_group WHERE groupId =:id")
+    @Query("SELECT * FROM task_group WHERE groupId = :id")
     fun getGroup(id: Int): Flow<TaskGroupEntity>
 
     @Transaction
     @Query("SELECT * FROM task_group WHERE groupId = :groupId LIMIT 1")
     fun getGroupWithTasks(groupId: Int): Flow<GroupWithTasks>
 
-    @Query("SELECT * FROM task WHERE periodic_type =:period")
+    @Query("SELECT * FROM task WHERE periodic_type = :period")
     fun getAllTasksByPeriodType(period: String): Flow<List<TaskEntity>>
 
     @Query("DELETE FROM task")
     suspend fun clearAll()
+
+    @Query("DELETE FROM task_group WHERE groupId = :groupId")
+    suspend fun deleteGroup(groupId: Int)
 
 }
