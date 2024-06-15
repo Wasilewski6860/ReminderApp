@@ -31,7 +31,7 @@ class DeviceBootReceiver : BroadcastReceiver(), KoinComponent {
 
     private fun resetAlarm() {
         scope.launch(Dispatchers.Main) {
-            getAllTasksUseCase.execute()
+            getAllTasksUseCase(Unit)
                 .collect { tasks ->
                     tasks.forEach { task ->
                         if(task.isActive) remindAlarmManager.createAlarm(task)

@@ -26,7 +26,7 @@ class CreatorViewModel(
     fun saveTaskInDatabase(task: Task) {
         viewModelScope.launch {
             try {
-                val res = saveTaskUseCase.execute(task)
+                val res = saveTaskUseCase(task)
 //                task.id = res.toInt()
                 result.postValue(task)
             } catch (e: Exception) {
@@ -48,7 +48,7 @@ class CreatorViewModel(
     fun editTaskInDatabase(task: Task) {
         viewModelScope.launch {
             try {
-                editTaskUseCase.execute(task)
+                editTaskUseCase(task)
             } catch (e: Exception) {
                 Log.e("editing task process", e.toString())
             }

@@ -25,7 +25,7 @@ import com.google.android.material.appbar.MaterialToolbar
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class NewListFragment : Fragment(), MenuProvider, BackActionInterface, DataReceiving {
-class NewListFragment : Fragment(), MenuProvider {
+
 
     companion object {
         fun newInstance() = NewListFragment()
@@ -37,8 +37,7 @@ class NewListFragment : Fragment(), MenuProvider {
 
     private lateinit var callback: OnBackPressedCallback
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+
     private val viewModel: NewListViewModel by viewModel()
 
     var selectedColor: Int? = null
@@ -88,11 +87,6 @@ class NewListFragment : Fragment(), MenuProvider {
         adapter = colorListAdapter
         layoutManager = GridLayoutManager(requireContext(), 6)
         this.addItemDecoration(ColorListItemDecoration(6, 50, true))
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        requireActivity().addMenuProvider(this, viewLifecycleOwner)
     }
 
     override fun onDestroyView() {

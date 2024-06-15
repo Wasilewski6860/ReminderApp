@@ -1,9 +1,13 @@
 package com.example.domain.use_case
 
+import com.example.domain.model.GroupWithTasks
+import com.example.domain.model.Task
 import com.example.domain.repository.TaskRepository
+import kotlinx.coroutines.flow.Flow
 
-class GetGroupWithTasksUseCase(private val taskRepository: TaskRepository) {
 
-    fun execute(id: Int) = taskRepository.getGroupWithTasks(id)
+typealias GetGroupWithTasksBaseUseCase = BaseUseCase<Int, Flow<GroupWithTasks>>
 
+class GetGroupWithTasksUseCase(private val taskRepository: TaskRepository) : GetGroupWithTasksBaseUseCase {
+    override suspend fun invoke(id: Int)  = taskRepository.getGroupWithTasks(id)
 }

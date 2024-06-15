@@ -18,7 +18,7 @@ class MainViewModel(
 
     fun fetchTaskGroups() {
         viewModelScope.launch {
-            getAllGroupsUseCase.execute()
+            getAllGroupsUseCase(Unit)
                 .catch { e ->
                     Log.e("FETCHING DATA FROM DATABASE", e.toString())
                 }
