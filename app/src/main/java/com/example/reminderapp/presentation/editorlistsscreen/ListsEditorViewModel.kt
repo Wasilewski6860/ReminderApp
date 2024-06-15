@@ -20,7 +20,7 @@ class ListsEditorViewModel(
 
     fun fetchGroupsFromDatabase() {
         viewModelScope.launch {
-            getAllGroupsUseCase.execute()
+            getAllGroupsUseCase(Unit)
                 .catch { e ->
                     Log.e("FETCHING DATA FROM DATABASE", e.toString())
                 }
@@ -34,7 +34,7 @@ class ListsEditorViewModel(
         viewModelScope.launch {
             /** use case execute method here */
             try {
-                deleteGroupUseCase.execute(groupId)
+                deleteGroupUseCase(groupId)
             } catch (e: Exception) {
                 Log.e("DELETING GROUP FROM DATABASE PROCESS", e.toString())
             }

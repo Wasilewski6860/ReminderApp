@@ -3,8 +3,8 @@ package com.example.domain.use_case
 import com.example.domain.model.Task
 import com.example.domain.repository.TaskRepository
 
-class EditTaskUseCase(private val taskRepository: TaskRepository) {
+typealias EditTaskBaseUseCase = BaseUseCase<Task, Unit>
 
-    suspend fun execute(task: Task) = taskRepository.editTask(task)
-
+class EditTaskUseCase(private val taskRepository: TaskRepository) : EditTaskBaseUseCase {
+    override suspend fun invoke(task: Task)  = taskRepository.editTask(task)
 }

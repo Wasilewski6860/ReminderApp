@@ -2,7 +2,8 @@ package com.example.domain.use_case
 
 import com.example.domain.repository.TaskRepository
 
-class ClearAllTasksUseCase(private val taskRepository: TaskRepository) {
+typealias ClearAllTasksBaseUseCase = BaseUseCase<Unit, Unit>
 
-    suspend fun execute() = taskRepository.deleteAll()
+class ClearAllTasksUseCase(private val taskRepository: TaskRepository) : ClearAllTasksBaseUseCase {
+    override suspend operator fun invoke(params: Unit) = taskRepository.deleteAll()
 }

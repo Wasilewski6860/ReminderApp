@@ -23,7 +23,7 @@ class ReminderListViewModel(
 
     fun fetchGroupWithTasks(id: Int) {
         viewModelScope.launch {
-            getGroupWithTasksUseCase.execute(id)
+            getGroupWithTasksUseCase(id)
                 .catch { e ->
                     _uiState.value = UiState.Error(e.toString())
                 }

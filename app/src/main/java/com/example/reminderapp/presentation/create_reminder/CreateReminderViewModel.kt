@@ -25,7 +25,7 @@ class CreateReminderViewModel(
 
     fun fetchGroups() {
         viewModelScope.launch {
-            getAllGroupsUseCase.execute()
+            getAllGroupsUseCase(Unit)
                 .catch { e ->
                     _uiState.value = UiState.Error(e.toString())
                 }
@@ -39,7 +39,7 @@ class CreateReminderViewModel(
        task: Task
     ) {
         viewModelScope.launch {
-            createTaskUseCase.execute(
+            createTaskUseCase(
                 Task(
                     id = 0,
                     name = task.name,
