@@ -1,9 +1,5 @@
 package com.example.reminderapp.presentation.mainscreen
 
-import android.animation.Animator
-import android.animation.AnimatorListenerAdapter
-import android.animation.AnimatorSet
-import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -15,7 +11,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.domain.model.Group
 import com.example.reminderapp.R
 import com.example.reminderapp.animations.animateImageViewRotation
@@ -31,13 +26,6 @@ import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainFragment : Fragment() {
-
-    companion object {
-        const val TO_CREATE_REMINDER_FRAGMENT = "to_create_reminder"
-        const val TO_EDIT_LISTS_FRAGMENT = "to_edit_lists"
-        const val TO_NEW_LIST_FRAGMENT = "to_new_list"
-        const val TO_TASKS_LIST_FRAGMENT = "to_tasks_list"
-    }
 
     private lateinit var binding: MainScreenBinding
     private lateinit var adapter: GroupListRecyclerViewAdapter
@@ -99,7 +87,7 @@ class MainFragment : Fragment() {
         }
     }
 
-    private fun navigate(destination: Navigation) {
+    private fun navigate(destination: Navigation, args: Bundle? = null) {
         parentFragmentManager.beginTransaction()
             .setCustomAnimations(
                 R.anim.slide_in_anim,
@@ -113,9 +101,12 @@ class MainFragment : Fragment() {
                     Navigation.ToCreateReminderFragment -> CreateReminderFragment()
                     Navigation.ToNewListFragment -> NewListFragment()
                     Navigation.ToEditListsFragment -> EditListsScreenFragment()
-                    Navigation.ToTasksListFragment -> MainFragment() // TODO replace this
+                    Navigation.ToTasksListFragment -> MainFragment() // TODO replace this with needed fragment
                 }
             )
+            .apply {
+                args?.let { arguments = it }
+            }
             .addToBackStack(FragmentNavigationConstants.TO_MAIN_FRAGMENT_BACKSTACK)
             .commit()
     }
@@ -123,17 +114,17 @@ class MainFragment : Fragment() {
     private fun gridLayoutItemsInit() = with(binding) {
         topGridLayout.apply {
             currentDayTasksItem.setOnClickListener {
-
+                navigate(Navigation.ToTasksListFragment)
             }
             plannedTasksItem.setOnClickListener {
-
+                navigate(Navigation.ToTasksListFragment)
             }
             allTasksItem.setOnClickListener {
-
+                navigate(Navigation.ToTasksListFragment)
             }
             tasksWithFlagItem.setOnClickListener {
-
-            }
+                navigate(Navigation.ToTasksListFragment)
+            } // TODO add data collection methods
         }
     }
 

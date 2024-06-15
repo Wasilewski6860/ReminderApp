@@ -13,9 +13,10 @@ import androidx.activity.OnBackPressedCallback
 import androidx.core.view.MenuProvider
 import com.example.reminderapp.MainActivity
 import com.example.reminderapp.R
-import com.example.reminderapp.presentation.BackActionInterface
+import com.example.reminderapp.presentation.interfaces.BackActionInterface
+import com.example.reminderapp.presentation.interfaces.DataReceiving
 
-class NewListFragment : Fragment(), MenuProvider, BackActionInterface {
+class NewListFragment : Fragment(), MenuProvider, BackActionInterface, DataReceiving {
 
     companion object {
         fun newInstance() = NewListFragment()
@@ -62,6 +63,12 @@ class NewListFragment : Fragment(), MenuProvider, BackActionInterface {
 
     override fun navigateBack() {
         parentFragmentManager.popBackStack()
+    }
+
+    override fun receiveData() {
+        arguments?.let {
+            // TODO fill all fields with that data
+        }
     }
 
     override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {

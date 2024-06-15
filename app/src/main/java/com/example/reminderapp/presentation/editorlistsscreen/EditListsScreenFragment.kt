@@ -18,8 +18,8 @@ import com.example.domain.model.Group
 import com.example.reminderapp.MainActivity
 import com.example.reminderapp.R
 import com.example.reminderapp.databinding.ListEditorScreenBinding
-import com.example.reminderapp.presentation.BackActionInterface
-import com.example.reminderapp.presentation.create_reminder.CreateReminderFragment
+import com.example.reminderapp.presentation.interfaces.BackActionInterface
+import com.example.reminderapp.presentation.interfaces.DataReceiving
 import com.example.reminderapp.presentation.navigation.FragmentNavigationConstants
 import com.example.reminderapp.presentation.new_list.NewListFragment
 import com.example.reminderapp.presentation.recycleradapter.GroupListRecyclerViewAdapter
@@ -81,7 +81,7 @@ class EditListsScreenFragment : Fragment(), MenuProvider, BackActionInterface {
             override fun onDeleteIconClick(position: Int) {
                 /** Deletion process here */
                 val data = adapter.collectInfo(position)
-                viewModel.deleteGroup(data)
+                viewModel.deleteGroup(data.groupId)
                 adapter.deleteItem(position)
             }
         }, isDeleteIconVisible = true)
@@ -105,7 +105,7 @@ class EditListsScreenFragment : Fragment(), MenuProvider, BackActionInterface {
         parentFragmentManager.popBackStack()
     }
 
-    private fun navigateToNewListFragment() {
+    private fun navigateToNewListFragment(args: Bundle? = null) {
         parentFragmentManager.beginTransaction()
             .setCustomAnimations(
                 R.anim.slide_in_anim,
@@ -113,6 +113,9 @@ class EditListsScreenFragment : Fragment(), MenuProvider, BackActionInterface {
                 R.anim.slide_in_anim,
                 R.anim.slide_out_anim
             )
+            .apply {
+                args?.let { arguments = it }
+            }
             .replace(R.id.fragmentContainerView, NewListFragment())
             .addToBackStack(FragmentNavigationConstants.TO_EDIT_LISTS_FRAGMENT)
             .commit()

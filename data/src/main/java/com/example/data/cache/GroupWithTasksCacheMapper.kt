@@ -7,8 +7,8 @@ import com.example.domain.model.GroupWithTasks as DomainGroupWithTasks
 import com.example.domain.model.Task
 
 class GroupWithTasksCacheMapper(
-    val groupCacheMapper: GroupCacheMapper,
-    val taskCacheMapper: TaskCacheMapper
+    private val groupCacheMapper: GroupCacheMapper,
+    private val taskCacheMapper: TaskCacheMapper
 ): Mapper<GroupWithTasks, DomainGroupWithTasks> {
     override fun mapFromEntity(type: GroupWithTasks): DomainGroupWithTasks {
         with(type) {

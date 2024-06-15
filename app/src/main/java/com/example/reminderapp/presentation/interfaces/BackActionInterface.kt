@@ -1,4 +1,4 @@
-package com.example.reminderapp.presentation
+package com.example.reminderapp.presentation.interfaces
 
 interface BackActionInterface {
 

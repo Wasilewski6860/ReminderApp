@@ -29,8 +29,9 @@ import com.example.domain.model.TaskPeriodType
 import com.example.reminderapp.MainActivity
 import com.example.reminderapp.R
 import com.example.reminderapp.databinding.FragmentCreateReminderBinding
-import com.example.reminderapp.presentation.BackActionInterface
+import com.example.reminderapp.presentation.interfaces.BackActionInterface
 import com.example.reminderapp.presentation.base.UiState
+import com.example.reminderapp.presentation.interfaces.DataReceiving
 import com.example.reminderapp.reminder.RemindAlarmManager
 import com.example.reminderapp.utils.ColorItem
 import com.example.reminderapp.utils.ColorsUtils
@@ -42,7 +43,7 @@ import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.Locale
 
-class CreateReminderFragment : Fragment(), MenuProvider, BackActionInterface {
+class CreateReminderFragment : Fragment(), MenuProvider, BackActionInterface, DataReceiving {
 
     companion object {
         fun newInstance() = CreateReminderFragment()
@@ -108,6 +109,12 @@ class CreateReminderFragment : Fragment(), MenuProvider, BackActionInterface {
     override fun onDestroyView() {
         super.onDestroyView()
         callback.remove()
+    }
+
+    override fun receiveData() {
+        arguments?.let {
+            // TODO fill all fields with that data
+        }
     }
 
     private fun setupSwitches() {
