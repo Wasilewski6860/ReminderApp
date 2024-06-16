@@ -1,161 +1,190 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     tools:context=".presentation.mainscreen.MainFragment">
 
-    <ScrollView
-        android:id="@+id/topItemsScrollViewHolder"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="2.5">
-
-        <GridLayout
-            android:id="@+id/topGridLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:useDefaultMargins="false"
-            android:columnCount="2"
-            android:rowCount="2">
-
-            <com.example.reminderapp.custom_view.GridItemCustomView
-                android:id="@+id/currentDayTasksItem"
-                android:layout_margin="0dp"
-                android:layout_row="0"
-                android:layout_column="0"
-                android:layout_columnWeight="1"
-                app:gridCounterText="@string/count_stub"
-                app:gridImage="@drawable/sand_clock_icon"
-                app:gridTitleText="@string/current_day" />
-
-            <com.example.reminderapp.custom_view.GridItemCustomView
-                android:id="@+id/plannedTasksItem"
-                android:layout_margin="0dp"
-                android:layout_row="0"
-                android:layout_column="1"
-                android:layout_columnWeight="1"
-                app:gridCounterText="@string/count_stub"
-                app:gridImage="@drawable/clock_icon"
-                app:gridTitleText="@string/planned" />
-
-            <com.example.reminderapp.custom_view.GridItemCustomView
-                android:id="@+id/allTasksItem"
-                android:layout_margin="0dp"
-                android:layout_row="1"
-                android:layout_column="0"
-                android:layout_columnWeight="1"
-                app:gridCounterText="@string/count_stub"
-                app:gridImage="@drawable/folder_icon"
-                app:gridTitleText="@string/all" />
-
-            <com.example.reminderapp.custom_view.GridItemCustomView
-                android:id="@+id/tasksWithFlagItem"
-                android:layout_margin="0dp"
-                android:layout_row="1"
-                android:layout_column="1"
-                android:layout_columnWeight="1"
-                app:gridCounterText="@string/count_stub"
-                app:gridImage="@drawable/flag_icon_black"
-                app:gridTitleText="@string/with_flag" />
-
-        </GridLayout>
-
-    </ScrollView>
-
     <LinearLayout
-        android:id="@+id/centerItemsLinearLayoutHolder"
+        android:id="@+id/content_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:orientation="vertical"
-        android:paddingTop="30dp">
+        android:orientation="vertical">
+
+        <ScrollView
+            android:id="@+id/topItemsScrollViewHolder"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="2.5">
+
+            <GridLayout
+                android:id="@+id/topGridLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:useDefaultMargins="false"
+                android:columnCount="2"
+                android:rowCount="2">
+
+                <com.example.reminderapp.custom_view.GridItemCustomView
+                    android:id="@+id/currentDayTasksItem"
+                    android:layout_width="0dp"
+                    android:layout_margin="0dp"
+                    android:layout_row="0"
+                    android:layout_column="0"
+                    android:layout_columnWeight="1"
+                    app:gridCounterText="@string/count_stub"
+                    app:gridImage="@drawable/sand_clock_icon"
+                    app:gridTitleText="@string/current_day" />
+
+                <com.example.reminderapp.custom_view.GridItemCustomView
+                    android:id="@+id/plannedTasksItem"
+                    android:layout_width="0dp"
+                    android:layout_margin="0dp"
+                    android:layout_row="0"
+                    android:layout_column="1"
+                    android:layout_columnWeight="1"
+                    app:gridCounterText="@string/count_stub"
+                    app:gridImage="@drawable/clock_icon"
+                    app:gridTitleText="@string/planned" />
+
+                <com.example.reminderapp.custom_view.GridItemCustomView
+                    android:id="@+id/allTasksItem"
+                    android:layout_width="0dp"
+                    android:layout_margin="0dp"
+                    android:layout_row="1"
+                    android:layout_column="0"
+                    android:layout_columnWeight="1"
+                    app:gridCounterText="@string/count_stub"
+                    app:gridImage="@drawable/folder_icon"
+                    app:gridTitleText="@string/all" />
+
+                <com.example.reminderapp.custom_view.GridItemCustomView
+                    android:id="@+id/tasksWithFlagItem"
+                    android:layout_width="0dp"
+                    android:layout_margin="0dp"
+                    android:layout_row="1"
+                    android:layout_column="1"
+                    android:layout_columnWeight="1"
+                    app:gridCounterText="@string/count_stub"
+                    app:gridImage="@drawable/flag_icon_black"
+                    app:gridTitleText="@string/with_flag" />
+
+            </GridLayout>
+
+        </ScrollView>
 
         <LinearLayout
-            android:id="@+id/listTitleHolder"
+            android:id="@+id/centerItemsLinearLayoutHolder"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:paddingTop="30dp">
+
+            <LinearLayout
+                android:id="@+id/listTitleHolder"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingVertical="6dp">
+
+                <TextView
+                    android:id="@+id/myListsTextView"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:paddingHorizontal="10dp"
+                    android:text="Мои списки"
+                    android:textStyle="bold"
+                    android:textSize="20sp" />
+
+                <ImageView
+                    android:id="@+id/showRecyclerViewButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginHorizontal="20dp"
+                    android:src="@drawable/arrow_drop_down" />
+
+            </LinearLayout>
+
+            <FrameLayout
+                android:id="@+id/mainScreenRecyclerViewHolder"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/customListsRecyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+            </FrameLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/bottomItemsLinearLayoutHolder"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingVertical="6dp">
+            android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/myListsTextView"
-                android:layout_width="0dp"
+                android:id="@+id/changeListsButton"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="start|center_vertical"
+                android:layout_marginHorizontal="10dp"
                 android:layout_weight="1"
-                android:paddingHorizontal="10dp"
-                android:text="Мои списки"
-                android:textStyle="bold"
-                android:textSize="20sp" />
+                android:paddingHorizontal="20dp"
+                android:paddingVertical="10dp"
+                android:text="Изменить"
+                android:textSize="@dimen/list_item_normal_text_size"
+                android:textStyle="bold"/>
 
-            <ImageView
-                android:id="@+id/showRecyclerViewButton"
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/addTaskButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginHorizontal="20dp"
-                android:src="@drawable/arrow_drop_down" />
+                android:layout_marginVertical="10dp"
+                android:layout_weight="1"
+                style="@style/MainFabStyle" />
+
+            <TextView
+                android:id="@+id/addListButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|center_vertical"
+                android:layout_weight="1"
+                android:gravity="end"
+                android:paddingHorizontal="20dp"
+                android:paddingVertical="10dp"
+                android:text="Доб.список"
+                android:textStyle="bold"
+                android:textSize="@dimen/list_item_normal_text_size" />
 
         </LinearLayout>
 
-        <FrameLayout
-            android:id="@+id/mainScreenRecyclerViewHolder"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/customListsRecyclerView"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-
-        </FrameLayout>
-
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/bottomItemsLinearLayoutHolder"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/loading_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_height="match_parent"
+        android:visibility="gone">
 
-        <TextView
-            android:id="@+id/changeListsButton"
+        <ProgressBar
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="start|center_vertical"
-            android:layout_marginHorizontal="10dp"
-            android:layout_weight="1"
-            android:paddingHorizontal="20dp"
-            android:paddingVertical="10dp"
-            android:text="Изменить"
-            android:textSize="@dimen/list_item_normal_text_size"
-            android:textStyle="bold"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_gravity="center"/>
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/addTaskButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginHorizontal="20dp"
-            android:layout_marginVertical="10dp"
-            android:layout_weight="1"
-            style="@style/MainFabStyle" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <TextView
-            android:id="@+id/addListButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="start|center_vertical"
-            android:layout_weight="1"
-            android:gravity="end"
-            android:paddingHorizontal="20dp"
-            android:paddingVertical="10dp"
-            android:text="Доб.список"
-            android:textStyle="bold"
-            android:textSize="@dimen/list_item_normal_text_size" />
 
-    </LinearLayout>
-
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

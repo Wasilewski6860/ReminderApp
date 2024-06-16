@@ -10,8 +10,11 @@ import com.example.domain.model.Group
 import com.example.domain.model.GroupWithTasks
 import com.example.domain.model.Task
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flatMapConcat
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.zip
 
 class TaskStorageImpl(
     val taskCacheMapper: TaskCacheMapper,
@@ -53,18 +56,30 @@ class TaskStorageImpl(
     override fun getTask(id: Int): Flow<Task> = taskDao.getTask(id).map { taskEntity -> taskCacheMapper.mapFromEntity(taskEntity) }
 
     override fun getAllGroups(): Flow<List<Group>> {
-        return taskDao.getAllGroups().map { groupEntities ->
-            groupEntities.map { taskEntity ->  groupCacheMapper.mapFromEntity(taskEntity) }
-        }
+       return taskDao.getAllGroups().flatMapConcat { groups ->
+           val taskCountFlows = groups.map { group ->
+               getCountOfTasksInGroup(group.groupId)
+           }
+           combine(taskCountFlows) { taskCounts ->
+               groups.zip(taskCounts) { taskGroup, tasksCount ->
+                   groupCacheMapper.mapFromEntity(Pair(taskGroup, tasksCount))
+               }
+           }
+       }
     }
 
-    override fun getGroup(id: Int): Flow<Group> = taskDao.getGroup(id).map {
-        groupCacheMapper.mapFromEntity(it)
+    override fun getGroup(id: Int): Flow<Group> {
+        return taskDao.getGroup(id)
+            .zip(getCountOfTasksInGroup(id)) { entity , count ->
+                groupCacheMapper.mapFromEntity(Pair(entity, count))
+            }
     }
 
     override fun getGroupWithTasks(id: Int): Flow<GroupWithTasks> = taskDao.getGroupWithTasks(id).map {
         groupWithTasksCacheMapper.mapFromEntity(it)
     }
+
+    override fun getCountOfTasksInGroup(id: Int): Flow<Int> = taskDao.getCountOfTasksInGroup(id)
 
     override suspend fun clearAll() = taskDao.clearAll()
 

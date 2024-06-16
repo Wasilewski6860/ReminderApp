@@ -10,7 +10,14 @@ import com.example.domain.use_case.GetAllPeriodicTasksUseCase
 import com.example.domain.use_case.GetAllTasksUseCase
 import com.example.domain.use_case.GetGroupUseCase
 import com.example.domain.use_case.GetGroupWithTasksUseCase
+import com.example.domain.use_case.GetPlannedTasksBaseUseCase
+import com.example.domain.use_case.GetPlannedTasksUseCase
 import com.example.domain.use_case.GetTaskUseCase
+import com.example.domain.use_case.GetTasksForTodayCountUseCase
+import com.example.domain.use_case.GetTasksForTodayUseCase
+import com.example.domain.use_case.GetTasksPlannedCountUseCase
+import com.example.domain.use_case.GetTasksWithFlagCountUseCase
+import com.example.domain.use_case.GetTasksWithFlagUseCase
 import com.example.domain.use_case.SaveTaskUseCase
 import org.koin.dsl.module
 
@@ -62,6 +69,30 @@ val domainModule = module {
 
     factory<DeleteGroupUseCase> {
         DeleteGroupUseCase(taskRepository = get())
+    }
+
+    factory<GetPlannedTasksUseCase> {
+        GetPlannedTasksUseCase(taskRepository = get())
+    }
+
+    factory<GetTasksPlannedCountUseCase> {
+        GetTasksPlannedCountUseCase(taskRepository = get())
+    }
+
+    factory<GetTasksForTodayUseCase> {
+        GetTasksForTodayUseCase(taskRepository = get())
+    }
+
+    factory<GetTasksForTodayCountUseCase> {
+        GetTasksForTodayCountUseCase(taskRepository = get())
+    }
+
+    factory<GetTasksWithFlagUseCase> {
+        GetTasksWithFlagUseCase(taskRepository = get())
+    }
+
+    factory<GetTasksWithFlagCountUseCase> {
+        GetTasksWithFlagCountUseCase(taskRepository = get())
     }
 
 }

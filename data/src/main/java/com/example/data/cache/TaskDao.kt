@@ -46,6 +46,9 @@ interface TaskDao {
     @Query("SELECT * FROM task WHERE periodic_type = :period")
     fun getAllTasksByPeriodType(period: String): Flow<List<TaskEntity>>
 
+    @Query("SELECT COUNT(*) FROM task WHERE groupId = :groupId")
+    fun getCountOfTasksInGroup(groupId: Int): Flow<Int>
+
     @Query("DELETE FROM task")
     suspend fun clearAll()
 

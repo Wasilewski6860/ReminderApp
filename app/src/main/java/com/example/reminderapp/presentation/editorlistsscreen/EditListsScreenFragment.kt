@@ -15,15 +15,16 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.GridLayoutManager
-import com.example.domain.model.Group
 import com.example.reminderapp.MainActivity
 import com.example.reminderapp.R
 import com.example.reminderapp.databinding.ListEditorScreenBinding
+import com.example.reminderapp.presentation.TestData
+import com.example.reminderapp.presentation.base.UiState
 import com.example.reminderapp.presentation.interfaces.BackActionInterface
-import com.example.reminderapp.presentation.interfaces.DataReceiving
 import com.example.reminderapp.presentation.navigation.FragmentNavigationConstants
 import com.example.reminderapp.presentation.new_list.NewListFragment
 import com.example.reminderapp.presentation.recycleradapter.GroupListRecyclerViewAdapter
+import com.example.reminderapp.utils.showSnackbar
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -55,7 +56,7 @@ class EditListsScreenFragment : Fragment(), MenuProvider, BackActionInterface {
         setupObserver()
 
         /** Testing */
-        adapter.fillRecyclerWithFullItemsList(Test.getTestList())
+        adapter.fillRecyclerWithFullItemsList(TestData().getTestList())
 
         return binding.root
     }
@@ -96,11 +97,27 @@ class EditListsScreenFragment : Fragment(), MenuProvider, BackActionInterface {
     }
 
     private fun setupObserver() {
-        viewModel.fetchGroupsFromDatabase()
+        viewModel.fetchData()
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.groupsListData.collect {
-                    adapter.fillRecyclerWithFullItemsList(it)
+                viewModel.uiState.collect {
+                    when (it) {
+                        is UiState.Success -> {
+                            binding.contentLayout.visibility = View.VISIBLE
+                            binding.loadingLayout.visibility = View.GONE
+                            adapter.fillRecyclerWithFullItemsList(it.data)
+                        }
+                        is UiState.Loading -> {
+                            binding.contentLayout.visibility = View.GONE
+                            binding.loadingLayout.visibility = View.VISIBLE
+                        }
+                        is UiState.Error -> {
+                            binding.contentLayout.visibility = View.VISIBLE
+                            binding.loadingLayout.visibility = View.GONE
+                            showSnackbar(it.message, requireActivity().findViewById(R.id.rootView))
+                        }
+                    }
+
                 }
             }
         }
@@ -140,31 +157,4 @@ class EditListsScreenFragment : Fragment(), MenuProvider, BackActionInterface {
         return true
     }
 
-}
-
-private object Test {
-    fun getTestList(): List<Group> {
-        return listOf(
-            Group(
-                groupId = 0,
-                groupName = "First list",
-                groupColor = R.color.red
-            ),
-            Group(
-                groupId = 0,
-                groupName = "Second list",
-                groupColor = R.color.black
-            ),
-            Group(
-                groupId = 0,
-                groupName = "Third list",
-                groupColor = R.color.blue
-            ),
-            Group(
-                groupId = 0,
-                groupName = "Fourth list",
-                groupColor = R.color.purple_500
-            )
-        )
-    }
 }
