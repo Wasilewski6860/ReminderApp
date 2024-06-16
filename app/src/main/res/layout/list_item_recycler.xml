@@ -58,7 +58,6 @@
             android:layout_height="15dp"
             android:layout_gravity="center_vertical"
             android:layout_weight="2"
-            android:src="@drawable/ic_arrow_forward" />
             android:layout_marginVertical="10dp"
             android:src="@drawable/arrow_forward" />
 

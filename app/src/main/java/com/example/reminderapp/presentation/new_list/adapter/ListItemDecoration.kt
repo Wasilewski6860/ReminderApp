@@ -4,7 +4,7 @@ import android.graphics.Rect
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 
-class ColorListItemDecoration(
+class ListItemDecoration(
     private val spanCount: Int,
     private val spacing: Int,
     private val includeEdge: Boolean

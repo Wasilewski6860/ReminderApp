@@ -79,4 +79,6 @@
     <string name="with_flag">With flag</string>
     <string name="my_lists">My lists</string>
 
+    <string name="nothing_found">Nothing found</string>
+
 </resources>
