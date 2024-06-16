@@ -30,7 +30,6 @@
             android:layout_width="0dp"
             android:layout_height="28dp"
             android:layout_weight="7"
-            android:layout_marginVertical="6dp"
             app:circleColor="@color/red" />
 
         <TextView
@@ -42,7 +41,6 @@
             android:layout_gravity="center_vertical"
             android:textSize="@dimen/list_item_normal_text_size"
             android:textStyle="bold"/>
-            android:layout_marginVertical="10dp" />
 
         <TextView
             android:id="@+id/listItemsCounterTextView"
