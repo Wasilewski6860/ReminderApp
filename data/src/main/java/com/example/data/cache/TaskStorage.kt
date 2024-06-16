@@ -26,6 +26,7 @@ interface TaskStorage {
     fun getGroup(id: Int): Flow<Group>
 
     fun getGroupWithTasks(id: Int): Flow<GroupWithTasks>
+    fun getCountOfTasksInGroup(id: Int): Flow<Int>
 
     suspend fun clearAll()
 

@@ -24,6 +24,7 @@ class GroupListRecyclerViewAdapter(
         fun bind(item: Group) = with(binding) {
             listNameTextView.text = item.groupName
             colorCircleItem.circleColor = item.groupColor
+            listItemsCounterTextView.text = item.tasksCount.toString()
             /**
              *  Use there image setting like this:
              * colorCircleItem.bitmap = item.image

@@ -56,7 +56,7 @@
 
     <!--  Strings for grid items  -->
     <string name="current_day">Сегодня</string>
-    <string name="planned">Сегодня</string>
+    <string name="planned">Запланировано</string>
     <string name="all">Все</string>
     <string name="with_flag">С флагом</string>
 

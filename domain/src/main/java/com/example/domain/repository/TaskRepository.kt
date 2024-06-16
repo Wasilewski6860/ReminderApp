@@ -24,6 +24,13 @@ interface TaskRepository {
 
     fun getAllTasks(): Flow<List<Task>>
 
+    fun getTasksForToday(): Flow<List<Task>>
+    fun getTasksForTodayCount(): Flow<Int>
+    fun getTasksPlanned(): Flow<List<Task>>
+    fun getTasksPlannedCount(): Flow<Int>
+    fun getTasksWithFlag(): Flow<List<Task>>
+    fun getTasksWithFlagCount(): Flow<Int>
+
     fun getAllGroups(): Flow<List<Group>>
 
     fun getGroup(id: Int): Flow<Group>

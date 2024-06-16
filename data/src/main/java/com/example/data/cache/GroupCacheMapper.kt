@@ -7,23 +7,37 @@ import com.example.data.toPeriodicType
 import com.example.domain.model.Group
 import com.example.domain.model.Task
 
-class GroupCacheMapper: Mapper<TaskGroupEntity, Group> {
-    override fun mapFromEntity(type: TaskGroupEntity): Group {
-        with(type) {
+class GroupCacheMapper: Mapper<Pair<TaskGroupEntity, Int>, Group> {
+    override fun mapFromEntity(type: Pair<TaskGroupEntity, Int>): Group {
+        with(type.first) {
             return Group(
                 groupId = groupId,
                 groupName = groupName,
                 groupColor = groupColor,
+                tasksCount = type.second
             )
         }
     }
 
-    override fun mapToEntity(type: Group): TaskGroupEntity {
+    override fun mapToEntity(type: Group): Pair<TaskGroupEntity, Int> {
         with(type) {
+            return Pair(
+                first = TaskGroupEntity(
+                    groupId = groupId,
+                    groupName = groupName,
+                    groupColor = groupColor
+                ),
+                second = tasksCount
+            )
+        }
+    }
+
+    fun mapToDatabaseEntity(group: Group): TaskGroupEntity {
+        with(group) {
             return TaskGroupEntity(
                 groupId = groupId,
                 groupName = groupName,
-                groupColor = groupColor,
+                groupColor = groupColor
             )
         }
     }

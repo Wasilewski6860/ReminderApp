@@ -13,7 +13,7 @@ class GroupWithTasksCacheMapper(
     override fun mapFromEntity(type: GroupWithTasks): DomainGroupWithTasks {
         with(type) {
             return DomainGroupWithTasks(
-                group = groupCacheMapper.mapFromEntity(type.group),
+                group = groupCacheMapper.mapFromEntity(Pair(group, tasks.size) ),
                 tasks = tasks.map { taskEntity: TaskEntity ->  taskCacheMapper.mapFromEntity(taskEntity)}
             )
         }
@@ -22,7 +22,7 @@ class GroupWithTasksCacheMapper(
     override fun mapToEntity(type: DomainGroupWithTasks): GroupWithTasks {
         with(type) {
             return GroupWithTasks(
-                group = groupCacheMapper.mapToEntity(type.group),
+                group = groupCacheMapper.mapToEntity(type.group).first,
                 tasks = tasks.map { task: Task ->  taskCacheMapper.mapToEntity(task)}
             )
         }

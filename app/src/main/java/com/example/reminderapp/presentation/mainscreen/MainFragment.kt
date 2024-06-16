@@ -18,6 +18,7 @@ import com.example.reminderapp.animations.animateImageViewRotation
 import com.example.reminderapp.animations.hideRecyclerAnimation
 import com.example.reminderapp.animations.showRecyclerAnimation
 import com.example.reminderapp.databinding.MainScreenBinding
+import com.example.reminderapp.presentation.base.UiState
 import com.example.reminderapp.presentation.create_reminder.CreateReminderFragment
 import com.example.reminderapp.presentation.editorlistsscreen.EditListsScreenFragment
 import com.example.reminderapp.presentation.navigation.FragmentNavigationConstants
@@ -25,6 +26,7 @@ import com.example.reminderapp.presentation.new_list.NewListFragment
 import com.example.reminderapp.presentation.recycleradapter.GroupListRecyclerViewAdapter
 import com.example.reminderapp.presentation.reminder_list.ReminderListFragment
 import com.example.reminderapp.utils.Constants
+import com.example.reminderapp.utils.showSnackbar
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -46,15 +48,9 @@ class MainFragment : Fragment() {
         (activity as MainActivity).setToolbarTitleAndTitleColor("")
 
         binding.apply {
-
             setupRecyclerAndAdapter()
             setupObserver()
             initListeners()
-            gridLayoutItemsInit()
-
-            /** For testing */
-            adapter.fillRecyclerWithFullItemsList(Test.getTestList())
-
         }
 
         initListeners()
@@ -116,10 +112,10 @@ class MainFragment : Fragment() {
             .commit()
     }
 
-    private fun gridLayoutItemsInit() = with(binding) {
+    private fun gridLayoutItemsInit(todayCount: Int, plannedCount: Int, withFlagCount: Int) = with(binding) {
         topGridLayout.apply {
             currentDayTasksItem.apply {
-                counterTitle = viewModel.todayReminders
+                counterTitle = todayCount.toString()
                 setOnClickListener {
                     val bundle = Bundle().apply {
 
@@ -128,7 +124,7 @@ class MainFragment : Fragment() {
                 }
             }
             plannedTasksItem.apply {
-                counterTitle = viewModel.plannedReminders
+                counterTitle = plannedCount.toString()
                 setOnClickListener {
                     val bundle = Bundle().apply {
 
@@ -137,7 +133,7 @@ class MainFragment : Fragment() {
                 }
             }
             allTasksItem.apply {
-                counterTitle = viewModel.allReminders
+                counterTitle = plannedCount.toString()
                 setOnClickListener {
                     val bundle = Bundle().apply {
 
@@ -146,7 +142,7 @@ class MainFragment : Fragment() {
                 }
             }
             tasksWithFlagItem.apply {
-                counterTitle = viewModel.remindersWithFlag
+                counterTitle = withFlagCount.toString()
                 setOnClickListener {
                     val bundle = Bundle().apply {
 
@@ -187,12 +183,36 @@ class MainFragment : Fragment() {
     }
 
     private fun setupObserver() {
-        viewModel.fetchTaskGroups()
-        viewModel.getAllTasks()
+        viewModel.fetchData()
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.groupsListData.collect {
-                    adapter.fillRecyclerWithFullItemsList(it)
+                viewModel.uiState.collect {
+                    when (it) {
+                        is UiState.Success -> {
+                            binding.contentLayout.visibility = View.VISIBLE
+                            binding.loadingLayout.visibility = View.GONE
+
+                            it.data.apply {
+                                adapter.fillRecyclerWithFullItemsList(this.groups)
+                                gridLayoutItemsInit(
+                                    todayCount = this.todayCount,
+                                    plannedCount = this.plannedCount,
+                                    withFlagCount = this.withFlagCount
+                                )
+                            }
+
+                        }
+                        is UiState.Loading -> {
+                            binding.contentLayout.visibility = View.GONE
+                            binding.loadingLayout.visibility = View.VISIBLE
+                        }
+                        is UiState.Error -> {
+                            binding.contentLayout.visibility = View.VISIBLE
+                            binding.loadingLayout.visibility = View.GONE
+                            showSnackbar(it.message, requireActivity().findViewById(R.id.rootView))
+                        }
+                    }
+
                 }
             }
         }
@@ -212,29 +232,3 @@ private sealed class Navigation {
 
 }
 
-private object Test {
-    fun getTestList(): List<Group> {
-        return listOf(
-            Group(
-                groupId = 0,
-                groupName = "First list",
-                groupColor = R.color.red
-            ),
-            Group(
-                groupId = 1,
-                groupName = "Second list",
-                groupColor = R.color.black
-            ),
-            Group(
-                groupId = 2,
-                groupName = "Third list",
-                groupColor = R.color.blue
-            ),
-            Group(
-                groupId = 3,
-                groupName = "Fourth list",
-                groupColor = R.color.purple_500
-            )
-        )
-    }
-}

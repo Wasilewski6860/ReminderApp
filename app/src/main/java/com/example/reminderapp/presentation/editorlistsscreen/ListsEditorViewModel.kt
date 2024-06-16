@@ -6,27 +6,35 @@ import androidx.lifecycle.viewModelScope
 import com.example.domain.model.Group
 import com.example.domain.use_case.DeleteGroupUseCase
 import com.example.domain.use_case.GetAllGroupsUseCase
+import com.example.reminderapp.presentation.TestData
+import com.example.reminderapp.presentation.base.UiState
+import com.example.reminderapp.presentation.mainscreen.MainUiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 
 class ListsEditorViewModel(
     private val getAllGroupsUseCase: GetAllGroupsUseCase,
-    private val deleteGroupUseCase: DeleteGroupUseCase
+    private val deleteGroupUseCase: DeleteGroupUseCase,
 ) : ViewModel() {
 
-    private val groupsListFlowData = MutableStateFlow<List<Group>>(emptyList())
-    val groupsListData get() = groupsListFlowData
+    private val _uiState = MutableStateFlow<UiState<List<Group>>>(UiState.Loading)
+    val uiState get() = _uiState
 
-    fun fetchGroupsFromDatabase() {
+    fun fetchData() {
         viewModelScope.launch {
-            getAllGroupsUseCase(Unit)
-                .catch { e ->
-                    Log.e("FETCHING DATA FROM DATABASE", e.toString())
-                }
-                .collect {
-                    groupsListFlowData.value = it
-                }
+            _uiState.value = UiState.Success(
+                TestData().getTestList()
+            )
+
+//            TODO делать так
+//            getAllGroupsUseCase(Unit)
+//                .catch { e ->
+//                    _uiState.value = UiState.Error(e.toString())
+//                }
+//                .collect {
+//                    _uiState.value = UiState.Success(it)
+//                }
         }
     }
 
@@ -36,7 +44,7 @@ class ListsEditorViewModel(
             try {
                 deleteGroupUseCase(groupId)
             } catch (e: Exception) {
-                Log.e("DELETING GROUP FROM DATABASE PROCESS", e.toString())
+                _uiState.value = UiState.Error("Не удалось удалить список")
             }
         }
     }

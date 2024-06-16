@@ -7,6 +7,8 @@ import com.example.domain.model.Task
 import com.example.domain.model.TaskPeriodType
 import com.example.domain.repository.TaskRepository
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
+import java.util.Calendar
 
 class TaskRepositoryImpl(private val taskStorage: TaskStorage) : TaskRepository {
 
@@ -28,6 +30,35 @@ class TaskRepositoryImpl(private val taskStorage: TaskStorage) : TaskRepository 
         taskStorage.getAllTasksByPeriodType(period.name)
 
     override fun getAllTasks(): Flow<List<Task>> = taskStorage.getAllTasks()
+    override fun getTasksForToday(): Flow<List<Task>> {
+        return getAllTasks().map { list->
+            list.filter { isToday(it.reminderTime) }
+        }
+    }
+
+    override fun getTasksForTodayCount(): Flow<Int> {
+        return getTasksForToday().map { list -> list.size }
+    }
+
+    override fun getTasksPlanned(): Flow<List<Task>> {
+        return getAllTasks().map { list->
+            list.filter { it.type == TaskPeriodType.ONE_TIME }
+        }
+    }
+
+    override fun getTasksPlannedCount(): Flow<Int> {
+        return getTasksPlanned().map { list -> list.size }
+    }
+
+    override fun getTasksWithFlag(): Flow<List<Task>> {
+        return getAllTasks().map { list->
+            list.filter { it.isMarkedWithFlag }
+        }
+    }
+
+    override fun getTasksWithFlagCount(): Flow<Int> {
+        return getTasksWithFlag().map { list -> list.size }
+    }
 
     override fun getAllGroups(): Flow<List<Group>> = taskStorage.getAllGroups()
 
@@ -39,5 +70,15 @@ class TaskRepositoryImpl(private val taskStorage: TaskStorage) : TaskRepository 
     override suspend fun deleteGroup(groupId: Int) {
         taskStorage.deleteGroup(groupId)
     }
+
+    fun isToday(timeInMillis: Long): Boolean {
+        val now = Calendar.getInstance()
+        val target = Calendar.getInstance()
+        target.timeInMillis = timeInMillis
+
+        return now.get(Calendar.YEAR) == target.get(Calendar.YEAR) &&
+                now.get(Calendar.DAY_OF_YEAR) == target.get(Calendar.DAY_OF_YEAR)
+    }
+
 
 }
