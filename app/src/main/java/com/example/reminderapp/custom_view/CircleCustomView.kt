@@ -5,8 +5,10 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.Paint
+import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.view.View
+import androidx.core.content.ContextCompat
 import com.example.reminderapp.R
 import kotlin.math.min
 
@@ -34,14 +36,23 @@ class CircleCustomView @JvmOverloads constructor(
         _bitmap = BitmapFactory.decodeResource(context.resources, R.drawable.clock_icon)
     }
 
-    private fun loadBitmapFromResource(context: Context, resourceId: Int) {
-        _bitmap = BitmapFactory.decodeResource(context.resources, resourceId)
-    }
-
-    var bitmap: Int
-        get() = 0
+    var bitmap: Int?
+        get() = null
         set(value) {
-            _bitmap = BitmapFactory.decodeResource(context.resources, value)
+            if (value != null) {
+                val vectorDrawable: Drawable? = ContextCompat.getDrawable(context, value)
+                vectorDrawable?.let {
+                    val bp = Bitmap.createBitmap(
+                        it.intrinsicWidth,
+                        it.intrinsicHeight,
+                        Bitmap.Config.ARGB_8888
+                        )
+                    val canvas = Canvas(bp)
+                    it.setBounds(0, 0, canvas.width, canvas.height)
+                    it.draw(canvas)
+                    _bitmap = bp
+                }
+            }
             invalidate()
         }
 

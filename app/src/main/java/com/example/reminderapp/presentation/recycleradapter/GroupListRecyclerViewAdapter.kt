@@ -23,7 +23,7 @@ class GroupListRecyclerViewAdapter(
         fun bind(item: Group) = with(binding) {
             listNameTextView.text = item.groupName
             colorCircleItem.circleColor = item.groupColor
-            colorCircleItem.bitmap = R.drawable.clock_icon
+            colorCircleItem.bitmap = R.drawable.test_image
 
             mainRecyclerViewItemHolder.setOnClickListener {
                 listener.onRcItemClick(position = adapterPosition)
