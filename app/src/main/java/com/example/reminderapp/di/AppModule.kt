@@ -41,7 +41,8 @@ val appModule = module {
 
     viewModel<MainViewModel> {
         MainViewModel(
-            getAllGroupsUseCase = get()
+            getAllGroupsUseCase = get(),
+            getAllTasksUseCase = get()
         )
     }
 
@@ -61,7 +62,8 @@ val appModule = module {
 
     viewModel<ReminderListViewModel> {
         ReminderListViewModel(
-            getGroupWithTasksUseCase = get()
+            getGroupWithTasksUseCase = get(),
+            getAllTasksUseCase = get()
         )
     }
 

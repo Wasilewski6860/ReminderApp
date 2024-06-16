@@ -49,4 +49,10 @@ class GridItemCustomView @JvmOverloads constructor(
         }
     }
 
+    var counterTitle: String
+        get() = counterTextView.text.toString()
+        set(value) {
+            counterTextView.text = value
+        }
+
 }

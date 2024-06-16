@@ -1,11 +1,14 @@
 package com.example.reminderapp.custom_view
 
 import android.content.Context
+import android.graphics.Bitmap
 import android.graphics.Canvas
+import android.graphics.Color
 import android.graphics.Paint
+import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.view.View
-import com.example.reminderapp.R
+import androidx.core.content.ContextCompat
 import kotlin.math.min
 
 class CircleCustomView @JvmOverloads constructor(
@@ -14,8 +17,10 @@ class CircleCustomView @JvmOverloads constructor(
     defStyle: Int = 0
 ) : View(context, attrs, defStyle) {
 
+    private var _bitmap: Bitmap? = null
+
     private var paint: Paint = Paint().apply {
-        color = context.getColor(R.color.red)
+        color = Color.TRANSPARENT
         style = Paint.Style.FILL
     }
 
@@ -26,9 +31,46 @@ class CircleCustomView @JvmOverloads constructor(
             invalidate()
         }
 
+    /**
+     * Use that value to set image drawable to this view element
+     * Vector asset size need be 25dp x 25dp or less to display the image correctly
+     * Usage example:
+     * val circleView = findViewById<CircleCustomView>(R.id.my_circle_view)
+     * circleView.bitmap = R.drawable.my_vector_asset
+     * **/
+    var bitmap: Int?
+        get() = null
+        set(value) {
+            if (value != null) {
+                val vectorDrawable: Drawable? = ContextCompat.getDrawable(context, value)
+                vectorDrawable?.let {
+                    val bp = Bitmap.createBitmap(
+                        it.intrinsicWidth,
+                        it.intrinsicHeight,
+                        Bitmap.Config.ARGB_8888
+                        )
+                    val canvas = Canvas(bp)
+                    it.setBounds(0, 0, canvas.width, canvas.height)
+                    it.draw(canvas)
+                    _bitmap = bp
+                }
+            }
+            invalidate()
+        }
+
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
+
         canvas.drawCircle(width / 2f, height / 2f, min(width, height) / 2f, paint)
+
+        if (_bitmap != null) {
+            canvas.drawBitmap(
+                _bitmap!!,
+                width / 2f - _bitmap!!.width / 2f,
+                height / 2f - _bitmap!!.height / 2f,
+                null
+            )
+        }
     }
 
 }

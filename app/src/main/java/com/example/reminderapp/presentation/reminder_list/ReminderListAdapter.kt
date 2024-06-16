@@ -6,26 +6,19 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import androidx.transition.Visibility
 import com.example.domain.model.Task
 import com.example.domain.model.TaskPeriodType
 import com.example.reminderapp.databinding.ReminderItemBinding
-import com.example.reminderapp.notification.NotificationManager
 import com.example.reminderapp.utils.TimeDateUtils
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
-import java.text.DecimalFormat
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
-import java.util.concurrent.TimeUnit
 
 class ReminderListAdapter(
     private val onItemClickListener: OnItemClickListener,
     private val onSwitchClickListener: OnSwitchClickListener
 ) : ListAdapter<Task, ReminderListAdapter.TaskViewHolder>(DiffCallBack), KoinComponent {
 
-    val timeDateUtils : TimeDateUtils by inject()
+    private val timeDateUtils : TimeDateUtils by inject()
 
     class TaskViewHolder(val binding: ReminderItemBinding) :
         RecyclerView.ViewHolder(binding.root)
@@ -51,13 +44,12 @@ class ReminderListAdapter(
                 onItemClickListener.onClickItem(item)
             }
 
-            switchIsActive.setOnCheckedChangeListener { view, isChecked ->
+            switchIsActive.setOnCheckedChangeListener { _, isChecked ->
                 onSwitchClickListener.onClickItem(item, isChecked)
             }
         }
 
     }
-
 
     interface OnItemClickListener {
         fun onClickItem(task: Task)

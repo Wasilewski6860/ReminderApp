@@ -1,5 +1,6 @@
 package com.example.reminderapp.presentation.recycleradapter
 
+import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
@@ -7,6 +8,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.domain.model.Group
 import com.example.reminderapp.R
+import com.example.reminderapp.animations.playRecyclerItemDeletingAnimation
 import com.example.reminderapp.databinding.ListItemRecyclerBinding
 
 class GroupListRecyclerViewAdapter(
@@ -22,6 +24,10 @@ class GroupListRecyclerViewAdapter(
         fun bind(item: Group) = with(binding) {
             listNameTextView.text = item.groupName
             colorCircleItem.circleColor = item.groupColor
+            /**
+             *  Use there image setting like this:
+             * colorCircleItem.bitmap = item.image
+             * **/
 
             mainRecyclerViewItemHolder.setOnClickListener {
                 listener.onRcItemClick(position = adapterPosition)
@@ -32,7 +38,11 @@ class GroupListRecyclerViewAdapter(
                     false -> this.visibility = View.GONE
                     else -> this.visibility = View.VISIBLE
                 }
-                setOnClickListener { listener.onDeleteIconClick(position = adapterPosition) }
+                setOnClickListener {
+                    playRecyclerItemDeletingAnimation(mainRecyclerViewItemHolder) {
+                        listener.onDeleteIconClick(position = adapterPosition)
+                    }
+                }
             }
         }
     }
@@ -71,8 +81,8 @@ class GroupListRecyclerViewAdapter(
         notifyItemRemoved(position)
     }
 
-    fun collectInfo(position: Int): Group {
-        return groupsList[position]
-    }
+    fun collectInfo(position: Int): Group = groupsList[position]
+
+    fun getGroupId(position: Int): Int = groupsList[position].groupId
 
 }

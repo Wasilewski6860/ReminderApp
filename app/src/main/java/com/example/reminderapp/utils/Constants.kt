@@ -16,4 +16,7 @@ object Constants {
     const val SERVICE_NAME = "REMINDER_SERVICE"
     const val ACTION_CANCEL_PENDING_INTENT_ID = 1
     const val ACTION_POSTPONE_PENDING_INTENT_ID = 14
+
+    /** Constants for bundle **/
+    const val GROUP_ID = "group_id"
 }

@@ -36,7 +36,6 @@ import com.example.reminderapp.reminder.RemindAlarmManager
 import com.example.reminderapp.utils.ColorItem
 import com.example.reminderapp.utils.ColorsUtils
 import com.example.reminderapp.utils.Constants
-import com.example.reminderapp.utils.Constants.GROUP_KEY
 import com.example.reminderapp.utils.TimeDateUtils
 import com.example.reminderapp.utils.setFocus
 import com.example.reminderapp.utils.showSnackbar
