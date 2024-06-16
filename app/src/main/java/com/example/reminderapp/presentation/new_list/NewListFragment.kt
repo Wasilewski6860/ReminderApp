@@ -47,11 +47,13 @@ class NewListFragment : Fragment(), MenuProvider, BackActionInterface, DataRecei
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentNewListBinding.inflate(layoutInflater, container, false)
+
         val activity = (activity as MainActivity)
         activity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
         activity.setToolbarTitleAndTitleColor("Добавить список")
+
         callback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 navigateBack()
@@ -72,7 +74,6 @@ class NewListFragment : Fragment(), MenuProvider, BackActionInterface, DataRecei
 
         setupRecyclerView()
         colorListAdapter.submitList(ColorsUtils(requireContext()).onlyColors)
-
     }
 
     private fun setupRecyclerView() = binding.colorsRv.apply {

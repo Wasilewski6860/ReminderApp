@@ -23,6 +23,7 @@ import com.example.reminderapp.presentation.editorlistsscreen.EditListsScreenFra
 import com.example.reminderapp.presentation.navigation.FragmentNavigationConstants
 import com.example.reminderapp.presentation.new_list.NewListFragment
 import com.example.reminderapp.presentation.recycleradapter.GroupListRecyclerViewAdapter
+import com.example.reminderapp.presentation.reminder_list.ReminderListFragment
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -104,7 +105,7 @@ class MainFragment : Fragment() {
                     Navigation.ToCreateReminderFragment -> CreateReminderFragment()
                     Navigation.ToNewListFragment -> NewListFragment()
                     Navigation.ToEditListsFragment -> EditListsScreenFragment()
-                    Navigation.ToTasksListFragment -> MainFragment() // TODO replace this with needed fragment
+                    Navigation.ToReminderListFragment -> ReminderListFragment() // TODO replace this with needed fragment
                 }
             )
             .apply {
@@ -117,16 +118,16 @@ class MainFragment : Fragment() {
     private fun gridLayoutItemsInit() = with(binding) {
         topGridLayout.apply {
             currentDayTasksItem.setOnClickListener {
-                navigate(Navigation.ToTasksListFragment)
+                navigate(Navigation.ToReminderListFragment)
             }
             plannedTasksItem.setOnClickListener {
-                navigate(Navigation.ToTasksListFragment)
+                navigate(Navigation.ToReminderListFragment)
             }
             allTasksItem.setOnClickListener {
-                navigate(Navigation.ToTasksListFragment)
+                navigate(Navigation.ToReminderListFragment)
             }
             tasksWithFlagItem.setOnClickListener {
-                navigate(Navigation.ToTasksListFragment)
+                navigate(Navigation.ToReminderListFragment)
             } // TODO add data collection methods
         }
     }
@@ -145,7 +146,7 @@ class MainFragment : Fragment() {
             override fun onRcItemClick(position: Int) {
                 /** Transition on TasksListFragment */
                 /** And add data to this transaction */
-                navigate(Navigation.ToTasksListFragment)
+                navigate(Navigation.ToReminderListFragment)
             }
             override fun onDeleteIconClick(position: Int) {
                 /** STUB **/
@@ -177,7 +178,7 @@ private sealed class Navigation {
 
     object ToNewListFragment : Navigation()
 
-    object ToTasksListFragment : Navigation()
+    object ToReminderListFragment : Navigation()
 
 }
 
