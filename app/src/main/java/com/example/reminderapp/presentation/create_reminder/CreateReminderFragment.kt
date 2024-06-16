@@ -208,6 +208,7 @@ class CreateReminderFragment : Fragment(), MenuProvider, BackActionInterface, Da
                             binding.loadingLayout.visibility = View.GONE
                             showSnackbar(it.message, requireActivity().findViewById(R.id.rootView))
                         }
+                        else -> Unit
                     }
                 }
             }

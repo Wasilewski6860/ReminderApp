@@ -22,7 +22,6 @@ class MainActivity : AppCompatActivity() {
         val toolbar: MaterialToolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayShowTitleEnabled(false)
-        enableEdgeToEdge()
     }
 
     override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {

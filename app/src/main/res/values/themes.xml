@@ -20,6 +20,10 @@
         <item name="android:background">#FFFFFF</item>
     </style>
 
+    <style name="CardContainerStyle">
+        <item name="cardBackgroundColor">#FFFFFF</item>
+    </style>
+
     <style name="ClickableTextStyle">
         <item name="android:textColor">@color/link_color</item>
     </style>
@@ -31,6 +35,10 @@
     </style>
 
     <style name="LayoutWithMiddleDividersMainContainer" parent="MainContainerStyle">
+        <item name="android:paddingHorizontal">@dimen/margin_start_text</item>
+    </style>
+
+    <style name="CardWithMiddleDividersMainContainer" parent="CardContainerStyle">
         <item name="android:paddingHorizontal">@dimen/margin_start_text</item>
     </style>
 
@@ -47,6 +55,10 @@
 
     <style name="BaseItemTextStyle">
         <item name="android:textSize">@dimen/normal_item_text_size</item>
+    </style>
+
+    <style name="ArrowImageStyle">
+        <item name="tint">@dimen/normal_item_text_size</item>
     </style>
 
     <style name="SubheadItemTextStyle" parent="BaseItemTextStyle">
