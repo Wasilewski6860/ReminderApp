@@ -147,6 +147,8 @@ class ReminderListFragment : Fragment(), DataReceiving {
     override fun receiveData() {
         arguments?.let {
             Log.d("Test", it.getInt(Constants.GROUP_ID).toString())
+
+
         }
     }
 
