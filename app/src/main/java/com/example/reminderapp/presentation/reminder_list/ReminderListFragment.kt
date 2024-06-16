@@ -1,32 +1,25 @@
 package com.example.reminderapp.presentation.reminder_list
 
-import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.domain.model.Group
 import com.example.domain.model.Task
 import com.example.reminderapp.MainActivity
 import com.example.reminderapp.R
-import com.example.reminderapp.databinding.FragmentCreateReminderBinding
 import com.example.reminderapp.databinding.FragmentReminderListBinding
 import com.example.reminderapp.presentation.base.UiState
 import com.example.reminderapp.presentation.create_reminder.CreateReminderFragment
-import com.example.reminderapp.presentation.mainscreen.MainFragment
-import com.example.reminderapp.presentation.recycleradapter.GroupListRecyclerViewAdapter
 import com.example.reminderapp.reminder.RemindAlarmManager
 import com.example.reminderapp.reminder.work.RemindWorkManager
 import com.example.reminderapp.utils.Constants.GROUP_KEY
 import com.example.reminderapp.utils.Constants.TASK_KEY
 import com.example.reminderapp.utils.showSnackbar
-import com.google.android.material.appbar.MaterialToolbar
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -46,7 +39,7 @@ class ReminderListFragment : Fragment() {
 
     private val viewModel: ReminderListViewModel by viewModel()
 
-    var groupId: Int = -1
+    private var groupId: Int = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,22 +58,19 @@ class ReminderListFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentReminderListBinding.inflate(layoutInflater, container, false)
 
         val activity = (activity as MainActivity)
-        return binding.root
-    }
 
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
         viewModel.fetchGroupWithTasks(groupId)
         setupRecyclerView()
         setupObservers()
+
+        return binding.root
     }
 
-    fun setupObservers() {
+    private fun setupObservers() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiState.collect {

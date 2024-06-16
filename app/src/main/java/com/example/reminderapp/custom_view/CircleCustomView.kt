@@ -2,14 +2,13 @@ package com.example.reminderapp.custom_view
 
 import android.content.Context
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.graphics.Canvas
+import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.view.View
 import androidx.core.content.ContextCompat
-import com.example.reminderapp.R
 import kotlin.math.min
 
 class CircleCustomView @JvmOverloads constructor(
@@ -18,10 +17,10 @@ class CircleCustomView @JvmOverloads constructor(
     defStyle: Int = 0
 ) : View(context, attrs, defStyle) {
 
-    private var _bitmap: Bitmap
+    private var _bitmap: Bitmap? = null
 
     private var paint: Paint = Paint().apply {
-        color = context.getColor(R.color.red)
+        color = Color.TRANSPARENT
         style = Paint.Style.FILL
     }
 
@@ -32,10 +31,13 @@ class CircleCustomView @JvmOverloads constructor(
             invalidate()
         }
 
-    init {
-        _bitmap = BitmapFactory.decodeResource(context.resources, R.drawable.clock_icon)
-    }
-
+    /**
+     * Use that value to set image drawable to this view element
+     * Vector asset size need be 25dp x 25dp or less to display the image correctly
+     * Usage example:
+     * val circleView = findViewById<CircleCustomView>(R.id.my_circle_view)
+     * circleView.bitmap = R.drawable.my_vector_asset
+     * **/
     var bitmap: Int?
         get() = null
         set(value) {
@@ -61,12 +63,14 @@ class CircleCustomView @JvmOverloads constructor(
 
         canvas.drawCircle(width / 2f, height / 2f, min(width, height) / 2f, paint)
 
-        canvas.drawBitmap(
-            _bitmap,
-            width / 2f - _bitmap.width / 2f,
-            height / 2f - _bitmap.height / 2f,
-            null
-        )
+        if (_bitmap != null) {
+            canvas.drawBitmap(
+                _bitmap!!,
+                width / 2f - _bitmap!!.width / 2f,
+                height / 2f - _bitmap!!.height / 2f,
+                null
+            )
+        }
     }
 
 }

@@ -1,6 +1,5 @@
 package com.example.reminderapp.presentation.new_list
 
-import androidx.fragment.app.viewModels
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -23,22 +22,15 @@ import com.example.reminderapp.presentation.new_list.adapter.ColorListAdapter
 import com.example.reminderapp.presentation.new_list.adapter.ColorListItemDecoration
 import com.example.reminderapp.utils.ColorItem
 import com.example.reminderapp.utils.ColorsUtils
-import com.google.android.material.appbar.MaterialToolbar
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class NewListFragment : Fragment(), MenuProvider, BackActionInterface, DataReceiving {
-
-
-    companion object {
-        fun newInstance() = NewListFragment()
-    }
 
     private var _binding: FragmentNewListBinding? = null
     private val binding get() = _binding!!
     private lateinit var colorListAdapter: ColorListAdapter
 
     private lateinit var callback: OnBackPressedCallback
-
 
     private val viewModel: NewListViewModel by viewModel()
 
@@ -61,19 +53,15 @@ class NewListFragment : Fragment(), MenuProvider, BackActionInterface, DataRecei
         }
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
 
+        setupRecyclerView()
+        colorListAdapter.submitList(ColorsUtils(requireContext()).onlyColors)
+
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         requireActivity().addMenuProvider(this, viewLifecycleOwner , Lifecycle.State.RESUMED)
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-
-        setupRecyclerView()
-        colorListAdapter.submitList(ColorsUtils(requireContext()).onlyColors)
     }
 
     private fun setupRecyclerView() = binding.colorsRv.apply {

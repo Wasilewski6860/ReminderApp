@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.domain.model.Group
 import com.example.reminderapp.R
-import com.example.reminderapp.custom_view.CircleCustomView
 import com.example.reminderapp.databinding.ListItemRecyclerBinding
 
 class GroupListRecyclerViewAdapter(
@@ -23,7 +22,10 @@ class GroupListRecyclerViewAdapter(
         fun bind(item: Group) = with(binding) {
             listNameTextView.text = item.groupName
             colorCircleItem.circleColor = item.groupColor
-            colorCircleItem.bitmap = R.drawable.test_image
+            /**
+             *  Use there image setting like this:
+             * colorCircleItem.bitmap = item.image
+             * **/
 
             mainRecyclerViewItemHolder.setOnClickListener {
                 listener.onRcItemClick(position = adapterPosition)
