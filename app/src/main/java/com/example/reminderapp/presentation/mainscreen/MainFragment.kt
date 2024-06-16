@@ -24,6 +24,7 @@ import com.example.reminderapp.presentation.navigation.FragmentNavigationConstan
 import com.example.reminderapp.presentation.new_list.NewListFragment
 import com.example.reminderapp.presentation.recycleradapter.GroupListRecyclerViewAdapter
 import com.example.reminderapp.presentation.reminder_list.ReminderListFragment
+import com.example.reminderapp.utils.Constants
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -105,7 +106,7 @@ class MainFragment : Fragment() {
                     Navigation.ToCreateReminderFragment -> CreateReminderFragment()
                     Navigation.ToNewListFragment -> NewListFragment()
                     Navigation.ToEditListsFragment -> EditListsScreenFragment()
-                    Navigation.ToReminderListFragment -> ReminderListFragment() // TODO replace this with needed fragment
+                    Navigation.ToReminderListFragment -> ReminderListFragment()
                 }
             )
             .apply {
@@ -117,18 +118,43 @@ class MainFragment : Fragment() {
 
     private fun gridLayoutItemsInit() = with(binding) {
         topGridLayout.apply {
-            currentDayTasksItem.setOnClickListener {
-                navigate(Navigation.ToReminderListFragment)
+            currentDayTasksItem.apply {
+                counterTitle = viewModel.todayReminders
+                setOnClickListener {
+                    val bundle = Bundle().apply {
+
+                    }
+                    navigate(Navigation.ToReminderListFragment)
+                }
             }
-            plannedTasksItem.setOnClickListener {
-                navigate(Navigation.ToReminderListFragment)
+            plannedTasksItem.apply {
+                counterTitle = viewModel.plannedReminders
+                setOnClickListener {
+                    val bundle = Bundle().apply {
+
+                    }
+                    navigate(Navigation.ToReminderListFragment)
+                }
             }
-            allTasksItem.setOnClickListener {
-                navigate(Navigation.ToReminderListFragment)
+            allTasksItem.apply {
+                counterTitle = viewModel.allReminders
+                setOnClickListener {
+                    val bundle = Bundle().apply {
+
+                    }
+                    navigate(Navigation.ToReminderListFragment)
+                }
             }
-            tasksWithFlagItem.setOnClickListener {
-                navigate(Navigation.ToReminderListFragment)
-            } // TODO add data collection methods
+            tasksWithFlagItem.apply {
+                counterTitle = viewModel.remindersWithFlag
+                setOnClickListener {
+                    val bundle = Bundle().apply {
+
+                    }
+                    navigate(Navigation.ToReminderListFragment)
+                }
+            }
+            // TODO add today tasks data collection method in viewModel
         }
     }
 
@@ -146,7 +172,10 @@ class MainFragment : Fragment() {
             override fun onRcItemClick(position: Int) {
                 /** Transition on TasksListFragment */
                 /** And add data to this transaction */
-                navigate(Navigation.ToReminderListFragment)
+                val bundle = Bundle().apply {
+                    putInt(Constants.GROUP_ID, adapter.getGroupId(position))
+                }
+                navigate(Navigation.ToReminderListFragment, bundle)
             }
             override fun onDeleteIconClick(position: Int) {
                 /** STUB **/
@@ -159,6 +188,7 @@ class MainFragment : Fragment() {
 
     private fun setupObserver() {
         viewModel.fetchTaskGroups()
+        viewModel.getAllTasks()
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.groupsListData.collect {
@@ -191,17 +221,17 @@ private object Test {
                 groupColor = R.color.red
             ),
             Group(
-                groupId = 0,
+                groupId = 1,
                 groupName = "Second list",
                 groupColor = R.color.black
             ),
             Group(
-                groupId = 0,
+                groupId = 2,
                 groupName = "Third list",
                 groupColor = R.color.blue
             ),
             Group(
-                groupId = 0,
+                groupId = 3,
                 groupName = "Fourth list",
                 groupColor = R.color.purple_500
             )

@@ -1,6 +1,7 @@
 package com.example.reminderapp.presentation.reminder_list
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -15,8 +16,10 @@ import com.example.reminderapp.R
 import com.example.reminderapp.databinding.FragmentReminderListBinding
 import com.example.reminderapp.presentation.base.UiState
 import com.example.reminderapp.presentation.create_reminder.CreateReminderFragment
+import com.example.reminderapp.presentation.interfaces.DataReceiving
 import com.example.reminderapp.reminder.RemindAlarmManager
 import com.example.reminderapp.reminder.work.RemindWorkManager
+import com.example.reminderapp.utils.Constants
 import com.example.reminderapp.utils.Constants.GROUP_KEY
 import com.example.reminderapp.utils.Constants.TASK_KEY
 import com.example.reminderapp.utils.showSnackbar
@@ -24,7 +27,7 @@ import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class ReminderListFragment : Fragment() {
+class ReminderListFragment : Fragment(), DataReceiving {
 
     companion object {
         fun newInstance() = ReminderListFragment()
@@ -67,6 +70,8 @@ class ReminderListFragment : Fragment() {
         setupRecyclerView()
         setupObservers()
 
+        receiveData()
+
         return binding.root
     }
 
@@ -95,6 +100,13 @@ class ReminderListFragment : Fragment() {
                             showSnackbar(it.message, requireActivity().findViewById(R.id.rootView))
                         }
                     }
+                }
+            }
+        }
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.tasksList.collect {
+                    // TODO add this data to adapter
                 }
             }
         }
@@ -130,6 +142,12 @@ class ReminderListFragment : Fragment() {
         )
         adapter = reminderAdapter
         layoutManager = LinearLayoutManager(requireContext())
+    }
+
+    override fun receiveData() {
+        arguments?.let {
+            Log.d("Test", it.getInt(Constants.GROUP_ID).toString())
+        }
     }
 
 }
