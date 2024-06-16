@@ -2,6 +2,7 @@
     <string name="app_name">ReminderApp</string>
     <string name="enter_reminder_name">Enter reminder</string>
     <string name="stub" translatable="false">STUB!</string>
+    <string name="count_stub" translatable="false">1</string>
     <string name="enter_reminder_description">Enter reminder description</string>
     <string name="periodic_reminder">Periodic reminder</string>
     <string name="onetime_reminder">One time reminder</string>
@@ -21,40 +22,40 @@
     <string name="day_3">3 Days</string>
     <string name="week">Week</string>
     <string name="month">Month</string>
-    <string name="reminder_name_et_hint">Название</string>
-    <string name="reminder_desc_et_hint">Описание</string>
-    <string name="reminder_remind_time_text">Напомнить в день</string>
-    <string name="reminder_date_tv_text">Дата</string>
-    <string name="remider_list_text">Список</string>
-    <string name="reminder_date_value_tv_text">вт 18 июн. 2024 г. 8:25 AM</string>
-    <string name="reminder_repeat_tv_text">Повтор</string>
-    <string name="reminder_flag_tv_text">Флаг</string>
-    <string name="reminder_color_text">Цвет</string>
-    <string name="not_selected_color_list_item">Не выбран</string>
-    <string name="red_color_list_item">Красный</string>
-    <string name="orange_color_list_item">Оранжевый</string>
-    <string name="light_blue_color_list_item">Голубой</string>
-    <string name="blue_color_list_item">Синий</string>
-    <string name="dark_blue_color_list_item">Темно-синий</string>
-    <string name="light_green_color_list_item">Светнло-зеленый</string>
-    <string name="green_color_list_item">Зеленый</string>
-    <string name="dark_green_color_list_item">Темно-зеленый</string>
-    <string name="yellow_color_list_item">Желтый</string>
-    <string name="violet_color_list_item">Фиолетовый</string>
-    <string name="light_purple_color_list_item">Светло-фиолетовый</string>
-    <string name="purple_color_list_item">Фиолетовый</string>
-    <string name="dark_purple_color_list_item">Темно-фиолетовый</string>
-    <string name="never_time_list_item">Никогда</string>
-    <string name="five_min_time_list_item">Каждые 5 минут</string>
-    <string name="every_15_min_time_list_item">Каждые 15 минут</string>
-    <string name="every_30_min_time_list_item">Каждые полчаса</string>
-    <string name="every_hour_time_list_item">Каждый час</string>
-    <string name="every_12_hours_time_list_item">Каждые 12 часов</string>
-    <string name="every_day_time_list_item">Ежедневно</string>
-    <string name="every_week_time_list_item">Еженедельно</string>
-    <string name="every_month_time_list_item">Ежемесячно</string>
-    <string name="every_6_month_time_list_item">Каждые полгода</string>
-    <string name="every_year_time_list_item">Ежегодно</string>
+    <string name="reminder_name_et_hint">Name</string>
+    <string name="reminder_desc_et_hint">Description</string>
+    <string name="reminder_remind_time_text">Remind me on the day</string>
+    <string name="reminder_date_tv_text">Date</string>
+    <string name="remider_list_text">List</string>
+    <string name="reminder_date_value_tv_text">tue 18 jul. 2024 г. 8:25 AM</string>
+    <string name="reminder_repeat_tv_text">Repeat</string>
+    <string name="reminder_flag_tv_text">Flag</string>
+    <string name="reminder_color_text">Color</string>
+    <string name="not_selected_color_list_item">Not selected</string>
+    <string name="red_color_list_item">Red</string>
+    <string name="orange_color_list_item">Orange</string>
+    <string name="light_blue_color_list_item">Cyan</string>
+    <string name="blue_color_list_item">Blue</string>
+    <string name="dark_blue_color_list_item">Dark-blue</string>
+    <string name="light_green_color_list_item">Light-green</string>
+    <string name="green_color_list_item">Green</string>
+    <string name="dark_green_color_list_item">Dark-green</string>
+    <string name="yellow_color_list_item">Yellow</string>
+    <string name="violet_color_list_item">Purple</string>
+    <string name="light_purple_color_list_item">Light-purple</string>
+    <string name="purple_color_list_item">Purple</string>
+    <string name="dark_purple_color_list_item">Dark-purple</string>
+    <string name="never_time_list_item">Never</string>
+    <string name="five_min_time_list_item">Every 5 minutes</string>
+    <string name="every_15_min_time_list_item">Every 15 minutes</string>
+    <string name="every_30_min_time_list_item">Every half hour</string>
+    <string name="every_hour_time_list_item">Every hour</string>
+    <string name="every_12_hours_time_list_item">Every 12 hours</string>
+    <string name="every_day_time_list_item">Every day</string>
+    <string name="every_week_time_list_item">Every week</string>
+    <string name="every_month_time_list_item">Every month</string>
+    <string name="every_6_month_time_list_item">Every 6 months</string>
+    <string name="every_year_time_list_item">Every year</string>
     <!--    -->
 
     <string-array name="time_options">
@@ -76,5 +77,6 @@
     <string name="planned">Planned</string>
     <string name="all">All</string>
     <string name="with_flag">With flag</string>
+    <string name="my_lists">My lists</string>
 
 </resources>

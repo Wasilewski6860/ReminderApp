@@ -4,8 +4,10 @@
     <color name="white">#FFFFFFFF</color>
 
     <color name="windowBackgroundDay">#F0F0F0</color>
+    <color name="windowBackgroundNight">#000000</color>
     <color name="subheadTextColorDay">#39403F3F</color>
     <color name="boxStrokeColor">#DCDCDC</color>
+    <color name="boxStrokeColorNignt">#606060</color>
 
     <color name="purple_500">#FF6200EE</color>
 <!--  Temp colors for spinner tests  -->

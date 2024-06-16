@@ -11,7 +11,7 @@
         android:id="@+id/topItemsScrollViewHolder"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="3">
+        android:layout_weight="2.5">
 
         <GridLayout
             android:id="@+id/topGridLayout"
@@ -27,7 +27,7 @@
                 android:layout_row="0"
                 android:layout_column="0"
                 android:layout_columnWeight="1"
-                app:gridCounterText="@string/stub"
+                app:gridCounterText="@string/count_stub"
                 app:gridImage="@drawable/sand_clock_icon"
                 app:gridTitleText="@string/current_day" />
 
@@ -37,7 +37,7 @@
                 android:layout_row="0"
                 android:layout_column="1"
                 android:layout_columnWeight="1"
-                app:gridCounterText="@string/stub"
+                app:gridCounterText="@string/count_stub"
                 app:gridImage="@drawable/clock_icon"
                 app:gridTitleText="@string/planned" />
 
@@ -47,7 +47,7 @@
                 android:layout_row="1"
                 android:layout_column="0"
                 android:layout_columnWeight="1"
-                app:gridCounterText="@string/stub"
+                app:gridCounterText="@string/count_stub"
                 app:gridImage="@drawable/folder_icon"
                 app:gridTitleText="@string/all" />
 
@@ -57,7 +57,7 @@
                 android:layout_row="1"
                 android:layout_column="1"
                 android:layout_columnWeight="1"
-                app:gridCounterText="@string/stub"
+                app:gridCounterText="@string/count_stub"
                 app:gridImage="@drawable/flag_icon_black"
                 app:gridTitleText="@string/with_flag" />
 
@@ -70,7 +70,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingTop="30dp">
 
         <LinearLayout
             android:id="@+id/listTitleHolder"
@@ -85,7 +86,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:paddingHorizontal="10dp"
-                android:text="My lists"
+                android:text="Мои списки"
+                android:textStyle="bold"
                 android:textSize="20sp" />
 
             <ImageView
@@ -127,8 +129,9 @@
             android:layout_weight="1"
             android:paddingHorizontal="20dp"
             android:paddingVertical="10dp"
-            android:text="Change"
-            android:textSize="20sp" />
+            android:text="Изменить"
+            android:textSize="@dimen/list_item_normal_text_size"
+            android:textStyle="bold"/>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/addTaskButton"
@@ -149,8 +152,9 @@
             android:gravity="end"
             android:paddingHorizontal="20dp"
             android:paddingVertical="10dp"
-            android:text="Add list"
-            android:textSize="20sp" />
+            android:text="Доб.список"
+            android:textStyle="bold"
+            android:textSize="@dimen/list_item_normal_text_size" />
 
     </LinearLayout>
 
