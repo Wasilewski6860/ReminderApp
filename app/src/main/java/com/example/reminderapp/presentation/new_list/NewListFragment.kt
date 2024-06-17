@@ -1,7 +1,7 @@
 package com.example.reminderapp.presentation.new_list
 
-import android.media.Image
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.Menu
@@ -19,12 +19,9 @@ import com.example.reminderapp.R
 import com.example.reminderapp.presentation.interfaces.BackActionInterface
 import com.example.reminderapp.presentation.interfaces.DataReceiving
 import com.example.reminderapp.databinding.FragmentNewListBinding
-import com.example.reminderapp.presentation.new_list.adapter.ColorListAdapter
-import com.example.reminderapp.presentation.new_list.adapter.ImageListAdapter
 import com.example.reminderapp.presentation.new_list.adapter.ListItemDecoration
-import com.example.reminderapp.utils.ColorItem
+import com.example.reminderapp.presentation.new_list.adapter.NewListAdapter
 import com.example.reminderapp.utils.ColorsUtils
-import com.example.reminderapp.utils.ImageItem
 import com.example.reminderapp.utils.ImageUtils
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -32,21 +29,24 @@ class NewListFragment : Fragment(), MenuProvider, BackActionInterface, DataRecei
 
     private var _binding: FragmentNewListBinding? = null
     private val binding get() = _binding!!
-    private lateinit var colorListAdapter: ColorListAdapter
-    private lateinit var imageListAdapter: ImageListAdapter
 
     private lateinit var callback: OnBackPressedCallback
 
     private val viewModel: NewListViewModel by viewModel()
 
-    var selectedColor: Int? = null
+    private var selectedColor: Int? = null
     var selectedImage: Int? = null
+
+    private lateinit var adapter: NewListAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentNewListBinding.inflate(layoutInflater, container, false)
+
+        selectedColor = ColorsUtils(requireContext()).colors[0].color
+        selectedColor?.let { binding.selectedColorIv.circleColor = it }
 
         val activity = (activity as MainActivity)
         activity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -60,8 +60,6 @@ class NewListFragment : Fragment(), MenuProvider, BackActionInterface, DataRecei
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
 
         setupRecyclerView()
-        colorListAdapter.submitList(ColorsUtils(requireContext()).onlyColors)
-        imageListAdapter.submitList(ImageUtils(requireContext()).onlyImages)
 
         return binding.root
     }
@@ -72,30 +70,34 @@ class NewListFragment : Fragment(), MenuProvider, BackActionInterface, DataRecei
     }
 
     private fun setupRecyclerView() = binding.apply {
-        colorListAdapter = ColorListAdapter(
-            onItemClickListener = object : ColorListAdapter.OnItemClickListener {
-                override fun onClickItem(colorItem: ColorItem) {
-                    selectedColor = colorItem.color
-                    colorItem.color?.let {
-                        binding.selectedColorIv.circleColor = it
+        val colorsList = ColorsUtils(requireContext()).onlyColors
+        val imagesList = ImageUtils(requireContext()).onlyImages
+
+        adapter = NewListAdapter(
+            object : NewListAdapter.OnItemClickListener {
+                override fun onItemClick(position: Int) {
+                    if (position < ColorsUtils(requireContext()).colorsListSize)
+                        colorsList[position].color?.let {
+                            selectedColorIv.circleColor = it
+                        }
+                    else {
+                        imagesList[position - colorsList.size].image?.let { selectedItem ->
+                            
+                            Log.d("selected: ", selectedItem.toString())
+                            Log.d("inflated: ", selectedColorIv.bitmap.toString())
+
+                            if (selectedColorIv.bitmap == selectedItem) {
+                                selectedColorIv.bitmap = null
+                            } else {
+                                selectedColorIv.bitmap = selectedItem
+                            }
+                        }
                     }
                 }
-            }
-        )
-        colorsRv.adapter = colorListAdapter
+            }, requireContext())
+        colorsRv.adapter = adapter
         colorsRv.layoutManager = GridLayoutManager(requireContext(), 6)
         colorsRv.addItemDecoration(ListItemDecoration(6, 50, true))
-
-        imageListAdapter = ImageListAdapter(
-            object : ImageListAdapter.OnItemClickListener {
-                override fun onClickItem(imageItem: ImageItem) {
-                    selectedImage = imageItem.image
-                }
-            }
-        )
-        imagesRecyclerView.adapter = imageListAdapter
-        imagesRecyclerView.layoutManager = GridLayoutManager(requireContext(), 6)
-        imagesRecyclerView.addItemDecoration(ListItemDecoration(6, 50, true))
     }
 
     override fun onDestroyView() {

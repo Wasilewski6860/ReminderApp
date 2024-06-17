@@ -82,6 +82,8 @@ class ImageUtils(context: Context) {
 
     val onlyImages: List<ImageItem>
         get() = images.filter { it.image != null }
+
+    val imagesListSize get() = images.size
 }
 
 data class ImageItem(

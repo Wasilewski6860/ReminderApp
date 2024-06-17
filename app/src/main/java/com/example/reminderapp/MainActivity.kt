@@ -5,9 +5,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MotionEvent
 import android.widget.EditText
-import androidx.activity.enableEdgeToEdge
 import com.example.reminderapp.databinding.ActivityMainBinding
-import com.example.reminderapp.objects.KeyboardUtils
+import com.example.reminderapp.utils.KeyboardUtils
 import com.google.android.material.appbar.MaterialToolbar
 
 class MainActivity : AppCompatActivity() {
