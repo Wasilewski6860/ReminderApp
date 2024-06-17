@@ -1,75 +1,113 @@
 package com.example.reminderapp.presentation.reminder_list
 
+import android.app.Application
+import android.content.Context
 import android.util.Log
+import androidx.core.content.ContextCompat
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.domain.model.Group
 import com.example.domain.model.GroupWithTasks
 import com.example.domain.model.Task
 import com.example.domain.model.TaskPeriodType
 import com.example.domain.use_case.GetAllTasksUseCase
 import com.example.domain.use_case.GetGroupWithTasksUseCase
+import com.example.domain.use_case.GetPlannedTasksUseCase
+import com.example.domain.use_case.GetTasksForTodayUseCase
+import com.example.domain.use_case.GetTasksWithFlagUseCase
+import com.example.reminderapp.R
+import com.example.reminderapp.app.App
+import com.example.reminderapp.presentation.base.BaseViewModel
 import com.example.reminderapp.presentation.base.UiState
 import com.example.reminderapp.presentation.navigation.TasksListTypeCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
+import org.koin.java.KoinJavaComponent.inject
+
+data class RemindersListUiState(
+    val tasks: List<Task>,
+    val groupName: String
+)
 
 class ReminderListViewModel(
+    application: Application,
     private val getGroupWithTasksUseCase: GetGroupWithTasksUseCase,
+    private val getTasksForTodayUseCase: GetTasksForTodayUseCase,
+    private val getPlannedTasksUseCase: GetPlannedTasksUseCase,
+    private val getTasksWithFlagUseCase: GetTasksWithFlagUseCase,
     private val getAllTasksUseCase: GetAllTasksUseCase
-) : ViewModel() {
+) : AndroidViewModel(application) {
     // TODO: Implement the ViewModel
 
-    private val _uiState = MutableStateFlow<UiState<GroupWithTasks>>(UiState.Loading)
-    val uiState: StateFlow<UiState<GroupWithTasks>> = _uiState
+    private val _uiState = MutableStateFlow<UiState<RemindersListUiState>>(UiState.Loading)
+    val uiState: StateFlow<UiState<RemindersListUiState>> = _uiState
 
-    private val tasksListFlowData = MutableStateFlow<List<Task>>(emptyList())
-    val tasksList get() = tasksListFlowData
-
-
-
-    fun fetchGroupWithTasks(id: Int) {
+    fun fetchData(taskListType: TasksListTypeCase) {
+        val context: Context = getApplication<App>().applicationContext
         viewModelScope.launch {
-            getGroupWithTasksUseCase(id)
-                .catch { e ->
-                    _uiState.value = UiState.Error(e.toString())
+            when(taskListType) {
+                is TasksListTypeCase.GroupTasks -> {
+                    getGroupWithTasksUseCase(taskListType.groupId)
+                        .catch { e ->
+                            _uiState.value = UiState.Error(e.toString())
+                        }
+                        .collect {
+                            _uiState.value = UiState.Success(RemindersListUiState(it.tasks, it.group.groupName))
+                        }
                 }
-                .collect {
-                    _uiState.value = UiState.Success(it)
+                TasksListTypeCase.PlannedTasks -> {
+                    getPlannedTasksUseCase(Unit)
+                        .catch { e ->
+                            _uiState.value = UiState.Error(e.toString())
+                        }
+                        .collect {
+                            _uiState.value = UiState.Success(
+                                RemindersListUiState(it, context.getString(R.string.planned))
+                            )
+                        }
                 }
-        }
-    }
+                TasksListTypeCase.TasksWithFlag -> {
+                    getTasksWithFlagUseCase(Unit)
+                        .catch { e ->
+                            _uiState.value = UiState.Error(e.toString())
+                        }
+                        .collect {
+                            _uiState.value = UiState.Success(
+                                RemindersListUiState(it, context.getString(R.string.with_flag))
+                            )
+                        }
+                }
+                TasksListTypeCase.TodayTasks -> {
+                    getTasksForTodayUseCase(Unit)
+                        .catch { e ->
+                            _uiState.value = UiState.Error(e.toString())
+                        }
+                        .collect {
+                            _uiState.value = UiState.Success(
+                                RemindersListUiState(it, context.getString(R.string.current_day))
+                            )
+                        }
+                }
 
-    fun getNeededTaskList(taskListType: TasksListTypeCase) {
-        viewModelScope.launch {
-            getAllTasksUseCase(Unit)
-                .catch { e ->
-                    Log.e("FETCHING DATA FROM DATABASE PROCESS", e.toString())
-                }
-                .collect {
-                    tasksListFlowData.value = getTasksList(taskListType, it)
-                }
-        }
-    }
-
-    private fun getTasksList(case: TasksListTypeCase, data: List<Task>): List<Task> {
-        var neededList = mutableListOf<Task>()
-        when (case) {
-            TasksListTypeCase.TodayTasks -> { /** Use method which will return today tasks list **/ }
-            TasksListTypeCase.PlannedTasks -> {
-                data.forEach {
-                    if (it.type == TaskPeriodType.ONE_TIME) neededList.add(it)
+                TasksListTypeCase.AllTasks -> {
+                    getAllTasksUseCase(Unit)
+                        .catch { e ->
+                            _uiState.value = UiState.Error(e.toString())
+                        }
+                        .collect {
+                            _uiState.value = UiState.Success(
+                                RemindersListUiState(it, context.getString(R.string.all))
+                            )
+                        }
                 }
             }
-            TasksListTypeCase.AllTasks -> neededList = data.toMutableList()
-            TasksListTypeCase.TasksWithFlag -> {
-                data.forEach {
-                    if (it.isMarkedWithFlag) neededList.add(it)
-                }
-            }
         }
-        return neededList
     }
+
 
 }

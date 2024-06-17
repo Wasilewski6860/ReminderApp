@@ -1,14 +1,9 @@
 package com.example.reminderapp.presentation.mainscreen
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.domain.model.Group
-import com.example.domain.model.GroupWithTasks
-import com.example.domain.model.Task
-import com.example.domain.model.TaskPeriodType
 import com.example.domain.use_case.GetAllGroupsUseCase
-import com.example.domain.use_case.GetAllTasksUseCase
 import com.example.domain.use_case.GetTasksForTodayCountUseCase
 import com.example.domain.use_case.GetTasksPlannedCountUseCase
 import com.example.domain.use_case.GetTasksWithFlagCountUseCase

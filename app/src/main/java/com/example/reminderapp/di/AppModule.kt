@@ -64,7 +64,11 @@ val appModule = module {
     viewModel<ReminderListViewModel> {
         ReminderListViewModel(
             getGroupWithTasksUseCase = get(),
-            getAllTasksUseCase = get()
+            getAllTasksUseCase = get(),
+            getPlannedTasksUseCase = get(),
+            getTasksForTodayUseCase = get(),
+            getTasksWithFlagUseCase = get(),
+            application = get()
         )
     }
 

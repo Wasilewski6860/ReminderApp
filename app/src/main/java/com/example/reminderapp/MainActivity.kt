@@ -1,12 +1,17 @@
 package com.example.reminderapp
 
 import android.graphics.Rect
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MotionEvent
+import androidx.core.view.WindowInsetsCompat.Type.navigationBars
+import androidx.core.view.WindowInsetsCompat.Type.statusBars
 import android.widget.EditText
+import androidx.core.view.WindowCompat
 import com.example.reminderapp.databinding.ActivityMainBinding
 import com.example.reminderapp.utils.KeyboardUtils
+import com.example.reminderapp.utils.setPaddingToInset
 import com.google.android.material.appbar.MaterialToolbar
 
 class MainActivity : AppCompatActivity() {
@@ -20,6 +25,14 @@ class MainActivity : AppCompatActivity() {
 
         val toolbar: MaterialToolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
+
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            WindowCompat.setDecorFitsSystemWindows(window, false)
+            toolbar setPaddingToInset statusBars()
+            binding.fragmentContainerView setPaddingToInset navigationBars()
+        }
+
         supportActionBar?.setDisplayShowTitleEnabled(false)
     }
 

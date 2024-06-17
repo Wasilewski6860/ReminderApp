@@ -8,13 +8,36 @@
         <!-- Customize your dark theme here. -->
         <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
 
-        <item name="colorPrimaryDark">#202020</item>
         <item name="colorPrimaryVariant">@color/white</item>
         <item name="colorPrimary">@color/white</item>
         <item name="android:fontFamily">@font/roboto</item>
-         <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+
+        <item name="android:windowTranslucentNavigation">false</item>
+
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">false</item>
+
+        <item name="android:statusBarColor">@android:color/transparent</item> //-
+
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:enforceNavigationBarContrast" tools:targetApi="q">false</item>
     </style>
+
+<!--    <style name="Base.Theme.ReminderApp" parent="Theme.Material3.DayNight.NoActionBar">-->
+<!--        <item name="windowNoTitle">true</item>-->
+<!--        <item name="windowActionBar">false</item>-->
+<!--        <item name="colorAccent">#202020</item>-->
+<!--        <item name="android:tint">@color/boxStrokeColor</item>-->
+
+<!--        <item name="colorPrimaryVariant">@color/white</item>-->
+<!--        <item name="colorPrimary">@color/white</item>-->
+<!--        <item name="android:fontFamily">@font/roboto</item>-->
+
+<!--        <item name="android:navigationBarColor">@android:color/transparent</item>-->
+<!--        <item name="android:enforceNavigationBarContrast" tools:targetApi="q">false</item>-->
+<!--        <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">false</item>-->
+<!--    </style>-->
+
 
     <style name="MainContainerStyle">
         <item name="android:background">#202020</item>
