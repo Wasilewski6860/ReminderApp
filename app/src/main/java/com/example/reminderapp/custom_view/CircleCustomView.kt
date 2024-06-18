@@ -18,8 +18,14 @@ class CircleCustomView @JvmOverloads constructor(
 ) : View(context, attrs, defStyle) {
 
     private var _bitmap: Bitmap? = null
+    private var _isVisible = true
 
     private var paint: Paint = Paint().apply {
+        color = Color.TRANSPARENT
+        style = Paint.Style.FILL
+    }
+
+    private var allocation: Paint = Paint().apply {
         color = Color.TRANSPARENT
         style = Paint.Style.FILL
     }
@@ -28,6 +34,16 @@ class CircleCustomView @JvmOverloads constructor(
         get() = paint.color
         set(value) {
             paint.color = value
+            invalidate()
+        }
+
+    var circleAllocation: Boolean
+        get() = allocation.color != Color.TRANSPARENT
+        set(value) {
+            when (value) {
+                true -> allocation.color = Color.BLACK // Test color variant
+                false -> allocation.color = Color.TRANSPARENT
+            }
             invalidate()
         }
 
@@ -58,12 +74,22 @@ class CircleCustomView @JvmOverloads constructor(
             invalidate()
         }
 
+    var visible: Boolean
+        get() = _isVisible
+        set(value) {
+            _isVisible = value
+            invalidate()
+        }
+
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
 
+        /** Use it to allocate circle (test variant) **/
+        // canvas.drawCircle(width / 2f, height / 2f, min(width, height) / 2f, allocation)
+        // canvas.drawCircle(width / 2f, height / 2f, min(width, height) / 2f - 5f, paint)
         canvas.drawCircle(width / 2f, height / 2f, min(width, height) / 2f, paint)
 
-        if (_bitmap != null) {
+        if (_bitmap != null && _isVisible) {
             canvas.drawBitmap(
                 _bitmap!!,
                 width / 2f - _bitmap!!.width / 2f,

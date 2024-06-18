@@ -7,10 +7,6 @@ import com.example.reminderapp.R
 class ColorsUtils(context: Context) {
     val colors: List<ColorItem> = listOf(
         ColorItem(
-            context.getString(R.string.not_selected_color_list_item),
-            null
-        ),
-        ColorItem(
             context.getString(R.string.red_color_list_item),
             ContextCompat.getColor(context, R.color.red)
         ),
@@ -62,6 +58,8 @@ class ColorsUtils(context: Context) {
 
     val onlyColors: List<ColorItem>
         get() = colors.filter { it.color != null  }
+
+    val colorsListSize get() = colors.size
 }
 
 data class ColorItem(

@@ -1,4 +1,4 @@
-package com.example.reminderapp.objects
+package com.example.reminderapp.utils
 
 import android.app.Activity
 import android.view.View

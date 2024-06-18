@@ -1,6 +1,7 @@
 package com.example.reminderapp.presentation.new_list
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.Menu
@@ -18,29 +19,34 @@ import com.example.reminderapp.R
 import com.example.reminderapp.presentation.interfaces.BackActionInterface
 import com.example.reminderapp.presentation.interfaces.DataReceiving
 import com.example.reminderapp.databinding.FragmentNewListBinding
-import com.example.reminderapp.presentation.new_list.adapter.ColorListAdapter
-import com.example.reminderapp.presentation.new_list.adapter.ColorListItemDecoration
-import com.example.reminderapp.utils.ColorItem
+import com.example.reminderapp.presentation.new_list.adapter.ListItemDecoration
+import com.example.reminderapp.presentation.new_list.adapter.NewListAdapter
 import com.example.reminderapp.utils.ColorsUtils
+import com.example.reminderapp.utils.ImageUtils
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class NewListFragment : Fragment(), MenuProvider, BackActionInterface, DataReceiving {
 
     private var _binding: FragmentNewListBinding? = null
     private val binding get() = _binding!!
-    private lateinit var colorListAdapter: ColorListAdapter
 
     private lateinit var callback: OnBackPressedCallback
 
     private val viewModel: NewListViewModel by viewModel()
 
-    var selectedColor: Int? = null
+    private var selectedColor: Int? = null
+    var selectedImage: Int? = null
+
+    private lateinit var adapter: NewListAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentNewListBinding.inflate(layoutInflater, container, false)
+
+        selectedColor = ColorsUtils(requireContext()).colors[0].color
+        selectedColor?.let { binding.selectedColorIv.circleColor = it }
 
         val activity = (activity as MainActivity)
         activity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -54,7 +60,6 @@ class NewListFragment : Fragment(), MenuProvider, BackActionInterface, DataRecei
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
 
         setupRecyclerView()
-        colorListAdapter.submitList(ColorsUtils(requireContext()).onlyColors)
 
         return binding.root
     }
@@ -64,20 +69,36 @@ class NewListFragment : Fragment(), MenuProvider, BackActionInterface, DataRecei
         requireActivity().addMenuProvider(this, viewLifecycleOwner , Lifecycle.State.RESUMED)
     }
 
-    private fun setupRecyclerView() = binding.colorsRv.apply {
-        colorListAdapter = ColorListAdapter(
-            onItemClickListener = object : ColorListAdapter.OnItemClickListener {
-                override fun onClickItem(colorItem: ColorItem) {
-                    selectedColor = colorItem.color
-                    colorItem.color?.let {
-                        binding.selectedColorIv.circleColor = it
+    private fun setupRecyclerView() = binding.apply {
+        val colorsList = ColorsUtils(requireContext()).onlyColors
+        val imagesList = ImageUtils(requireContext()).onlyImages
+
+        adapter = NewListAdapter(
+            object : NewListAdapter.OnItemClickListener {
+                override fun onItemClick(position: Int) {
+                    if (position < ColorsUtils(requireContext()).colorsListSize)
+                        colorsList[position].color?.let {
+                            selectedColorIv.circleColor = it
+                        }
+                    else {
+                        imagesList[position - colorsList.size].image?.let { selectedItem ->
+                            if (selectedImage != null && selectedImage == selectedItem) {
+                                selectedColorIv.visible = false
+                                selectedImage = null
+                            } else {
+                                selectedColorIv.apply {
+                                    bitmap = selectedItem
+                                    visible = true
+                                }
+                                selectedImage = selectedItem
+                            }
+                        }
                     }
                 }
-            }
-        )
-        adapter = colorListAdapter
-        layoutManager = GridLayoutManager(requireContext(), 6)
-        this.addItemDecoration(ColorListItemDecoration(6, 50, true))
+            }, requireContext())
+        colorsRv.adapter = adapter
+        colorsRv.layoutManager = GridLayoutManager(requireContext(), 6)
+        colorsRv.addItemDecoration(ListItemDecoration(6, 50, true))
     }
 
     override fun onDestroyView() {

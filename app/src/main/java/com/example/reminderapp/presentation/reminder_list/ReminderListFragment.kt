@@ -22,7 +22,6 @@ import com.example.reminderapp.reminder.work.RemindWorkManager
 import com.example.reminderapp.utils.Constants
 import com.example.reminderapp.utils.Constants.GROUP_KEY
 import com.example.reminderapp.utils.Constants.TASK_KEY
-import com.example.reminderapp.utils.showSnackbar
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -83,6 +82,7 @@ class ReminderListFragment : Fragment(), DataReceiving {
                         is UiState.Success -> {
                             binding.contentLayout.visibility = View.VISIBLE
                             binding.loadingLayout.visibility = View.GONE
+                            binding.nothingFindLayout.visibility = View.GONE
 
                             reminderAdapter.submitList(it.data.tasks)
                             it.data.group.apply {
@@ -93,11 +93,12 @@ class ReminderListFragment : Fragment(), DataReceiving {
                         is UiState.Loading -> {
                             binding.contentLayout.visibility = View.GONE
                             binding.loadingLayout.visibility = View.VISIBLE
+                            binding.nothingFindLayout.visibility = View.GONE
                         }
                         is UiState.Error -> {
-                            binding.contentLayout.visibility = View.VISIBLE
+                            binding.contentLayout.visibility = View.GONE
                             binding.loadingLayout.visibility = View.GONE
-                            showSnackbar(it.message, requireActivity().findViewById(R.id.rootView))
+                            binding.nothingFindLayout.visibility = View.VISIBLE
                         }
                     }
                 }
@@ -146,9 +147,8 @@ class ReminderListFragment : Fragment(), DataReceiving {
 
     override fun receiveData() {
         arguments?.let {
+            // TODO data receiving here
             Log.d("Test", it.getInt(Constants.GROUP_ID).toString())
-
-
         }
     }
 
