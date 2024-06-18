@@ -15,6 +15,8 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.GridLayoutManager
+import com.example.domain.model.Group
+import com.example.domain.model.GroupSerializer
 import com.example.reminderapp.MainActivity
 import com.example.reminderapp.R
 import com.example.reminderapp.databinding.ListEditorScreenBinding
@@ -23,6 +25,8 @@ import com.example.reminderapp.presentation.base.OperationResult
 import com.example.reminderapp.presentation.base.UiState
 import com.example.reminderapp.presentation.interfaces.BackActionInterface
 import com.example.reminderapp.presentation.navigation.FragmentNavigationConstants
+import com.example.reminderapp.presentation.navigation.TasksListTypeCase
+import com.example.reminderapp.presentation.navigation.TasksListTypeCaseSerializer
 import com.example.reminderapp.presentation.new_list.NewListFragment
 import com.example.reminderapp.presentation.recycleradapter.GroupListRecyclerViewAdapter
 import com.example.reminderapp.utils.showSnackbar
@@ -71,7 +75,7 @@ class EditListsScreenFragment : Fragment(), MenuProvider, BackActionInterface {
         super.onDestroyView()
         val menuHost: MenuHost = requireActivity()
         menuHost.removeMenuProvider(this)
-        //TODO Чет не так, вызывается при работающем фрагменте
+        // TODO Чет не так, вызывается при работающем фрагменте
 //        (activity as MainActivity).setToolbarTitleAndTitleColor("")
         callback.remove()
     }
@@ -81,9 +85,15 @@ class EditListsScreenFragment : Fragment(), MenuProvider, BackActionInterface {
             GroupListRecyclerViewAdapter.OnItemClickListener {
             override fun onRcItemClick(position: Int) {
                 /** Editing list info process here */
-                val data = adapter.collectInfo(position)
-                // TODO add bundle of data here
-                navigateToNewListFragment()
+                val bundle = Bundle().apply {
+                    putString(
+                        FragmentNavigationConstants.EDITABLE_LIST,
+                        GroupSerializer.serialize(
+                            adapter.collectInfo(position)
+                        )
+                    )
+                }
+                navigateToNewListFragment(bundle)
             }
             override fun onDeleteIconClick(position: Int) {
                 /** Deletion process here */

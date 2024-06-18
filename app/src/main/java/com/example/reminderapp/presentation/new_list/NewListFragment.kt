@@ -1,7 +1,7 @@
 package com.example.reminderapp.presentation.new_list
 
+import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.Menu
@@ -14,11 +14,15 @@ import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.lifecycle.Lifecycle
 import androidx.recyclerview.widget.GridLayoutManager
+import com.example.domain.model.Group
+import com.example.domain.model.GroupSerializer
 import com.example.reminderapp.MainActivity
 import com.example.reminderapp.R
 import com.example.reminderapp.presentation.interfaces.BackActionInterface
 import com.example.reminderapp.presentation.interfaces.DataReceiving
 import com.example.reminderapp.databinding.FragmentNewListBinding
+import com.example.reminderapp.presentation.navigation.FragmentNavigationConstants
+import com.example.reminderapp.presentation.navigation.TasksListTypeCaseSerializer
 import com.example.reminderapp.presentation.new_list.adapter.ListItemDecoration
 import com.example.reminderapp.presentation.new_list.adapter.NewListAdapter
 import com.example.reminderapp.utils.ColorsUtils
@@ -60,6 +64,7 @@ class NewListFragment : Fragment(), MenuProvider, BackActionInterface, DataRecei
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
 
         setupRecyclerView()
+        receiveData()
 
         return binding.root
     }
@@ -115,10 +120,17 @@ class NewListFragment : Fragment(), MenuProvider, BackActionInterface, DataRecei
 
     override fun receiveData() {
         arguments?.let {
-            // TODO fill all fields with that data
+            val groupSerialized = it.getString(FragmentNavigationConstants.EDITABLE_LIST)
+            groupSerialized?.let { data ->
+                val group = GroupSerializer.deserialize(data)
+                binding.apply {
+                    newListTip.editText?.setText(group.groupName)
+                    selectedColorIv.circleColor = group.groupColor
+                    selectedColorIv.bitmap = group.groupColor
+                }
+            }
         }
     }
-
 
     override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
         menuInflater.inflate(R.menu.create_task_menu, menu)

@@ -1,7 +1,6 @@
 package com.example.reminderapp.presentation.reminder_list
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -17,10 +16,11 @@ import com.example.reminderapp.databinding.FragmentReminderListBinding
 import com.example.reminderapp.presentation.base.UiState
 import com.example.reminderapp.presentation.create_reminder.CreateReminderFragment
 import com.example.reminderapp.presentation.interfaces.DataReceiving
+import com.example.reminderapp.presentation.navigation.FragmentNavigationConstants
 import com.example.reminderapp.presentation.navigation.TasksListTypeCase
+import com.example.reminderapp.presentation.navigation.TasksListTypeCaseSerializer
 import com.example.reminderapp.reminder.RemindAlarmManager
 import com.example.reminderapp.reminder.work.RemindWorkManager
-import com.example.reminderapp.utils.Constants
 import com.example.reminderapp.utils.Constants.GROUP_KEY
 import com.example.reminderapp.utils.Constants.TASK_KEY
 import kotlinx.coroutines.launch
@@ -65,7 +65,7 @@ class ReminderListFragment : Fragment(), DataReceiving {
     ): View {
         _binding = FragmentReminderListBinding.inflate(layoutInflater, container, false)
 
-        viewModel.fetchData(groupType)
+        // viewModel.fetchData(groupType)
         setupRecyclerView()
         setupObservers()
 
@@ -137,8 +137,10 @@ class ReminderListFragment : Fragment(), DataReceiving {
 
     override fun receiveData() {
         arguments?.let {
-            // TODO data receiving here
-            Log.d("Test", it.getInt(Constants.GROUP_ID).toString())
+            val taskTypeSerialized = it.getString(FragmentNavigationConstants.LIST_TYPE)
+            taskTypeSerialized?.let { data ->
+                viewModel.fetchData(TasksListTypeCaseSerializer.deserialize(data))
+            }
         }
     }
 

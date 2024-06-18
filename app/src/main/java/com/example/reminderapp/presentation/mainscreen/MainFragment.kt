@@ -11,7 +11,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.GridLayoutManager
-import com.example.domain.model.Group
 import com.example.reminderapp.MainActivity
 import com.example.reminderapp.R
 import com.example.reminderapp.animations.animateImageViewRotation
@@ -22,6 +21,8 @@ import com.example.reminderapp.presentation.base.UiState
 import com.example.reminderapp.presentation.create_reminder.CreateReminderFragment
 import com.example.reminderapp.presentation.editorlistsscreen.EditListsScreenFragment
 import com.example.reminderapp.presentation.navigation.FragmentNavigationConstants
+import com.example.reminderapp.presentation.navigation.TasksListTypeCase
+import com.example.reminderapp.presentation.navigation.TasksListTypeCaseSerializer
 import com.example.reminderapp.presentation.new_list.NewListFragment
 import com.example.reminderapp.presentation.recycleradapter.GroupListRecyclerViewAdapter
 import com.example.reminderapp.presentation.reminder_list.ReminderListFragment
@@ -118,39 +119,50 @@ class MainFragment : Fragment() {
                 counterTitle = todayCount.toString()
                 setOnClickListener {
                     val bundle = Bundle().apply {
-
+                       putString(
+                           FragmentNavigationConstants.LIST_TYPE,
+                           TasksListTypeCaseSerializer.serialize(TasksListTypeCase.TodayTasks)
+                           )
                     }
-                    navigate(Navigation.ToReminderListFragment)
+                    navigate(Navigation.ToReminderListFragment, bundle)
                 }
             }
             plannedTasksItem.apply {
                 counterTitle = plannedCount.toString()
                 setOnClickListener {
                     val bundle = Bundle().apply {
-
+                        putString(
+                            FragmentNavigationConstants.LIST_TYPE,
+                            TasksListTypeCaseSerializer.serialize(TasksListTypeCase.PlannedTasks)
+                        )
                     }
-                    navigate(Navigation.ToReminderListFragment)
+                    navigate(Navigation.ToReminderListFragment, bundle)
                 }
             }
             allTasksItem.apply {
-                counterTitle = plannedCount.toString()
+                counterTitle = plannedCount.toString() // TODO replace this with all tasks title later
                 setOnClickListener {
                     val bundle = Bundle().apply {
-
+                        putString(
+                            FragmentNavigationConstants.LIST_TYPE,
+                            TasksListTypeCaseSerializer.serialize(TasksListTypeCase.AllTasks)
+                        )
                     }
-                    navigate(Navigation.ToReminderListFragment)
+                    navigate(Navigation.ToReminderListFragment, bundle)
                 }
             }
             tasksWithFlagItem.apply {
                 counterTitle = withFlagCount.toString()
                 setOnClickListener {
                     val bundle = Bundle().apply {
-
+                        putString(
+                            FragmentNavigationConstants.LIST_TYPE,
+                            TasksListTypeCaseSerializer.serialize(TasksListTypeCase.TasksWithFlag)
+                        )
                     }
-                    navigate(Navigation.ToReminderListFragment)
+                    navigate(Navigation.ToReminderListFragment, bundle)
                 }
             }
-            // TODO add today tasks data collection method in viewModel
         }
     }
 
@@ -166,10 +178,13 @@ class MainFragment : Fragment() {
         adapter = GroupListRecyclerViewAdapter(object :
             GroupListRecyclerViewAdapter.OnItemClickListener {
             override fun onRcItemClick(position: Int) {
-                /** Transition on TasksListFragment */
-                /** And add data to this transaction */
                 val bundle = Bundle().apply {
-                    putInt(Constants.GROUP_ID, adapter.getGroupId(position))
+                    putString(
+                        FragmentNavigationConstants.LIST_TYPE,
+                        TasksListTypeCaseSerializer.serialize(TasksListTypeCase.GroupTasks(
+                            adapter.getGroupId(position)
+                        ))
+                    )
                 }
                 navigate(Navigation.ToReminderListFragment, bundle)
             }
@@ -231,4 +246,3 @@ private sealed class Navigation {
     object ToReminderListFragment : Navigation()
 
 }
-
