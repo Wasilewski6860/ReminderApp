@@ -82,14 +82,15 @@ class NewListFragment : Fragment(), MenuProvider, BackActionInterface, DataRecei
                         }
                     else {
                         imagesList[position - colorsList.size].image?.let { selectedItem ->
-                            
-                            Log.d("selected: ", selectedItem.toString())
-                            Log.d("inflated: ", selectedColorIv.bitmap.toString())
-
-                            if (selectedColorIv.bitmap == selectedItem) {
-                                selectedColorIv.bitmap = null
+                            if (selectedImage != null && selectedImage == selectedItem) {
+                                selectedColorIv.visible = false
+                                selectedImage = null
                             } else {
-                                selectedColorIv.bitmap = selectedItem
+                                selectedColorIv.apply {
+                                    bitmap = selectedItem
+                                    visible = true
+                                }
+                                selectedImage = selectedItem
                             }
                         }
                     }

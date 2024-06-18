@@ -60,4 +60,10 @@ class NewListAdapter(
         )
     }
 
+    fun allocateColorItem(position: Int) {
+        if (position < colorsList.size) {
+            colorsList[position]
+        }
+    }
+
 }
