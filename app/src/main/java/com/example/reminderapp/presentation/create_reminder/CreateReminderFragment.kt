@@ -29,6 +29,7 @@ import com.example.domain.model.TaskPeriodType
 import com.example.reminderapp.MainActivity
 import com.example.reminderapp.R
 import com.example.reminderapp.databinding.FragmentCreateReminderBinding
+import com.example.reminderapp.presentation.base.OperationResult
 import com.example.reminderapp.presentation.interfaces.BackActionInterface
 import com.example.reminderapp.presentation.base.UiState
 import com.example.reminderapp.presentation.interfaces.DataReceiving
@@ -217,15 +218,22 @@ class CreateReminderFragment : Fragment(), MenuProvider, BackActionInterface, Da
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.saveResult.collect {
-                    if (it != (-1).toLong()) {
-                        task.id = it.toInt()
-                        remindAlarmManager.createAlarm(task)
-                        navigateBack()
-//                        val fragment = MainFragment()
-//                        val transaction = requireActivity().supportFragmentManager.beginTransaction()
-//                        transaction.replace(R.id.fragmentContainerView, fragment)
-//                        transaction.addToBackStack(null)
-//                        transaction.commit()
+                    when (it) {
+                        is OperationResult.Error ->  {
+                            binding.contentLayout.visibility = View.VISIBLE
+                            binding.loadingLayout.visibility = View.GONE
+                            showSnackbar(it.message, requireActivity().findViewById(R.id.rootView))
+                        }
+                        OperationResult.Loading -> {
+                            binding.contentLayout.visibility = View.GONE
+                            binding.loadingLayout.visibility = View.VISIBLE
+                        }
+                        OperationResult.NotStarted -> Unit
+                        is OperationResult.Success -> {
+                            task.id = it.data.toInt()
+                            remindAlarmManager.createAlarm(task)
+                            navigateBack()
+                        }
                     }
                 }
             }
@@ -284,7 +292,7 @@ class CreateReminderFragment : Fragment(), MenuProvider, BackActionInterface, Da
         val spinner = binding.selectedColorSpinner
         spinner.adapter = adapter
 
-        binding.selectedListSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+        binding.selectedColorSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(p0: AdapterView<*>?) {}
 
             override fun onItemSelected(adapterView: AdapterView<*>?, view: View?, pos: Int, id: Long) {

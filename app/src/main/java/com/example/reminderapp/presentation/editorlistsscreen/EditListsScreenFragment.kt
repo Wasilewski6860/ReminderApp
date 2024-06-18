@@ -19,6 +19,7 @@ import com.example.reminderapp.MainActivity
 import com.example.reminderapp.R
 import com.example.reminderapp.databinding.ListEditorScreenBinding
 import com.example.reminderapp.presentation.TestData
+import com.example.reminderapp.presentation.base.OperationResult
 import com.example.reminderapp.presentation.base.UiState
 import com.example.reminderapp.presentation.interfaces.BackActionInterface
 import com.example.reminderapp.presentation.navigation.FragmentNavigationConstants
@@ -116,6 +117,7 @@ class EditListsScreenFragment : Fragment(), MenuProvider, BackActionInterface {
                             binding.loadingLayout.visibility = View.GONE
                             showSnackbar(it.message, requireActivity().findViewById(R.id.rootView))
                         }
+
                     }
 
                 }

@@ -17,6 +17,7 @@ import com.example.reminderapp.databinding.FragmentReminderListBinding
 import com.example.reminderapp.presentation.base.UiState
 import com.example.reminderapp.presentation.create_reminder.CreateReminderFragment
 import com.example.reminderapp.presentation.interfaces.DataReceiving
+import com.example.reminderapp.presentation.navigation.TasksListTypeCase
 import com.example.reminderapp.reminder.RemindAlarmManager
 import com.example.reminderapp.reminder.work.RemindWorkManager
 import com.example.reminderapp.utils.Constants
@@ -42,6 +43,7 @@ class ReminderListFragment : Fragment(), DataReceiving {
     private val viewModel: ReminderListViewModel by viewModel()
 
     private var groupId: Int = -1
+    lateinit var groupType: TasksListTypeCase
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,9 +65,7 @@ class ReminderListFragment : Fragment(), DataReceiving {
     ): View {
         _binding = FragmentReminderListBinding.inflate(layoutInflater, container, false)
 
-        val activity = (activity as MainActivity)
-
-        viewModel.fetchGroupWithTasks(groupId)
+        viewModel.fetchData(groupType)
         setupRecyclerView()
         setupObservers()
 
@@ -85,10 +85,7 @@ class ReminderListFragment : Fragment(), DataReceiving {
                             binding.nothingFindLayout.visibility = View.GONE
 
                             reminderAdapter.submitList(it.data.tasks)
-                            it.data.group.apply {
-                                val activity = (activity as MainActivity)
-                                activity.setToolbarTitleAndTitleColor(this.groupName, this.groupColor)
-                            }
+                            (activity as MainActivity).setToolbarTitleAndTitleColor(it.data.groupName)
                         }
                         is UiState.Loading -> {
                             binding.contentLayout.visibility = View.GONE
@@ -101,13 +98,6 @@ class ReminderListFragment : Fragment(), DataReceiving {
                             binding.nothingFindLayout.visibility = View.VISIBLE
                         }
                     }
-                }
-            }
-        }
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.tasksList.collect {
-                    // TODO add this data to adapter
                 }
             }
         }

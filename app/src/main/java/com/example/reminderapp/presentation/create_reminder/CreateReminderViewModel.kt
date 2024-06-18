@@ -6,6 +6,8 @@ import com.example.domain.model.Group
 import com.example.domain.model.Task
 import com.example.domain.use_case.GetAllGroupsUseCase
 import com.example.domain.use_case.SaveTaskUseCase
+import com.example.reminderapp.presentation.TestData
+import com.example.reminderapp.presentation.base.OperationResult
 import com.example.reminderapp.presentation.base.UiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -20,24 +22,27 @@ class CreateReminderViewModel(
     private val _uiState = MutableStateFlow<UiState<List<Group>>>(UiState.Loading)
     val uiState: StateFlow<UiState<List<Group>>> = _uiState
 
-    private val _saveResult = MutableStateFlow<Long>(-1)
-    val saveResult: StateFlow<Long> = _saveResult
+    private val _saveResult = MutableStateFlow<OperationResult<Long>>(OperationResult.NotStarted)
+    val saveResult: StateFlow<OperationResult<Long>> = _saveResult
 
     fun fetchGroups() {
         viewModelScope.launch {
-            getAllGroupsUseCase(Unit)
-                .catch { e ->
-                    _uiState.value = UiState.Error(e.toString())
-                }
-                .collect {
-                    _uiState.value = UiState.Success(it)
-                }
+            _uiState.value = UiState.Success(TestData().getTestList())
+//            TODO использовать это
+//            getAllGroupsUseCase(Unit)
+//                .catch { e ->
+//                    _uiState.value = UiState.Error(e.toString())
+//                }
+//                .collect {
+//                    _uiState.value = UiState.Success(it)
+//                }
         }
     }
 
     fun saveTask(
        task: Task
     ) {
+        _saveResult.value = OperationResult.Loading
         viewModelScope.launch {
             createTaskUseCase(
                 Task(
@@ -54,9 +59,9 @@ class CreateReminderViewModel(
                     color = task.color
                 )
             ).catch { e ->
-                _uiState.value = UiState.Error(e.toString())
+                _saveResult.value = OperationResult.Error(e.toString())
             }.collect {
-                _saveResult.value = it
+                _saveResult.value = OperationResult.Success(it)
             }
         }
     }
