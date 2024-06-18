@@ -28,7 +28,7 @@
         <com.example.reminderapp.custom_view.CircleCustomView
             android:id="@+id/colorCircleItem"
             android:layout_width="0dp"
-            android:layout_height="28dp"
+            android:layout_height="match_parent"
             android:layout_weight="7"
             app:circleColor="@color/red" />
 

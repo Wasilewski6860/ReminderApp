@@ -1,12 +1,12 @@
 package com.example.reminderapp.presentation.navigation
 
-import android.content.Context
+import com.google.gson.Gson
 import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 
 sealed class TasksListTypeCase: KoinComponent {
 
     object AllTasks : TasksListTypeCase()
+
     object TodayTasks : TasksListTypeCase()
 
     object PlannedTasks : TasksListTypeCase()
@@ -14,5 +14,18 @@ sealed class TasksListTypeCase: KoinComponent {
     class GroupTasks(val groupId: Int) : TasksListTypeCase()
 
     object TasksWithFlag : TasksListTypeCase()
+
+}
+
+object TasksListTypeCaseSerializer {
+    private val gson = Gson()
+
+    fun serialize(typeCase: TasksListTypeCase): String {
+        return gson.toJson(typeCase)
+    }
+
+    fun deserialize(data: String): TasksListTypeCase {
+        return gson.fromJson(data, TasksListTypeCase::class.java)
+    }
 
 }

@@ -2,15 +2,9 @@ package com.example.reminderapp.presentation.reminder_list
 
 import android.app.Application
 import android.content.Context
-import android.util.Log
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.domain.model.Group
-import com.example.domain.model.GroupWithTasks
 import com.example.domain.model.Task
-import com.example.domain.model.TaskPeriodType
 import com.example.domain.use_case.GetAllTasksUseCase
 import com.example.domain.use_case.GetGroupWithTasksUseCase
 import com.example.domain.use_case.GetPlannedTasksUseCase
@@ -18,16 +12,12 @@ import com.example.domain.use_case.GetTasksForTodayUseCase
 import com.example.domain.use_case.GetTasksWithFlagUseCase
 import com.example.reminderapp.R
 import com.example.reminderapp.app.App
-import com.example.reminderapp.presentation.base.BaseViewModel
 import com.example.reminderapp.presentation.base.UiState
 import com.example.reminderapp.presentation.navigation.TasksListTypeCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
-import org.koin.java.KoinJavaComponent.inject
 
 data class RemindersListUiState(
     val tasks: List<Task>,

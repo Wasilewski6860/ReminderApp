@@ -4,4 +4,7 @@ import androidx.lifecycle.ViewModel
 
 class NewListViewModel : ViewModel() {
     // TODO: Implement the ViewModel
+
+
+
 }
