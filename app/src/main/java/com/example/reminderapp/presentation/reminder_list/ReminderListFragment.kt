@@ -14,11 +14,14 @@ import com.example.reminderapp.MainActivity
 import com.example.reminderapp.R
 import com.example.reminderapp.databinding.FragmentReminderListBinding
 import com.example.reminderapp.presentation.base.UiState
+import com.example.reminderapp.presentation.base.serializer.GroupSerializer
+import com.example.reminderapp.presentation.base.serializer.TaskSerializer
+import com.example.reminderapp.presentation.base.serializer.TasksListTypeCaseSerializer
 import com.example.reminderapp.presentation.create_reminder.CreateReminderFragment
 import com.example.reminderapp.presentation.interfaces.DataReceiving
 import com.example.reminderapp.presentation.navigation.FragmentNavigationConstants
 import com.example.reminderapp.presentation.navigation.TasksListTypeCase
-import com.example.reminderapp.presentation.navigation.TasksListTypeCaseSerializer
+import com.example.reminderapp.presentation.new_list.NewListFragment
 import com.example.reminderapp.reminder.RemindAlarmManager
 import com.example.reminderapp.reminder.work.RemindWorkManager
 import com.example.reminderapp.utils.Constants.GROUP_KEY
@@ -43,20 +46,11 @@ class ReminderListFragment : Fragment(), DataReceiving {
     private val viewModel: ReminderListViewModel by viewModel()
 
     private var groupId: Int = -1
-    lateinit var groupType: TasksListTypeCase
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        groupId = arguments?.getInt(GROUP_KEY) ?: -1
-
-//        reminderGroup = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-//            arguments?.getSerializable(GROUP_KEY, Group::class.java)
-//        }
-//        else {
-//            arguments?.getSerializable(GROUP_KEY) as Group?
-//        }
-
+        receiveData()
     }
 
     override fun onCreateView(
@@ -65,11 +59,12 @@ class ReminderListFragment : Fragment(), DataReceiving {
     ): View {
         _binding = FragmentReminderListBinding.inflate(layoutInflater, container, false)
 
+
         // viewModel.fetchData(groupType)
         setupRecyclerView()
         setupObservers()
 
-        receiveData()
+
 
         return binding.root
     }
@@ -107,17 +102,13 @@ class ReminderListFragment : Fragment(), DataReceiving {
         reminderAdapter = ReminderListAdapter(
             onItemClickListener = object : ReminderListAdapter.OnItemClickListener {
                 override fun onClickItem(task: Task) {
-                    val fragmentManager = requireActivity().supportFragmentManager
-                    val bundle = Bundle()
-                    bundle.putSerializable(TASK_KEY, task)
-                    val fragmentTransaction = fragmentManager.beginTransaction()
-
-                    val targetFragment = CreateReminderFragment()
-                    targetFragment.arguments = bundle
-
-                    fragmentTransaction.replace(R.id.fragmentContainerView, targetFragment)
-                    fragmentTransaction.addToBackStack(null)
-                    fragmentTransaction.commit()
+                    val bundle = Bundle().apply {
+                        putSerializable(
+                            FragmentNavigationConstants.TASK_KEY,
+                            task
+                        )
+                    }
+                    navigateToEditReminder(bundle)
                 }
             },
             onSwitchClickListener = object : ReminderListAdapter.OnSwitchClickListener {
@@ -135,11 +126,29 @@ class ReminderListFragment : Fragment(), DataReceiving {
         layoutManager = LinearLayoutManager(requireContext())
     }
 
+    private fun navigateToEditReminder(args: Bundle) {
+        parentFragmentManager.beginTransaction()
+            .setCustomAnimations(
+                R.anim.slide_in_anim,
+                R.anim.slide_out_anim,
+                R.anim.slide_in_anim,
+                R.anim.slide_out_anim
+            )
+            .replace(
+                R.id.fragmentContainerView,
+                CreateReminderFragment().apply {
+                    args?.let { arguments = it }
+                }
+            )
+            .addToBackStack(FragmentNavigationConstants.TASK_KEY)
+            .commit()
+    }
+
     override fun receiveData() {
         arguments?.let {
-            val taskTypeSerialized = it.getString(FragmentNavigationConstants.LIST_TYPE)
+            val taskTypeSerialized: TasksListTypeCase? = it.getSerializable(FragmentNavigationConstants.LIST_TYPE)  as TasksListTypeCase?
             taskTypeSerialized?.let { data ->
-                viewModel.fetchData(TasksListTypeCaseSerializer.deserialize(data))
+                viewModel.fetchData(data)
             }
         }
     }

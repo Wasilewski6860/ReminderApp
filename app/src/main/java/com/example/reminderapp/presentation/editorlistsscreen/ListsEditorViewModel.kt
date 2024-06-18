@@ -1,14 +1,11 @@
 package com.example.reminderapp.presentation.editorlistsscreen
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.domain.model.Group
 import com.example.domain.use_case.DeleteGroupUseCase
 import com.example.domain.use_case.GetAllGroupsUseCase
-import com.example.reminderapp.presentation.TestData
 import com.example.reminderapp.presentation.base.UiState
-import com.example.reminderapp.presentation.mainscreen.MainUiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
@@ -23,18 +20,18 @@ class ListsEditorViewModel(
 
     fun fetchData() {
         viewModelScope.launch {
-            _uiState.value = UiState.Success(
-                TestData().getTestList()
-            )
+//            _uiState.value = UiState.Success(
+//                TestData().getTestList()
+//            )
 
 //            TODO делать так
-//            getAllGroupsUseCase(Unit)
-//                .catch { e ->
-//                    _uiState.value = UiState.Error(e.toString())
-//                }
-//                .collect {
-//                    _uiState.value = UiState.Success(it)
-//                }
+            getAllGroupsUseCase(Unit)
+                .catch { e ->
+                    _uiState.value = UiState.Error(e.toString())
+                }
+                .collect {
+                    _uiState.value = UiState.Success(it)
+                }
         }
     }
 

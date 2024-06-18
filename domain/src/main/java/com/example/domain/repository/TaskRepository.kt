@@ -23,6 +23,7 @@ interface TaskRepository {
     fun getAllTasksByPeriodType(period: TaskPeriodType): Flow<List<Task>>
 
     fun getAllTasks(): Flow<List<Task>>
+    fun getAllTasksCount(): Flow<Int>
 
     fun getTasksForToday(): Flow<List<Task>>
     fun getTasksForTodayCount(): Flow<Int>
@@ -30,6 +31,8 @@ interface TaskRepository {
     fun getTasksPlannedCount(): Flow<Int>
     fun getTasksWithFlag(): Flow<List<Task>>
     fun getTasksWithFlagCount(): Flow<Int>
+
+    suspend fun addGroup(group: Group)
 
     fun getAllGroups(): Flow<List<Group>>
 

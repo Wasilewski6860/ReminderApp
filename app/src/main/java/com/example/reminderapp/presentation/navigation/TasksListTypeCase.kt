@@ -1,31 +1,25 @@
 package com.example.reminderapp.presentation.navigation
 
-import com.google.gson.Gson
-import org.koin.core.component.KoinComponent
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+import java.io.Serializable
 
-sealed class TasksListTypeCase: KoinComponent {
+sealed class TasksListTypeCase : Serializable {
 
+//    @Parcelize
     object AllTasks : TasksListTypeCase()
 
+//    @Parcelize
     object TodayTasks : TasksListTypeCase()
 
+//    @Parcelize
     object PlannedTasks : TasksListTypeCase()
 
+//    @Parcelize
     class GroupTasks(val groupId: Int) : TasksListTypeCase()
 
+//    @Parcelize
     object TasksWithFlag : TasksListTypeCase()
 
 }
 
-object TasksListTypeCaseSerializer {
-    private val gson = Gson()
-
-    fun serialize(typeCase: TasksListTypeCase): String {
-        return gson.toJson(typeCase)
-    }
-
-    fun deserialize(data: String): TasksListTypeCase {
-        return gson.fromJson(data, TasksListTypeCase::class.java)
-    }
-
-}
