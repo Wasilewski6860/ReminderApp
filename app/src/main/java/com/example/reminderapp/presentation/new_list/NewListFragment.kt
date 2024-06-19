@@ -161,7 +161,7 @@ class NewListFragment : Fragment(), MenuProvider, BackActionInterface, DataRecei
                     viewModel.saveList(
                         id = groupId,
                         groupName = newListEt.text.toString(),
-                        groupColor = groupColor!!,
+                        groupColor = binding.selectedColorIv.circleColor,
                         groupImage = groupImage ?: R.drawable.arrow_back,
                         tasksCount = if (group != null) group!!.tasksCount else 0,
                     )
