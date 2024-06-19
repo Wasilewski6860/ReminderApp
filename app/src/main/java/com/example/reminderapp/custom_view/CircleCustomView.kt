@@ -18,6 +18,7 @@ class CircleCustomView @JvmOverloads constructor(
 ) : View(context, attrs, defStyle) {
 
     private var _bitmap: Bitmap? = null
+    var _drawable: Drawable? = null
     private var _isVisible = true
 
     private var paint: Paint = Paint().apply {
@@ -58,8 +59,8 @@ class CircleCustomView @JvmOverloads constructor(
         get() = null
         set(value) {
             if (value != null) {
-                val vectorDrawable: Drawable? = ContextCompat.getDrawable(context, value)
-                vectorDrawable?.let {
+                _drawable = ContextCompat.getDrawable(context, value)
+                _drawable?.let {
                     val bp = Bitmap.createBitmap(
                         it.intrinsicWidth,
                         it.intrinsicHeight,

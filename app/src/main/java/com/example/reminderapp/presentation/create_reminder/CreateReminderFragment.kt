@@ -61,11 +61,13 @@ class CreateReminderFragment : Fragment(), MenuProvider, BackActionInterface, Da
 
     val dateFormat = SimpleDateFormat("E, dd.MM.yyyy 'г.' HH:mm", Locale.getDefault())
 
+    private var taskId: Int? = null
     var selectedGroup: Int? = null
     var selectedPeriod: Long? = null
     var selectedTime: Long? = null
     var selectedColor: Int? = null
-    lateinit var task: Task
+    var taskType: TaskPeriodType? = null
+    var task: Task? = null
 
     private lateinit var callback: OnBackPressedCallback
 
@@ -88,11 +90,10 @@ class CreateReminderFragment : Fragment(), MenuProvider, BackActionInterface, Da
         }
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
 
-        receiveData()
-
         viewModel.fetchGroups()
         setupObservers()
 
+        receiveData()
 
         binding.selectedDateTv.setOnClickListener {
             showDateAndTimePickers()
@@ -116,6 +117,7 @@ class CreateReminderFragment : Fragment(), MenuProvider, BackActionInterface, Da
         arguments?.let {
             val taskSerialized: Task? = it.getSerializable(FragmentNavigationConstants.TASK_KEY) as Task?
             if (taskSerialized != null) {
+                taskId = taskSerialized.id
                 fillViews(taskSerialized)
             }
         }
@@ -250,8 +252,8 @@ class CreateReminderFragment : Fragment(), MenuProvider, BackActionInterface, Da
                         }
                         OperationResult.NotStarted -> Unit
                         is OperationResult.Success -> {
-                            task.id = it.data.toInt()
-                            remindAlarmManager.createAlarm(task)
+                            task?.id = it.data.toInt()
+                            task?.let { item -> remindAlarmManager.createAlarm(item) }
                             navigateBack()
                         }
                     }
@@ -273,6 +275,11 @@ class CreateReminderFragment : Fragment(), MenuProvider, BackActionInterface, Da
 
             override fun onItemSelected(adapterView: AdapterView<*>?, view: View?, pos: Int, id: Long) {
                 selectedPeriod = TimeDateUtils(requireContext()).timeDates[pos].time
+                taskType = if (TimeDateUtils(requireContext()).timeDates[pos].time != null) {
+                    TaskPeriodType.PERIODIC
+                } else {
+                    TaskPeriodType.ONE_TIME
+                }
             }
         }
     }
@@ -325,26 +332,23 @@ class CreateReminderFragment : Fragment(), MenuProvider, BackActionInterface, Da
         }
     }
     //TODO переделать
-    private fun saveTask() = with(binding){
+    private fun saveTask() = with(binding) {
         if (isInputValid()) {
             val name = reminderNameEt.text.toString()
-            val description = reminderNameEt.text.toString()
-            val isFlag = flagSwitch.isChecked
+            val description = reminderDescriptionEt.text.toString()
 
-            task = Task(
-                name = name,
-                description = description,
-                reminderCreationTime = Calendar.getInstance().timeInMillis,
-                reminderTime = selectedTime!!,
-                reminderTimePeriod = selectedPeriod?:0,
-                type = if (selectedPeriod != null) TaskPeriodType.ONE_TIME else TaskPeriodType.PERIODIC,
+            viewModel.saveTask(
+                taskId = taskId,
+                taskName = name,
+                taskDesc = description,
+                taskCreationTime = Calendar.getInstance().timeInMillis,
+                taskTime = selectedTime!!,
+                taskTimePeriod = selectedPeriod ?: 0,
+                taskType = taskType!!,
                 isActive = true,
                 isMarkedWithFlag = flagSwitch.isChecked,
                 groupId = selectedGroup!!,
-                color = selectedColor!!
-            )
-            viewModel.saveTask(
-                task
+                taskColor = selectedColor!!
             )
         }
     }

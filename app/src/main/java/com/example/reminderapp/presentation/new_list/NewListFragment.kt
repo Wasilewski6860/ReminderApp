@@ -1,6 +1,5 @@
 package com.example.reminderapp.presentation.new_list
 
-import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -21,7 +20,6 @@ import com.example.reminderapp.presentation.interfaces.BackActionInterface
 import com.example.reminderapp.presentation.interfaces.DataReceiving
 import com.example.reminderapp.databinding.FragmentNewListBinding
 import com.example.reminderapp.presentation.base.serializer.GroupSerializer
-import com.example.reminderapp.presentation.create_reminder.CreateReminderFragment
 import com.example.reminderapp.presentation.navigation.FragmentNavigationConstants
 import com.example.reminderapp.presentation.new_list.adapter.ListItemDecoration
 import com.example.reminderapp.presentation.new_list.adapter.NewListAdapter
@@ -85,8 +83,9 @@ class NewListFragment : Fragment(), MenuProvider, BackActionInterface, DataRecei
             object : NewListAdapter.OnItemClickListener {
                 override fun onItemClick(position: Int) {
                     if (position < ColorsUtils(requireContext()).colorsListSize)
-                        colorsList[position].color?.let {
-                            selectedColorIv.circleColor = it
+                        colorsList[position].color?.let { selectedColor ->
+                            selectedColorIv.circleColor = selectedColor
+                            group?.groupColor = selectedColor
                         }
                     else {
                         imagesList[position - colorsList.size].image?.let { selectedItem ->
@@ -127,10 +126,10 @@ class NewListFragment : Fragment(), MenuProvider, BackActionInterface, DataRecei
             groupSerialized?.let { data ->
                 group = GroupSerializer.deserialize(data)
                 binding.apply {
-                    group?.let {
-                        newListTip.editText?.setText(it.groupName)
-                        selectedColorIv.circleColor = it.groupColor
-                        selectedColorIv.bitmap = it.groupColor
+                    group?.let { receivedGroup ->
+                        newListTip.editText?.setText(receivedGroup.groupName)
+                        selectedColorIv.circleColor = receivedGroup.groupColor
+                        selectedColorIv.bitmap = receivedGroup.groupColor
                     }
                 }
             }
@@ -139,6 +138,31 @@ class NewListFragment : Fragment(), MenuProvider, BackActionInterface, DataRecei
 
     override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
         menuInflater.inflate(R.menu.create_task_menu, menu)
+    }
+
+    override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+        when (menuItem.itemId) {
+            android.R.id.home -> {
+                navigateBack()
+                return true
+            }
+            R.id.action_save -> {
+                // TODO add list saving method here
+                if (isInputValid()) with(binding) {
+                    viewModel.saveList(
+                        id = if (group != null) group!!.groupId else -1,
+                        groupName = newListEt.text.toString(),
+                        groupColor = if (group != null) group!!.groupColor else -1,
+                        groupImage = if (group != null) group!!.groupImage else -1,
+                        tasksCount = if (group != null) group!!.tasksCount else 0,
+                    )
+                    navigateBack()
+                }
+                return true
+            }
+        }
+
+        return true
     }
 
     private fun isInputValid(): Boolean {
@@ -162,30 +186,5 @@ class NewListFragment : Fragment(), MenuProvider, BackActionInterface, DataRecei
         }
         return true
     }
-    override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-        when (menuItem.itemId) {
-            android.R.id.home -> {
-                navigateBack()
-                return true
-            }
-            R.id.action_save -> {
-                // TODO add list saving method here
-                if (isInputValid()) with(binding){
-                    viewModel.saveList(
-                        id = if (group != null) group!!.groupId else -1,
-                        groupName = newListEt.text.toString(),
-                        groupColor = if (group != null) group!!.groupColor else -1,
-                        groupImage = if (group != null) group!!.groupImage else -1,
-                        tasksCount = if (group != null) group!!.tasksCount else 0,
-                    )
-                    navigateBack()
-                }
-                return true
-            }
-        }
-
-        return true
-    }
-
 
 }
