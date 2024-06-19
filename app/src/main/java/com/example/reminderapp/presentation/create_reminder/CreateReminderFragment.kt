@@ -32,7 +32,9 @@ import com.example.reminderapp.databinding.FragmentCreateReminderBinding
 import com.example.reminderapp.presentation.base.OperationResult
 import com.example.reminderapp.presentation.interfaces.BackActionInterface
 import com.example.reminderapp.presentation.base.UiState
+import com.example.reminderapp.presentation.base.serializer.TaskSerializer
 import com.example.reminderapp.presentation.interfaces.DataReceiving
+import com.example.reminderapp.presentation.navigation.FragmentNavigationConstants
 import com.example.reminderapp.reminder.RemindAlarmManager
 import com.example.reminderapp.utils.ColorItem
 import com.example.reminderapp.utils.ColorsUtils
@@ -57,7 +59,9 @@ class CreateReminderFragment : Fragment(), MenuProvider, BackActionInterface, Da
     private val viewModel: CreateReminderViewModel by viewModel()
     private val remindAlarmManager: RemindAlarmManager by inject()
 
-    var selectedGroup: Group? = null
+    val dateFormat = SimpleDateFormat("E, dd.MM.yyyy 'г.' HH:mm", Locale.getDefault())
+
+    var selectedGroup: Int? = null
     var selectedPeriod: Long? = null
     var selectedTime: Long? = null
     var selectedColor: Int? = null
@@ -65,10 +69,6 @@ class CreateReminderFragment : Fragment(), MenuProvider, BackActionInterface, Da
 
     private lateinit var callback: OnBackPressedCallback
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        selectedGroup = arguments?.getSerializable(Constants.TASK_KEY) as Group?
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -88,13 +88,11 @@ class CreateReminderFragment : Fragment(), MenuProvider, BackActionInterface, Da
         }
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
 
+        receiveData()
+
         viewModel.fetchGroups()
         setupObservers()
 
-        setSpinnerColor()
-        setSpinnerPeriod()
-
-        setupSwitches()
 
         binding.selectedDateTv.setOnClickListener {
             showDateAndTimePickers()
@@ -114,11 +112,33 @@ class CreateReminderFragment : Fragment(), MenuProvider, BackActionInterface, Da
     }
 
     override fun receiveData() {
+        setupSwitches()
         arguments?.let {
-            // TODO fill all fields with that data
+            val taskSerialized: Task? = it.getSerializable(FragmentNavigationConstants.TASK_KEY) as Task?
+            if (taskSerialized != null) {
+                fillViews(taskSerialized)
+            }
         }
+        setSpinnerColor()
+        setSpinnerPeriod()
     }
 
+    private fun fillViews(task: Task) = with(binding) {
+        reminderNameEt.setText(task.name)
+        reminderDescriptionEt.setText(task.description)
+
+        val dateString = dateFormat.format(task.reminderTime)
+
+        remindSwitch.isChecked = true
+        selectedTime = task.reminderTime
+        selectedDateTv.text = dateString
+        selectedPeriod = task.reminderTimePeriod
+
+        binding.flagSwitch.isChecked = task.isMarkedWithFlag
+        selectedColor = task.color
+        selectedGroup = task.groupId
+
+    }
     private fun setupSwitches() {
         binding.remindSwitch.setOnCheckedChangeListener { _, isChecked ->
             val constraintLayout = binding.dateContainer
@@ -241,11 +261,13 @@ class CreateReminderFragment : Fragment(), MenuProvider, BackActionInterface, Da
     }
 
     private fun setSpinnerPeriod() {
-        val repeatTimeSpinnerItems = TimeDateUtils(requireContext()).timeDates.map { timeDate -> timeDate.name }
+        val timeDates = TimeDateUtils(requireContext()).timeDates
+        val repeatTimeSpinnerItems = timeDates.map { timeDate -> timeDate.name }
         val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, repeatTimeSpinnerItems)
         val spinner = binding.selectedPeriodSpinner
         spinner.adapter = adapter
 
+        if (selectedPeriod!=null) spinner.setSelection(timeDates.indexOfFirst{it.time == selectedPeriod})
         binding.selectedPeriodSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(p0: AdapterView<*>?) {}
 
@@ -261,12 +283,12 @@ class CreateReminderFragment : Fragment(), MenuProvider, BackActionInterface, Da
         val spinner = binding.selectedListSpinner
         spinner.adapter = adapter
 
-        if (selectedGroup!=null) spinner.setSelection(groups.indexOf(selectedGroup))
+        if (selectedGroup!=null) spinner.setSelection(groups.indexOfFirst{it.groupId == selectedGroup})
         binding.selectedListSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(p0: AdapterView<*>?) {}
 
             override fun onItemSelected(adapterView: AdapterView<*>?, view: View?, pos: Int, id: Long) {
-                selectedGroup = groups[pos]
+                selectedGroup = groups[pos].groupId
             }
         }
     }
@@ -292,6 +314,8 @@ class CreateReminderFragment : Fragment(), MenuProvider, BackActionInterface, Da
         val spinner = binding.selectedColorSpinner
         spinner.adapter = adapter
 
+        if (selectedColor!=null) spinner.setSelection(groupSpinnerItems.indexOfFirst{it.color == selectedColor})
+
         binding.selectedColorSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(p0: AdapterView<*>?) {}
 
@@ -316,7 +340,7 @@ class CreateReminderFragment : Fragment(), MenuProvider, BackActionInterface, Da
                 type = if (selectedPeriod != null) TaskPeriodType.ONE_TIME else TaskPeriodType.PERIODIC,
                 isActive = true,
                 isMarkedWithFlag = flagSwitch.isChecked,
-                groupId = selectedGroup!!.groupId,
+                groupId = selectedGroup!!,
                 color = selectedColor!!
             )
             viewModel.saveTask(
@@ -326,7 +350,6 @@ class CreateReminderFragment : Fragment(), MenuProvider, BackActionInterface, Da
     }
 
     private fun showDateAndTimePickers() {
-        val dateFormat = SimpleDateFormat("E, dd.MM.yyyy 'г.' HH:mm", Locale.getDefault())
         val getDate = Calendar.getInstance()
 
         // Date Picker
@@ -411,12 +434,6 @@ class CreateReminderFragment : Fragment(), MenuProvider, BackActionInterface, Da
                 return true
             }
             R.id.action_save -> {
-//                //TODO добавить сохранение
-//                val fragment = MainFragment()
-//                val transaction = requireActivity().supportFragmentManager.beginTransaction()
-//                transaction.replace(R.id.fragmentContainerView, fragment)
-//                transaction.addToBackStack(null)
-//                transaction.commit()
                 saveTask()
                 return true
             }

@@ -16,17 +16,13 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.domain.model.Group
-import com.example.domain.model.GroupSerializer
 import com.example.reminderapp.MainActivity
 import com.example.reminderapp.R
 import com.example.reminderapp.databinding.ListEditorScreenBinding
-import com.example.reminderapp.presentation.TestData
-import com.example.reminderapp.presentation.base.OperationResult
 import com.example.reminderapp.presentation.base.UiState
+import com.example.reminderapp.presentation.base.serializer.GroupSerializer
 import com.example.reminderapp.presentation.interfaces.BackActionInterface
 import com.example.reminderapp.presentation.navigation.FragmentNavigationConstants
-import com.example.reminderapp.presentation.navigation.TasksListTypeCase
-import com.example.reminderapp.presentation.navigation.TasksListTypeCaseSerializer
 import com.example.reminderapp.presentation.new_list.NewListFragment
 import com.example.reminderapp.presentation.recycleradapter.GroupListRecyclerViewAdapter
 import com.example.reminderapp.utils.showSnackbar
@@ -61,7 +57,7 @@ class EditListsScreenFragment : Fragment(), MenuProvider, BackActionInterface {
         setupObserver()
 
         /** Testing */
-        adapter.fillRecyclerWithFullItemsList(TestData().getTestList())
+//        adapter.fillRecyclerWithFullItemsList(TestData().getTestList())
 
         return binding.root
     }
@@ -83,23 +79,22 @@ class EditListsScreenFragment : Fragment(), MenuProvider, BackActionInterface {
     private fun setupAdapterAndRecycler() = with(binding) {
         adapter = GroupListRecyclerViewAdapter(object :
             GroupListRecyclerViewAdapter.OnItemClickListener {
-            override fun onRcItemClick(position: Int) {
+            override fun onRcItemClick(group: Group) {
                 /** Editing list info process here */
                 val bundle = Bundle().apply {
                     putString(
                         FragmentNavigationConstants.EDITABLE_LIST,
                         GroupSerializer.serialize(
-                            adapter.collectInfo(position)
+                            group
                         )
                     )
                 }
                 navigateToNewListFragment(bundle)
             }
-            override fun onDeleteIconClick(position: Int) {
-                /** Deletion process here */
-                val data = adapter.collectInfo(position)
-                viewModel.deleteGroup(data.groupId)
-                adapter.deleteItem(position)
+            override fun onDeleteIconClick(group: Group) {
+
+                viewModel.deleteGroup(group.groupId)
+                adapter.deleteItem(group)
             }
         }, isDeleteIconVisible = true)
 
@@ -116,7 +111,7 @@ class EditListsScreenFragment : Fragment(), MenuProvider, BackActionInterface {
                         is UiState.Success -> {
                             binding.contentLayout.visibility = View.VISIBLE
                             binding.loadingLayout.visibility = View.GONE
-                            adapter.fillRecyclerWithFullItemsList(it.data)
+                            adapter.submitList(it.data)
                         }
                         is UiState.Loading -> {
                             binding.contentLayout.visibility = View.GONE

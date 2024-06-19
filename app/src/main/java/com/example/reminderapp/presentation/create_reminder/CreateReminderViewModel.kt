@@ -6,7 +6,6 @@ import com.example.domain.model.Group
 import com.example.domain.model.Task
 import com.example.domain.use_case.GetAllGroupsUseCase
 import com.example.domain.use_case.SaveTaskUseCase
-import com.example.reminderapp.presentation.TestData
 import com.example.reminderapp.presentation.base.OperationResult
 import com.example.reminderapp.presentation.base.UiState
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -27,15 +26,15 @@ class CreateReminderViewModel(
 
     fun fetchGroups() {
         viewModelScope.launch {
-            _uiState.value = UiState.Success(TestData().getTestList())
+//            _uiState.value = UiState.Success(TestData().getTestList())
 //            TODO использовать это
-//            getAllGroupsUseCase(Unit)
-//                .catch { e ->
-//                    _uiState.value = UiState.Error(e.toString())
-//                }
-//                .collect {
-//                    _uiState.value = UiState.Success(it)
-//                }
+            getAllGroupsUseCase(Unit)
+                .catch { e ->
+                    _uiState.value = UiState.Error(e.toString())
+                }
+                .collect {
+                    _uiState.value = UiState.Success(it)
+                }
         }
     }
 

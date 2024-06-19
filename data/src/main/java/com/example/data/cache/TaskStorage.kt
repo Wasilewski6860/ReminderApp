@@ -19,6 +19,8 @@ interface TaskStorage {
 
     fun getAllTasksByPeriodType(period: String): Flow<List<Task>>
 
+    suspend fun addGroup(group: Group)
+
     fun getTask(id: Int): Flow<Task>
 
     fun getAllGroups(): Flow<List<Group>>

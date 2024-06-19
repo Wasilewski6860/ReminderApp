@@ -14,7 +14,8 @@ class GroupCacheMapper: Mapper<Pair<TaskGroupEntity, Int>, Group> {
                 groupId = groupId,
                 groupName = groupName,
                 groupColor = groupColor,
-                tasksCount = type.second
+                tasksCount = type.second,
+                groupImage = groupImage
             )
         }
     }
@@ -25,7 +26,8 @@ class GroupCacheMapper: Mapper<Pair<TaskGroupEntity, Int>, Group> {
                 first = TaskGroupEntity(
                     groupId = groupId,
                     groupName = groupName,
-                    groupColor = groupColor
+                    groupColor = groupColor,
+                    groupImage = groupImage
                 ),
                 second = tasksCount
             )
@@ -37,7 +39,8 @@ class GroupCacheMapper: Mapper<Pair<TaskGroupEntity, Int>, Group> {
             return TaskGroupEntity(
                 groupId = groupId,
                 groupName = groupName,
-                groupColor = groupColor
+                groupColor = groupColor,
+                groupImage = groupImage
             )
         }
     }

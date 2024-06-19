@@ -43,7 +43,8 @@ val appModule = module {
             getAllGroupsUseCase = get(),
             getTasksPlannedCountUseCase = get(),
             getTasksForTodayCountUseCase = get(),
-            getTasksWithFlagCountUseCase = get()
+            getTasksWithFlagCountUseCase = get(),
+            getAllTasksCountUseCase = get()
         )
     }
 
@@ -74,7 +75,7 @@ val appModule = module {
 
     viewModel<NewListViewModel> {
         NewListViewModel(
-
+            insertGroupUseCase = get()
         )
     }
 }

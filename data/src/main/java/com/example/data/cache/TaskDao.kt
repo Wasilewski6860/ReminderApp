@@ -36,6 +36,9 @@ interface TaskDao {
     @Query("SELECT * FROM task_group")
     fun getAllGroups(): Flow<List<TaskGroupEntity>>
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun addGroup(groupEntity: TaskGroupEntity)
+
     @Query("SELECT * FROM task_group WHERE groupId = :id")
     fun getGroup(id: Int): Flow<TaskGroupEntity>
 
@@ -47,7 +50,7 @@ interface TaskDao {
     fun getAllTasksByPeriodType(period: String): Flow<List<TaskEntity>>
 
     @Query("SELECT COUNT(*) FROM task WHERE groupId = :groupId")
-    fun getCountOfTasksInGroup(groupId: Int): Flow<Int>
+    suspend fun getCountOfTasksInGroup(groupId: Int): Int
 
     @Query("DELETE FROM task")
     suspend fun clearAll()

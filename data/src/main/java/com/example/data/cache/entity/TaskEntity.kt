@@ -2,9 +2,20 @@ package com.example.data.cache.entity
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "task")
+@Entity(
+    tableName = "task",
+    foreignKeys = [
+        ForeignKey(
+            entity = TaskGroupEntity::class,
+            parentColumns = ["groupId"],
+            childColumns = ["groupId"],
+            onDelete = ForeignKey.CASCADE
+        )
+    ]
+)
 data class TaskEntity(
     @PrimaryKey(autoGenerate = true) val id: Int,
     @ColumnInfo(name = "name") val name: String,

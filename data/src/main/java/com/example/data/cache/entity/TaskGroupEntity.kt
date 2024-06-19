@@ -9,4 +9,5 @@ data class TaskGroupEntity(
     val groupId: Int,
     val groupName: String,
     val groupColor: Int,
+    val groupImage: Int,
 )

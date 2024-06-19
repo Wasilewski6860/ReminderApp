@@ -30,6 +30,12 @@ class TaskRepositoryImpl(private val taskStorage: TaskStorage) : TaskRepository 
         taskStorage.getAllTasksByPeriodType(period.name)
 
     override fun getAllTasks(): Flow<List<Task>> = taskStorage.getAllTasks()
+    override fun getAllTasksCount(): Flow<Int> {
+        return getAllTasks().map { list->
+            list.size
+        }
+    }
+
     override fun getTasksForToday(): Flow<List<Task>> {
         return getAllTasks().map { list->
             list.filter { isToday(it.reminderTime) }
@@ -59,6 +65,8 @@ class TaskRepositoryImpl(private val taskStorage: TaskStorage) : TaskRepository 
     override fun getTasksWithFlagCount(): Flow<Int> {
         return getTasksWithFlag().map { list -> list.size }
     }
+
+    override suspend fun addGroup(group: Group) = taskStorage.addGroup(group)
 
     override fun getAllGroups(): Flow<List<Group>> = taskStorage.getAllGroups()
 

@@ -11,6 +11,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.GridLayoutManager
+import com.example.domain.model.Group
 import com.example.reminderapp.MainActivity
 import com.example.reminderapp.R
 import com.example.reminderapp.animations.animateImageViewRotation
@@ -18,15 +19,14 @@ import com.example.reminderapp.animations.hideRecyclerAnimation
 import com.example.reminderapp.animations.showRecyclerAnimation
 import com.example.reminderapp.databinding.MainScreenBinding
 import com.example.reminderapp.presentation.base.UiState
+import com.example.reminderapp.presentation.base.serializer.TasksListTypeCaseSerializer
 import com.example.reminderapp.presentation.create_reminder.CreateReminderFragment
 import com.example.reminderapp.presentation.editorlistsscreen.EditListsScreenFragment
 import com.example.reminderapp.presentation.navigation.FragmentNavigationConstants
 import com.example.reminderapp.presentation.navigation.TasksListTypeCase
-import com.example.reminderapp.presentation.navigation.TasksListTypeCaseSerializer
 import com.example.reminderapp.presentation.new_list.NewListFragment
 import com.example.reminderapp.presentation.recycleradapter.GroupListRecyclerViewAdapter
 import com.example.reminderapp.presentation.reminder_list.ReminderListFragment
-import com.example.reminderapp.utils.Constants
 import com.example.reminderapp.utils.showSnackbar
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -104,24 +104,31 @@ class MainFragment : Fragment() {
                     Navigation.ToNewListFragment -> NewListFragment()
                     Navigation.ToEditListsFragment -> EditListsScreenFragment()
                     Navigation.ToReminderListFragment -> ReminderListFragment()
+                }.apply {
+                    args?.let {
+                        arguments = it
+                    }
                 }
             )
-            .apply {
-                args?.let { arguments = it }
-            }
+//            .apply {
+//                args?.let {
+//                    arguments = it
+//                }
+//            }
             .addToBackStack(FragmentNavigationConstants.TO_MAIN_FRAGMENT_BACKSTACK)
             .commit()
     }
 
-    private fun gridLayoutItemsInit(todayCount: Int, plannedCount: Int, withFlagCount: Int) = with(binding) {
+    private fun gridLayoutItemsInit(todayCount: Int, plannedCount: Int, withFlagCount: Int, allCount: Int,) = with(binding) {
         topGridLayout.apply {
             currentDayTasksItem.apply {
                 counterTitle = todayCount.toString()
                 setOnClickListener {
+                    val string = TasksListTypeCaseSerializer.serialize(TasksListTypeCase.TodayTasks)
                     val bundle = Bundle().apply {
-                       putString(
+                       putSerializable(
                            FragmentNavigationConstants.LIST_TYPE,
-                           TasksListTypeCaseSerializer.serialize(TasksListTypeCase.TodayTasks)
+                           TasksListTypeCase.TodayTasks
                            )
                     }
                     navigate(Navigation.ToReminderListFragment, bundle)
@@ -131,21 +138,21 @@ class MainFragment : Fragment() {
                 counterTitle = plannedCount.toString()
                 setOnClickListener {
                     val bundle = Bundle().apply {
-                        putString(
+                        putSerializable(
                             FragmentNavigationConstants.LIST_TYPE,
-                            TasksListTypeCaseSerializer.serialize(TasksListTypeCase.PlannedTasks)
+                            TasksListTypeCase.PlannedTasks
                         )
                     }
                     navigate(Navigation.ToReminderListFragment, bundle)
                 }
             }
             allTasksItem.apply {
-                counterTitle = plannedCount.toString() // TODO replace this with all tasks title later
+                counterTitle = allCount.toString() // TODO replace this with all tasks title later
                 setOnClickListener {
                     val bundle = Bundle().apply {
-                        putString(
+                        putSerializable(
                             FragmentNavigationConstants.LIST_TYPE,
-                            TasksListTypeCaseSerializer.serialize(TasksListTypeCase.AllTasks)
+                            TasksListTypeCase.AllTasks
                         )
                     }
                     navigate(Navigation.ToReminderListFragment, bundle)
@@ -155,9 +162,9 @@ class MainFragment : Fragment() {
                 counterTitle = withFlagCount.toString()
                 setOnClickListener {
                     val bundle = Bundle().apply {
-                        putString(
+                        putSerializable(
                             FragmentNavigationConstants.LIST_TYPE,
-                            TasksListTypeCaseSerializer.serialize(TasksListTypeCase.TasksWithFlag)
+                            TasksListTypeCase.TasksWithFlag
                         )
                     }
                     navigate(Navigation.ToReminderListFragment, bundle)
@@ -177,18 +184,18 @@ class MainFragment : Fragment() {
     private fun setupRecyclerAndAdapter() = with(binding) {
         adapter = GroupListRecyclerViewAdapter(object :
             GroupListRecyclerViewAdapter.OnItemClickListener {
-            override fun onRcItemClick(position: Int) {
+            override fun onRcItemClick(group: Group) {
                 val bundle = Bundle().apply {
-                    putString(
+                    putSerializable(
                         FragmentNavigationConstants.LIST_TYPE,
-                        TasksListTypeCaseSerializer.serialize(TasksListTypeCase.GroupTasks(
-                            adapter.getGroupId(position)
-                        ))
+                        TasksListTypeCase.GroupTasks(
+                            group.groupId
+                        )
                     )
                 }
                 navigate(Navigation.ToReminderListFragment, bundle)
             }
-            override fun onDeleteIconClick(position: Int) {
+            override fun onDeleteIconClick(group: Group) {
                 /** STUB **/
             }
         }, isDeleteIconVisible = false)
@@ -198,7 +205,7 @@ class MainFragment : Fragment() {
     }
 
     private fun setupObserver() {
-        viewModel.fetchData()
+        viewModel.fetchData(Unit)
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiState.collect {
@@ -208,11 +215,12 @@ class MainFragment : Fragment() {
                             binding.loadingLayout.visibility = View.GONE
 
                             it.data.apply {
-                                adapter.fillRecyclerWithFullItemsList(this.groups)
+                                adapter.submitList(this.groups)
                                 gridLayoutItemsInit(
                                     todayCount = this.todayCount,
                                     plannedCount = this.plannedCount,
-                                    withFlagCount = this.withFlagCount
+                                    withFlagCount = this.withFlagCount,
+                                    allCount = this.allCount
                                 )
                             }
 

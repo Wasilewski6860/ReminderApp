@@ -5,23 +5,39 @@ import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.domain.model.Group
+import com.example.domain.model.Task
+import com.example.domain.model.TaskPeriodType
 import com.example.reminderapp.R
 import com.example.reminderapp.animations.playRecyclerItemDeletingAnimation
 import com.example.reminderapp.databinding.ListItemRecyclerBinding
+import com.example.reminderapp.databinding.ReminderItemBinding
+import com.example.reminderapp.utils.TimeDateUtils
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
 class GroupListRecyclerViewAdapter(
     private val listener: OnItemClickListener,
     private val isDeleteIconVisible: Boolean = false
-) : RecyclerView.Adapter<GroupListRecyclerViewAdapter.ItemHolder>() {
+) : ListAdapter<Group, GroupListRecyclerViewAdapter.GroupViewHolder>(DiffCallBack), KoinComponent {
 
-    private val groupsList = mutableListOf<Group>()
 
-    inner class ItemHolder(view: View) : RecyclerView.ViewHolder(view) {
-        private val binding = ListItemRecyclerBinding.bind(view)
+    class GroupViewHolder(val binding: ListItemRecyclerBinding) :
+        RecyclerView.ViewHolder(binding.root)
 
-        fun bind(item: Group) = with(binding) {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GroupViewHolder {
+        val inflater = LayoutInflater.from(parent.context)
+        val binding = ListItemRecyclerBinding.inflate(inflater, parent, false)
+        return GroupViewHolder(binding)
+    }
+
+    override fun onBindViewHolder(holder: GroupViewHolder, position: Int) {
+        val item = getItem(position)
+
+        with(holder.binding) {
             listNameTextView.text = item.groupName
             colorCircleItem.circleColor = item.groupColor
             listItemsCounterTextView.text = item.tasksCount.toString()
@@ -31,59 +47,54 @@ class GroupListRecyclerViewAdapter(
              * **/
 
             mainRecyclerViewItemHolder.setOnClickListener {
-                listener.onRcItemClick(position = adapterPosition)
+                listener.onRcItemClick(item)
             }
 
             trashImageView.apply {
                 when (isDeleteIconVisible) {
-                    false -> this.visibility = View.GONE
-                    else -> this.visibility = View.VISIBLE
+                    false -> this.visibility = android.view.View.GONE
+                    else -> this.visibility = android.view.View.VISIBLE
                 }
                 setOnClickListener {
                     playRecyclerItemDeletingAnimation(mainRecyclerViewItemHolder) {
-                        listener.onDeleteIconClick(position = adapterPosition)
+                        listener.onDeleteIconClick(item)
                     }
                 }
             }
+        }
+
+    }
+
+    fun deleteItem(itemToDelete: Group) {
+        val items = currentList.toMutableList()
+        val position = items.indexOfFirst { it == itemToDelete }
+
+        if (position != RecyclerView.NO_POSITION) {
+            val items = currentList.toMutableList()
+            items.removeAt(position)
+            submitList(items)
         }
     }
 
     interface OnItemClickListener {
 
-        fun onRcItemClick(position: Int)
+        fun onRcItemClick(group: Group)
 
-        fun onDeleteIconClick(position: Int)
+        fun onDeleteIconClick(group: Group)
 
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemHolder {
-        val view = LayoutInflater.from(parent.context).inflate(
-            R.layout.list_item_recycler, parent, false
-        )
-        return ItemHolder(view)
-    }
+    companion object {
+        val DiffCallBack = object : DiffUtil.ItemCallback<Group>() {
 
-    override fun getItemCount(): Int = groupsList.size
+            override fun areItemsTheSame(oldItem: Group, newItem: Group): Boolean {
+                return oldItem === newItem
+            }
 
-    override fun onBindViewHolder(holder: ItemHolder, position: Int) {
-        holder.bind(groupsList[position])
-    }
-
-    @SuppressLint("NotifyDataSetChanged")
-    fun fillRecyclerWithFullItemsList(itemsList: List<Group>) {
-        itemsList.forEach {
-            groupsList.add(it)
-            notifyDataSetChanged()
+            override fun areContentsTheSame(oldItem: Group, newItem: Group): Boolean {
+                return oldItem == newItem
+            }
         }
     }
-
-    fun deleteItem(position: Int) {
-        groupsList.removeAt(position)
-        notifyItemRemoved(position)
-    }
-
-    fun collectInfo(position: Int): Group = groupsList[position]
-
-    fun getGroupId(position: Int): Int = groupsList[position].groupId
 
 }
