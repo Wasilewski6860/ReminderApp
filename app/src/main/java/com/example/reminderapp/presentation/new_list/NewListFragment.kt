@@ -1,6 +1,7 @@
 package com.example.reminderapp.presentation.new_list
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.Menu
@@ -39,8 +40,9 @@ class NewListFragment : Fragment(), MenuProvider, BackActionInterface, DataRecei
     private val viewModel: NewListViewModel by viewModel()
 
     private var group: Group? = null
-    private var selectedColor: Int? = null
-    var selectedImage: Int? = null
+    private var groupColor: Int? = null
+    private var groupImage: Int? = null
+    private var groupId: Int? = null
 
     private lateinit var adapter: NewListAdapter
 
@@ -50,8 +52,8 @@ class NewListFragment : Fragment(), MenuProvider, BackActionInterface, DataRecei
     ): View {
         _binding = FragmentNewListBinding.inflate(layoutInflater, container, false)
 
-        selectedColor = ColorsUtils(requireContext()).colors[0].color
-        selectedColor?.let { binding.selectedColorIv.circleColor = it }
+        groupColor = ColorsUtils(requireContext()).colors[0].color
+        groupColor?.let { binding.selectedColorIv.circleColor = it }
 
         val activity = (activity as MainActivity)
         activity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -72,7 +74,7 @@ class NewListFragment : Fragment(), MenuProvider, BackActionInterface, DataRecei
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        requireActivity().addMenuProvider(this, viewLifecycleOwner , Lifecycle.State.RESUMED)
+        requireActivity().addMenuProvider(this, viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
 
     private fun setupRecyclerView() = binding.apply {
@@ -85,24 +87,25 @@ class NewListFragment : Fragment(), MenuProvider, BackActionInterface, DataRecei
                     if (position < ColorsUtils(requireContext()).colorsListSize)
                         colorsList[position].color?.let { selectedColor ->
                             selectedColorIv.circleColor = selectedColor
-                            group?.groupColor = selectedColor
+                            groupColor = selectedColor
                         }
                     else {
                         imagesList[position - colorsList.size].image?.let { selectedItem ->
-                            if (selectedImage != null && selectedImage == selectedItem) {
-                                selectedColorIv.visible = false
-                                selectedImage = null
+                            if (groupImage != null && groupImage == selectedItem) {
+                                selectedColorIv.isImageVisible = false
+                                groupImage = null
                             } else {
                                 selectedColorIv.apply {
                                     bitmap = selectedItem
-                                    visible = true
+                                    isImageVisible = true
                                 }
-                                selectedImage = selectedItem
+                                groupImage = selectedItem
                             }
                         }
                     }
                 }
-            }, requireContext())
+            }, requireContext()
+        )
         colorsRv.adapter = adapter
         colorsRv.layoutManager = GridLayoutManager(requireContext(), 6)
         colorsRv.addItemDecoration(ListItemDecoration(6, 50, true))
@@ -122,15 +125,21 @@ class NewListFragment : Fragment(), MenuProvider, BackActionInterface, DataRecei
 
     override fun receiveData() {
         arguments?.let {
-            val groupSerialized = it.getString(FragmentNavigationConstants.EDITABLE_LIST)
-            groupSerialized?.let { data ->
-                group = GroupSerializer.deserialize(data)
+            val receivedData = it.getSerializable(
+                FragmentNavigationConstants.EDITABLE_LIST,
+                Group::class.java
+            )
+            receivedData?.let { data ->
+                group = data
+                groupId = data.groupId
                 binding.apply {
-                    group?.let { receivedGroup ->
-                        newListTip.editText?.setText(receivedGroup.groupName)
-                        selectedColorIv.circleColor = receivedGroup.groupColor
-                        selectedColorIv.bitmap = receivedGroup.groupColor
+                    newListTip.editText?.setText(data.groupName)
+                    selectedColorIv.circleColor = data.groupColor
+                    data.groupImage.let { image ->
+                        selectedColorIv.isImageVisible = image != R.drawable.arrow_back
                     }
+                    if (selectedColorIv.isImageVisible)
+                        selectedColorIv.bitmap = data.groupImage
                 }
             }
         }
@@ -146,14 +155,14 @@ class NewListFragment : Fragment(), MenuProvider, BackActionInterface, DataRecei
                 navigateBack()
                 return true
             }
+
             R.id.action_save -> {
-                // TODO add list saving method here
                 if (isInputValid()) with(binding) {
                     viewModel.saveList(
-                        id = if (group != null) group!!.groupId else -1,
+                        id = groupId,
                         groupName = newListEt.text.toString(),
-                        groupColor = if (group != null) group!!.groupColor else -1,
-                        groupImage = if (group != null) group!!.groupImage else -1,
+                        groupColor = groupColor!!,
+                        groupImage = groupImage ?: R.drawable.arrow_back,
                         tasksCount = if (group != null) group!!.tasksCount else 0,
                     )
                     navigateBack()
@@ -169,17 +178,15 @@ class NewListFragment : Fragment(), MenuProvider, BackActionInterface, DataRecei
         with(binding) {
             val name = newListEt.text.toString()
 
-            if (name.isNullOrEmpty()){
+            if (name.isNullOrEmpty()) {
                 newListEt.setFocus(requireContext())
-                newListEt.setError("Имя не может быть пустым")
+                newListEt.error = "Имя не может быть пустым"
                 return false
-            }
-            else if(selectedColor == null) {
-                showSnackbar("Цвет должен быть выбран", requireActivity().findViewById(R.id.rootView))
-                return false
-            }
-            else if(selectedImage == null) {
-                showSnackbar("Изображение должно быть выбрано", requireActivity().findViewById(R.id.rootView))
+            } else if (groupColor == null) {
+                showSnackbar(
+                    "Цвет должен быть выбран",
+                    requireActivity().findViewById(R.id.rootView)
+                )
                 return false
             }
 

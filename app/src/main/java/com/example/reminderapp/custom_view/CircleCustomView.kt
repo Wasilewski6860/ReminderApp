@@ -75,7 +75,7 @@ class CircleCustomView @JvmOverloads constructor(
             invalidate()
         }
 
-    var visible: Boolean
+    var isImageVisible: Boolean
         get() = _isVisible
         set(value) {
             _isVisible = value

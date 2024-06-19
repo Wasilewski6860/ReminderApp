@@ -14,4 +14,5 @@ object GroupSerializer: BaseDataSerializer<Group> {
     override fun deserialize(serialized: String): Group {
         return gson.fromJson(serialized, Group::class.java)
     }
+
 }

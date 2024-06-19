@@ -172,7 +172,9 @@ class ReminderListFragment : Fragment(), DataReceiving, BackActionInterface, Men
 
     override fun receiveData() {
         arguments?.let {
-            val taskTypeSerialized: TasksListTypeCase? = it.getSerializable(FragmentNavigationConstants.LIST_TYPE)  as TasksListTypeCase?
+            val taskTypeSerialized: TasksListTypeCase? = it.getSerializable(
+                FragmentNavigationConstants.LIST_TYPE, TasksListTypeCase::class.java
+            )
             taskTypeSerialized?.let { data ->
                 viewModel.fetchData(data)
             }

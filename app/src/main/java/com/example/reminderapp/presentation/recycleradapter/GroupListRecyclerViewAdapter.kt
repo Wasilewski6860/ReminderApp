@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.domain.model.Group
+import com.example.reminderapp.R
 import com.example.reminderapp.animations.playRecyclerItemDeletingAnimation
 import com.example.reminderapp.databinding.ListItemRecyclerBinding
 import org.koin.core.component.KoinComponent
@@ -30,11 +31,17 @@ class GroupListRecyclerViewAdapter(
         with(holder.binding) {
             listNameTextView.text = item.groupName
             colorCircleItem.circleColor = item.groupColor
-            // colorCircleItem.bitmap = item.groupImage
+            item.groupImage.apply {
+                if (this == R.drawable.arrow_back) {
+                    colorCircleItem.isImageVisible = false
+                } else {
+                    colorCircleItem.bitmap = this
+                }
+            }
             listItemsCounterTextView.text = item.tasksCount.toString()
             /**
              *  Use there image setting like this:
-             * colorCircleItem.bitmap = item.image
+             *  colorCircleItem.bitmap = item.image
              * **/
 
             mainRecyclerViewItemHolder.setOnClickListener {

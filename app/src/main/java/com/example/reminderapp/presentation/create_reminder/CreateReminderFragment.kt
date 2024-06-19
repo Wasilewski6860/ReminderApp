@@ -115,7 +115,10 @@ class CreateReminderFragment : Fragment(), MenuProvider, BackActionInterface, Da
     override fun receiveData() {
         setupSwitches()
         arguments?.let {
-            val taskSerialized: Task? = it.getSerializable(FragmentNavigationConstants.TASK_KEY) as Task?
+            val taskSerialized: Task? = it.getSerializable(
+                FragmentNavigationConstants.TASK_KEY,
+                Task::class.java
+            )
             if (taskSerialized != null) {
                 taskId = taskSerialized.id
                 fillViews(taskSerialized)
