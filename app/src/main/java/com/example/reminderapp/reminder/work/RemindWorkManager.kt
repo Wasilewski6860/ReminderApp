@@ -21,6 +21,19 @@ class RemindWorkManager(val context: Context) {
             ExistingWorkPolicy.REPLACE, workRequest)
     }
 
+    fun createSetInactiveWorkRequest(taskId: Int) {
+        val workRequest = OneTimeWorkRequestBuilder<SetInactiveTaskWorker>()
+            .addTag(taskId.toString())
+            .setInputData(
+                workDataOf(
+                    "id" to taskId,
+                )
+            )
+            .build()
+        WorkManager.getInstance(context).enqueueUniqueWork(taskId.toString(),
+            ExistingWorkPolicy.REPLACE, workRequest)
+    }
+
     fun createPostponeWorkRequest(taskId: Int) {
         val workRequest = OneTimeWorkRequestBuilder<PostponeTaskWorker>()
             .addTag(taskId.toString())

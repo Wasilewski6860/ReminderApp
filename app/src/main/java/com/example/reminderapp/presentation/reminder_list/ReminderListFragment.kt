@@ -143,7 +143,7 @@ class ReminderListFragment : Fragment(), DataReceiving, BackActionInterface, Men
                         remindAlarmManager.createAlarm(task)
                     }
                     else {
-                        remindWorkManager.createCancelWorkRequest(taskId = task.id)
+                        remindWorkManager.createSetInactiveWorkRequest(taskId = task.id)
                     }
                 }
             }
