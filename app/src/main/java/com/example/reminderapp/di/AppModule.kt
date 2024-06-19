@@ -51,7 +51,8 @@ val appModule = module {
     viewModel<CreateReminderViewModel> {
         CreateReminderViewModel(
             createTaskUseCase = get(),
-            getAllGroupsUseCase = get()
+            getAllGroupsUseCase = get(),
+            editTaskUseCase = get()
         )
     }
 

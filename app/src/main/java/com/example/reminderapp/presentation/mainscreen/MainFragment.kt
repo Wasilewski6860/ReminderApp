@@ -110,11 +110,6 @@ class MainFragment : Fragment() {
                     }
                 }
             )
-//            .apply {
-//                args?.let {
-//                    arguments = it
-//                }
-//            }
             .addToBackStack(FragmentNavigationConstants.TO_MAIN_FRAGMENT_BACKSTACK)
             .commit()
     }

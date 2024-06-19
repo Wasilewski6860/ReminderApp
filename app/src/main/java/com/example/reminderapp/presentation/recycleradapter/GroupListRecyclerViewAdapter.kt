@@ -1,29 +1,19 @@
 package com.example.reminderapp.presentation.recycleradapter
 
-import android.animation.ObjectAnimator
-import android.annotation.SuppressLint
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.domain.model.Group
-import com.example.domain.model.Task
-import com.example.domain.model.TaskPeriodType
-import com.example.reminderapp.R
 import com.example.reminderapp.animations.playRecyclerItemDeletingAnimation
 import com.example.reminderapp.databinding.ListItemRecyclerBinding
-import com.example.reminderapp.databinding.ReminderItemBinding
-import com.example.reminderapp.utils.TimeDateUtils
 import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 
 class GroupListRecyclerViewAdapter(
     private val listener: OnItemClickListener,
     private val isDeleteIconVisible: Boolean = false
 ) : ListAdapter<Group, GroupListRecyclerViewAdapter.GroupViewHolder>(DiffCallBack), KoinComponent {
-
 
     class GroupViewHolder(val binding: ListItemRecyclerBinding) :
         RecyclerView.ViewHolder(binding.root)
@@ -40,6 +30,7 @@ class GroupListRecyclerViewAdapter(
         with(holder.binding) {
             listNameTextView.text = item.groupName
             colorCircleItem.circleColor = item.groupColor
+            // colorCircleItem.bitmap = item.groupImage
             listItemsCounterTextView.text = item.tasksCount.toString()
             /**
              *  Use there image setting like this:

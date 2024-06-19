@@ -4,10 +4,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.domain.model.Group
 import com.example.domain.model.Task
+import com.example.domain.model.TaskPeriodType
+import com.example.domain.use_case.EditTaskUseCase
 import com.example.domain.use_case.GetAllGroupsUseCase
 import com.example.domain.use_case.SaveTaskUseCase
 import com.example.reminderapp.presentation.base.OperationResult
 import com.example.reminderapp.presentation.base.UiState
+import com.example.reminderapp.utils.TimePeriodItem
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
@@ -16,6 +19,7 @@ import kotlinx.coroutines.launch
 class CreateReminderViewModel(
     val createTaskUseCase: SaveTaskUseCase,
     val getAllGroupsUseCase: GetAllGroupsUseCase,
+    val editTaskUseCase: EditTaskUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow<UiState<List<Group>>>(UiState.Loading)
@@ -39,28 +43,57 @@ class CreateReminderViewModel(
     }
 
     fun saveTask(
-       task: Task
+       taskId: Int? = null,
+       taskName: String,
+       taskDesc: String,
+       taskCreationTime: Long,
+       taskTime: Long,
+       taskTimePeriod: Long,
+       taskType: TaskPeriodType,
+       isActive: Boolean,
+       isMarkedWithFlag: Boolean,
+       groupId: Int,
+       taskColor: Int
     ) {
         _saveResult.value = OperationResult.Loading
         viewModelScope.launch {
-            createTaskUseCase(
-                Task(
-                    id = 0,
-                    name = task.name,
-                    description = task.description,
-                    reminderCreationTime = task.reminderCreationTime,
-                    reminderTime = task.reminderTime,
-                    reminderTimePeriod = task.reminderTimePeriod,
-                    type = task.type,
-                    isActive = task.isActive,
-                    isMarkedWithFlag = task.isMarkedWithFlag,
-                    groupId = task.groupId,
-                    color = task.color
+            if (taskId == null) {
+                createTaskUseCase(
+                    Task(
+                        id = 0,
+                        name = taskName,
+                        description = taskDesc,
+                        reminderCreationTime = taskCreationTime,
+                        reminderTime = taskTime,
+                        reminderTimePeriod = taskTimePeriod,
+                        type = taskType,
+                        isActive = isActive,
+                        isMarkedWithFlag = isMarkedWithFlag,
+                        groupId = groupId,
+                        color = taskColor
+                    )
+                ).catch { e ->
+                    _saveResult.value = OperationResult.Error(e.toString())
+                }.collect {
+                    _saveResult.value = OperationResult.Success(it)
+                }
+            } else {
+                editTaskUseCase(
+                    Task(
+                        id = taskId,
+                        name = taskName,
+                        description = taskDesc,
+                        reminderCreationTime = taskCreationTime,
+                        reminderTime = taskTime,
+                        reminderTimePeriod = taskTimePeriod,
+                        type = taskType,
+                        isActive = isActive,
+                        isMarkedWithFlag = isMarkedWithFlag,
+                        groupId = groupId,
+                        color = taskColor
+                    )
                 )
-            ).catch { e ->
-                _saveResult.value = OperationResult.Error(e.toString())
-            }.collect {
-                _saveResult.value = OperationResult.Success(it)
+                _saveResult.value = OperationResult.Success(taskId.toLong())
             }
         }
     }

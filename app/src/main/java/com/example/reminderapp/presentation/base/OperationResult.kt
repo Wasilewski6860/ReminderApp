@@ -10,6 +10,4 @@ sealed interface OperationResult<out T> {
 
     data class Error(val message: String) : OperationResult<Nothing>
 
-
-
 }

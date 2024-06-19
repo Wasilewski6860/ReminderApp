@@ -7,11 +7,11 @@ import com.google.gson.Gson
 object GroupSerializer: BaseDataSerializer<Group> {
     private val gson = Gson()
 
-    override fun serialize(group: Group): String {
-        return gson.toJson(group)
+    override fun serialize(obj: Group): String {
+        return gson.toJson(obj)
     }
 
-    override fun deserialize(data: String): Group {
-        return gson.fromJson(data, Group::class.java)
+    override fun deserialize(serialized: String): Group {
+        return gson.fromJson(serialized, Group::class.java)
     }
 }
