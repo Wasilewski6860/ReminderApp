@@ -1,6 +1,7 @@
 package com.example.reminderapp.presentation.editorlistsscreen
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
@@ -56,9 +57,6 @@ class EditListsScreenFragment : Fragment(), MenuProvider, BackActionInterface {
         setupAdapterAndRecycler()
         setupObserver()
 
-        /** Testing */
-//        adapter.fillRecyclerWithFullItemsList(TestData().getTestList())
-
         return binding.root
     }
 
@@ -82,17 +80,14 @@ class EditListsScreenFragment : Fragment(), MenuProvider, BackActionInterface {
             override fun onRcItemClick(group: Group) {
                 /** Editing list info process here */
                 val bundle = Bundle().apply {
-                    putString(
+                    putSerializable(
                         FragmentNavigationConstants.EDITABLE_LIST,
-                        GroupSerializer.serialize(
-                            group
-                        )
+                        group
                     )
                 }
                 navigateToNewListFragment(bundle)
             }
             override fun onDeleteIconClick(group: Group) {
-
                 viewModel.deleteGroup(group.groupId)
                 adapter.deleteItem(group)
             }
@@ -142,10 +137,11 @@ class EditListsScreenFragment : Fragment(), MenuProvider, BackActionInterface {
                 R.anim.slide_in_anim,
                 R.anim.slide_out_anim
             )
-            .apply {
+            .replace(
+                R.id.fragmentContainerView,
+                NewListFragment().apply {
                 args?.let { arguments = it }
-            }
-            .replace(R.id.fragmentContainerView, NewListFragment())
+            })
             .addToBackStack(FragmentNavigationConstants.TO_EDIT_LISTS_FRAGMENT)
             .commit()
     }

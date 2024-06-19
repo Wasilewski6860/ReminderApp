@@ -114,12 +114,16 @@ class MainFragment : Fragment() {
             .commit()
     }
 
-    private fun gridLayoutItemsInit(todayCount: Int, plannedCount: Int, withFlagCount: Int, allCount: Int,) = with(binding) {
+    private fun gridLayoutItemsInit(
+        todayCount: Int,
+        plannedCount: Int,
+        withFlagCount: Int,
+        allCount: Int
+    ) = with(binding) {
         topGridLayout.apply {
             currentDayTasksItem.apply {
                 counterTitle = todayCount.toString()
                 setOnClickListener {
-                    val string = TasksListTypeCaseSerializer.serialize(TasksListTypeCase.TodayTasks)
                     val bundle = Bundle().apply {
                        putSerializable(
                            FragmentNavigationConstants.LIST_TYPE,
@@ -142,7 +146,7 @@ class MainFragment : Fragment() {
                 }
             }
             allTasksItem.apply {
-                counterTitle = allCount.toString() // TODO replace this with all tasks title later
+                counterTitle = allCount.toString()
                 setOnClickListener {
                     val bundle = Bundle().apply {
                         putSerializable(

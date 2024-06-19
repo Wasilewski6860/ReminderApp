@@ -2,7 +2,6 @@ package com.example.reminderapp.presentation.base.serializer
 
 import com.example.domain.model.Task
 import com.example.reminderapp.presentation.base.BaseDataSerializer
-import com.example.reminderapp.presentation.navigation.TasksListTypeCase
 import com.google.gson.Gson
 
 object TaskSerializer: BaseDataSerializer<Task> {
