@@ -20,7 +20,7 @@ class DeleteTaskWorker(val context: Context, val workerParams: WorkerParameters)
         val id = inputData.getInt("id",-1)
         val name = inputData.getString("name")
         val description = inputData.getString("description")
-        if (id != -1 && name != null && description!=null) {
+        if (id != -1 && name != null && description!=null)  {
             deleteTaskUseCase(id)
         }
 
