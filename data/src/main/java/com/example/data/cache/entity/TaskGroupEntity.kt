@@ -1,5 +1,6 @@
 package com.example.data.cache.entity
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
@@ -9,5 +10,5 @@ data class TaskGroupEntity(
     val groupId: Int,
     val groupName: String,
     val groupColor: Int,
-    val groupImage: Int,
+    val groupImage: Int?
 )

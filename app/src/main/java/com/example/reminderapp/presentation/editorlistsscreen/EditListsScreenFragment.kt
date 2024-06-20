@@ -69,8 +69,6 @@ class EditListsScreenFragment : Fragment(), MenuProvider, BackActionInterface {
         super.onDestroyView()
         val menuHost: MenuHost = requireActivity()
         menuHost.removeMenuProvider(this)
-        // TODO Чет не так, вызывается при работающем фрагменте
-//        (activity as MainActivity).setToolbarTitleAndTitleColor("")
         callback.remove()
     }
 

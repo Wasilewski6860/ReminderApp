@@ -12,10 +12,13 @@ class GroupWithTasksCacheMapper(
 ): Mapper<GroupWithTasks, DomainGroupWithTasks> {
     override fun mapFromEntity(type: GroupWithTasks): DomainGroupWithTasks {
         with(type) {
-            return DomainGroupWithTasks(
+            val group = type.group
+            val tasks = type.tasks
+            val result = DomainGroupWithTasks(
                 group = groupCacheMapper.mapFromEntity(Pair(group, tasks.size) ),
-                tasks = tasks.map { taskEntity: TaskEntity ->  taskCacheMapper.mapFromEntity(taskEntity)}
+                tasks = if(tasks != null) tasks.map { taskEntity: TaskEntity ->  taskCacheMapper.mapFromEntity(taskEntity)} else listOf()
             )
+            return result
         }
     }
 
@@ -23,7 +26,7 @@ class GroupWithTasksCacheMapper(
         with(type) {
             return GroupWithTasks(
                 group = groupCacheMapper.mapToEntity(type.group).first,
-                tasks = tasks.map { task: Task ->  taskCacheMapper.mapToEntity(task)}
+                tasks = if(tasks != null) tasks.map { task: Task ->  taskCacheMapper.mapToEntity(task)} else listOf()
             )
         }
     }
