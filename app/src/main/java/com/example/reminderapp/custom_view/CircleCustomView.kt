@@ -5,6 +5,8 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffColorFilter
 import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.view.View
@@ -18,8 +20,17 @@ class CircleCustomView @JvmOverloads constructor(
 ) : View(context, attrs, defStyle) {
 
     private var _bitmap: Bitmap? = null
-    var _drawable: Drawable? = null
+    private var _drawable: Drawable? = null
     private var _isVisible = true
+
+    private val isDarkThemeEnabled = when (
+        resources.configuration.uiMode
+            and
+        android.content.res.Configuration.UI_MODE_NIGHT_MASK
+    ) {
+        android.content.res.Configuration.UI_MODE_NIGHT_NO -> false
+        else -> true
+    }
 
     private var paint: Paint = Paint().apply {
         color = Color.TRANSPARENT
@@ -60,12 +71,16 @@ class CircleCustomView @JvmOverloads constructor(
         set(value) {
             if (value != null) {
                 _drawable = ContextCompat.getDrawable(context, value)
+                _drawable?.colorFilter = PorterDuffColorFilter(
+                    if (isDarkThemeEnabled) Color.WHITE else Color.BLACK,
+                    PorterDuff.Mode.SRC_ATOP
+                )
                 _drawable?.let {
                     val bp = Bitmap.createBitmap(
                         it.intrinsicWidth,
                         it.intrinsicHeight,
                         Bitmap.Config.ARGB_8888
-                        )
+                    )
                     val canvas = Canvas(bp)
                     it.setBounds(0, 0, canvas.width, canvas.height)
                     it.draw(canvas)
