@@ -269,7 +269,10 @@ class CreateReminderFragment : Fragment(), MenuProvider, BackActionInterface, Da
         val spinner = binding.selectedListSpinner
         spinner.adapter = adapter
 
-        if (selectedGroup!=null) spinner.setSelection(groups.indexOfFirst{it.groupId == selectedGroup})
+        if (selectedGroup!=null){
+            spinner.setSelection(groups.indexOfFirst{it.groupId == selectedGroup})
+        }
+        else if (groups.isNotEmpty()) spinner.setSelection(0)
         binding.selectedListSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(p0: AdapterView<*>?) {}
 
