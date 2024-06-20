@@ -16,6 +16,7 @@ import com.example.domain.model.Task
 import com.example.domain.model.TaskPeriodType
 import com.example.domain.repository.TaskRepository
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -131,12 +132,17 @@ class TaskRepositoryImpl(
         taskStorage.getGroupWithTasks(id)
 
     override suspend fun deleteGroup(groupId: Int) {
-        getGroupWithTasks(groupId).collect{
-            for (task in it.tasks) {
-                deleteTask(task)
-            }
+
+        val groupWithTasksFlow = getGroupWithTasks(groupId)
+
+        val groupWithTasks = groupWithTasksFlow.first()
+
+        groupWithTasks.tasks.forEach { task ->
+            deleteTask(task)
         }
+
         taskStorage.deleteGroup(groupId)
+
     }
 
     fun isToday(timeInMillis: Long): Boolean {
