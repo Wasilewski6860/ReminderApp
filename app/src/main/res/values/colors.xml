@@ -8,9 +8,10 @@
     <color name="subheadTextColorDay">#39403F3F</color>
     <color name="boxStrokeColor">#DCDCDC</color>
     <color name="boxStrokeColorNignt">#606060</color>
+    <color name="dividerColor">#606060</color>
 
     <color name="purple_500">#FF6200EE</color>
-<!--  Temp colors for spinner tests  -->
+    <!--  Temp colors for spinner tests  -->
     <color name="red">#F80000</color>
     <color name="orange">#EF6C00</color>
     <color name="light_blue">#2F8FFF</color>

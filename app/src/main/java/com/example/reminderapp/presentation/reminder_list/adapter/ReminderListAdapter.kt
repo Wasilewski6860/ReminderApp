@@ -1,4 +1,4 @@
-package com.example.reminderapp.presentation.reminder_list
+package com.example.reminderapp.presentation.reminder_list.adapter
 
 import android.view.LayoutInflater
 import android.view.View
