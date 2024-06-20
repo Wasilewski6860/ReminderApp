@@ -1,6 +1,5 @@
 package com.example.reminderapp.presentation.reminder_list
 
-import android.icu.util.Calendar
 import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -26,6 +25,8 @@ import com.example.reminderapp.presentation.interfaces.BackActionInterface
 import com.example.reminderapp.presentation.interfaces.DataReceiving
 import com.example.reminderapp.presentation.navigation.FragmentNavigationConstants
 import com.example.reminderapp.presentation.navigation.TasksListTypeCase
+import com.example.reminderapp.presentation.reminder_list.adapter.ReminderItemDivider
+import com.example.reminderapp.presentation.reminder_list.adapter.ReminderListAdapter
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -153,6 +154,7 @@ class ReminderListFragment : Fragment(), DataReceiving, BackActionInterface, Men
         )
         adapter = reminderAdapter
         layoutManager = LinearLayoutManager(requireContext())
+        this.addItemDecoration(ReminderItemDivider(requireContext()))
     }
 
     private fun navigateToEditReminder(args: Bundle? = null) {
