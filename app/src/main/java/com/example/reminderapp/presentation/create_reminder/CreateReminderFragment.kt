@@ -2,7 +2,10 @@ package com.example.reminderapp.presentation.create_reminder
 
 import android.animation.ValueAnimator
 import android.app.DatePickerDialog
+import android.app.Dialog
 import android.app.TimePickerDialog
+import android.graphics.Color
+import android.graphics.drawable.Drawable
 import android.icu.text.SimpleDateFormat
 import android.icu.util.Calendar
 import android.os.Build
@@ -29,6 +32,7 @@ import com.example.domain.model.Task
 import com.example.domain.model.TaskPeriodType
 import com.example.reminderapp.MainActivity
 import com.example.reminderapp.R
+import com.example.reminderapp.app.App
 import com.example.reminderapp.databinding.FragmentCreateReminderBinding
 import com.example.reminderapp.presentation.interfaces.BackActionInterface
 import com.example.reminderapp.presentation.base.UiState
@@ -341,7 +345,7 @@ class CreateReminderFragment : Fragment(), MenuProvider, BackActionInterface, Da
 
         // Date Picker
         val datePicker = DatePickerDialog(
-            requireContext(),
+            requireContext(), R.style.PickerDialogStyle,
             { _, year, monthOfYear, dayOfMonth ->
                 val selectedDate = Calendar.getInstance()
                 selectedDate.set(Calendar.YEAR, year)
@@ -350,7 +354,7 @@ class CreateReminderFragment : Fragment(), MenuProvider, BackActionInterface, Da
 
                 // Time Picker
                 val timePicker = TimePickerDialog(
-                    requireContext(),
+                    requireContext(), R.style.PickerDialogStyle,
                     { _, hourOfDay, minute ->
                         selectedDate.set(Calendar.HOUR_OF_DAY, hourOfDay)
                         selectedDate.set(Calendar.MINUTE, minute)
@@ -364,14 +368,20 @@ class CreateReminderFragment : Fragment(), MenuProvider, BackActionInterface, Da
                     getDate.get(Calendar.MINUTE),
                     true // set true for 24-hour format
                 )
+
                 timePicker.show()
+                timePicker.getButton(Dialog.BUTTON_POSITIVE).setTextColor(Color.BLACK)
+                timePicker.getButton(Dialog.BUTTON_NEGATIVE).setTextColor(Color.BLACK)
             },
             getDate.get(Calendar.YEAR),
             getDate.get(Calendar.MONTH),
             getDate.get(Calendar.DAY_OF_MONTH)
 
         )
+
         datePicker.show()
+        datePicker.getButton(Dialog.BUTTON_POSITIVE).setTextColor(Color.BLACK)
+        datePicker.getButton(Dialog.BUTTON_NEGATIVE).setTextColor(Color.BLACK)
     }
 
     private fun isInputValid(): Boolean {

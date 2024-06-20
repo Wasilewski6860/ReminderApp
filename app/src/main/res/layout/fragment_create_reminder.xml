@@ -6,8 +6,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".presentation.create_reminder.CreateReminderFragment">
 
-
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/content_layout"
         android:layout_width="match_parent"
@@ -111,7 +109,8 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:paddingHorizontal="@dimen/padding_start_text"
-                android:paddingVertical="@dimen/padding_text_vertical"/>
+                android:paddingVertical="@dimen/padding_text_vertical"
+                android:theme="@style/SwitchStyle"/>
 
             <LinearLayout
                 android:id="@+id/date_and_period_ll"
@@ -218,7 +217,7 @@
                     app:layout_constraintStart_toEndOf="@+id/flag_tv"
                     app:layout_constraintTop_toTopOf="@+id/flag_tv"
                     app:layout_constraintBottom_toBottomOf="@+id/flag_tv"
-                    android:src="@drawable/flag_icon"/>
+                    android:src="@drawable/flag_icon_black"/>
 
                 <Switch
                     android:id="@+id/flag_switch"
@@ -227,7 +226,8 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     android:paddingHorizontal="@dimen/padding_start_text"
-                    android:paddingVertical="@dimen/padding_text_vertical"/>
+                    android:paddingVertical="@dimen/padding_text_vertical"
+                    android:theme="@style/SwitchStyle"/>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
