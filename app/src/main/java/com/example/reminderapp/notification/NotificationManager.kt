@@ -12,16 +12,20 @@ import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.os.bundleOf
 import com.example.reminderapp.MainActivity
 import com.example.reminderapp.R
-import com.example.reminderapp.utils.Constants.ACTION_CANCEL_PENDING_INTENT_ID
-import com.example.reminderapp.utils.Constants.ACTION_DISMISS
-import com.example.reminderapp.utils.Constants.ACTION_POSTPONE
-import com.example.reminderapp.utils.Constants.ACTION_POSTPONE_PENDING_INTENT_ID
-import com.example.reminderapp.utils.Constants.TASK_ID_EXTRA
+import com.example.data.reminder.Constants.ACTION_CANCEL_PENDING_INTENT_ID
+import com.example.data.reminder.Constants.ACTION_DISMISS
+import com.example.data.reminder.Constants.ACTION_POSTPONE
+import com.example.data.reminder.Constants.ACTION_POSTPONE_PENDING_INTENT_ID
+import com.example.data.reminder.Constants.TASK_ID_EXTRA
 import com.example.reminderapp.presentation.reminder.ReminderActivity
 import com.example.reminderapp.receivers.ReminderBroadcast
-import com.example.reminderapp.utils.Constants
+import com.example.data.reminder.Constants
+import com.example.data.reminder.Constants.TASK_DESCRIPTION_EXTRA
+import com.example.data.reminder.Constants.TASK_EXTRA
+import com.example.data.reminder.Constants.TASK_NAME_EXTRA
 import org.koin.core.component.KoinComponent
 
 class NotificationManager(val context: Context) : KoinComponent {
@@ -100,8 +104,8 @@ class NotificationManager(val context: Context) : KoinComponent {
                     PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
                 )
             )
-            .addAction(getDismissAction(taskId))
-            .addAction(getPostponeAction(taskId))
+            .addAction(getDismissAction(taskId, contentTitle, contextText))
+            .addAction(getPostponeAction(taskId, contentTitle, contextText))
 
         if (ActivityCompat.checkSelfPermission(
                 context,
@@ -112,9 +116,16 @@ class NotificationManager(val context: Context) : KoinComponent {
         }
     }
 
-    private fun getDismissAction(id: Int): NotificationCompat.Action {
+    private fun getDismissAction(id: Int, name: String, description: String): NotificationCompat.Action {
 
-        val intent = Intent(context, ReminderBroadcast::class.java).putExtra(TASK_ID_EXTRA, id).setAction(ACTION_DISMISS)
+        val intent = Intent(context, ReminderBroadcast::class.java).putExtra(
+            TASK_EXTRA,
+            bundleOf(
+                    TASK_ID_EXTRA to id,
+                    TASK_NAME_EXTRA to name,
+                    TASK_DESCRIPTION_EXTRA to description
+                )
+        ).setAction(ACTION_DISMISS)
 
         val cancelReminderPendingIntent = PendingIntent.getBroadcast(
             context,
@@ -131,8 +142,15 @@ class NotificationManager(val context: Context) : KoinComponent {
     }
 
 
-    private fun getPostponeAction(id: Int): NotificationCompat.Action {
-        val intent = Intent(context, ReminderBroadcast::class.java).putExtra(TASK_ID_EXTRA, id).setAction(ACTION_POSTPONE)
+    private fun getPostponeAction(id: Int, name: String, description: String): NotificationCompat.Action {
+        val intent = Intent(context, ReminderBroadcast::class.java).putExtra(
+            TASK_EXTRA,
+            bundleOf(
+                TASK_ID_EXTRA to id,
+                TASK_NAME_EXTRA to name,
+                TASK_DESCRIPTION_EXTRA to description
+            )
+        ).setAction(ACTION_POSTPONE)
 
         intent.putExtra(TASK_ID_EXTRA, id)
 
@@ -154,6 +172,10 @@ class NotificationManager(val context: Context) : KoinComponent {
     fun clearNotification(id: Int) {
         Log.d("NotificationManager","clearNotification")
         notificationManager.cancel(id)
+    }
+
+    fun clearNotifications() {
+        notificationManager.cancelAll()
     }
 
 

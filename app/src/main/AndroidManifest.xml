@@ -43,10 +43,24 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name=".receivers.ReminderBroadcast" />
+        <receiver android:name=".receivers.ReminderBroadcast"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.example.reminderapp.ACTION_DISMISS" />
+                <action android:name="com.example.reminderapp.ACTION_POSTPONE" />
+                <action android:name="com.example.reminderapp.ACTION_SET_INACTIVE" />
+                <action android:name="com.example.reminderapp.ACTION_CANCEL_ALL" />
+            </intent-filter>
+        </receiver>
+
         <receiver
             android:name=".receivers.AlarmBroadcastReceiver"
-            android:directBootAware="true"></receiver>
+            android:directBootAware="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.example.reminderapp.ACTION_CREATE_REMINDER" />
+            </intent-filter>
+        </receiver>
 
         <receiver
             android:name=".receivers.DeviceBootReceiver"

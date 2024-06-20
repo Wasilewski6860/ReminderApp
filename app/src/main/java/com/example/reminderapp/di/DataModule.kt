@@ -201,7 +201,7 @@ val dataModule = module {
     }
 
     single<TaskRepository> {
-        TaskRepositoryImpl(taskStorage = get())
+        TaskRepositoryImpl(taskStorage = get(), context = get())
     }
 
     single<TaskCacheMapper> {

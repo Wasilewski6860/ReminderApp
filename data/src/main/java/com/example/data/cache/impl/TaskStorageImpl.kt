@@ -29,8 +29,17 @@ class TaskStorageImpl(
 
     private val taskDao = taskDatabase.dao
 
-    override suspend fun addTask(task: Task) = flow {
-        emit(taskDao.addTask(taskCacheMapper.mapToEntity(task)))
+    override fun addTask(task: Task): Flow<Task> {
+        return flow {
+            // Вставляем запись и получаем её идентификатор
+            val taskId = taskDao.addTask(taskCacheMapper.mapToEntity(task))
+            emit(taskId)
+        }.flatMapLatest { id ->
+            // Получаем Flow<TaskEntity> по идентификатору
+            taskDao.getTask(id.toInt()).map {
+                taskCacheMapper.mapFromEntity(it)
+            }
+        }
     }
 
     override suspend fun editTask(task: Task) = taskDao.editTask(taskCacheMapper.mapToEntity(task))

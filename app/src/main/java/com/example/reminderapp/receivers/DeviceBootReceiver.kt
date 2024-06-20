@@ -7,7 +7,7 @@ import android.content.Intent
 import android.util.Log
 import com.example.domain.use_case.GetAllTasksUseCase
 import com.example.reminderapp.presentation.base.UiState
-import com.example.reminderapp.reminder.RemindAlarmManager
+import com.example.data.reminder.RemindAlarmManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob

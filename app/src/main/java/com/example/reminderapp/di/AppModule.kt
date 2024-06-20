@@ -8,8 +8,8 @@ import com.example.reminderapp.presentation.editorlistsscreen.ListsEditorViewMod
 import com.example.reminderapp.presentation.mainscreen.MainViewModel
 import com.example.reminderapp.presentation.new_list.NewListViewModel
 import com.example.reminderapp.presentation.reminder_list.ReminderListViewModel
-import com.example.reminderapp.reminder.RemindAlarmManager
-import com.example.reminderapp.reminder.work.RemindWorkManager
+import com.example.data.reminder.RemindAlarmManager
+import com.example.reminderapp.receivers.work.RemindWorkManager
 import com.example.reminderapp.utils.TimeDateUtils
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -70,7 +70,8 @@ val appModule = module {
             getPlannedTasksUseCase = get(),
             getTasksForTodayUseCase = get(),
             getTasksWithFlagUseCase = get(),
-            application = get()
+            application = get(),
+            editTaskUseCase = get()
         )
     }
 
