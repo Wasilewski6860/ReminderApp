@@ -5,6 +5,8 @@ import android.content.Context
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.domain.model.Task
+import com.example.domain.model.TaskPeriodType
+import com.example.domain.use_case.EditTaskUseCase
 import com.example.domain.use_case.GetAllTasksUseCase
 import com.example.domain.use_case.GetGroupWithTasksUseCase
 import com.example.domain.use_case.GetPlannedTasksUseCase
@@ -30,7 +32,8 @@ class ReminderListViewModel(
     private val getTasksForTodayUseCase: GetTasksForTodayUseCase,
     private val getPlannedTasksUseCase: GetPlannedTasksUseCase,
     private val getTasksWithFlagUseCase: GetTasksWithFlagUseCase,
-    private val getAllTasksUseCase: GetAllTasksUseCase
+    private val getAllTasksUseCase: GetAllTasksUseCase,
+    private val editTaskUseCase: EditTaskUseCase
 ) : AndroidViewModel(application) {
     // TODO: Implement the ViewModel
 
@@ -99,5 +102,37 @@ class ReminderListViewModel(
         }
     }
 
+    fun editTask(
+        taskId: Int,
+        taskName: String,
+        taskDesc: String,
+        taskCreationTime: Long,
+        taskTime: Long,
+        taskTimePeriod: Long,
+        taskType: TaskPeriodType,
+        isActive: Boolean,
+        isMarkedWithFlag: Boolean,
+        groupId: Int,
+        taskColor: Int
+    ) {
+        viewModelScope.launch {
+            val task = Task(
+                id = taskId,
+                name = taskName,
+                description = taskDesc,
+                reminderCreationTime = taskCreationTime,
+                reminderTime = taskTime,
+                reminderTimePeriod = taskTimePeriod,
+                type = taskType,
+                isActive = isActive,
+                isMarkedWithFlag = isMarkedWithFlag,
+                groupId = groupId,
+                color = taskColor
+            )
+            editTaskUseCase(
+                task
+            )
+        }
+    }
 
 }

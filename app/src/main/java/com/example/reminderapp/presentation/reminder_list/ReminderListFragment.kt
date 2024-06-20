@@ -1,5 +1,7 @@
 package com.example.reminderapp.presentation.reminder_list
 
+import android.icu.util.Calendar
+import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -24,10 +26,7 @@ import com.example.reminderapp.presentation.interfaces.BackActionInterface
 import com.example.reminderapp.presentation.interfaces.DataReceiving
 import com.example.reminderapp.presentation.navigation.FragmentNavigationConstants
 import com.example.reminderapp.presentation.navigation.TasksListTypeCase
-import com.example.reminderapp.reminder.RemindAlarmManager
-import com.example.reminderapp.reminder.work.RemindWorkManager
 import kotlinx.coroutines.launch
-import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class ReminderListFragment : Fragment(), DataReceiving, BackActionInterface, MenuProvider {
@@ -39,9 +38,6 @@ class ReminderListFragment : Fragment(), DataReceiving, BackActionInterface, Men
     private var _binding: FragmentReminderListBinding? = null
     private val binding get() = _binding!!
     private lateinit var reminderAdapter: ReminderListAdapter
-
-    private val remindAlarmManager: RemindAlarmManager by inject()
-    private val remindWorkManager: RemindWorkManager by inject()
 
     private val viewModel: ReminderListViewModel by viewModel()
 
@@ -139,12 +135,19 @@ class ReminderListFragment : Fragment(), DataReceiving, BackActionInterface, Men
             },
             onSwitchClickListener = object : ReminderListAdapter.OnSwitchClickListener {
                 override fun onClickItem(task: Task, isChecked: Boolean) {
-                    if (isChecked) {
-                        remindAlarmManager.createAlarm(task)
-                    }
-                    else {
-                        remindWorkManager.createCancelWorkRequest(taskId = task.id)
-                    }
+                    viewModel.editTask(
+                        taskId = task.id,
+                        taskName = task.name,
+                        taskDesc = task.description,
+                        taskCreationTime = task.reminderCreationTime,
+                        taskTime = task.reminderTime,
+                        taskTimePeriod = task.reminderTimePeriod,
+                        taskType = task.type,
+                        isActive = isChecked,
+                        isMarkedWithFlag = task.isMarkedWithFlag,
+                        groupId = task.groupId,
+                        taskColor = task.color
+                    )
                 }
             }
         )
@@ -172,9 +175,13 @@ class ReminderListFragment : Fragment(), DataReceiving, BackActionInterface, Men
 
     override fun receiveData() {
         arguments?.let {
-            val taskTypeSerialized: TasksListTypeCase? = it.getSerializable(
-                FragmentNavigationConstants.LIST_TYPE, TasksListTypeCase::class.java
-            )
+            val taskTypeSerialized: TasksListTypeCase? = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                it.getSerializable(
+                    FragmentNavigationConstants.LIST_TYPE, TasksListTypeCase::class.java
+                )
+            } else {
+                it.getSerializable(FragmentNavigationConstants.LIST_TYPE) as TasksListTypeCase?
+            }
             taskTypeSerialized?.let { data ->
                 viewModel.fetchData(data)
             }

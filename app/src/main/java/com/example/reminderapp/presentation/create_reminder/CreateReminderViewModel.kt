@@ -25,8 +25,8 @@ class CreateReminderViewModel(
     private val _uiState = MutableStateFlow<UiState<List<Group>>>(UiState.Loading)
     val uiState: StateFlow<UiState<List<Group>>> = _uiState
 
-    private val _saveResult = MutableStateFlow<OperationResult<Long>>(OperationResult.NotStarted)
-    val saveResult: StateFlow<OperationResult<Long>> = _saveResult
+    private val _saveResult = MutableStateFlow<OperationResult<Task>>(OperationResult.NotStarted)
+    val saveResult: StateFlow<OperationResult<Task>> = _saveResult
 
     fun fetchGroups() {
         viewModelScope.launch {
@@ -72,28 +72,25 @@ class CreateReminderViewModel(
                         groupId = groupId,
                         color = taskColor
                     )
-                ).catch { e ->
-                    _saveResult.value = OperationResult.Error(e.toString())
-                }.collect {
-                    _saveResult.value = OperationResult.Success(it)
-                }
-            } else {
-                editTaskUseCase(
-                    Task(
-                        id = taskId,
-                        name = taskName,
-                        description = taskDesc,
-                        reminderCreationTime = taskCreationTime,
-                        reminderTime = taskTime,
-                        reminderTimePeriod = taskTimePeriod,
-                        type = taskType,
-                        isActive = isActive,
-                        isMarkedWithFlag = isMarkedWithFlag,
-                        groupId = groupId,
-                        color = taskColor
-                    )
                 )
-                _saveResult.value = OperationResult.Success(taskId.toLong())
+            } else {
+                val task = Task(
+                    id = taskId,
+                    name = taskName,
+                    description = taskDesc,
+                    reminderCreationTime = taskCreationTime,
+                    reminderTime = taskTime,
+                    reminderTimePeriod = taskTimePeriod,
+                    type = taskType,
+                    isActive = isActive,
+                    isMarkedWithFlag = isMarkedWithFlag,
+                    groupId = groupId,
+                    color = taskColor
+                )
+                editTaskUseCase(
+                    task
+                )
+                _saveResult.value = OperationResult.Success(task)
             }
         }
     }

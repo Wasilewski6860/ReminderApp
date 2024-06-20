@@ -33,7 +33,7 @@ class ReminderListAdapter(
         val item = getItem(position)
 
         with(holder.binding) {
-            switchIsActive.isActivated = item.isActive
+            switchIsActive.isChecked = item.isActive
             reminderNameTv.text = item.name
             reminderDescriptionTv.text = item.description
             reminderDateTv.text = timeDateUtils.getFormattedTime(item.reminderTime, if (item.type==TaskPeriodType.PERIODIC) item.reminderTimePeriod else null)

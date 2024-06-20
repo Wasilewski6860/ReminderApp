@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface TaskStorage {
 
-    suspend fun addTask(task: Task): Flow<Long>
+    fun addTask(task: Task): Flow<Task>
 
     suspend fun editTask(task: Task)
 

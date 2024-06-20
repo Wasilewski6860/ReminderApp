@@ -5,6 +5,7 @@ import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.icu.text.SimpleDateFormat
 import android.icu.util.Calendar
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
@@ -29,21 +30,16 @@ import com.example.domain.model.TaskPeriodType
 import com.example.reminderapp.MainActivity
 import com.example.reminderapp.R
 import com.example.reminderapp.databinding.FragmentCreateReminderBinding
-import com.example.reminderapp.presentation.base.OperationResult
 import com.example.reminderapp.presentation.interfaces.BackActionInterface
 import com.example.reminderapp.presentation.base.UiState
-import com.example.reminderapp.presentation.base.serializer.TaskSerializer
 import com.example.reminderapp.presentation.interfaces.DataReceiving
 import com.example.reminderapp.presentation.navigation.FragmentNavigationConstants
-import com.example.reminderapp.reminder.RemindAlarmManager
 import com.example.reminderapp.utils.ColorItem
 import com.example.reminderapp.utils.ColorsUtils
-import com.example.reminderapp.utils.Constants
 import com.example.reminderapp.utils.TimeDateUtils
 import com.example.reminderapp.utils.setFocus
 import com.example.reminderapp.utils.showSnackbar
 import kotlinx.coroutines.launch
-import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.Locale
 
@@ -57,7 +53,6 @@ class CreateReminderFragment : Fragment(), MenuProvider, BackActionInterface, Da
     private val binding get() = _binding!!
 
     private val viewModel: CreateReminderViewModel by viewModel()
-    private val remindAlarmManager: RemindAlarmManager by inject()
 
     val dateFormat = SimpleDateFormat("E, dd.MM.yyyy 'г.' HH:mm", Locale.getDefault())
 
@@ -67,7 +62,6 @@ class CreateReminderFragment : Fragment(), MenuProvider, BackActionInterface, Da
     var selectedTime: Long? = null
     var selectedColor: Int? = null
     var taskType: TaskPeriodType? = null
-    var task: Task? = null
 
     private lateinit var callback: OnBackPressedCallback
 
@@ -115,10 +109,16 @@ class CreateReminderFragment : Fragment(), MenuProvider, BackActionInterface, Da
     override fun receiveData() {
         setupSwitches()
         arguments?.let {
-            val taskSerialized: Task? = it.getSerializable(
-                FragmentNavigationConstants.TASK_KEY,
-                Task::class.java
-            )
+            val taskSerialized: Task? = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                it.getSerializable(
+                    FragmentNavigationConstants.TASK_KEY,
+                    Task::class.java
+                )
+            } else {
+                it.getSerializable(
+                    FragmentNavigationConstants.TASK_KEY
+                ) as Task?
+            }
             if (taskSerialized != null) {
                 taskId = taskSerialized.id
                 fillViews(taskSerialized)
@@ -239,30 +239,6 @@ class CreateReminderFragment : Fragment(), MenuProvider, BackActionInterface, Da
                 }
             }
         }
-
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.saveResult.collect {
-                    when (it) {
-                        is OperationResult.Error ->  {
-                            binding.contentLayout.visibility = View.VISIBLE
-                            binding.loadingLayout.visibility = View.GONE
-                            showSnackbar(it.message, requireActivity().findViewById(R.id.rootView))
-                        }
-                        OperationResult.Loading -> {
-                            binding.contentLayout.visibility = View.GONE
-                            binding.loadingLayout.visibility = View.VISIBLE
-                        }
-                        OperationResult.NotStarted -> Unit
-                        is OperationResult.Success -> {
-                            task?.id = it.data.toInt()
-                            task?.let { item -> remindAlarmManager.createAlarm(item) }
-                            navigateBack()
-                        }
-                    }
-                }
-            }
-        }
     }
 
     private fun setSpinnerPeriod() {
@@ -353,6 +329,7 @@ class CreateReminderFragment : Fragment(), MenuProvider, BackActionInterface, Da
                 groupId = selectedGroup!!,
                 taskColor = selectedColor!!
             )
+            navigateBack()
         }
     }
 
