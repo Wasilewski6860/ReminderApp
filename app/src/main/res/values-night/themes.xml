@@ -60,4 +60,11 @@
         <item name="srcCompat">@drawable/add_icon</item>
     </style>
 
+    <style name="PickerDialogStyle" parent="Theme.AppCompat.Light.Dialog">
+        <item name="colorAccent">@color/black</item>
+        <item name="colorControlNormal">@color/black</item>
+    </style>
+
+    <style name="SwitchStyle" parent="Theme.AppCompat"/>
+
 </resources>

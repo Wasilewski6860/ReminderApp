@@ -64,7 +64,6 @@
         <item name="hintTextColor">@color/black</item>
     </style>
 
-
     <style name="BaseItemTextStyle">
         <item name="android:textSize">@dimen/normal_item_text_size</item>
     </style>
@@ -83,5 +82,12 @@
         <item name="backgroundTint">@color/blue</item>
         <item name="srcCompat">@drawable/add_icon</item>
     </style>
+
+    <style name="PickerDialogStyle" parent="Theme.AppCompat.Light.Dialog">
+        <item name="colorAccent">@color/black</item>
+        <item name="colorControlNormal">@color/black</item>
+    </style>
+
+    <style name="SwitchStyle" parent="Theme.AppCompat.Light"/>
 
 </resources>
