@@ -4,6 +4,7 @@ object Constants {
     const val ACTION_CREATE_REMINDER = "com.example.reminderapp.ACTION_CREATE_REMINDER"
     const val ACTION_SHOW_TASK = "ACTION_SHOW_TASK"
     const val ACTION_DISMISS = "com.example.reminderapp.ACTION_DISMISS"
+    const val ACTION_DELETE = "com.example.reminderapp.ACTION_DELETE"
     const val ACTION_POSTPONE = "com.example.reminderapp.ACTION_POSTPONE"
     const val ACTION_SET_INACTIVE = "com.example.reminderapp.ACTION_SET_INACTIVE"
     const val ACTION_CANCEL_ALL = "com.example.reminderapp.ACTION_CANCEL_ALL"

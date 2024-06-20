@@ -28,6 +28,10 @@ class ReminderBroadcast: BroadcastReceiver(), KoinComponent {
                     Log.d("MY LOG","ReminderBroadcast onReceive ACTION_DISMISS")
                     workManager.createCancelWorkRequest(id,name, description )
                 }
+                Constants.ACTION_DELETE -> {
+                    Log.d("MY LOG","ReminderBroadcast onReceive ACTION_DELETE")
+                    workManager.createDeleteWorkRequest(id,name, description )
+                }
                 Constants.ACTION_POSTPONE -> {
                     Log.d("MY LOG","ReminderBroadcast onReceive ACTION_POSTPONE")
                     workManager.createPostponeWorkRequest(id,name, description)

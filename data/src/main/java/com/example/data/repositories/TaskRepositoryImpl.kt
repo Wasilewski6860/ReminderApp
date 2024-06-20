@@ -6,6 +6,7 @@ import androidx.core.os.bundleOf
 import com.example.data.cache.TaskStorage
 import com.example.data.reminder.Constants
 import com.example.data.reminder.Constants.ACTION_CANCEL_ALL
+import com.example.data.reminder.Constants.ACTION_DELETE
 import com.example.data.reminder.Constants.ACTION_DISMISS
 import com.example.data.reminder.Constants.ACTION_SET_INACTIVE
 import com.example.data.reminder.RemindAlarmManager
@@ -20,7 +21,11 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import java.util.Calendar
 
-class TaskRepositoryImpl(private val taskStorage: TaskStorage, private val context: Context) : TaskRepository, KoinComponent {
+class TaskRepositoryImpl(
+    private val taskStorage: TaskStorage,
+    private val context: Context,
+    private val reminderReceiverClass: Class<*>
+) : TaskRepository, KoinComponent {
 
     private val remindAlarmManager: RemindAlarmManager by inject()
 
@@ -35,28 +40,28 @@ class TaskRepositoryImpl(private val taskStorage: TaskStorage, private val conte
             remindAlarmManager.createAlarm(task)
         }
         else {
-            val intent = Intent(ACTION_SET_INACTIVE).putExtra(
+            val intent = Intent(context, reminderReceiverClass).putExtra(
                 Constants.TASK_EXTRA,
                 bundleOf(
                     Constants.TASK_ID_EXTRA to task.id,
                     Constants.TASK_NAME_EXTRA to task.name,
                     Constants.TASK_DESCRIPTION_EXTRA to task.description
                 )
-            )
+            ).setAction(ACTION_SET_INACTIVE)
             context.sendBroadcast(intent)
         }
         taskStorage.editTask(task)
     }
 
     override suspend fun deleteTask(task: Task) {
-        val intent = Intent(ACTION_DISMISS).putExtra(
+        val intent = Intent(context, reminderReceiverClass).putExtra(
             Constants.TASK_EXTRA,
             bundleOf(
                 Constants.TASK_ID_EXTRA to task.id,
                 Constants.TASK_NAME_EXTRA to task.name,
                 Constants.TASK_DESCRIPTION_EXTRA to task.description
             )
-        )
+        ).setAction(ACTION_DISMISS)
         context.sendBroadcast(intent)
 
         taskStorage.deleteTask(task)
@@ -69,7 +74,7 @@ class TaskRepositoryImpl(private val taskStorage: TaskStorage, private val conte
     }
 
     override suspend fun deleteAll() {
-        val intent = Intent(ACTION_CANCEL_ALL)
+        val intent = Intent(context, reminderReceiverClass).setAction(ACTION_CANCEL_ALL)
         context.sendBroadcast(intent)
         taskStorage.clearAll()
     }

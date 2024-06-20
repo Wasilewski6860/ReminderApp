@@ -18,6 +18,7 @@ class CancellAllTasksWorker(val context: Context, val workerParams: WorkerParame
     val deleteTaskUseCase : DeleteTaskUseCase by inject()
 
     override suspend fun doWork(): Result {
+        Log.d("MY LOG","CancellAllTasksWorker doWork")
         getAllTasksUseCase(Unit).collect{
             for(task in it) {
                 deleteTaskUseCase(task.id)

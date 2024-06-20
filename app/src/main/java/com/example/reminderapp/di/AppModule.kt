@@ -9,6 +9,7 @@ import com.example.reminderapp.presentation.mainscreen.MainViewModel
 import com.example.reminderapp.presentation.new_list.NewListViewModel
 import com.example.reminderapp.presentation.reminder_list.ReminderListViewModel
 import com.example.data.reminder.RemindAlarmManager
+import com.example.reminderapp.receivers.AlarmBroadcastReceiver
 import com.example.reminderapp.receivers.work.RemindWorkManager
 import com.example.reminderapp.utils.TimeDateUtils
 import org.koin.android.ext.koin.androidContext
@@ -22,7 +23,7 @@ val appModule = module {
     }
 
     single<RemindAlarmManager> {
-        RemindAlarmManager(context = androidContext())
+        RemindAlarmManager(context = androidContext(), receiverClass = AlarmBroadcastReceiver::class.java)
     }
 
     single<AlarmManager> {

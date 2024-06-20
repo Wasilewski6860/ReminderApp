@@ -23,6 +23,7 @@ import com.example.data.reminder.Constants.TASK_ID_EXTRA
 import com.example.reminderapp.presentation.reminder.ReminderActivity
 import com.example.reminderapp.receivers.ReminderBroadcast
 import com.example.data.reminder.Constants
+import com.example.data.reminder.Constants.ACTION_DELETE
 import com.example.data.reminder.Constants.TASK_DESCRIPTION_EXTRA
 import com.example.data.reminder.Constants.TASK_EXTRA
 import com.example.data.reminder.Constants.TASK_NAME_EXTRA
@@ -125,7 +126,7 @@ class NotificationManager(val context: Context) : KoinComponent {
                     TASK_NAME_EXTRA to name,
                     TASK_DESCRIPTION_EXTRA to description
                 )
-        ).setAction(ACTION_DISMISS)
+        ).setAction(ACTION_DELETE)
 
         val cancelReminderPendingIntent = PendingIntent.getBroadcast(
             context,

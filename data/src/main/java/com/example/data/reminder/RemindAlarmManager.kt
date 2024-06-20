@@ -14,7 +14,8 @@ import com.example.domain.model.Task
 import com.example.domain.model.TaskPeriodType
 
 class RemindAlarmManager(
-    private val context: Context
+    private val context: Context,
+    private val receiverClass: Class<*>
 ) {
 
     private val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
@@ -82,10 +83,11 @@ class RemindAlarmManager(
     fun clearAlarm(task: Task) = clearAlarm(task.id, task.name, task.description)
 
     private fun createReminderAlarmIntent(taskId: Int, name: String, text: String): PendingIntent {
-        val intent = Intent(ACTION_CREATE_REMINDER).apply {
+        val intent = Intent(context, receiverClass).apply {
             putExtra(TASK_ID_EXTRA, taskId)
             putExtra(TASK_NAME_EXTRA, name)
             putExtra(TASK_DESCRIPTION_EXTRA, text)
+            action = ACTION_CREATE_REMINDER
         }
         return PendingIntent
             .getBroadcast(context, taskId.toInt(), intent, PendingIntent.FLAG_UPDATE_CURRENT)

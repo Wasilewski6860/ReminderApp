@@ -23,6 +23,21 @@ class RemindWorkManager(val context: Context) {
             ExistingWorkPolicy.REPLACE, workRequest)
     }
 
+    fun createDeleteWorkRequest(id: Int, name: String, description: String) {
+        val workRequest = OneTimeWorkRequestBuilder<DeleteTaskWorker>()
+            .addTag(id.toString())
+            .setInputData(
+                workDataOf(
+                    "id" to id,
+                    "name" to name,
+                    "description" to description,
+                )
+            )
+            .build()
+        WorkManager.getInstance(context).enqueueUniqueWork(id.toString(),
+            ExistingWorkPolicy.REPLACE, workRequest)
+    }
+
     fun createCancelAllWorkRequest() {
         val workRequest = OneTimeWorkRequestBuilder<CancellAllTasksWorker>()
             .build()
