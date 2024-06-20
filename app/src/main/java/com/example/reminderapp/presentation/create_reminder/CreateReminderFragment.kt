@@ -324,7 +324,7 @@ class CreateReminderFragment : Fragment(), MenuProvider, BackActionInterface, Da
                 taskName = name,
                 taskDesc = description,
                 taskCreationTime = Calendar.getInstance().timeInMillis,
-                taskTime = selectedTime!!,
+                taskTime = selectedTime?:Calendar.getInstance().timeInMillis,
                 taskTimePeriod = selectedPeriod ?: 0,
                 taskType = taskType!!,
                 isActive = true,
@@ -383,8 +383,8 @@ class CreateReminderFragment : Fragment(), MenuProvider, BackActionInterface, Da
                 reminderNameEt.setError("Имя не может быть пустым")
                 return false
             }
-            else if(selectedTime == null) {
-                showSnackbar("Дата напоминания должна быть выбрана", requireActivity().findViewById(R.id.rootView))
+            else if(selectedTime == null && selectedPeriod == null) {
+                showSnackbar("Дата напоминания и/или периодичность должны быть выбраны", requireActivity().findViewById(R.id.rootView))
                 return false
             }
             else if(selectedGroup == null) {
