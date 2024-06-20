@@ -133,27 +133,16 @@ class TaskRepositoryImpl(
 
     override suspend fun deleteGroup(groupId: Int) {
 
-
-        // Получаем Flow с группой и её задачами
         val groupWithTasksFlow = getGroupWithTasks(groupId)
 
-        // Преобразуем Flow<GroupWithTasks> в GroupWithTasks
         val groupWithTasks = groupWithTasksFlow.first()
 
-        // Удаляем все задачи в группе
         groupWithTasks.tasks.forEach { task ->
             deleteTask(task)
         }
 
-        // Удаляем саму группу
         taskStorage.deleteGroup(groupId)
 
-//        getGroupWithTasks(groupId).collect{
-//            for (task in it.tasks) {
-//                deleteTask(task)
-//            }
-//        }
-//        taskStorage.deleteGroup(groupId)
     }
 
     fun isToday(timeInMillis: Long): Boolean {
