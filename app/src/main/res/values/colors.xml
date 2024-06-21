@@ -5,7 +5,8 @@
 
     <color name="windowBackgroundDay">#F0F0F0</color>
     <color name="windowBackgroundNight">#000000</color>
-    <color name="subheadTextColorDay">#39403F3F</color>
+    <color name="subheadTextColorDay">#9A333333</color>
+    <color name="subheadTextColorNight">#99F4F4F4</color>
     <color name="boxStrokeColor">#DCDCDC</color>
     <color name="boxStrokeColorNignt">#606060</color>
     <color name="dividerColor">#606060</color>

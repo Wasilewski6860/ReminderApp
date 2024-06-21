@@ -144,9 +144,7 @@ class EditListsScreenFragment : Fragment(), MenuProvider, BackActionInterface {
             .commit()
     }
 
-    override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-        menuInflater.inflate(R.menu.create_task_menu, menu)
-    }
+    override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) { /** STUB **/ }
 
     override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
         when (menuItem.itemId) {

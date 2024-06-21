@@ -135,4 +135,8 @@ class ReminderListViewModel(
         }
     }
 
+    fun deleteTask(task: Task) {
+        /** Deletion process here **/
+    }
+
 }

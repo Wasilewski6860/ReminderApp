@@ -150,6 +150,11 @@ class ReminderListFragment : Fragment(), DataReceiving, BackActionInterface, Men
                         taskColor = task.color
                     )
                 }
+            },
+            onDeleteClickListener = object : ReminderListAdapter.OnDeleteClickListener {
+                override fun onDeleteClick(task: Task) {
+                    viewModel.deleteTask(task) // TODO check this method in viewModel
+                }
             }
         )
         adapter = reminderAdapter
