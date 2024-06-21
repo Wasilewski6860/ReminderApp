@@ -39,6 +39,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:paddingVertical="@dimen/item_vertical_padding"
+            android:background="?android:attr/windowBackground"
             tools:listitem="@layout/reminder_item" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
