@@ -36,16 +36,11 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val toolbar: MaterialToolbar = findViewById(R.id.toolbar)
-        setSupportActionBar(toolbar)
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             WindowCompat.setDecorFitsSystemWindows(window, false)
-            toolbar setPaddingToInset statusBars()
             binding.fragmentContainerView setPaddingToInset navigationBars()
+//            binding.fragmentContainerView setPaddingToInset statusBars()
         }
-
-        supportActionBar?.setDisplayShowTitleEnabled(false)
 
     }
 
@@ -63,12 +58,12 @@ class MainActivity : AppCompatActivity() {
         return super.dispatchTouchEvent(ev)
     }
 
-    fun setToolbarTitleAndTitleColor(title: String,color: Int? = null) {
-        val toolbar: MaterialToolbar = findViewById(R.id.toolbar)
-        toolbar.title = title
-        color?.let {
-            toolbar.setTitleTextColor(it)
-        }
-    }
+//    fun setToolbarTitleAndTitleColor(title: String,color: Int? = null) {
+//        val toolbar: MaterialToolbar = findViewById(R.id.toolbar)
+//        toolbar.title = title
+//        color?.let {
+//            toolbar.setTitleTextColor(it)
+//        }
+//    }
 
 }

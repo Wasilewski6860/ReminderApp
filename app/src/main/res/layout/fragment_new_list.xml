@@ -6,12 +6,28 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".presentation.new_list.NewListFragment">
 
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/createListAppBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/createListToolbar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        </com.google.android.material.appbar.MaterialToolbar>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
     <com.example.reminderapp.custom_view.CircleCustomView
         android:id="@+id/selected_color_iv"
         android:layout_width="50dp"
         android:layout_height="50dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/createListAppBarLayout"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="50dp"/>
 
@@ -34,7 +50,7 @@
             android:id="@+id/new_list_et"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Новый список"
+            android:hint="@string/add_list_hint"
             android:imeOptions="actionDone"
             android:gravity="center" />
 

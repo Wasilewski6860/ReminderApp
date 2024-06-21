@@ -80,7 +80,11 @@
     <string name="all">All</string>
     <string name="with_flag">With flag</string>
     <string name="my_lists">My lists</string>
+    <string name="add_list">Add new list</string>
 
     <string name="nothing_found">Nothing found</string>
+    <string name="edit">Edit</string>
+    <string name="add_list_abbr">Add list</string>
+    <string name="add_list_hint">New list</string>
 
 </resources>

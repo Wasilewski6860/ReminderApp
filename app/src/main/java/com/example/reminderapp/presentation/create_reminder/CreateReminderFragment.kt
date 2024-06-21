@@ -32,6 +32,8 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.view.MenuProvider
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -50,10 +52,12 @@ import com.example.reminderapp.utils.ColorItem
 import com.example.reminderapp.utils.ColorsUtils
 import com.example.reminderapp.utils.TimeDateUtils
 import com.example.reminderapp.utils.setFocus
+import com.example.reminderapp.utils.setPaddingToInset
 import com.example.reminderapp.utils.showSnackbar
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import androidx.core.view.WindowInsetsCompat.Type.statusBars
 import java.util.Locale
 
 
@@ -92,17 +96,10 @@ class CreateReminderFragment : Fragment(), MenuProvider, BackActionInterface, Da
 
         checkPermissions()
 
-        val activity = (activity as MainActivity)
-        activity.supportActionBar?.setDisplayShowTitleEnabled(false)
-        activity.setToolbarTitleAndTitleColor("")
-        activity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        edgeToEdge()
+        setupToolbar()
 
-        callback = object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                navigateBack()
-            }
-        }
-        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
+        setupOnBackPressed()
 
         viewModel.fetchGroups()
         setupObservers()
@@ -437,6 +434,32 @@ class CreateReminderFragment : Fragment(), MenuProvider, BackActionInterface, Da
             height += child.measuredHeight
         }
         return height
+    }
+
+    fun setupOnBackPressed() {
+        callback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                navigateBack()
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
+    }
+    private fun setupToolbar() = with(binding) {
+        val activity = (activity as MainActivity)
+        activity.setSupportActionBar(createToolbar)
+
+        activity.supportActionBar?.apply {
+            setDisplayShowTitleEnabled(false)
+            title = ""
+            setDisplayHomeAsUpEnabled(true)
+        }
+    }
+
+    private fun edgeToEdge() = with(binding) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            WindowCompat.setDecorFitsSystemWindows(requireActivity().window, false)
+            createToolbar setPaddingToInset statusBars()
+        }
     }
 
     override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {

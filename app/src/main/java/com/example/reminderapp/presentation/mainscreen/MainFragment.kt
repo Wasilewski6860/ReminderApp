@@ -1,11 +1,15 @@
 package com.example.reminderapp.presentation.mainscreen
 
 import android.annotation.SuppressLint
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.activity.OnBackPressedCallback
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -27,6 +31,7 @@ import com.example.reminderapp.presentation.navigation.TasksListTypeCase
 import com.example.reminderapp.presentation.new_list.NewListFragment
 import com.example.reminderapp.presentation.recycleradapter.GroupListRecyclerViewAdapter
 import com.example.reminderapp.presentation.reminder_list.ReminderListFragment
+import com.example.reminderapp.utils.setPaddingToInset
 import com.example.reminderapp.utils.showSnackbar
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -46,17 +51,36 @@ class MainFragment : Fragment() {
     ): View {
         binding = MainScreenBinding.inflate(inflater, container, false)
 
-        (activity as MainActivity).setToolbarTitleAndTitleColor("")
+//        (activity as MainActivity).setToolbarTitleAndTitleColor("")
 
-        binding.apply {
-            setupRecyclerAndAdapter()
-            setupObserver()
-            initListeners()
-        }
+        edgeToEdge()
+        setupToolbar()
+
+
+        setupRecyclerAndAdapter()
+        setupObserver()
+        initListeners()
 
         initListeners()
 
         return binding.root
+    }
+
+    private fun setupToolbar() = with(binding) {
+        val activity = (activity as MainActivity)
+        activity.setSupportActionBar(mainToolbar)
+
+        activity.supportActionBar?.apply {
+            setDisplayShowTitleEnabled(false)
+            title = ""
+        }
+    }
+
+    private fun edgeToEdge() = with(binding) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            WindowCompat.setDecorFitsSystemWindows(requireActivity().window, false)
+            mainToolbar setPaddingToInset WindowInsetsCompat.Type.statusBars()
+        }
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")

@@ -63,7 +63,11 @@
     <string name="with_flag">С флагом</string>
 
     <string name="my_lists">Мои списки</string>
+    <string name="add_list">Добавить список</string>
 
     <string name="nothing_found">Ничего не найдено</string>
+    <string name="edit">Изменить</string>
+    <string name="add_list_abbr">Доб.список</string>
+    <string name="add_list_hint">Новый список</string>
 
 </resources>

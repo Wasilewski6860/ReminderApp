@@ -11,6 +11,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.core.view.MenuProvider
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -27,6 +29,7 @@ import com.example.reminderapp.presentation.navigation.FragmentNavigationConstan
 import com.example.reminderapp.presentation.navigation.TasksListTypeCase
 import com.example.reminderapp.presentation.reminder_list.adapter.ReminderItemDivider
 import com.example.reminderapp.presentation.reminder_list.adapter.ReminderListAdapter
+import com.example.reminderapp.utils.setPaddingToInset
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -58,15 +61,10 @@ class ReminderListFragment : Fragment(), DataReceiving, BackActionInterface, Men
     ): View {
         _binding = FragmentReminderListBinding.inflate(layoutInflater, container, false)
 
-        val activity = (activity as MainActivity)
-        activity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        edgeToEdge()
+        setupToolbar()
 
-        callback = object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                navigateBack()
-            }
-        }
-        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
+        setupOnBackPressed()
 
         // viewModel.fetchData(groupType)
         setupRecyclerView()
@@ -86,6 +84,31 @@ class ReminderListFragment : Fragment(), DataReceiving, BackActionInterface, Men
         callback.remove()
     }
 
+    fun setupOnBackPressed() {
+        callback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                navigateBack()
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
+    }
+    private fun setupToolbar() = with(binding) {
+        val activity = (activity as MainActivity)
+        activity.setSupportActionBar(reminderListToolbar)
+
+        activity.supportActionBar?.apply {
+            setDisplayShowTitleEnabled(false)
+            setDisplayHomeAsUpEnabled(true)
+        }
+    }
+
+    private fun edgeToEdge() = with(binding) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            WindowCompat.setDecorFitsSystemWindows(requireActivity().window, false)
+            reminderListToolbar setPaddingToInset WindowInsetsCompat.Type.statusBars()
+        }
+    }
+
     private fun initListener() = with(binding) {
         addFloatingActionButton.setOnClickListener {
             navigateToEditReminder()
@@ -103,7 +126,7 @@ class ReminderListFragment : Fragment(), DataReceiving, BackActionInterface, Men
                             binding.nothingFindLayout.visibility = View.GONE
 
                             reminderAdapter.submitList(it.data.tasks)
-                            (activity as MainActivity).setToolbarTitleAndTitleColor(it.data.groupName)
+                            binding.reminderListToolbar.title = it.data.groupName
                         }
                         is UiState.Loading -> {
                             binding.contentLayout.visibility = View.GONE
