@@ -1,5 +1,6 @@
 package com.example.reminderapp.presentation.reminder_list.adapter
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,7 +16,8 @@ import org.koin.core.component.inject
 
 class ReminderListAdapter(
     private val onItemClickListener: OnItemClickListener,
-    private val onSwitchClickListener: OnSwitchClickListener
+    private val onSwitchClickListener: OnSwitchClickListener,
+    private val onDeleteClickListener: OnDeleteClickListener
 ) : ListAdapter<Task, ReminderListAdapter.TaskViewHolder>(DiffCallBack), KoinComponent {
 
     private val timeDateUtils : TimeDateUtils by inject()
@@ -29,6 +31,7 @@ class ReminderListAdapter(
         return TaskViewHolder(binding)
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onBindViewHolder(holder: TaskViewHolder, position: Int) {
         val item = getItem(position)
 
@@ -43,7 +46,9 @@ class ReminderListAdapter(
             remindItemRootView.setOnClickListener {
                 onItemClickListener.onClickItem(item)
             }
-
+            reminderDeleteIv.setOnClickListener {
+                onDeleteClickListener.onDeleteClick(item)
+            }
             switchIsActive.setOnCheckedChangeListener { _, isChecked ->
                 onSwitchClickListener.onClickItem(item, isChecked)
             }
@@ -57,6 +62,10 @@ class ReminderListAdapter(
 
     interface OnSwitchClickListener {
         fun onClickItem(task: Task, isChecked: Boolean)
+    }
+
+    interface OnDeleteClickListener {
+        fun onDeleteClick(task: Task)
     }
 
     companion object {

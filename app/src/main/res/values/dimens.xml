@@ -41,4 +41,6 @@
     <dimen name="small_icon_size">20dp</dimen>
     <dimen name="small_icon_padding">15dp</dimen>
     <dimen name="small_icon_padding_small">10dp</dimen>
+
+    <dimen name="medium_icon_size">40dp</dimen>
 </resources>
