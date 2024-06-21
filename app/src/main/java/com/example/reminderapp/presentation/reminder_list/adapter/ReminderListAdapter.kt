@@ -15,7 +15,7 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
 class ReminderListAdapter(
-    private val onItemClick: OnItemElementsClickListener
+    private val onItemClick: OnClickListener
 ) : ListAdapter<Task, ReminderListAdapter.TaskViewHolder>(DiffCallBack), KoinComponent {
 
     private val timeDateUtils : TimeDateUtils by inject()
@@ -54,7 +54,7 @@ class ReminderListAdapter(
 
     }
 
-    interface OnItemElementsClickListener {
+    interface OnClickListener {
 
         fun onItemClick(task: Task)
 

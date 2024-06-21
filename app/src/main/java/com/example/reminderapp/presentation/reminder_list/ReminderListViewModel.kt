@@ -6,6 +6,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.domain.model.Task
 import com.example.domain.model.TaskPeriodType
+import com.example.domain.use_case.DeleteTaskUseCase
 import com.example.domain.use_case.EditTaskUseCase
 import com.example.domain.use_case.GetAllTasksUseCase
 import com.example.domain.use_case.GetGroupWithTasksUseCase
@@ -14,6 +15,7 @@ import com.example.domain.use_case.GetTasksForTodayUseCase
 import com.example.domain.use_case.GetTasksWithFlagUseCase
 import com.example.reminderapp.R
 import com.example.reminderapp.app.App
+import com.example.reminderapp.presentation.base.OperationResult
 import com.example.reminderapp.presentation.base.UiState
 import com.example.reminderapp.presentation.navigation.TasksListTypeCase
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -33,12 +35,16 @@ class ReminderListViewModel(
     private val getPlannedTasksUseCase: GetPlannedTasksUseCase,
     private val getTasksWithFlagUseCase: GetTasksWithFlagUseCase,
     private val getAllTasksUseCase: GetAllTasksUseCase,
-    private val editTaskUseCase: EditTaskUseCase
+    private val editTaskUseCase: EditTaskUseCase,
+    private val deleteTaskUseCase: DeleteTaskUseCase,
 ) : AndroidViewModel(application) {
     // TODO: Implement the ViewModel
 
     private val _uiState = MutableStateFlow<UiState<RemindersListUiState>>(UiState.Loading)
     val uiState: StateFlow<UiState<RemindersListUiState>> = _uiState
+
+    private val _operationResult = MutableStateFlow<OperationResult<Unit>>(OperationResult.NotStarted)
+    val operationResult: StateFlow<OperationResult<Unit>> = _operationResult
 
     fun fetchData(taskListType: TasksListTypeCase) {
         val context: Context = getApplication<App>().applicationContext
@@ -135,8 +141,20 @@ class ReminderListViewModel(
         }
     }
 
-    fun deleteTask(task: Task) {
-        /** Deletion process here **/
+    fun deleteTask(
+        task: Task
+    ) {
+        _operationResult.value = OperationResult.Loading
+        viewModelScope.launch {
+            try {
+                deleteTaskUseCase(task.id)
+                _operationResult.value = OperationResult.Success(Unit)
+            }
+            catch (e: Exception) {
+                _operationResult.value = OperationResult.Error(e.toString())
+            }
+        }
     }
+
 
 }

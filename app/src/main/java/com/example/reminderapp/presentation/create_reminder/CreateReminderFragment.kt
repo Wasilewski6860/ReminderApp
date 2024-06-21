@@ -87,7 +87,6 @@ class CreateReminderFragment : Fragment(), MenuProvider, BackActionInterface, Da
 
     private lateinit var callback: OnBackPressedCallback
 
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -115,7 +114,7 @@ class CreateReminderFragment : Fragment(), MenuProvider, BackActionInterface, Da
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        requireActivity().addMenuProvider(this, viewLifecycleOwner, Lifecycle.State.RESUMED)
+        requireActivity().addMenuProvider(this, viewLifecycleOwner, Lifecycle.State.STARTED)
     }
 
     override fun onDestroyView() {
@@ -262,7 +261,7 @@ class CreateReminderFragment : Fragment(), MenuProvider, BackActionInterface, Da
     private fun setSpinnerPeriod() {
         val timeDates = TimeDateUtils(requireContext()).timeDates
         val repeatTimeSpinnerItems = timeDates.map { timeDate -> timeDate.name }
-        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, repeatTimeSpinnerItems)
+        val adapter = ArrayAdapter(requireContext(), R.layout.repeat_time_spinner_item, repeatTimeSpinnerItems)
         val spinner = binding.selectedPeriodSpinner
         spinner.adapter = adapter
 
@@ -406,19 +405,19 @@ class CreateReminderFragment : Fragment(), MenuProvider, BackActionInterface, Da
 
             if (name.isNullOrEmpty()){
                 reminderNameEt.setFocus(requireContext())
-                reminderNameEt.setError("Имя не может быть пустым")
+                reminderNameEt.setError(getString(R.string.name_shouldnt_be_empty))
                 return false
             }
             else if(selectedTime == null && selectedPeriod == null) {
-                showSnackbar("Дата напоминания и/или периодичность должны быть выбраны", requireActivity().findViewById(R.id.rootView))
+                showSnackbar(getString(R.string.date_or_period_should_be_selected), requireActivity().findViewById(R.id.rootView))
                 return false
             }
             else if(selectedGroup == null) {
-                showSnackbar("Список должен быть выбран", requireActivity().findViewById(R.id.rootView))
+                showSnackbar(getString(R.string.group_should_be_selected), requireActivity().findViewById(R.id.rootView))
                 return false
             }
             else if(selectedColor == null) {
-                showSnackbar("Цвет должен быть выбран", requireActivity().findViewById(R.id.rootView))
+                showSnackbar(getString(R.string.color_should_be_selected), requireActivity().findViewById(R.id.rootView))
                 return false
             }
 

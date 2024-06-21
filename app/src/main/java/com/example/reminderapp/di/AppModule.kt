@@ -72,7 +72,8 @@ val appModule = module {
             getTasksForTodayUseCase = get(),
             getTasksWithFlagUseCase = get(),
             application = get(),
-            editTaskUseCase = get()
+            editTaskUseCase = get(),
+            deleteTaskUseCase = get()
         )
     }
 
