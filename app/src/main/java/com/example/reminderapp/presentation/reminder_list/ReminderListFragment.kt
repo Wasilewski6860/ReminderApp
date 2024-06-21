@@ -21,6 +21,7 @@ import com.example.domain.model.Task
 import com.example.reminderapp.MainActivity
 import com.example.reminderapp.R
 import com.example.reminderapp.databinding.FragmentReminderListBinding
+import com.example.reminderapp.presentation.base.OperationResult
 import com.example.reminderapp.presentation.base.UiState
 import com.example.reminderapp.presentation.create_reminder.CreateReminderFragment
 import com.example.reminderapp.presentation.interfaces.BackActionInterface
@@ -30,6 +31,7 @@ import com.example.reminderapp.presentation.navigation.TasksListTypeCase
 import com.example.reminderapp.presentation.reminder_list.adapter.ReminderItemDivider
 import com.example.reminderapp.presentation.reminder_list.adapter.ReminderListAdapter
 import com.example.reminderapp.utils.setPaddingToInset
+import com.example.reminderapp.utils.showSnackbar
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -142,11 +144,31 @@ class ReminderListFragment : Fragment(), DataReceiving, BackActionInterface, Men
                 }
             }
         }
+
+        lifecycleScope.launch {
+            viewModel.operationResult.collect {
+                when (it) {
+                    is OperationResult.Error -> Unit
+                    OperationResult.Loading -> {
+                        binding.contentLayout.visibility = View.GONE
+                        binding.loadingLayout.visibility = View.VISIBLE
+                        binding.nothingFindLayout.visibility = View.GONE
+                    }
+                    OperationResult.NotStarted -> Unit
+                    is OperationResult.Success -> {
+                        binding.contentLayout.visibility = View.VISIBLE
+                        binding.loadingLayout.visibility = View.GONE
+                        binding.nothingFindLayout.visibility = View.GONE
+                    }
+                    else -> Unit
+                }
+            }
+        }
     }
 
     private fun setupRecyclerView() = binding.recyclerView.apply {
         reminderAdapter = ReminderListAdapter(
-            onItemClick = object : ReminderListAdapter.OnItemElementsClickListener {
+            onItemClick = object : ReminderListAdapter.OnClickListener {
                 override fun onItemClick(task: Task) {
                     val bundle = Bundle().apply {
                         putSerializable(

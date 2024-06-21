@@ -86,5 +86,10 @@
     <string name="edit">Edit</string>
     <string name="add_list_abbr">Add list</string>
     <string name="add_list_hint">New list</string>
+    <string name="deletion_error">Failed to delete task</string>
+    <string name="name_shouldnt_be_empty">The name cannot be empty</string>
+    <string name="date_or_period_should_be_selected">The reminder date and/or frequency must be selected</string>
+    <string name="group_should_be_selected">The list must be selected</string>
+    <string name="color_should_be_selected">The color must be chosen</string>
 
 </resources>

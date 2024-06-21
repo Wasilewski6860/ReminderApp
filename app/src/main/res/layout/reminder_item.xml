@@ -79,7 +79,7 @@
         android:id="@+id/reminder_delete_iv"
         android:layout_width="@dimen/medium_icon_size"
         android:layout_height="@dimen/medium_icon_size"
-        android:src="@drawable/cross"
+        android:src="@drawable/trash_delete_icon"
         android:layout_marginEnd="@dimen/small_icon_padding_small"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
