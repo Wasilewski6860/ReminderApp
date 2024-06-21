@@ -8,6 +8,8 @@
     <string name="choose_time">Выбрать время</string>
     <string name="save">Сохранить</string>
 
+    <string name="notification_permission_required" >Требуется разрешение на показ уведомлений</string>
+    <string name="go_to_settings">К настройкам</string>
     <!--  Time here  -->
     <string name="min_15">15 Мин</string>
     <string name="min_30">30 Мин</string>
