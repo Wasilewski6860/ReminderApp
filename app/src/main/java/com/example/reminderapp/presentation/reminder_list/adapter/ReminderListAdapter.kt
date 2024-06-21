@@ -15,9 +15,7 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
 class ReminderListAdapter(
-    private val onItemClickListener: OnItemClickListener,
-    private val onSwitchClickListener: OnSwitchClickListener,
-    private val onDeleteClickListener: OnDeleteClickListener
+    private val onItemClick: OnItemElementsClickListener
 ) : ListAdapter<Task, ReminderListAdapter.TaskViewHolder>(DiffCallBack), KoinComponent {
 
     private val timeDateUtils : TimeDateUtils by inject()
@@ -44,28 +42,26 @@ class ReminderListAdapter(
             reminderRepeatIv.visibility = if (item.type==TaskPeriodType.PERIODIC) View.VISIBLE else View.INVISIBLE
 
             remindItemRootView.setOnClickListener {
-                onItemClickListener.onClickItem(item)
-            }
-            reminderDeleteIv.setOnClickListener {
-                onDeleteClickListener.onDeleteClick(item)
+                onItemClick.onItemClick(item)
             }
             switchIsActive.setOnCheckedChangeListener { _, isChecked ->
-                onSwitchClickListener.onClickItem(item, isChecked)
+                onItemClick.onSwitchClick(item, isChecked)
+            }
+            reminderDeleteIv.setOnClickListener {
+                onItemClick.onDeleteClick(item)
             }
         }
 
     }
 
-    interface OnItemClickListener {
-        fun onClickItem(task: Task)
-    }
+    interface OnItemElementsClickListener {
 
-    interface OnSwitchClickListener {
-        fun onClickItem(task: Task, isChecked: Boolean)
-    }
+        fun onItemClick(task: Task)
 
-    interface OnDeleteClickListener {
+        fun onSwitchClick(task: Task, isChecked: Boolean)
+
         fun onDeleteClick(task: Task)
+
     }
 
     companion object {
