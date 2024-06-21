@@ -61,6 +61,7 @@ class NotificationManager(val context: Context) : KoinComponent {
     }
 
     fun createNotificationReminder(contentTitle: String, contextText: String, taskId: Int) {
+        Log.d("NotificationManager","createNotificationReminder taskId:"+taskId.toString()+" name:"+contentTitle+" desc:"+contextText )
         val builder = NotificationCompat.Builder(context, CHANNEL_REMINDER_ID)
             .setSmallIcon(R.drawable.logo)
             .setContentTitle(contentTitle)
@@ -85,6 +86,7 @@ class NotificationManager(val context: Context) : KoinComponent {
         }
     }
     fun createNotification(contentTitle: String, contextText: String, taskId: Int) {
+        Log.d("NotificationManager","createNotification taskId:"+taskId.toString()+" name:"+contentTitle+" desc:"+contextText )
         val builder = NotificationCompat.Builder(context, CHANNEL_ID)
             .setSmallIcon(R.drawable.logo)
             .setContentTitle(contentTitle)

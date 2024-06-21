@@ -1,15 +1,21 @@
 package com.example.reminderapp.presentation.create_reminder
 
+import android.Manifest
 import android.animation.ValueAnimator
+import android.app.AlarmManager
 import android.app.DatePickerDialog
 import android.app.Dialog
 import android.app.TimePickerDialog
+import android.content.Context
+import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Color
-import android.graphics.drawable.Drawable
 import android.icu.text.SimpleDateFormat
 import android.icu.util.Calendar
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
@@ -21,8 +27,13 @@ import android.widget.ArrayAdapter
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.view.MenuProvider
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -32,20 +43,23 @@ import com.example.domain.model.Task
 import com.example.domain.model.TaskPeriodType
 import com.example.reminderapp.MainActivity
 import com.example.reminderapp.R
-import com.example.reminderapp.app.App
 import com.example.reminderapp.databinding.FragmentCreateReminderBinding
-import com.example.reminderapp.presentation.interfaces.BackActionInterface
 import com.example.reminderapp.presentation.base.UiState
+import com.example.reminderapp.presentation.interfaces.BackActionInterface
 import com.example.reminderapp.presentation.interfaces.DataReceiving
 import com.example.reminderapp.presentation.navigation.FragmentNavigationConstants
 import com.example.reminderapp.utils.ColorItem
 import com.example.reminderapp.utils.ColorsUtils
 import com.example.reminderapp.utils.TimeDateUtils
 import com.example.reminderapp.utils.setFocus
+import com.example.reminderapp.utils.setPaddingToInset
 import com.example.reminderapp.utils.showSnackbar
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import androidx.core.view.WindowInsetsCompat.Type.statusBars
 import java.util.Locale
+
 
 class CreateReminderFragment : Fragment(), MenuProvider, BackActionInterface, DataReceiving {
 
@@ -67,6 +81,10 @@ class CreateReminderFragment : Fragment(), MenuProvider, BackActionInterface, Da
     var selectedColor: Int? = null
     var taskType: TaskPeriodType? = null
 
+    var hasNotificationPermisions = false
+    var hasScheduleExactAlarmPermisions = false
+
+
     private lateinit var callback: OnBackPressedCallback
 
 
@@ -76,17 +94,12 @@ class CreateReminderFragment : Fragment(), MenuProvider, BackActionInterface, Da
     ): View {
         _binding = FragmentCreateReminderBinding.inflate(layoutInflater, container, false)
 
-        val activity = (activity as MainActivity)
-        activity.supportActionBar?.setDisplayShowTitleEnabled(false)
-        activity.setToolbarTitleAndTitleColor("")
-        activity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        checkPermissions()
 
-        callback = object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                navigateBack()
-            }
-        }
-        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
+        edgeToEdge()
+        setupToolbar()
+
+        setupOnBackPressed()
 
         viewModel.fetchGroups()
         setupObservers()
@@ -109,6 +122,7 @@ class CreateReminderFragment : Fragment(), MenuProvider, BackActionInterface, Da
         super.onDestroyView()
         callback.remove()
     }
+
 
     override fun receiveData() {
         setupSwitches()
@@ -319,7 +333,8 @@ class CreateReminderFragment : Fragment(), MenuProvider, BackActionInterface, Da
     }
     //TODO переделать
     private fun saveTask() = with(binding) {
-        if (isInputValid()) {
+
+        if (isInputValid() && hasNotificationPermisions && hasScheduleExactAlarmPermisions) {
             val name = reminderNameEt.text.toString()
             val description = reminderDescriptionEt.text.toString()
 
@@ -338,6 +353,7 @@ class CreateReminderFragment : Fragment(), MenuProvider, BackActionInterface, Da
             )
             navigateBack()
         }
+        else if(!(hasNotificationPermisions && hasScheduleExactAlarmPermisions)) checkPermissions()
     }
 
     private fun showDateAndTimePickers() {
@@ -420,6 +436,32 @@ class CreateReminderFragment : Fragment(), MenuProvider, BackActionInterface, Da
         return height
     }
 
+    fun setupOnBackPressed() {
+        callback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                navigateBack()
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
+    }
+    private fun setupToolbar() = with(binding) {
+        val activity = (activity as MainActivity)
+        activity.setSupportActionBar(createToolbar)
+
+        activity.supportActionBar?.apply {
+            setDisplayShowTitleEnabled(false)
+            title = ""
+            setDisplayHomeAsUpEnabled(true)
+        }
+    }
+
+    private fun edgeToEdge() = with(binding) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            WindowCompat.setDecorFitsSystemWindows(requireActivity().window, false)
+            createToolbar setPaddingToInset statusBars()
+        }
+    }
+
     override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
         menuInflater.inflate(R.menu.create_task_menu, menu)
     }
@@ -442,4 +484,66 @@ class CreateReminderFragment : Fragment(), MenuProvider, BackActionInterface, Da
         parentFragmentManager.popBackStack()
     }
 
+
+    fun checkPermissions() {
+        checkNotificationPermission()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            checkScheduleExactPermission()
+        }
+        else hasScheduleExactAlarmPermisions = true
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            checkNotificationPermission()
+        }
+        else hasNotificationPermisions = true
+    }
+
+
+    private fun checkNotificationPermission() {
+        val permission = Manifest.permission.POST_NOTIFICATIONS
+        when {
+            ContextCompat.checkSelfPermission(
+                requireContext(), permission
+            ) == PackageManager.PERMISSION_GRANTED -> {
+                hasNotificationPermisions = true
+            }
+            shouldShowRequestPermissionRationale(permission) -> {
+                Snackbar.make(
+                    requireActivity().findViewById(R.id.rootView),
+                    getString(R.string.notification_permission_required),
+                    Snackbar.LENGTH_LONG
+                ).setAction(getString(R.string.go_to_settings)) {
+                    val uri: Uri = Uri.fromParts("package", requireContext().getPackageName(), null)
+                    Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+                        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                        data = uri
+                        startActivity(this)
+                    }
+                }.show()
+            }
+            else -> {
+                requestNotificationPermissionLauncher.launch(permission)
+            }
+        }
+    }
+
+    private fun checkScheduleExactPermission() {
+        val alarmManager = requireContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager?
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && !alarmManager!!.canScheduleExactAlarms()) {
+            // If not, request the SCHEDULE_EXACT_ALARM permission
+            val intent = Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM)
+            intent.setData(Uri.fromParts("package", requireContext().getPackageName(), null))
+            startActivity(intent)
+        }
+        else hasScheduleExactAlarmPermisions = true
+    }
+
+    val requestNotificationPermissionLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
+            hasNotificationPermisions = isGranted
+        }
+
+    val requestScheduleExactPermissionLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
+            hasScheduleExactAlarmPermisions = isGranted
+        }
 }

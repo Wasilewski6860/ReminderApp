@@ -8,6 +8,8 @@
     <string name="choose_time">Выбрать время</string>
     <string name="save">Сохранить</string>
 
+    <string name="notification_permission_required" >Требуется разрешение на показ уведомлений</string>
+    <string name="go_to_settings">К настройкам</string>
     <!--  Time here  -->
     <string name="min_15">15 Мин</string>
     <string name="min_30">30 Мин</string>
@@ -61,7 +63,11 @@
     <string name="with_flag">С флагом</string>
 
     <string name="my_lists">Мои списки</string>
+    <string name="add_list">Добавить список</string>
 
     <string name="nothing_found">Ничего не найдено</string>
+    <string name="edit">Изменить</string>
+    <string name="add_list_abbr">Доб.список</string>
+    <string name="add_list_hint">Новый список</string>
 
 </resources>

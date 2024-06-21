@@ -1,5 +1,6 @@
 package com.example.reminderapp.presentation.new_list
 
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -12,6 +13,8 @@ import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.Lifecycle
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.domain.model.Group
@@ -27,6 +30,7 @@ import com.example.reminderapp.presentation.new_list.adapter.NewListAdapter
 import com.example.reminderapp.utils.ColorsUtils
 import com.example.reminderapp.utils.ImageUtils
 import com.example.reminderapp.utils.setFocus
+import com.example.reminderapp.utils.setPaddingToInset
 import com.example.reminderapp.utils.showSnackbar
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -52,19 +56,13 @@ class NewListFragment : Fragment(), MenuProvider, BackActionInterface, DataRecei
     ): View {
         _binding = FragmentNewListBinding.inflate(layoutInflater, container, false)
 
+        edgeToEdge()
+        setupToolbar()
+
+        setupOnBackPressed()
+
         groupColor = ColorsUtils(requireContext()).colors[0].color
         groupColor?.let { binding.selectedColorIv.circleColor = it }
-
-        val activity = (activity as MainActivity)
-        activity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        activity.setToolbarTitleAndTitleColor("Добавить список")
-
-        callback = object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                navigateBack()
-            }
-        }
-        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
 
         setupRecyclerView()
         receiveData()
@@ -75,6 +73,33 @@ class NewListFragment : Fragment(), MenuProvider, BackActionInterface, DataRecei
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         requireActivity().addMenuProvider(this, viewLifecycleOwner, Lifecycle.State.RESUMED)
+    }
+
+
+    fun setupOnBackPressed() {
+        callback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                navigateBack()
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
+    }
+    private fun setupToolbar() = with(binding) {
+        val activity = (activity as MainActivity)
+        activity.setSupportActionBar(createListToolbar)
+
+        activity.supportActionBar?.apply {
+            setDisplayShowTitleEnabled(false)
+            setDisplayHomeAsUpEnabled(true)
+        }
+        createListToolbar.title = requireContext().getString(R.string.add_list)
+    }
+
+    private fun edgeToEdge() = with(binding) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            WindowCompat.setDecorFitsSystemWindows(requireActivity().window, false)
+            createListToolbar setPaddingToInset WindowInsetsCompat.Type.statusBars()
+        }
     }
 
     private fun setupRecyclerView() = binding.apply {
@@ -115,7 +140,7 @@ class NewListFragment : Fragment(), MenuProvider, BackActionInterface, DataRecei
         super.onDestroyView()
         val menuHost: MenuHost = requireActivity()
         menuHost.removeMenuProvider(this)
-        (activity as MainActivity).setToolbarTitleAndTitleColor("")
+//        (activity as MainActivity).setToolbarTitleAndTitleColor("")
         callback.remove()
     }
 
@@ -125,10 +150,16 @@ class NewListFragment : Fragment(), MenuProvider, BackActionInterface, DataRecei
 
     override fun receiveData() {
         arguments?.let {
-            val receivedData = it.getSerializable(
-                FragmentNavigationConstants.EDITABLE_LIST,
-                Group::class.java
-            )
+            val receivedData = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                it.getSerializable(
+                    FragmentNavigationConstants.EDITABLE_LIST,
+                    Group::class.java
+                )
+            } else {
+                it.getSerializable(
+                    FragmentNavigationConstants.EDITABLE_LIST
+                ) as Group?
+            }
             receivedData?.let { data ->
                 group = data
                 groupId = data.groupId

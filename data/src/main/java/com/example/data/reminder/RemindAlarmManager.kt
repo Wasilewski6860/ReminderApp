@@ -42,6 +42,7 @@ class RemindAlarmManager(
     private fun createAlarmOneTime(title: String, text: String, targetInMs: Long,  taskId: Int) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             if (!alarmManager.canScheduleExactAlarms()) {
+                Log.d("MY LOG","cannot schedule exact alarms")
                 return
             }
         }
@@ -90,7 +91,7 @@ class RemindAlarmManager(
             action = ACTION_CREATE_REMINDER
         }
         return PendingIntent
-            .getBroadcast(context, taskId.toInt(), intent, PendingIntent.FLAG_UPDATE_CURRENT)
+            .getBroadcast(context, taskId.toInt(), intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
     }
 
 }

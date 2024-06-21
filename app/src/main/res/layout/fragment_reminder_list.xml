@@ -7,14 +7,32 @@
     android:layout_height="match_parent"
     tools:context=".presentation.reminder_list.ReminderListFragment">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/content_layout"
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/reminderListAppBarLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/reminderListToolbar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        </com.google.android.material.appbar.MaterialToolbar>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/content_layout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/reminderListAppBarLayout">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"
@@ -35,12 +53,12 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/loading_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/reminderListAppBarLayout">
 
         <ProgressBar
             android:layout_width="wrap_content"
@@ -56,12 +74,12 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/nothing_find_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/reminderListAppBarLayout">
 
         <ImageView
             android:id="@+id/imageView"
