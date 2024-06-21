@@ -13,7 +13,7 @@ class NewListViewModel(
         id: Int? = null,
         groupName: String,
         groupColor: Int,
-        groupImage: Int,
+        groupImage: Int?,
         tasksCount: Int,
     ) {
         viewModelScope.launch {

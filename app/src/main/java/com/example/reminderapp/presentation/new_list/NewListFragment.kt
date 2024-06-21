@@ -135,11 +135,7 @@ class NewListFragment : Fragment(), MenuProvider, BackActionInterface, DataRecei
                 binding.apply {
                     newListTip.editText?.setText(data.groupName)
                     selectedColorIv.circleColor = data.groupColor
-                    data.groupImage.let { image ->
-                        selectedColorIv.isImageVisible = image != R.drawable.arrow_back
-                    }
-                    if (selectedColorIv.isImageVisible)
-                        selectedColorIv.bitmap = data.groupImage
+                    data.groupImage?.let { image -> selectedColorIv.bitmap = image }
                 }
             }
         }
@@ -158,13 +154,13 @@ class NewListFragment : Fragment(), MenuProvider, BackActionInterface, DataRecei
 
             R.id.action_save -> {
                 if (isInputValid()) with(binding) {
-                    viewModel.saveList(
-                        id = groupId,
-                        groupName = newListEt.text.toString(),
-                        groupColor = binding.selectedColorIv.circleColor,
-                        groupImage = groupImage ?: R.drawable.arrow_back,
-                        tasksCount = if (group != null) group!!.tasksCount else 0,
-                    )
+                        viewModel.saveList(
+                            id = groupId,
+                            groupName = newListEt.text.toString(),
+                            groupColor = binding.selectedColorIv.circleColor,
+                            groupImage = groupImage,
+                            tasksCount = if (group != null) group!!.tasksCount else 0,
+                        )
                     navigateBack()
                 }
                 return true
