@@ -123,8 +123,8 @@ class ReminderListFragment : Fragment(), DataReceiving, BackActionInterface, Men
 
     private fun setupRecyclerView() = binding.recyclerView.apply {
         reminderAdapter = ReminderListAdapter(
-            onItemClickListener = object : ReminderListAdapter.OnItemClickListener {
-                override fun onClickItem(task: Task) {
+            onItemClick = object : ReminderListAdapter.OnItemElementsClickListener {
+                override fun onItemClick(task: Task) {
                     val bundle = Bundle().apply {
                         putSerializable(
                             FragmentNavigationConstants.TASK_KEY,
@@ -133,9 +133,8 @@ class ReminderListFragment : Fragment(), DataReceiving, BackActionInterface, Men
                     }
                     navigateToEditReminder(bundle)
                 }
-            },
-            onSwitchClickListener = object : ReminderListAdapter.OnSwitchClickListener {
-                override fun onClickItem(task: Task, isChecked: Boolean) {
+
+                override fun onSwitchClick(task: Task, isChecked: Boolean) {
                     viewModel.editTask(
                         taskId = task.id,
                         taskName = task.name,
@@ -150,8 +149,7 @@ class ReminderListFragment : Fragment(), DataReceiving, BackActionInterface, Men
                         taskColor = task.color
                     )
                 }
-            },
-            onDeleteClickListener = object : ReminderListAdapter.OnDeleteClickListener {
+
                 override fun onDeleteClick(task: Task) {
                     viewModel.deleteTask(task) // TODO check this method in viewModel
                 }
