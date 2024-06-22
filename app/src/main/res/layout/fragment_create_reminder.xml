@@ -73,7 +73,7 @@
                     android:imeOptions="actionNext"
                     android:textCursorDrawable="@drawable/edit_text_cursor"
                     android:hint="@string/reminder_name_et_hint"
-                    style="@style/EditTextStyle"/>
+                    android:inputType="textCapSentences"/>
 
                 <EditText
                     android:id="@+id/reminder_description_et"
@@ -83,7 +83,7 @@
                     android:imeOptions="actionDone"
                     android:textCursorDrawable="@drawable/edit_text_cursor"
                     android:hint="@string/reminder_desc_et_hint"
-                    style="@style/EditTextStyle"/>
+                    android:inputType="textCapSentences"/>
 
                 <!--                <com.google.android.material.textfield.TextInputLayout-->
                 <!--                    android:id="@+id/reminder_description_input_layout"-->

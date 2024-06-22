@@ -74,8 +74,4 @@
 
     <style name="SwitchStyle" parent="Theme.AppCompat"/>
 
-    <style name="EditTextStyle" parent="Theme.AppCompat">
-        <item name="android:inputType">textCapSentences</item>
-    </style>
-
 </resources>
