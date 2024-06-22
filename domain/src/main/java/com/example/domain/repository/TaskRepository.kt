@@ -33,6 +33,7 @@ interface TaskRepository {
     fun getTasksWithFlagCount(): Flow<Int>
 
     suspend fun addGroup(group: Group)
+    suspend fun editGroup(group: Group)
 
     fun getAllGroups(): Flow<List<Group>>
 

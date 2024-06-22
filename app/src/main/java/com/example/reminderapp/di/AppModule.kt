@@ -79,7 +79,8 @@ val appModule = module {
 
     viewModel<NewListViewModel> {
         NewListViewModel(
-            insertGroupUseCase = get()
+            insertGroupUseCase = get(),
+            editGroupUseCase = get()
         )
     }
 }

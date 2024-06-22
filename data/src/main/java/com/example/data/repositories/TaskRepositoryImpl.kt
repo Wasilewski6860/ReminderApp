@@ -123,6 +123,7 @@ class TaskRepositoryImpl(
     }
 
     override suspend fun addGroup(group: Group) = taskStorage.addGroup(group)
+    override suspend fun editGroup(group: Group) = taskStorage.editGroup(group)
 
     override fun getAllGroups(): Flow<List<Group>> = taskStorage.getAllGroups()
 

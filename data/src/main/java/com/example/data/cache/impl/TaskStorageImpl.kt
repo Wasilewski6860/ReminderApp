@@ -70,6 +70,8 @@ class TaskStorageImpl(
         taskDao.addGroup(groupCacheMapper.mapToEntity(group).first)
     }
 
+    override suspend fun editGroup(group: Group) = taskDao.editGroup(groupCacheMapper.mapToEntity(group).first)
+
     override fun getTask(id: Int): Flow<Task> = taskDao.getTask(id).map { taskEntity -> taskCacheMapper.mapFromEntity(taskEntity) }
 
 

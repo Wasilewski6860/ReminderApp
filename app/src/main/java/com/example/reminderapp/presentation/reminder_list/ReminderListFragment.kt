@@ -47,7 +47,7 @@ class ReminderListFragment : Fragment(), DataReceiving, BackActionInterface, Men
 
     private val viewModel: ReminderListViewModel by viewModel()
 
-    private var groupId: Int = -1
+    private var groupName: String? = null
 
     private lateinit var callback: OnBackPressedCallback
 
@@ -113,7 +113,13 @@ class ReminderListFragment : Fragment(), DataReceiving, BackActionInterface, Men
 
     private fun initListener() = with(binding) {
         addFloatingActionButton.setOnClickListener {
-            navigateToEditReminder()
+            val bundle = Bundle().apply {
+                putSerializable(
+                    FragmentNavigationConstants.LIST_NAME,
+                    groupName
+                )
+            }
+            navigateToEditReminder(bundle)
         }
     }
 
@@ -128,6 +134,7 @@ class ReminderListFragment : Fragment(), DataReceiving, BackActionInterface, Men
                             binding.nothingFindLayout.visibility = View.GONE
 
                             reminderAdapter.submitList(it.data.tasks)
+                            groupName = it.data.groupName
                             binding.reminderListToolbar.title = it.data.groupName
                         }
                         is UiState.Loading -> {

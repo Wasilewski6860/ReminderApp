@@ -39,6 +39,9 @@ interface TaskDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addGroup(groupEntity: TaskGroupEntity)
 
+    @Update
+    suspend fun editGroup(groupEntity: TaskGroupEntity)
+
     @Query("SELECT * FROM task_group WHERE groupId = :id")
     fun getGroup(id: Int): Flow<TaskGroupEntity>
 

@@ -76,16 +76,26 @@ class CreateReminderFragment : Fragment(), MenuProvider, BackActionInterface, Da
 
     private var taskId: Int? = null
     var selectedGroup: Int? = null
+    var selectedGroupName: String? = null
     var selectedPeriod: Long? = null
     var selectedTime: Long? = null
     var selectedColor: Int? = null
     var taskType: TaskPeriodType? = null
+    var taskName: String? = null
+    var taskDescription: String? = null
+    var taskFlag: Boolean = false
 
     var hasNotificationPermisions = false
     var hasScheduleExactAlarmPermisions = false
 
 
     private lateinit var callback: OnBackPressedCallback
+
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        receiveData()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -100,10 +110,13 @@ class CreateReminderFragment : Fragment(), MenuProvider, BackActionInterface, Da
 
         setupOnBackPressed()
 
-        viewModel.fetchGroups()
+        fillViews()
+        setSpinnerColor()
+        setSpinnerPeriod()
+        setupSwitches()
         setupObservers()
+        viewModel.fetchGroups()
 
-        receiveData()
 
         binding.selectedDateTv.setOnClickListener {
             showDateAndTimePickers()
@@ -124,7 +137,6 @@ class CreateReminderFragment : Fragment(), MenuProvider, BackActionInterface, Da
 
 
     override fun receiveData() {
-        setupSwitches()
         arguments?.let {
             val taskSerialized: Task? = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 it.getSerializable(
@@ -136,29 +148,32 @@ class CreateReminderFragment : Fragment(), MenuProvider, BackActionInterface, Da
                     FragmentNavigationConstants.TASK_KEY
                 ) as Task?
             }
+            selectedGroupName = it.getString(FragmentNavigationConstants.LIST_NAME)
             if (taskSerialized != null) {
                 taskId = taskSerialized.id
-                fillViews(taskSerialized)
+                selectedTime = taskSerialized.reminderTime
+                selectedColor = taskSerialized.color
+                selectedGroup = taskSerialized.groupId
+                taskName = taskSerialized.name
+                taskDescription = taskSerialized.description
+                taskFlag = taskSerialized.isMarkedWithFlag
             }
         }
-        setSpinnerColor()
-        setSpinnerPeriod()
     }
 
-    private fun fillViews(task: Task) = with(binding) {
-        reminderNameEt.setText(task.name)
-        reminderDescriptionEt.setText(task.description)
+    private fun fillViews() = with(binding) {
+        taskName?.let { reminderNameEt.setText(it) }
 
-        val dateString = dateFormat.format(task.reminderTime)
+        reminderDescriptionEt.setText(taskDescription)
 
-        remindSwitch.isChecked = true
-        selectedTime = task.reminderTime
-        selectedDateTv.text = dateString
-        selectedPeriod = task.reminderTimePeriod
+        if (selectedTime!=null){
+            val dateString = dateFormat.format(selectedTime)
+            selectedDateTv.text = dateString
+        }
 
-        binding.flagSwitch.isChecked = task.isMarkedWithFlag
-        selectedColor = task.color
-        selectedGroup = task.groupId
+        remindSwitch.isChecked = if(taskId!=null) true else false
+
+        binding.flagSwitch.isChecked = taskFlag
 
     }
     private fun setupSwitches() {
@@ -288,6 +303,9 @@ class CreateReminderFragment : Fragment(), MenuProvider, BackActionInterface, Da
 
         if (selectedGroup!=null){
             spinner.setSelection(groups.indexOfFirst{it.groupId == selectedGroup})
+        }
+        else if(selectedGroupName != null) {
+            spinner.setSelection(groups.indexOfFirst{it.groupName == selectedGroupName})
         }
         else if (groups.isNotEmpty()) spinner.setSelection(0)
         binding.selectedListSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
