@@ -71,7 +71,7 @@
     <string name="add_list">Добавить список</string>
 
     <string name="nothing_found">Ничего не найдено</string>
-    <string name="edit">Изменить список</string>
+    <string name="edit">Изм.список</string>
     <string name="add_list_abbr">Доб.список</string>
     <string name="add_list_hint">Новый список</string>
     <string name="deletion_error">Не удалось удалить задачу</string>
