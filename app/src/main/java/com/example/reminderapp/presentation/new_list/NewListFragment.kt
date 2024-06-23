@@ -11,20 +11,28 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
+import androidx.core.os.bundleOf
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.GridLayoutManager
+import com.example.data.reminder.Constants
 import com.example.domain.model.Group
 import com.example.reminderapp.MainActivity
 import com.example.reminderapp.R
 import com.example.reminderapp.presentation.interfaces.BackActionInterface
 import com.example.reminderapp.presentation.interfaces.DataReceiving
 import com.example.reminderapp.databinding.FragmentNewListBinding
+import com.example.reminderapp.presentation.base.OperationResult
+import com.example.reminderapp.presentation.base.UiState
 import com.example.reminderapp.presentation.base.serializer.GroupSerializer
 import com.example.reminderapp.presentation.navigation.FragmentNavigationConstants
+import com.example.reminderapp.presentation.navigation.FragmentNavigationConstants.GROUP_KEY
 import com.example.reminderapp.presentation.new_list.adapter.ListItemDecoration
 import com.example.reminderapp.presentation.new_list.adapter.NewListAdapter
 import com.example.reminderapp.utils.ColorsUtils
@@ -32,6 +40,7 @@ import com.example.reminderapp.utils.ImageUtils
 import com.example.reminderapp.utils.setFocus
 import com.example.reminderapp.utils.setPaddingToInset
 import com.example.reminderapp.utils.showSnackbar
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class NewListFragment : Fragment(), MenuProvider, BackActionInterface, DataReceiving {
@@ -65,6 +74,8 @@ class NewListFragment : Fragment(), MenuProvider, BackActionInterface, DataRecei
         groupColor?.let { binding.selectedColorIv.circleColor = it }
 
         setupRecyclerView()
+
+        setupObservers()
         receiveData()
 
         return binding.root
@@ -136,6 +147,26 @@ class NewListFragment : Fragment(), MenuProvider, BackActionInterface, DataRecei
         colorsRv.addItemDecoration(ListItemDecoration(6, 50, true))
     }
 
+    private fun setupObservers() {
+        lifecycleScope.launch {
+            viewModel.saveResult.collect {
+                when (it) {
+                    is OperationResult.Error -> showSnackbar("",requireActivity().findViewById(R.id.rootView))
+                    OperationResult.Loading -> Unit
+                    OperationResult.NotStarted -> Unit
+                    is OperationResult.Success -> {
+                        setFragmentResult(GROUP_KEY,
+                            bundleOf(
+                                GROUP_KEY to it.data
+                            )
+                        )
+                        navigateBack()
+                    }
+                }
+            }
+        }
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         val menuHost: MenuHost = requireActivity()
@@ -192,7 +223,6 @@ class NewListFragment : Fragment(), MenuProvider, BackActionInterface, DataRecei
                             groupImage = groupImage,
                             tasksCount = if (group != null) group!!.tasksCount else 0,
                         )
-                    navigateBack()
                 }
                 return true
             }

@@ -58,6 +58,13 @@ import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import androidx.core.view.WindowInsetsCompat.Type.statusBars
+import androidx.fragment.app.setFragmentResultListener
+import com.example.reminderapp.presentation.create_reminder.adapter.GroupSpinnerAdapter
+import com.example.reminderapp.presentation.editorlistsscreen.EditListsScreenFragment
+import com.example.reminderapp.presentation.navigation.FragmentNavigationConstants.GROUP_KEY
+import com.example.reminderapp.presentation.navigation.Navigation
+import com.example.reminderapp.presentation.new_list.NewListFragment
+import com.example.reminderapp.presentation.reminder_list.ReminderListFragment
 import java.util.Locale
 
 
@@ -71,6 +78,7 @@ class CreateReminderFragment : Fragment(), MenuProvider, BackActionInterface, Da
     private val binding get() = _binding!!
 
     private val viewModel: CreateReminderViewModel by viewModel()
+    private lateinit var groupSpinnerAdapter: GroupSpinnerAdapter
 
     val dateFormat = SimpleDateFormat("E, dd.MM.yyyy 'г.' HH:mm", Locale.getDefault())
 
@@ -103,6 +111,9 @@ class CreateReminderFragment : Fragment(), MenuProvider, BackActionInterface, Da
     ): View {
         _binding = FragmentCreateReminderBinding.inflate(layoutInflater, container, false)
 
+        setFragmentResultListener(GROUP_KEY) { key, bundle ->
+            selectedGroup = bundle.getLong(key).toInt()
+        }
         checkPermissions()
 
         edgeToEdge()
@@ -152,6 +163,7 @@ class CreateReminderFragment : Fragment(), MenuProvider, BackActionInterface, Da
             if (taskSerialized != null) {
                 taskId = taskSerialized.id
                 selectedTime = taskSerialized.reminderTime
+                selectedPeriod = taskSerialized.reminderTimePeriod
                 selectedColor = taskSerialized.color
                 selectedGroup = taskSerialized.groupId
                 taskName = taskSerialized.name
@@ -165,13 +177,15 @@ class CreateReminderFragment : Fragment(), MenuProvider, BackActionInterface, Da
         taskName?.let { reminderNameEt.setText(it) }
 
         reminderDescriptionEt.setText(taskDescription)
-
+        val time = selectedTime
+        val period = selectedPeriod
+        remindSwitch.isChecked = if(taskId!=null) true else false
+        selectedTime = time
+        selectedPeriod = period
         if (selectedTime!=null){
             val dateString = dateFormat.format(selectedTime)
             selectedDateTv.text = dateString
         }
-
-        remindSwitch.isChecked = if(taskId!=null) true else false
 
         binding.flagSwitch.isChecked = taskFlag
 
@@ -280,7 +294,9 @@ class CreateReminderFragment : Fragment(), MenuProvider, BackActionInterface, Da
         val spinner = binding.selectedPeriodSpinner
         spinner.adapter = adapter
 
-        if (selectedPeriod!=null) spinner.setSelection(timeDates.indexOfFirst{it.time == selectedPeriod})
+        if (selectedPeriod!=null){
+            spinner.setSelection(timeDates.indexOfFirst{it.time == selectedPeriod})
+        }
         binding.selectedPeriodSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(p0: AdapterView<*>?) {}
 
@@ -294,23 +310,37 @@ class CreateReminderFragment : Fragment(), MenuProvider, BackActionInterface, Da
     }
 
     private fun setSpinnerGroup(groups: List<Group>) {
-        val groupSpinnerItems = groups.map { group -> group.groupName }
-        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, groupSpinnerItems)
+
+        groupSpinnerAdapter = GroupSpinnerAdapter(
+            requireContext(),
+            groups,
+            onNoneSelected = {
+                selectedGroup = null
+            },
+            onCreateGroup = {
+                navigateToNewGroupScreen()
+            },
+            onGroupSelected = { group ->
+                selectedGroup = group.groupId
+            }
+        )
         val spinner = binding.selectedListSpinner
-        spinner.adapter = adapter
+        spinner.adapter = groupSpinnerAdapter
 
         if (selectedGroup!=null){
-            spinner.setSelection(groups.indexOfFirst{it.groupId == selectedGroup})
+            val selectedPos = groupSpinnerAdapter.getGroupPosition(selectedGroup!!)
+            if(selectedPos!=-1)spinner.setSelection(selectedPos)
         }
         else if(selectedGroupName != null) {
-            spinner.setSelection(groups.indexOfFirst{it.groupName == selectedGroupName})
+            val selectedPos = groupSpinnerAdapter.getGroupPosition(selectedGroupName!!)
+            if(selectedPos!=-1)spinner.setSelection(selectedPos)
         }
-        else if (groups.isNotEmpty()) spinner.setSelection(0)
+        else spinner.setSelection(0)
         binding.selectedListSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(p0: AdapterView<*>?) {}
 
             override fun onItemSelected(adapterView: AdapterView<*>?, view: View?, pos: Int, id: Long) {
-                selectedGroup = groups[pos].groupId
+                groupSpinnerAdapter.handleItemSelected(pos)
             }
         }
     }
@@ -508,6 +538,21 @@ class CreateReminderFragment : Fragment(), MenuProvider, BackActionInterface, Da
         parentFragmentManager.popBackStack()
     }
 
+    private fun navigateToNewGroupScreen() {
+        parentFragmentManager.beginTransaction()
+            .setCustomAnimations(
+                R.anim.slide_in_anim,
+                R.anim.slide_out_anim,
+                R.anim.slide_in_anim,
+                R.anim.slide_out_anim
+            )
+            .replace(
+                R.id.fragmentContainerView,
+                NewListFragment()
+            )
+            .addToBackStack(FragmentNavigationConstants.TASK_KEY)
+            .commit()
+    }
 
     fun checkPermissions() {
         checkNotificationPermission()

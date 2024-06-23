@@ -7,6 +7,7 @@ object FragmentNavigationConstants {
     const val LIST_TYPE = "list_type"
     const val LIST_NAME = "list_name"
     const val TASK_KEY = "TASK_KEY"
+    const val GROUP_KEY = "GROUP_KEY"
 
     const val EDITABLE_LIST = "editable_list"
 }

@@ -76,8 +76,8 @@ class TaskStorageImpl(
         }
     }
 
-    override suspend fun addGroup(group: Group) {
-        taskDao.addGroup(groupCacheMapper.mapToEntity(group).first)
+    override suspend fun addGroup(group: Group): Long {
+        return taskDao.addGroup(groupCacheMapper.mapToEntity(group).first)
     }
 
     override suspend fun editGroup(group: Group) = taskDao.editGroup(groupCacheMapper.mapToEntity(group).first)

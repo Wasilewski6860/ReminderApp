@@ -92,5 +92,8 @@
     <string name="date_or_period_should_be_selected">The reminder date and/or frequency must be selected</string>
     <string name="group_should_be_selected">The list must be selected</string>
     <string name="color_should_be_selected">The color must be chosen</string>
+    <string name="not_selected">Not selected</string>
+    <string name="create">Create</string>
+
 
 </resources>
