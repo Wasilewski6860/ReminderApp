@@ -7,6 +7,10 @@
     <string name="onetime_reminder">Единоразовое напоминание</string>
     <string name="choose_time">Выбрать время</string>
     <string name="save">Сохранить</string>
+    <string name="time_expired">Время истекло</string>
+    <string name="postpone">Отложить</string>
+    <string name="dismiss">Отменить</string>
+
 
     <string name="notification_permission_required" >Требуется разрешение на показ уведомлений</string>
     <string name="go_to_settings">К настройкам</string>
@@ -25,7 +29,7 @@
     <string name="reminder_desc_et_hint">Описание</string>
     <string name="reminder_remind_time_text">Напомнить в день</string>
     <string name="reminder_date_tv_text">Дата</string>
-    <string name="remider_list_text">Список</string>
+    <string name="reminder_list_text">Список</string>
     <string name="reminder_date_value_tv_text">вт 18 июн. 2024 г. 8:25 AM</string>
     <string name="reminder_repeat_tv_text">Повтор</string>
     <string name="reminder_flag_tv_text">Флаг</string>
@@ -66,7 +70,7 @@
     <string name="add_list">Добавить список</string>
 
     <string name="nothing_found">Ничего не найдено</string>
-    <string name="edit">Изменить</string>
+    <string name="edit">Изменить список</string>
     <string name="add_list_abbr">Доб.список</string>
     <string name="add_list_hint">Новый список</string>
     <string name="deletion_error">Не удалось удалить задачу</string>

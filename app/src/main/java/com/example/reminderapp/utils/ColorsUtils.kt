@@ -11,7 +11,7 @@ class ColorsUtils(context: Context) {
             ContextCompat.getColor(context, R.color.red)
         ),
         ColorItem(
-            context.getString(R.string.red_color_list_item),
+            context.getString(R.string.orange_color_list_item),
             ContextCompat.getColor(context, R.color.orange)
         ),
         ColorItem(
