@@ -8,9 +8,9 @@
     <string name="onetime_reminder">One time reminder</string>
     <string name="choose_time">Choose a time</string>
     <string name="save">Save</string>
-    <string name="time_expired" translatable="false">Time expired</string>
-    <string name="postpone" translatable="false">Postpone</string>
-    <string name="dismiss" translatable="false">Dismiss</string>
+    <string name="time_expired">Time expired</string>
+    <string name="postpone">Postpone</string>
+    <string name="dismiss">Dismiss</string>
     <string name="swipe_right_to_dismiss" translatable="false">Swipe right to Dismiss, or left to Snooze.</string>
 
     <string name="notification_permission_required" >Notification Permission required</string>
@@ -28,7 +28,7 @@
     <string name="reminder_desc_et_hint">Description</string>
     <string name="reminder_remind_time_text">Remind me on the day</string>
     <string name="reminder_date_tv_text">Date</string>
-    <string name="remider_list_text">List</string>
+    <string name="reminder_list_text">List</string>
     <string name="reminder_date_value_tv_text">tue 18 jul. 2024 г. 8:25 AM</string>
     <string name="reminder_repeat_tv_text">Repeat</string>
     <string name="reminder_flag_tv_text">Flag</string>
@@ -84,7 +84,7 @@
     <string name="add_list">Add new list</string>
 
     <string name="nothing_found">Nothing found</string>
-    <string name="edit">Edit</string>
+    <string name="edit">Edit list</string>
     <string name="add_list_abbr">Add list</string>
     <string name="add_list_hint">New list</string>
     <string name="deletion_error">Failed to delete task</string>
