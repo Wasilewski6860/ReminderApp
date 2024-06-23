@@ -10,6 +10,7 @@ import com.example.domain.use_case.DeleteTaskUseCase
 import com.example.domain.use_case.EditTaskUseCase
 import com.example.domain.use_case.GetAllTasksUseCase
 import com.example.domain.use_case.GetGroupWithTasksUseCase
+import com.example.domain.use_case.GetNoTimeTasksUseCase
 import com.example.domain.use_case.GetPlannedTasksUseCase
 import com.example.domain.use_case.GetTasksForTodayUseCase
 import com.example.domain.use_case.GetTasksWithFlagUseCase
@@ -35,6 +36,7 @@ class ReminderListViewModel(
     private val getPlannedTasksUseCase: GetPlannedTasksUseCase,
     private val getTasksWithFlagUseCase: GetTasksWithFlagUseCase,
     private val getAllTasksUseCase: GetAllTasksUseCase,
+    private val getNoTimeTasksUseCase: GetNoTimeTasksUseCase,
     private val editTaskUseCase: EditTaskUseCase,
     private val deleteTaskUseCase: DeleteTaskUseCase,
 ) : AndroidViewModel(application) {
@@ -101,6 +103,18 @@ class ReminderListViewModel(
                         .collect {
                             _uiState.value = UiState.Success(
                                 RemindersListUiState(it, context.getString(R.string.all))
+                            )
+                        }
+                }
+
+                TasksListTypeCase.TasksNoTime -> {
+                    getNoTimeTasksUseCase(Unit)
+                        .catch { e ->
+                            _uiState.value = UiState.Error(e.toString())
+                        }
+                        .collect {
+                            _uiState.value = UiState.Success(
+                                RemindersListUiState(it, context.getString(R.string.no_time))
                             )
                         }
                 }

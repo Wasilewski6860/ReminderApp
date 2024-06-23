@@ -142,6 +142,7 @@ class MainFragment : Fragment() {
         todayCount: Int,
         plannedCount: Int,
         withFlagCount: Int,
+        noTimeCount: Int,
         allCount: Int
     ) = with(binding) {
         topGridLayout.apply {
@@ -188,6 +189,18 @@ class MainFragment : Fragment() {
                         putSerializable(
                             FragmentNavigationConstants.LIST_TYPE,
                             TasksListTypeCase.TasksWithFlag
+                        )
+                    }
+                    navigate(Navigation.ToReminderListFragment, bundle)
+                }
+            }
+            tasksNoTimeItem.apply {
+                counterTitle = noTimeCount.toString()
+                setOnClickListener {
+                    val bundle = Bundle().apply {
+                        putSerializable(
+                            FragmentNavigationConstants.LIST_TYPE,
+                            TasksListTypeCase.TasksNoTime
                         )
                     }
                     navigate(Navigation.ToReminderListFragment, bundle)
@@ -243,7 +256,8 @@ class MainFragment : Fragment() {
                                     todayCount = this.todayCount,
                                     plannedCount = this.plannedCount,
                                     withFlagCount = this.withFlagCount,
-                                    allCount = this.allCount
+                                    allCount = this.allCount,
+                                    noTimeCount = this.noTimeCount
                                 )
                             }
 

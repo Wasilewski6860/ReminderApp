@@ -4,6 +4,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.domain.model.Group
 import com.example.domain.use_case.GetAllGroupsUseCase
 import com.example.domain.use_case.GetAllTasksCountUseCase
+import com.example.domain.use_case.GetNoTimeTasksCountUseCase
 import com.example.domain.use_case.GetTasksForTodayCountUseCase
 import com.example.domain.use_case.GetTasksPlannedCountUseCase
 import com.example.domain.use_case.GetTasksWithFlagCountUseCase
@@ -13,6 +14,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.launch
 
 data class MainUiState(
@@ -20,7 +22,8 @@ data class MainUiState(
     val todayCount: Int,
     val plannedCount: Int,
     val withFlagCount: Int,
-    val allCount: Int,
+    val noTimeCount: Int,
+    val allCount: Int
 )
 
 class MainViewModel(
@@ -29,6 +32,7 @@ class MainViewModel(
     private val getTasksPlannedCountUseCase: GetTasksPlannedCountUseCase,
     private val getTasksWithFlagCountUseCase: GetTasksWithFlagCountUseCase,
     private val getAllTasksCountUseCase: GetAllTasksCountUseCase,
+    private val getNoTimeTasksCountUseCase: GetNoTimeTasksCountUseCase,
 ) : BaseViewModel<Unit, MainUiState>() {
 
     private val _uiState = MutableStateFlow<UiState<MainUiState>>(UiState.Loading)
@@ -36,33 +40,51 @@ class MainViewModel(
 
     override fun fetchData(params: Unit) {
         viewModelScope.launch {
-//            _uiState.value = UiState.Success(
-//                MainUiState(
-//                     TestData().getTestList(), 6, 5, 1, 2
-//                )
-//            )
-//            TODO Делать так:
+            val groupsFlow = getAllGroupsUseCase(Unit)
+            val todayCountFlow = getTasksForTodayCountUseCase(Unit)
+            val plannedCountFlow = getTasksPlannedCountUseCase(Unit)
+            val withFlagCountFlow = getTasksWithFlagCountUseCase(Unit)
+            val noTimeCountFlow = getNoTimeTasksCountUseCase(Unit)
+            val allCountFlow = getAllTasksCountUseCase(Unit)
 
             combine(
-                getAllGroupsUseCase(Unit),
-                getTasksForTodayCountUseCase(Unit),
-                getTasksPlannedCountUseCase(Unit),
-                getTasksWithFlagCountUseCase(Unit),
-                getAllTasksCountUseCase(Unit),
-            ) { allGroups, todayCount, plannedCount, withFlagCount, allCount  ->
-                MainUiState(
-                    allGroups, todayCount, plannedCount, withFlagCount, allCount
+                groupsFlow,
+                todayCountFlow,
+                plannedCountFlow,
+                withFlagCountFlow
+            ) { allGroups, todayCount, plannedCount, withFlagCount ->
+                CombinedResult(
+                    groups = allGroups,
+                    todayCount = todayCount,
+                    plannedCount = plannedCount,
+                    withFlagCount = withFlagCount
                 )
+            }.flatMapLatest { combinedResult ->
+                combine(
+                    noTimeCountFlow,
+                    allCountFlow
+                ) { noTimeCount, allCount ->
+                    MainUiState(
+                        groups = combinedResult.groups,
+                        todayCount = combinedResult.todayCount,
+                        plannedCount = combinedResult.plannedCount,
+                        withFlagCount = combinedResult.withFlagCount,
+                        noTimeCount = noTimeCount,
+                        allCount = allCount
+                    )
+                }
             }.catch { e ->
                 _uiState.value = UiState.Error(e.toString())
-            }.collect {
-                _uiState.value = UiState.Success(it)
+            }.collect { uiState ->
+                _uiState.value = UiState.Success(uiState)
             }
-
-
         }
     }
 
-
-
+    private data class CombinedResult(
+        val groups: List<Group>,
+        val todayCount: Int,
+        val plannedCount: Int,
+        val withFlagCount: Int
+    )
 }

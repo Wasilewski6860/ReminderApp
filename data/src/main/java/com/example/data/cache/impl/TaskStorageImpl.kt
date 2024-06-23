@@ -58,6 +58,16 @@ class TaskStorageImpl(
         }
     }
 
+    override fun getNoTimeTasks(): Flow<List<Task>> {
+        return taskDao.getNoTimeTasks().map { list ->
+            list.map {  taskEntity ->
+                taskCacheMapper.mapFromEntity(taskEntity)
+            }
+        }
+    }
+
+    override fun getCountOfNoTimeTasks(): Flow<Int> = taskDao.getCountOfNoTimeTasks()
+
     override fun getAllTasksByPeriodType(period: String): Flow<List<Task>> {
         return taskDao.getAllTasksByPeriodType(period).map { list ->
             list.map {  taskEntity ->
@@ -76,41 +86,6 @@ class TaskStorageImpl(
 
 
     override fun getAllGroups(): Flow<List<Group>> {
-//        return flow {
-//            emit(listOf())
-//        }
-
-//       return taskDao.getAllGroups().flatMapConcat { groups ->
-//           val taskCountFlows = groups.map { group ->
-//               getCountOfTasksInGroup(group.groupId)
-//           }
-//           combine(taskCountFlows) { taskCounts ->
-//               groups.zip(taskCounts) { taskGroup, tasksCount ->
-//                   groupCacheMapper.mapFromEntity(Pair(taskGroup, tasksCount))
-//               }
-//           }
-//       }
-
-//        return taskDao.getAllGroups()
-//            .flatMapLatest { groups ->
-//                val groupFlows = groups.map { group ->
-//                    getCountOfTasksInGroup(group.groupId)
-//                        .map { tasksCount ->
-//                            Group(
-//                                groupId = group.groupId,
-//                                groupName = group.groupName,
-//                                groupColor = group.groupColor,
-//                                groupImage = group.groupImage,
-//                                tasksCount = tasksCount
-//                            )
-//                        }
-//                }
-//                combine(groupFlows) { taskCounts ->
-//                    groups.zip(taskCounts) { taskGroup, tasksCount ->
-//                        groupCacheMapper.mapFromEntity(Pair(taskGroup, tasksCount.tasksCount))
-//                    }
-//                }
-//            }
 
         val emptyListFlow: Flow<List<Group>> = flowOf(emptyList())
 

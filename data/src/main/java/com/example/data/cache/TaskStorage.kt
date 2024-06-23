@@ -1,5 +1,7 @@
 package com.example.data.cache
 
+import androidx.room.Query
+import com.example.data.cache.entity.TaskEntity
 import com.example.domain.model.Group
 import com.example.domain.model.GroupWithTasks
 import com.example.domain.model.Task
@@ -16,6 +18,10 @@ interface TaskStorage {
     suspend fun deleteTask(id: Int)
 
     fun getAllTasks(): Flow<List<Task>>
+
+    fun getNoTimeTasks(): Flow<List<Task>>
+
+    fun getCountOfNoTimeTasks(): Flow<Int>
 
     fun getAllTasksByPeriodType(period: String): Flow<List<Task>>
 

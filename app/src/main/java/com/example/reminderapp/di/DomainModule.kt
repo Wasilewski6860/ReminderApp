@@ -12,6 +12,8 @@ import com.example.domain.use_case.GetAllTasksCountUseCase
 import com.example.domain.use_case.GetAllTasksUseCase
 import com.example.domain.use_case.GetGroupUseCase
 import com.example.domain.use_case.GetGroupWithTasksUseCase
+import com.example.domain.use_case.GetNoTimeTasksCountUseCase
+import com.example.domain.use_case.GetNoTimeTasksUseCase
 import com.example.domain.use_case.GetPlannedTasksBaseUseCase
 import com.example.domain.use_case.GetPlannedTasksUseCase
 import com.example.domain.use_case.GetTaskUseCase
@@ -108,6 +110,14 @@ val domainModule = module {
 
     factory<EditGroupUseCase> {
         EditGroupUseCase(taskRepository = get())
+    }
+
+    factory<GetNoTimeTasksCountUseCase> {
+        GetNoTimeTasksCountUseCase(taskRepository = get())
+    }
+
+    factory<GetNoTimeTasksUseCase> {
+        GetNoTimeTasksUseCase(taskRepository = get())
     }
 
 }
