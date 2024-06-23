@@ -88,7 +88,7 @@ class NotificationManager(val context: Context) : KoinComponent {
     fun createNotification(contentTitle: String, contextText: String, taskId: Int) {
         Log.d("NotificationManager","createNotification taskId:"+taskId.toString()+" name:"+contentTitle+" desc:"+contextText )
         val builder = NotificationCompat.Builder(context, CHANNEL_ID)
-            .setSmallIcon(R.drawable.logo)
+            .setSmallIcon(R.mipmap.ic_launcher)
             .setContentTitle(contentTitle)
             .setContentText(contextText)
             .setAutoCancel(true)
@@ -139,7 +139,7 @@ class NotificationManager(val context: Context) : KoinComponent {
 
         return NotificationCompat.Action(
             R.drawable.ic_close,
-            "Dismiss",
+            context.getString(R.string.dismiss),
             cancelReminderPendingIntent
         )
     }
@@ -166,7 +166,7 @@ class NotificationManager(val context: Context) : KoinComponent {
 
         return NotificationCompat.Action(
             R.drawable.ic_check,
-            "Postpone",
+            context.getString(R.string.postpone),
             postponeReminderPendingIntent
         )
     }
