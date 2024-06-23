@@ -43,7 +43,7 @@ interface TaskDao {
     fun getAllGroups(): Flow<List<TaskGroupEntity>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun addGroup(groupEntity: TaskGroupEntity)
+    suspend fun addGroup(groupEntity: TaskGroupEntity): Long
 
     @Update
     suspend fun editGroup(groupEntity: TaskGroupEntity)

@@ -27,6 +27,7 @@ import com.example.reminderapp.presentation.base.serializer.TasksListTypeCaseSer
 import com.example.reminderapp.presentation.create_reminder.CreateReminderFragment
 import com.example.reminderapp.presentation.editorlistsscreen.EditListsScreenFragment
 import com.example.reminderapp.presentation.navigation.FragmentNavigationConstants
+import com.example.reminderapp.presentation.navigation.Navigation
 import com.example.reminderapp.presentation.navigation.TasksListTypeCase
 import com.example.reminderapp.presentation.new_list.NewListFragment
 import com.example.reminderapp.presentation.recycleradapter.GroupListRecyclerViewAdapter
@@ -280,14 +281,3 @@ class MainFragment : Fragment() {
 
 }
 
-private sealed class Navigation {
-
-    object ToCreateReminderFragment : Navigation()
-
-    object ToEditListsFragment : Navigation()
-
-    object ToNewListFragment : Navigation()
-
-    object ToReminderListFragment : Navigation()
-
-}

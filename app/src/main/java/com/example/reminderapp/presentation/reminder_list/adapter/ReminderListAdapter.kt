@@ -34,16 +34,30 @@ class ReminderListAdapter(
         val item = getItem(position)
 
         with(holder.binding) {
+            switchIsActive.setOnCheckedChangeListener(null)
+            reminderDeleteIv.setOnClickListener(null)
+            remindItemRootView.setOnClickListener(null)
+
             switchIsActive.isChecked = item.isActive
             reminderNameTv.text = item.name
             reminderDescriptionTv.text = item.description
-            val formattedTime = timeDateUtils.getFormattedTime(item.reminderTime, if (item.type==TaskPeriodType.PERIODIC) item.reminderTimePeriod else null)
+            val formattedTime = timeDateUtils.getFormattedTime(item.reminderTime)
             if (formattedTime.isNullOrEmpty()){
                 reminderDateTv.visibility = View.GONE
             }
             else{
+                reminderDateTv.visibility = View.VISIBLE
                 reminderDateTv.text = formattedTime
             }
+            val period =  timeDateUtils.getFormattedPeriod(item.reminderTimePeriod)
+            if (period.isNullOrEmpty()){
+                reminderPeriodTv.visibility = View.GONE
+            }
+            else {
+                reminderPeriodTv.visibility = View.VISIBLE
+                reminderPeriodTv.text = period
+            }
+
             reminderFlagIv.visibility = if (item.isMarkedWithFlag) View.VISIBLE else View.INVISIBLE
             reminderRepeatIv.visibility = if (item.type==TaskPeriodType.PERIODIC) View.VISIBLE else View.INVISIBLE
 
@@ -60,6 +74,7 @@ class ReminderListAdapter(
 
     }
 
+
     interface OnClickListener {
 
         fun onItemClick(task: Task)
@@ -74,7 +89,7 @@ class ReminderListAdapter(
         val DiffCallBack = object : DiffUtil.ItemCallback<Task>() {
 
             override fun areItemsTheSame(oldItem: Task, newItem: Task): Boolean {
-                return oldItem === newItem
+                return oldItem.id === newItem.id
             }
 
             override fun areContentsTheSame(oldItem: Task, newItem: Task): Boolean {
@@ -82,5 +97,6 @@ class ReminderListAdapter(
             }
         }
     }
+
 
 }

@@ -75,4 +75,6 @@
     <string name="date_or_period_should_be_selected">Дата напоминания и/или периодичность должны быть выбраны</string>
     <string name="group_should_be_selected">Список должен быть выбран</string>
     <string name="color_should_be_selected">Цвет должен быть выбран</string>
+    <string name="not_selected">Не выбрано</string>
+    <string name="create">Создать</string>
 </resources>

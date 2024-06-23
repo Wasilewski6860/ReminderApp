@@ -75,7 +75,7 @@ class GroupListRecyclerViewAdapter(
         val DiffCallBack = object : DiffUtil.ItemCallback<Group>() {
 
             override fun areItemsTheSame(oldItem: Group, newItem: Group): Boolean {
-                return oldItem === newItem
+                return oldItem.groupId === newItem.groupId
             }
 
             override fun areContentsTheSame(oldItem: Group, newItem: Group): Boolean {

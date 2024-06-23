@@ -55,18 +55,16 @@ class TimeDateUtils(context: Context) {
         ),
     )
 
-    private fun getPeriod(ms: Long) : TimePeriodItem? = timeDates.firstOrNull { it.time == ms }
+    private fun getPeriod(ms: Long?) : TimePeriodItem? = timeDates.firstOrNull { it.time == ms }
 
-    fun getFormattedTime(ms: Long?, period: Long? = null): String {
+    fun getFormattedTime(ms: Long?): String {
         if (ms==null) return ""
         val date = Date(ms)
         val sdf = SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.getDefault())
-        var formattedDateTime = sdf.format(date)
-        period?.let {
-            formattedDateTime += " ${getPeriod(period)?.name}"
-        }
-        return formattedDateTime
+        return sdf.format(date)
     }
+
+    fun getFormattedPeriod(period: Long?): String? = getPeriod(period)?.name
 
 }
 
