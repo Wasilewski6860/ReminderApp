@@ -30,6 +30,12 @@ interface TaskDao {
     @Query("SELECT * FROM task")
     fun getAllTasks(): Flow<List<TaskEntity>>
 
+    @Query("SELECT * FROM task WHERE start_time IS NULL AND time_period IS NULL")
+    fun getNoTimeTasks(): Flow<List<TaskEntity>>
+
+    @Query("SELECT COUNT(*) FROM task WHERE start_time IS NULL AND time_period IS NULL")
+    fun getCountOfNoTimeTasks(): Flow<Int>
+
     @Query("SELECT * FROM task WHERE id =:id")
     fun getTask(id: Int): Flow<TaskEntity>
 

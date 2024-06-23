@@ -18,35 +18,39 @@
         android:id="@+id/reminder_info_ll"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_margin="@dimen/medium_margin"
         app:layout_constraintStart_toEndOf="@+id/switchIsActive"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/reminder_flag_iv"
-        android:orientation="vertical">
+        android:orientation="vertical" >
 
         <TextView
             android:id="@+id/reminder_name_tv"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:layout_weight="1"
+            android:gravity="center_vertical"
             style="@style/BaseItemTextStyle"
             android:text="Name" />
 
         <TextView
             android:id="@+id/reminder_description_tv"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:layout_weight="1"
             android:maxEms="30"
+            android:gravity="center_vertical"
             style="@style/SubheadItemTextStyle"
             android:text="Description"/>
 
         <TextView
             android:id="@+id/reminder_date_tv"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:layout_weight="1"
             android:maxEms="16"
+            android:gravity="center_vertical"
             style="@style/SubheadItemTextStyle"
             android:text="Date"/>
 

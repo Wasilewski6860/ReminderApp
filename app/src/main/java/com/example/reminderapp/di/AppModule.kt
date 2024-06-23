@@ -45,7 +45,8 @@ val appModule = module {
             getTasksPlannedCountUseCase = get(),
             getTasksForTodayCountUseCase = get(),
             getTasksWithFlagCountUseCase = get(),
-            getAllTasksCountUseCase = get()
+            getAllTasksCountUseCase = get(),
+            getNoTimeTasksCountUseCase = get()
         )
     }
 
@@ -73,7 +74,8 @@ val appModule = module {
             getTasksWithFlagUseCase = get(),
             application = get(),
             editTaskUseCase = get(),
-            deleteTaskUseCase = get()
+            deleteTaskUseCase = get(),
+            getNoTimeTasksUseCase = get()
         )
     }
 

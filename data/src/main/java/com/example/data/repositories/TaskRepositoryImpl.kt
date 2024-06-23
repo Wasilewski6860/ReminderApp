@@ -86,6 +86,11 @@ class TaskRepositoryImpl(
         taskStorage.getAllTasksByPeriodType(period.name)
 
     override fun getAllTasks(): Flow<List<Task>> = taskStorage.getAllTasks()
+
+    override fun getNoTimeTasks(): Flow<List<Task>> = taskStorage.getNoTimeTasks()
+
+    override fun getCountOfNoTimeTasks(): Flow<Int> = taskStorage.getCountOfNoTimeTasks()
+
     override fun getAllTasksCount(): Flow<Int> {
         return getAllTasks().map { list->
             list.size

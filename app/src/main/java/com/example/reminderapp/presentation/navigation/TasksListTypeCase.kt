@@ -14,5 +14,7 @@ sealed class TasksListTypeCase : Serializable {
 
     object TasksWithFlag : TasksListTypeCase()
 
+    object TasksNoTime : TasksListTypeCase()
+
 }
 

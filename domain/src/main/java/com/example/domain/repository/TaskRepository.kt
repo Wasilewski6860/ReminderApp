@@ -23,6 +23,11 @@ interface TaskRepository {
     fun getAllTasksByPeriodType(period: TaskPeriodType): Flow<List<Task>>
 
     fun getAllTasks(): Flow<List<Task>>
+
+    fun getNoTimeTasks(): Flow<List<Task>>
+
+    fun getCountOfNoTimeTasks(): Flow<Int>
+
     fun getAllTasksCount(): Flow<Int>
 
     fun getTasksForToday(): Flow<List<Task>>
