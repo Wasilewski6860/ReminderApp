@@ -80,7 +80,7 @@ class CreateReminderFragment : Fragment(), MenuProvider, BackActionInterface, Da
     var selectedPeriod: Long? = null
     var selectedTime: Long? = null
     var selectedColor: Int? = null
-    var taskType: TaskPeriodType? = null
+    var taskType: TaskPeriodType = TaskPeriodType.NO_TIME
     var taskName: String? = null
     var taskDescription: String? = null
     var taskFlag: Boolean = false
@@ -110,10 +110,10 @@ class CreateReminderFragment : Fragment(), MenuProvider, BackActionInterface, Da
 
         setupOnBackPressed()
 
+        setupSwitches()
         fillViews()
         setSpinnerColor()
         setSpinnerPeriod()
-        setupSwitches()
         setupObservers()
         viewModel.fetchGroups()
 
@@ -286,10 +286,8 @@ class CreateReminderFragment : Fragment(), MenuProvider, BackActionInterface, Da
 
             override fun onItemSelected(adapterView: AdapterView<*>?, view: View?, pos: Int, id: Long) {
                 selectedPeriod = TimeDateUtils(requireContext()).timeDates[pos].time
-                taskType = if (TimeDateUtils(requireContext()).timeDates[pos].time != null) {
-                    TaskPeriodType.PERIODIC
-                } else {
-                    TaskPeriodType.ONE_TIME
+                if (TimeDateUtils(requireContext()).timeDates[pos].time != null) {
+                    taskType=TaskPeriodType.PERIODIC
                 }
             }
         }
@@ -354,15 +352,24 @@ class CreateReminderFragment : Fragment(), MenuProvider, BackActionInterface, Da
         if (isInputValid() && hasNotificationPermisions && hasScheduleExactAlarmPermisions) {
             val name = reminderNameEt.text.toString()
             val description = reminderDescriptionEt.text.toString()
-
+            if(selectedTime==null && selectedPeriod==null) {
+                taskType = TaskPeriodType.NO_TIME
+            }
+            if(selectedTime==null && selectedPeriod!= null) {
+                selectedTime=Calendar.getInstance().timeInMillis
+                taskType=TaskPeriodType.PERIODIC
+            }
+            if (selectedTime!=null && selectedPeriod==null){
+                taskType=TaskPeriodType.ONE_TIME
+            }
             viewModel.saveTask(
                 taskId = taskId,
                 taskName = name,
                 taskDesc = description,
                 taskCreationTime = Calendar.getInstance().timeInMillis,
-                taskTime = selectedTime?:Calendar.getInstance().timeInMillis,
-                taskTimePeriod = selectedPeriod ?: 0,
-                taskType = taskType!!,
+                taskTime = selectedTime,
+                taskTimePeriod = selectedPeriod,
+                taskType = taskType,
                 isActive = true,
                 isMarkedWithFlag = flagSwitch.isChecked,
                 groupId = selectedGroup!!,
@@ -426,10 +433,10 @@ class CreateReminderFragment : Fragment(), MenuProvider, BackActionInterface, Da
                 reminderNameEt.setError(getString(R.string.name_shouldnt_be_empty))
                 return false
             }
-            else if(selectedTime == null && selectedPeriod == null) {
-                showSnackbar(getString(R.string.date_or_period_should_be_selected), requireActivity().findViewById(R.id.rootView))
-                return false
-            }
+//            else if(selectedTime == null && selectedPeriod == null) {
+//                showSnackbar(getString(R.string.date_or_period_should_be_selected), requireActivity().findViewById(R.id.rootView))
+//                return false
+//            }
             else if(selectedGroup == null) {
                 showSnackbar(getString(R.string.group_should_be_selected), requireActivity().findViewById(R.id.rootView))
                 return false
