@@ -146,7 +146,10 @@ class TaskRepositoryImpl(
 
     }
 
-    fun isToday(timeInMillis: Long): Boolean {
+    fun isToday(timeInMillis: Long?): Boolean {
+        if (timeInMillis==null){
+            return false
+        }
         val now = Calendar.getInstance()
         val target = Calendar.getInstance()
         target.timeInMillis = timeInMillis

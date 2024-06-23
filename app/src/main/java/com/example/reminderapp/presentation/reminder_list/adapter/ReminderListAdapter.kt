@@ -37,7 +37,13 @@ class ReminderListAdapter(
             switchIsActive.isChecked = item.isActive
             reminderNameTv.text = item.name
             reminderDescriptionTv.text = item.description
-            reminderDateTv.text = timeDateUtils.getFormattedTime(item.reminderTime, if (item.type==TaskPeriodType.PERIODIC) item.reminderTimePeriod else null)
+            val formattedTime = timeDateUtils.getFormattedTime(item.reminderTime, if (item.type==TaskPeriodType.PERIODIC) item.reminderTimePeriod else null)
+            if (formattedTime.isNullOrEmpty()){
+                reminderDateTv.visibility = View.GONE
+            }
+            else{
+                reminderDateTv.text = formattedTime
+            }
             reminderFlagIv.visibility = if (item.isMarkedWithFlag) View.VISIBLE else View.INVISIBLE
             reminderRepeatIv.visibility = if (item.type==TaskPeriodType.PERIODIC) View.VISIBLE else View.INVISIBLE
 

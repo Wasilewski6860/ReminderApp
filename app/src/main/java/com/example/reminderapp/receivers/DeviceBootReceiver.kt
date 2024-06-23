@@ -8,6 +8,7 @@ import android.util.Log
 import com.example.domain.use_case.GetAllTasksUseCase
 import com.example.reminderapp.presentation.base.UiState
 import com.example.data.reminder.RemindAlarmManager
+import com.example.domain.model.TaskPeriodType
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -34,7 +35,7 @@ class DeviceBootReceiver : BroadcastReceiver(), KoinComponent {
             getAllTasksUseCase(Unit)
                 .collect { tasks ->
                     tasks.forEach { task ->
-                        if(task.isActive) remindAlarmManager.createAlarm(task)
+                        if(task.isActive && task.type != TaskPeriodType.NO_TIME) remindAlarmManager.createAlarm(task)
                     }
                 }
         }

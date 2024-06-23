@@ -26,16 +26,17 @@ class RemindAlarmManager(
             TaskPeriodType.PERIODIC -> createAlarmPeriodic(
                 title = task.name,
                 text = task.description,
-                startTimeInMs = task.reminderTime,
-                intervalInMs = task.reminderTimePeriod,
+                startTimeInMs = task.reminderTime!!,
+                intervalInMs = task.reminderTimePeriod!!,
                 taskId = task.id
             )
             TaskPeriodType.ONE_TIME -> createAlarmOneTime(
                 title = task.name,
                 text = task.description,
-                targetInMs = task.reminderTime,
+                targetInMs = task.reminderTime!!,
                 taskId = task.id
             )
+            TaskPeriodType.NO_TIME -> Unit
         }
     }
 

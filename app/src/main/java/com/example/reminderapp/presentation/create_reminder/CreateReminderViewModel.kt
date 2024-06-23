@@ -47,15 +47,14 @@ class CreateReminderViewModel(
        taskName: String,
        taskDesc: String,
        taskCreationTime: Long,
-       taskTime: Long,
-       taskTimePeriod: Long,
        taskType: TaskPeriodType,
+       taskTime: Long?,
+       taskTimePeriod: Long?,
        isActive: Boolean,
        isMarkedWithFlag: Boolean,
        groupId: Int,
        taskColor: Int
     ) {
-        _saveResult.value = OperationResult.Loading
         viewModelScope.launch {
             if (taskId == null) {
                 createTaskUseCase(

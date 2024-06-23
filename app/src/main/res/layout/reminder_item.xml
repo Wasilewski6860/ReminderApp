@@ -16,11 +16,12 @@
 
     <LinearLayout
         android:id="@+id/reminder_info_ll"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintStart_toEndOf="@+id/switchIsActive"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/reminder_flag_iv"
         android:orientation="vertical">
 
         <TextView
@@ -45,6 +46,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:maxEms="16"
             style="@style/SubheadItemTextStyle"
             android:text="Date"/>
 
