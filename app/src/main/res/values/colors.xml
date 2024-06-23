@@ -8,7 +8,7 @@
     <color name="subheadTextColorDay">#9A333333</color>
     <color name="subheadTextColorNight">#99F4F4F4</color>
     <color name="boxStrokeColor">#DCDCDC</color>
-    <color name="boxStrokeColorNignt">#606060</color>
+    <color name="boxStrokeColorNight">#606060</color>
     <color name="dividerColor">#606060</color>
 
     <color name="purple_500">#FF6200EE</color>
@@ -30,4 +30,6 @@
 
     <color name="activated_item_foreground">#6E6E6E</color>
     <color name="pressed_item_foreground">#08000000</color>
+
+    <color name="light_grey">#818181</color>
 </resources>
