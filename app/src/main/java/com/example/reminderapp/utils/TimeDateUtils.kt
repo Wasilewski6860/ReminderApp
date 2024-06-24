@@ -9,10 +9,10 @@ import java.util.Locale
 class TimeDateUtils(context: Context) {
 
     val timeDates = listOf<TimePeriodItem>(
-        TimePeriodItem(
-            context.getString(R.string.never_time_list_item),
-            null
-        ),
+//        TimePeriodItem(
+//            context.getString(R.string.never_time_list_item),
+//            null
+//        ),
         TimePeriodItem(
             context.getString(R.string.five_min_time_list_item),
             300000

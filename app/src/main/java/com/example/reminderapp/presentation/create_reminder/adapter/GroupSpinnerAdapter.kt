@@ -10,24 +10,38 @@ import com.example.reminderapp.R
 
 class GroupSpinnerAdapter(
     context: Context,
-    private val groups: List<Group>,
     private val onNoneSelected: () -> Unit,
     private val onCreateGroup: () -> Unit,
     private val onGroupSelected: (Group) -> Unit
-) : ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, listOf(context.getString(R.string.not_selected)) + groups.map { it.groupName } + context.getString(R.string.create)) {
+) : ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, listOf(context.getString(R.string.not_selected))  + context.getString(R.string.create)) {
+
+    private var groupItems = mutableListOf<Group>()
+
+    fun submitList(groups: List<Group>) {
+        groupItems.clear()
+        groupItems.addAll(groups)
+        val list = mutableListOf<String>()
+        list.add(context.getString(R.string.not_selected))
+        list.addAll(groupItems.map { it.groupName })
+        list.add(context.getString(R.string.create))
+        notifyDataSetChanged()
+    }
+
 
     override fun getCount(): Int {
         // +2 для "Не выбрано" и "Создать список"
-        return groups.size + 2
+        return groupItems.size + 2
     }
 
     override fun getItem(position: Int): String? {
         return when (position) {
             0 -> context.getString(R.string.not_selected)
             count - 1 -> context.getString(R.string.create)
-            else -> groups[position - 1].groupName
+            else -> groupItems[position - 1].groupName
         }
     }
+
+    override fun getItemId(position: Int): Long = position.toLong()
 
     override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
         val view = super.getDropDownView(position, convertView, parent)
@@ -40,17 +54,17 @@ class GroupSpinnerAdapter(
         when (position) {
             0 -> onNoneSelected()
             count - 1 -> onCreateGroup()
-            else -> onGroupSelected(groups[position - 1])
+            else -> onGroupSelected(groupItems[position - 1])
         }
     }
 
     fun getGroupPosition(groupId: Int): Int {
-        val index = groups.indexOfFirst { it.groupId == groupId }
+        val index = groupItems.indexOfFirst { it.groupId == groupId }
         return if (index >= 0) index + 1 else -1 // +1 чтобы учесть "Не выбрано"
     }
 
-    fun getGroupPosition(groupName: String): Int {
-        val index = groups.indexOfFirst { it.groupName == groupName }
-        return if (index >= 0) index + 1 else -1 // +1 чтобы учесть "Не выбрано"
+    fun getGroupPosition(groupName: String?): Int {
+        val index = groupItems.indexOfFirst { it.groupName == groupName }
+        return if (index >= 0) index + 1 else 0 // +1 чтобы учесть "Не выбрано"
     }
 }

@@ -30,9 +30,10 @@ class TaskRepositoryImpl(
 
     private val remindAlarmManager: RemindAlarmManager by inject()
 
-    override suspend fun addTask(task: Task) {
-        taskStorage.addTask(task).collect{
-            remindAlarmManager.createAlarm(it)
+    override suspend fun addTask(task: Task): Flow<Task> {
+        return taskStorage.addTask(task).map { savedTask ->
+            remindAlarmManager.createAlarm(savedTask)
+            savedTask
         }
     }
 
