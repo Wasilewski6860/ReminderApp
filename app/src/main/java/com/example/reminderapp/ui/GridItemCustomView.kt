@@ -1,10 +1,9 @@
-package com.example.reminderapp.custom_view
+package com.example.reminderapp.ui
 
 import android.annotation.SuppressLint
 import android.content.Context
 import android.util.AttributeSet
 import android.widget.FrameLayout
-import android.widget.GridLayout
 import android.widget.ImageView
 import android.widget.TextView
 import com.example.reminderapp.R

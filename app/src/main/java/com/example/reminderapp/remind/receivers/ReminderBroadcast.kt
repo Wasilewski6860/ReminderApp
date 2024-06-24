@@ -1,4 +1,4 @@
-package com.example.reminderapp.receivers
+package com.example.reminderapp.remind.receivers
 
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -9,7 +9,7 @@ import com.example.data.reminder.Constants.TASK_DESCRIPTION_EXTRA
 import com.example.data.reminder.Constants.TASK_EXTRA
 import com.example.data.reminder.Constants.TASK_ID_EXTRA
 import com.example.data.reminder.Constants.TASK_NAME_EXTRA
-import com.example.reminderapp.receivers.work.RemindWorkManager
+import com.example.reminderapp.remind.work.RemindWorkManager
 import org.koin.core.component.KoinComponent
 
 class ReminderBroadcast: BroadcastReceiver(), KoinComponent {

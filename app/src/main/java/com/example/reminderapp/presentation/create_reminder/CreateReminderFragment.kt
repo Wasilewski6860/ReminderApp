@@ -24,25 +24,19 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.LinearLayout
-import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.view.MenuProvider
 import androidx.core.view.WindowCompat
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import com.example.domain.model.Group
 import com.example.domain.model.Task
-import com.example.domain.model.TaskPeriodType
-import com.example.reminderapp.MainActivity
 import com.example.reminderapp.R
 import com.example.reminderapp.databinding.FragmentCreateReminderBinding
 import com.example.reminderapp.presentation.base.UiState
-import com.example.reminderapp.presentation.interfaces.BackActionInterface
-import com.example.reminderapp.presentation.interfaces.DataReceiving
 import com.example.reminderapp.presentation.navigation.FragmentNavigationConstants
 import com.example.reminderapp.utils.ColorsUtils
 import com.example.reminderapp.utils.TimeDateUtils
@@ -56,22 +50,22 @@ import androidx.core.view.WindowInsetsCompat.Type.statusBars
 import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.setFragmentResultListener
+import com.example.reminderapp.presentation.base.NavigationFragment
 import com.example.reminderapp.presentation.base.OperationResult
 import com.example.reminderapp.presentation.create_reminder.adapter.ColorSpinnerAdapter
 import com.example.reminderapp.presentation.create_reminder.adapter.GroupSpinnerAdapter
 import com.example.reminderapp.presentation.create_reminder.adapter.PeriodSpinnerAdapter
+import com.example.reminderapp.presentation.base.DataReceiver
 import com.example.reminderapp.presentation.navigation.FragmentNavigationConstants.GROUP_KEY
-import com.example.reminderapp.presentation.new_list.NewListFragment
+import com.example.reminderapp.presentation.navigation.NavigationDestinations
 import com.example.reminderapp.utils.actionIfChanged
-import kotlinx.coroutines.flow.distinctUntilChanged
+import com.example.reminderapp.utils.setupToolbar
 import java.util.Locale
 
 
-class CreateReminderFragment : Fragment(), MenuProvider, BackActionInterface, DataReceiving {
+class CreateReminderFragment :  NavigationFragment(), MenuProvider, DataReceiver {
 
-    companion object {
-        fun newInstance() = CreateReminderFragment()
-    }
+    override var backstackTag: String = FragmentNavigationConstants.TASK_KEY
 
     private var _binding: FragmentCreateReminderBinding? = null
     private val binding get() = _binding!!
@@ -88,13 +82,6 @@ class CreateReminderFragment : Fragment(), MenuProvider, BackActionInterface, Da
     var hasScheduleExactAlarmPermisions = false
 
 
-    private lateinit var callback: OnBackPressedCallback
-
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        receiveData()
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -102,14 +89,19 @@ class CreateReminderFragment : Fragment(), MenuProvider, BackActionInterface, Da
     ): View {
         _binding = FragmentCreateReminderBinding.inflate(layoutInflater, container, false)
 
+        receiveData()
+
         setFragmentResultListener(GROUP_KEY) { key, bundle ->
             viewModel.onGroupIdChanged(bundle.getLong(key).toInt())
         }
         checkPermissions()
 
         edgeToEdge()
-        setupToolbar()
-        setupOnBackPressed()
+        setupToolbar(
+            activity = activity as AppCompatActivity,
+            toolbar = binding.createToolbar,
+            backEnable = true
+        )
 
         initListeners()
         setupSwitches()
@@ -131,12 +123,6 @@ class CreateReminderFragment : Fragment(), MenuProvider, BackActionInterface, Da
         super.onViewCreated(view, savedInstanceState)
         requireActivity().addMenuProvider(this, viewLifecycleOwner, Lifecycle.State.STARTED)
     }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        callback.remove()
-    }
-
 
     override fun receiveData() {
         arguments?.let {
@@ -369,7 +355,7 @@ class CreateReminderFragment : Fragment(), MenuProvider, BackActionInterface, Da
                 viewModel.onGroupIdChanged(null)
             },
             onCreateGroup = {
-                navigateToNewGroupScreen()
+                navigateTo(NavigationDestinations.ToNewListFragment)
             },
             onGroupSelected = { group ->
                 viewModel.onGroupIdChanged(group.groupId)
@@ -470,26 +456,6 @@ class CreateReminderFragment : Fragment(), MenuProvider, BackActionInterface, Da
         return height
     }
 
-    private fun setupOnBackPressed() {
-        callback = object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                navigateBack()
-            }
-        }
-        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
-    }
-
-    private fun setupToolbar() = with(binding) {
-        val activity = (activity as MainActivity)
-        activity.setSupportActionBar(createToolbar)
-
-        activity.supportActionBar?.apply {
-            setDisplayShowTitleEnabled(false)
-            title = ""
-            setDisplayHomeAsUpEnabled(true)
-        }
-    }
-
     private fun edgeToEdge() = with(binding) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             WindowCompat.setDecorFitsSystemWindows(requireActivity().window, false)
@@ -513,26 +479,6 @@ class CreateReminderFragment : Fragment(), MenuProvider, BackActionInterface, Da
             }
         }
         return true
-    }
-
-    override fun navigateBack() {
-        parentFragmentManager.popBackStack()
-    }
-
-    private fun navigateToNewGroupScreen() {
-        parentFragmentManager.beginTransaction()
-            .setCustomAnimations(
-                R.anim.slide_in_anim,
-                R.anim.slide_out_anim,
-                R.anim.slide_in_anim,
-                R.anim.slide_out_anim
-            )
-            .replace(
-                R.id.fragmentContainerView,
-                NewListFragment()
-            )
-            .addToBackStack(FragmentNavigationConstants.TASK_KEY)
-            .commit()
     }
 
     fun checkPermissions() {

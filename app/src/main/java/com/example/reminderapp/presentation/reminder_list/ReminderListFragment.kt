@@ -2,44 +2,39 @@ package com.example.reminderapp.presentation.reminder_list
 
 import android.os.Build
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.OnBackPressedCallback
 import androidx.core.view.MenuProvider
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.isVisible
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.domain.model.Task
 import com.example.reminderapp.MainActivity
-import com.example.reminderapp.R
 import com.example.reminderapp.databinding.FragmentReminderListBinding
 import com.example.reminderapp.presentation.base.OperationResult
 import com.example.reminderapp.presentation.base.UiState
-import com.example.reminderapp.presentation.create_reminder.CreateReminderFragment
-import com.example.reminderapp.presentation.interfaces.BackActionInterface
-import com.example.reminderapp.presentation.interfaces.DataReceiving
+import com.example.reminderapp.presentation.base.DataReceiver
+import com.example.reminderapp.presentation.base.NavigationFragment
 import com.example.reminderapp.presentation.navigation.FragmentNavigationConstants
+import com.example.reminderapp.presentation.navigation.NavigationDestinations
 import com.example.reminderapp.presentation.navigation.TasksListTypeCase
 import com.example.reminderapp.presentation.reminder_list.adapter.ReminderItemDivider
 import com.example.reminderapp.presentation.reminder_list.adapter.ReminderListAdapter
 import com.example.reminderapp.utils.setPaddingToInset
-import com.example.reminderapp.utils.showSnackbar
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class ReminderListFragment : Fragment(), DataReceiving, BackActionInterface, MenuProvider {
+class ReminderListFragment : NavigationFragment(), DataReceiver, MenuProvider {
 
-    companion object {
-        fun newInstance() = ReminderListFragment()
-    }
+    override val backstackTag: String = FragmentNavigationConstants.TASK_KEY
 
     private var _binding: FragmentReminderListBinding? = null
     private val binding get() = _binding!!
@@ -48,9 +43,6 @@ class ReminderListFragment : Fragment(), DataReceiving, BackActionInterface, Men
     private val viewModel: ReminderListViewModel by viewModel()
 
     private var groupName: String? = null
-
-    private lateinit var callback: OnBackPressedCallback
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -81,19 +73,7 @@ class ReminderListFragment : Fragment(), DataReceiving, BackActionInterface, Men
         requireActivity().addMenuProvider(this, viewLifecycleOwner , Lifecycle.State.RESUMED)
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        callback.remove()
-    }
 
-    fun setupOnBackPressed() {
-        callback = object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                navigateBack()
-            }
-        }
-        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
-    }
     private fun setupToolbar() = with(binding) {
         val activity = (activity as MainActivity)
         activity.setSupportActionBar(reminderListToolbar)
@@ -119,7 +99,7 @@ class ReminderListFragment : Fragment(), DataReceiving, BackActionInterface, Men
                     groupName
                 )
             }
-            navigateToEditReminder(bundle)
+            navigateTo(NavigationDestinations.ToCreateReminderFragment,bundle)
         }
     }
 
@@ -129,23 +109,23 @@ class ReminderListFragment : Fragment(), DataReceiving, BackActionInterface, Men
                 viewModel.uiState.collect {
                     when (it) {
                         is UiState.Success -> {
-                            binding.contentLayout.visibility = View.VISIBLE
-                            binding.loadingLayout.visibility = View.GONE
-                            binding.nothingFindLayout.visibility = View.GONE
+                            binding.contentLayout.isVisible = true
+                            binding.loadingLayout.isVisible = false
+                            binding.nothingFindLayout.isVisible = false
 
                             reminderAdapter.submitList(it.data.tasks)
                             groupName = it.data.groupName
                             binding.reminderListToolbar.title = it.data.groupName
                         }
                         is UiState.Loading -> {
-                            binding.contentLayout.visibility = View.GONE
-                            binding.loadingLayout.visibility = View.VISIBLE
-                            binding.nothingFindLayout.visibility = View.GONE
+                            binding.contentLayout.isVisible = false
+                            binding.loadingLayout.isVisible = true
+                            binding.nothingFindLayout.isVisible = false
                         }
                         is UiState.Error -> {
-                            binding.contentLayout.visibility = View.GONE
-                            binding.loadingLayout.visibility = View.GONE
-                            binding.nothingFindLayout.visibility = View.VISIBLE
+                            binding.contentLayout.isVisible = false
+                            binding.loadingLayout.isVisible = false
+                            binding.nothingFindLayout.isVisible = true
                         }
                     }
                 }
@@ -157,15 +137,15 @@ class ReminderListFragment : Fragment(), DataReceiving, BackActionInterface, Men
                 when (it) {
                     is OperationResult.Error -> Unit
                     OperationResult.Loading -> {
-                        binding.contentLayout.visibility = View.GONE
-                        binding.loadingLayout.visibility = View.VISIBLE
-                        binding.nothingFindLayout.visibility = View.GONE
+                        binding.contentLayout.isVisible = false
+                        binding.loadingLayout.isVisible = true
+                        binding.nothingFindLayout.isVisible = false
                     }
                     OperationResult.NotStarted -> Unit
                     is OperationResult.Success -> {
-                        binding.contentLayout.visibility = View.VISIBLE
-                        binding.loadingLayout.visibility = View.GONE
-                        binding.nothingFindLayout.visibility = View.GONE
+                        binding.contentLayout.isVisible = true
+                        binding.loadingLayout.isVisible = false
+                        binding.nothingFindLayout.isVisible = false
                     }
                     else -> Unit
                 }
@@ -183,22 +163,12 @@ class ReminderListFragment : Fragment(), DataReceiving, BackActionInterface, Men
                             task
                         )
                     }
-                    navigateToEditReminder(bundle)
+                    navigateTo(NavigationDestinations.ToCreateReminderFragment ,bundle)
                 }
-
                 override fun onSwitchClick(task: Task, isChecked: Boolean) {
-                    viewModel.editTask(
-                        taskId = task.id,
-                        taskName = task.name,
-                        taskDesc = task.description,
-                        taskCreationTime = task.reminderCreationTime,
-                        taskTime = task.reminderTime,
-                        taskTimePeriod = task.reminderTimePeriod,
-                        taskType = task.type,
-                        isActive = isChecked,
-                        isMarkedWithFlag = task.isMarkedWithFlag,
-                        groupId = task.groupId,
-                        taskColor = task.color
+                    viewModel.editIsActive(
+                        task = task,
+                        isActive = isChecked
                     )
                 }
 
@@ -210,24 +180,6 @@ class ReminderListFragment : Fragment(), DataReceiving, BackActionInterface, Men
         adapter = reminderAdapter
         layoutManager = LinearLayoutManager(requireContext())
         this.addItemDecoration(ReminderItemDivider(requireContext()))
-    }
-
-    private fun navigateToEditReminder(args: Bundle? = null) {
-        parentFragmentManager.beginTransaction()
-            .setCustomAnimations(
-                R.anim.slide_in_anim,
-                R.anim.slide_out_anim,
-                R.anim.slide_in_anim,
-                R.anim.slide_out_anim
-            )
-            .replace(
-                R.id.fragmentContainerView,
-                CreateReminderFragment().apply {
-                    args?.let { arguments = it }
-                }
-            )
-            .addToBackStack(FragmentNavigationConstants.TASK_KEY)
-            .commit()
     }
 
     override fun receiveData() {
@@ -245,13 +197,7 @@ class ReminderListFragment : Fragment(), DataReceiving, BackActionInterface, Men
         }
     }
 
-    override fun navigateBack() {
-        parentFragmentManager.popBackStack()
-    }
-
-    override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-        // menuInflater.inflate(R.menu.create_task_menu, menu)
-    }
+    override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) = Unit
 
     override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
         when (menuItem.itemId) {
@@ -260,7 +206,6 @@ class ReminderListFragment : Fragment(), DataReceiving, BackActionInterface, Men
                 return true
             }
         }
-
         return true
     }
 

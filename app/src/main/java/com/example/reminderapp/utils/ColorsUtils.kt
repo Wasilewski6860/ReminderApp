@@ -64,5 +64,5 @@ class ColorsUtils(context: Context) {
 
 data class ColorItem(
     val name: String,
-    val color: Int?
+    val color: Int
 )

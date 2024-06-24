@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.example.reminderapp.custom_view.CircleCustomView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.example.reminderapp.ui.CircleCustomView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/colorCircleItem"
     android:layout_width="40dp"
     android:layout_height="40dp">
 
-</com.example.reminderapp.custom_view.CircleCustomView>
+</com.example.reminderapp.ui.CircleCustomView>

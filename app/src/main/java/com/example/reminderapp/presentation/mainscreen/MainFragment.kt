@@ -7,7 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import androidx.activity.OnBackPressedCallback
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
@@ -22,23 +22,25 @@ import com.example.reminderapp.animations.animateImageViewRotation
 import com.example.reminderapp.animations.hideRecyclerAnimation
 import com.example.reminderapp.animations.showRecyclerAnimation
 import com.example.reminderapp.databinding.MainScreenBinding
+import com.example.reminderapp.presentation.base.NavigationFragment
 import com.example.reminderapp.presentation.base.UiState
-import com.example.reminderapp.presentation.base.serializer.TasksListTypeCaseSerializer
 import com.example.reminderapp.presentation.create_reminder.CreateReminderFragment
 import com.example.reminderapp.presentation.editorlistsscreen.EditListsScreenFragment
 import com.example.reminderapp.presentation.navigation.FragmentNavigationConstants
-import com.example.reminderapp.presentation.navigation.Navigation
+import com.example.reminderapp.presentation.navigation.NavigationDestinations
 import com.example.reminderapp.presentation.navigation.TasksListTypeCase
 import com.example.reminderapp.presentation.new_list.NewListFragment
 import com.example.reminderapp.presentation.recycleradapter.GroupListRecyclerViewAdapter
 import com.example.reminderapp.presentation.reminder_list.ReminderListFragment
 import com.example.reminderapp.utils.setPaddingToInset
+import com.example.reminderapp.utils.setupToolbar
 import com.example.reminderapp.utils.showSnackbar
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class MainFragment : Fragment() {
+class MainFragment : NavigationFragment() {
 
+    override val backstackTag: String = FragmentNavigationConstants.TO_MAIN_FRAGMENT_BACKSTACK
     private lateinit var binding: MainScreenBinding
     private lateinit var adapter: GroupListRecyclerViewAdapter
     private val viewModel by viewModel<MainViewModel>()
@@ -52,11 +54,12 @@ class MainFragment : Fragment() {
     ): View {
         binding = MainScreenBinding.inflate(inflater, container, false)
 
-//        (activity as MainActivity).setToolbarTitleAndTitleColor("")
-
         edgeToEdge()
-        setupToolbar()
-
+        setupToolbar(
+            activity = activity as AppCompatActivity,
+            toolbar = binding.mainToolbar,
+            backEnable = false
+        )
 
         setupRecyclerAndAdapter()
         setupObserver()
@@ -65,16 +68,6 @@ class MainFragment : Fragment() {
         initListeners()
 
         return binding.root
-    }
-
-    private fun setupToolbar() = with(binding) {
-        val activity = (activity as MainActivity)
-        activity.setSupportActionBar(mainToolbar)
-
-        activity.supportActionBar?.apply {
-            setDisplayShowTitleEnabled(false)
-            title = ""
-        }
     }
 
     private fun edgeToEdge() = with(binding) {
@@ -96,48 +89,20 @@ class MainFragment : Fragment() {
                 View.GONE -> {
                     showRecyclerAnimation(customListsRecyclerView)
                 }
-
-                else -> {}
+                else -> Unit
             }
         }
-
         addTaskButton.setOnClickListener {
-            navigate(Navigation.ToCreateReminderFragment)
+            navigateTo(NavigationDestinations.ToCreateReminderFragment)
         }
-
         changeListsButton.setOnClickListener {
-            navigate(Navigation.ToEditListsFragment)
+            navigateTo(NavigationDestinations.ToEditListsFragment)
         }
-
         addListButton.setOnClickListener {
-            navigate(Navigation.ToNewListFragment)
+            navigateTo(NavigationDestinations.ToNewListFragment)
         }
     }
 
-    private fun navigate(destination: Navigation, args: Bundle? = null) {
-        parentFragmentManager.beginTransaction()
-            .setCustomAnimations(
-                R.anim.slide_in_anim,
-                R.anim.slide_out_anim,
-                R.anim.slide_in_anim,
-                R.anim.slide_out_anim
-            )
-            .replace(
-                R.id.fragmentContainerView,
-                when (destination) {
-                    Navigation.ToCreateReminderFragment -> CreateReminderFragment()
-                    Navigation.ToNewListFragment -> NewListFragment()
-                    Navigation.ToEditListsFragment -> EditListsScreenFragment()
-                    Navigation.ToReminderListFragment -> ReminderListFragment()
-                }.apply {
-                    args?.let {
-                        arguments = it
-                    }
-                }
-            )
-            .addToBackStack(FragmentNavigationConstants.TO_MAIN_FRAGMENT_BACKSTACK)
-            .commit()
-    }
 
     private fun gridLayoutItemsInit(
         todayCount: Int,
@@ -156,7 +121,7 @@ class MainFragment : Fragment() {
                            TasksListTypeCase.TodayTasks
                            )
                     }
-                    navigate(Navigation.ToReminderListFragment, bundle)
+                    navigateTo(NavigationDestinations.ToReminderListFragment, bundle)
                 }
             }
             plannedTasksItem.apply {
@@ -168,7 +133,7 @@ class MainFragment : Fragment() {
                             TasksListTypeCase.PlannedTasks
                         )
                     }
-                    navigate(Navigation.ToReminderListFragment, bundle)
+                    navigateTo(NavigationDestinations.ToReminderListFragment, bundle)
                 }
             }
             allTasksItem.apply {
@@ -180,7 +145,7 @@ class MainFragment : Fragment() {
                             TasksListTypeCase.AllTasks
                         )
                     }
-                    navigate(Navigation.ToReminderListFragment, bundle)
+                    navigateTo(NavigationDestinations.ToReminderListFragment, bundle)
                 }
             }
             tasksWithFlagItem.apply {
@@ -192,7 +157,7 @@ class MainFragment : Fragment() {
                             TasksListTypeCase.TasksWithFlag
                         )
                     }
-                    navigate(Navigation.ToReminderListFragment, bundle)
+                    navigateTo(NavigationDestinations.ToReminderListFragment, bundle)
                 }
             }
             tasksNoTimeItem.apply {
@@ -204,7 +169,7 @@ class MainFragment : Fragment() {
                             TasksListTypeCase.TasksNoTime
                         )
                     }
-                    navigate(Navigation.ToReminderListFragment, bundle)
+                    navigateTo(NavigationDestinations.ToReminderListFragment, bundle)
                 }
             }
         }
@@ -230,7 +195,7 @@ class MainFragment : Fragment() {
                         )
                     )
                 }
-                navigate(Navigation.ToReminderListFragment, bundle)
+                navigateTo(NavigationDestinations.ToReminderListFragment, bundle)
             }
             override fun onDeleteIconClick(group: Group) {
                 /** STUB **/

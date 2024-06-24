@@ -2,44 +2,42 @@ package com.example.reminderapp.presentation.editorlistsscreen
 
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.OnBackPressedCallback
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.domain.model.Group
-import com.example.reminderapp.MainActivity
 import com.example.reminderapp.R
 import com.example.reminderapp.databinding.ListEditorScreenBinding
+import com.example.reminderapp.presentation.base.NavigationFragment
 import com.example.reminderapp.presentation.base.UiState
-import com.example.reminderapp.presentation.base.serializer.GroupSerializer
-import com.example.reminderapp.presentation.interfaces.BackActionInterface
 import com.example.reminderapp.presentation.navigation.FragmentNavigationConstants
-import com.example.reminderapp.presentation.new_list.NewListFragment
+import com.example.reminderapp.presentation.navigation.NavigationDestinations
 import com.example.reminderapp.presentation.recycleradapter.GroupListRecyclerViewAdapter
 import com.example.reminderapp.utils.setPaddingToInset
+import com.example.reminderapp.utils.setupToolbar
 import com.example.reminderapp.utils.showSnackbar
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class EditListsScreenFragment : Fragment(), MenuProvider, BackActionInterface {
+class EditListsScreenFragment : NavigationFragment(), MenuProvider {
+
+    override var backstackTag: String = FragmentNavigationConstants.TO_EDIT_LISTS_FRAGMENT
 
     private lateinit var binding: ListEditorScreenBinding
     private lateinit var adapter: GroupListRecyclerViewAdapter
     private val viewModel by viewModel<ListsEditorViewModel>()
-    private lateinit var callback: OnBackPressedCallback
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -49,9 +47,11 @@ class EditListsScreenFragment : Fragment(), MenuProvider, BackActionInterface {
         binding = ListEditorScreenBinding.inflate(inflater, container, false)
 
         edgeToEdge()
-        setupToolbar()
-
-        setupOnBackPressed()
+        setupToolbar(
+            activity = activity as AppCompatActivity,
+            toolbar = binding.editListToolbar,
+            backEnable = true
+        )
 
         setupAdapterAndRecycler()
         setupObserver()
@@ -68,25 +68,6 @@ class EditListsScreenFragment : Fragment(), MenuProvider, BackActionInterface {
         super.onDestroyView()
         val menuHost: MenuHost = requireActivity()
         menuHost.removeMenuProvider(this)
-        callback.remove()
-    }
-
-    fun setupOnBackPressed() {
-        callback = object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                navigateBack()
-            }
-        }
-        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
-    }
-    private fun setupToolbar() = with(binding) {
-        val activity = (activity as MainActivity)
-        activity.setSupportActionBar(editListToolbar)
-
-        activity.supportActionBar?.apply {
-            setDisplayShowTitleEnabled(false)
-            setDisplayHomeAsUpEnabled(true)
-        }
     }
 
     private fun edgeToEdge() = with(binding) {
@@ -107,7 +88,7 @@ class EditListsScreenFragment : Fragment(), MenuProvider, BackActionInterface {
                         group
                     )
                 }
-                navigateToNewListFragment(bundle)
+                navigateTo(NavigationDestinations.ToNewListFragment, bundle)
             }
             override fun onDeleteIconClick(group: Group) {
                 viewModel.deleteGroup(group.groupId)
@@ -139,33 +120,10 @@ class EditListsScreenFragment : Fragment(), MenuProvider, BackActionInterface {
                             binding.loadingLayout.visibility = View.GONE
                             showSnackbar(it.message, requireActivity().findViewById(R.id.rootView))
                         }
-
                     }
-
                 }
             }
         }
-    }
-
-    override fun navigateBack() {
-        parentFragmentManager.popBackStack()
-    }
-
-    private fun navigateToNewListFragment(args: Bundle? = null) {
-        parentFragmentManager.beginTransaction()
-            .setCustomAnimations(
-                R.anim.slide_in_anim,
-                R.anim.slide_out_anim,
-                R.anim.slide_in_anim,
-                R.anim.slide_out_anim
-            )
-            .replace(
-                R.id.fragmentContainerView,
-                NewListFragment().apply {
-                args?.let { arguments = it }
-            })
-            .addToBackStack(FragmentNavigationConstants.TO_EDIT_LISTS_FRAGMENT)
-            .commit()
     }
 
     override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) { /** STUB **/ }

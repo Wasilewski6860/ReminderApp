@@ -14,7 +14,7 @@ import com.example.domain.model.Task
 import com.example.domain.model.TaskPeriodType
 import com.example.domain.repository.TaskRepository
 import com.example.reminderapp.R
-import com.example.reminderapp.receivers.ReminderBroadcast
+import com.example.reminderapp.remind.receivers.ReminderBroadcast
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import org.koin.dsl.module
