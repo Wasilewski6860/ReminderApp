@@ -23,17 +23,13 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
-import android.widget.ArrayAdapter
 import android.widget.LinearLayout
-import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.view.MenuProvider
 import androidx.core.view.WindowCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -48,7 +44,6 @@ import com.example.reminderapp.presentation.base.UiState
 import com.example.reminderapp.presentation.interfaces.BackActionInterface
 import com.example.reminderapp.presentation.interfaces.DataReceiving
 import com.example.reminderapp.presentation.navigation.FragmentNavigationConstants
-import com.example.reminderapp.utils.ColorItem
 import com.example.reminderapp.utils.ColorsUtils
 import com.example.reminderapp.utils.TimeDateUtils
 import com.example.reminderapp.utils.setFocus
@@ -58,13 +53,17 @@ import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import androidx.core.view.WindowInsetsCompat.Type.statusBars
+import androidx.core.view.isVisible
+import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.setFragmentResultListener
+import com.example.reminderapp.presentation.base.OperationResult
+import com.example.reminderapp.presentation.create_reminder.adapter.ColorSpinnerAdapter
 import com.example.reminderapp.presentation.create_reminder.adapter.GroupSpinnerAdapter
-import com.example.reminderapp.presentation.editorlistsscreen.EditListsScreenFragment
+import com.example.reminderapp.presentation.create_reminder.adapter.PeriodSpinnerAdapter
 import com.example.reminderapp.presentation.navigation.FragmentNavigationConstants.GROUP_KEY
-import com.example.reminderapp.presentation.navigation.Navigation
 import com.example.reminderapp.presentation.new_list.NewListFragment
-import com.example.reminderapp.presentation.reminder_list.ReminderListFragment
+import com.example.reminderapp.utils.actionIfChanged
+import kotlinx.coroutines.flow.distinctUntilChanged
 import java.util.Locale
 
 
@@ -78,20 +77,12 @@ class CreateReminderFragment : Fragment(), MenuProvider, BackActionInterface, Da
     private val binding get() = _binding!!
 
     private val viewModel: CreateReminderViewModel by viewModel()
+
     private lateinit var groupSpinnerAdapter: GroupSpinnerAdapter
+    private lateinit var periodSpinnerAdapter: PeriodSpinnerAdapter
+    private lateinit var colorSpinnerAdapter: ColorSpinnerAdapter
 
     val dateFormat = SimpleDateFormat("E, dd.MM.yyyy 'г.' HH:mm", Locale.getDefault())
-
-    private var taskId: Int? = null
-    var selectedGroup: Int? = null
-    var selectedGroupName: String? = null
-    var selectedPeriod: Long? = null
-    var selectedTime: Long? = null
-    var selectedColor: Int? = null
-    var taskType: TaskPeriodType = TaskPeriodType.NO_TIME
-    var taskName: String? = null
-    var taskDescription: String? = null
-    var taskFlag: Boolean = false
 
     var hasNotificationPermisions = false
     var hasScheduleExactAlarmPermisions = false
@@ -112,19 +103,19 @@ class CreateReminderFragment : Fragment(), MenuProvider, BackActionInterface, Da
         _binding = FragmentCreateReminderBinding.inflate(layoutInflater, container, false)
 
         setFragmentResultListener(GROUP_KEY) { key, bundle ->
-            selectedGroup = bundle.getLong(key).toInt()
+            viewModel.onGroupIdChanged(bundle.getLong(key).toInt())
         }
         checkPermissions()
 
         edgeToEdge()
         setupToolbar()
-
         setupOnBackPressed()
 
+        initListeners()
         setupSwitches()
-        fillViews()
-        setSpinnerColor()
-        setSpinnerPeriod()
+        setupSpinnerColor()
+        setupSpinnerPeriod()
+        setSpinnerGroup()
         setupObservers()
         viewModel.fetchGroups()
 
@@ -159,95 +150,60 @@ class CreateReminderFragment : Fragment(), MenuProvider, BackActionInterface, Da
                     FragmentNavigationConstants.TASK_KEY
                 ) as Task?
             }
-            selectedGroupName = it.getString(FragmentNavigationConstants.LIST_NAME)
+            val selectedGroupName = it.getString(FragmentNavigationConstants.LIST_NAME)
+            viewModel.onGroupNameChanged(selectedGroupName)
             if (taskSerialized != null) {
-                taskId = taskSerialized.id
-                selectedTime = taskSerialized.reminderTime
-                selectedPeriod = taskSerialized.reminderTimePeriod
-                selectedColor = taskSerialized.color
-                selectedGroup = taskSerialized.groupId
-                taskName = taskSerialized.name
-                taskDescription = taskSerialized.description
-                taskFlag = taskSerialized.isMarkedWithFlag
+                viewModel.onTaskIdChanged(taskSerialized.id)
+                viewModel.onFirstTimeChanged(taskSerialized.reminderTime)
+                viewModel.onPeriodChanged(taskSerialized.reminderTimePeriod)
+                viewModel.onColorChanged(taskSerialized.color)
+                viewModel.onGroupIdChanged(taskSerialized.groupId)
+                viewModel.onNameTextChanged(taskSerialized.name)
+                viewModel.onDescriptionTextChanged(taskSerialized.description)
+                viewModel.onFlagChanged(taskSerialized.isMarkedWithFlag)
+                if(taskSerialized.reminderTime!=null || taskSerialized.reminderTimePeriod!=null) {
+                    viewModel.onRemindSwitchChecked(true)
+                }
             }
         }
     }
 
-    private fun fillViews() = with(binding) {
-        taskName?.let { reminderNameEt.setText(it) }
-
-        reminderDescriptionEt.setText(taskDescription)
-        val time = selectedTime
-        val period = selectedPeriod
-        remindSwitch.isChecked = if(taskId!=null) true else false
-        selectedTime = time
-        selectedPeriod = period
-        if (selectedTime!=null){
-            val dateString = dateFormat.format(selectedTime)
-            selectedDateTv.text = dateString
-        }
-
-        binding.flagSwitch.isChecked = taskFlag
-
+    private fun initListeners() {
+        binding.reminderNameEt.doAfterTextChanged(viewModel::onNameTextChanged)
+        binding.reminderDescriptionEt.doAfterTextChanged(viewModel::onDescriptionTextChanged)
     }
     private fun setupSwitches() {
         binding.remindSwitch.setOnCheckedChangeListener { _, isChecked ->
+            viewModel.onRemindSwitchChecked(isChecked)
             val constraintLayout = binding.dateContainer
             val linearLayout = binding.dateAndPeriodLl
             if (isChecked) {
-//                AnimationUtils.expandLayoutToBottom(
-//                    baseContainer = constraintLayout,
-//                    neededToExpandContainer = linearLayout
-//                )
-                // устанавливаем высоту LinearLayout в 0dp в начале
                 val layoutParams = linearLayout.layoutParams as ConstraintLayout.LayoutParams
                 layoutParams.height = 0
                 linearLayout.layoutParams = layoutParams
-
-                // создаем анимацию изменения высоты LinearLayout
                 val animator = ValueAnimator.ofInt(0, getContentHeight(binding.dateAndPeriodLl)).apply {
-                    duration = 500 // длительность анимации в миллисекундах
+                    duration = 500
                     addUpdateListener { animation ->
                         val value = animation.animatedValue as Int
                         layoutParams.height = value
                         linearLayout.layoutParams = layoutParams
-                        // вычисляем позицию Y для нижней части LinearLayout
                         val y: Float = constraintLayout.height.toFloat() - linearLayout.height.toFloat()
-                        // устанавливаем позицию Y для нижней части LinearLayout
                         linearLayout.y = y
                     }
                 }
-                // запускаем анимацию
                 animator.start()
-
-                selectedTime = null
-                selectedPeriod = null
-                binding.selectedPeriodSpinner.setSelection(0)
-                binding.selectedDateTv.text = "не установлено"
             }
             else {
-
-//                AnimationUtils.collapseLayoutToTop(
-//                    baseContainer = constraintLayout,
-//                    neededToCollapseContainer = linearLayout
-//                )
-//
-                // устанавливаем высоту LinearLayout в заданную величину в начале
                 val layoutParams = linearLayout.layoutParams as ConstraintLayout.LayoutParams
                 layoutParams.height = getContentHeight(binding.dateAndPeriodLl)
                 linearLayout.layoutParams = layoutParams
-
-                // создаем анимацию изменения высоты LinearLayout
                 val animator = ValueAnimator.ofInt(getContentHeight(binding.dateAndPeriodLl), 0).apply {
                     duration = 500 // длительность анимации в миллисекундах
                     addUpdateListener { animation ->
                         val value = animation.animatedValue as Int
                         layoutParams.height = value
                         linearLayout.layoutParams = layoutParams
-
-                        // вычисляем позицию Y для нижней части LinearLayout
                         val y: Float = constraintLayout.height.toFloat() - linearLayout.height.toFloat()
-                        // устанавливаем позицию Y для нижней части LinearLayout
                         linearLayout.y = y
                     }
                 }
@@ -257,28 +213,121 @@ class CreateReminderFragment : Fragment(), MenuProvider, BackActionInterface, Da
         }
 
         binding.flagSwitch.setOnCheckedChangeListener {  _, isChecked ->
-            binding.flagIv.visibility = if(isChecked) View.VISIBLE else View.GONE
+            viewModel.onFlagChanged(isChecked)
         }
     }
 
     private fun setupObservers() {
+        observeScreenState()
+        observeValidation()
+        observeOperationResult()
+    }
+
+    private fun observeOperationResult() {
+        lifecycleScope.launch {
+            viewModel.saveResult.collect { saveResult ->
+                when (saveResult) {
+                    is OperationResult.Error -> showSnackbar(
+                        saveResult.message,
+                        requireActivity().findViewById(R.id.rootView)
+                    )
+
+                    OperationResult.Loading -> {
+                        binding.contentLayout.isVisible = false
+                        binding.loadingLayout.isVisible = true
+                    }
+
+                    OperationResult.NotStarted -> Unit
+                    is OperationResult.Success -> {
+                        navigateBack()
+                    }
+                }
+            }
+        }
+    }
+
+    private fun observeValidation() {
+        lifecycleScope.launch {
+            viewModel.validationResult.collect { validationResult ->
+                when (validationResult) {
+                    ValidationResult.IncorrectGroup -> {
+                        showSnackbar(
+                            getString(R.string.group_should_be_selected),
+                            requireActivity().findViewById(R.id.rootView)
+                        )
+                    }
+
+                    ValidationResult.IncorrectName -> {
+                        binding.reminderNameEt.setFocus(requireContext())
+                        binding.reminderNameEt.setError(getString(R.string.name_shouldnt_be_empty))
+                    }
+
+                    ValidationResult.NotStarted -> Unit
+                    ValidationResult.IncorrectColor -> {
+                        showSnackbar(
+                            getString(R.string.color_should_be_selected),
+                            requireActivity().findViewById(R.id.rootView)
+                        )
+                    }
+                }
+            }
+        }
+    }
+
+    private fun observeScreenState() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.uiState.collect {
-                    when (it) {
+                viewModel.screenState
+                    .collect { currentState ->
+                    when (currentState.groupsUiState) {
                         is UiState.Success -> {
-                            binding.contentLayout.visibility = View.VISIBLE
-                            binding.loadingLayout.visibility = View.GONE
-                            setSpinnerGroup(it.data)
+                            binding.contentLayout.isVisible = true
+                            binding.loadingLayout.isVisible = false
+                            with(binding) {
+                                reminderNameEt.actionIfChanged(currentState.reminderName) {
+                                    reminderNameEt.setText(currentState.reminderName)
+                                    reminderNameEt.setSelection(currentState.reminderName.length)
+                                }
+                                reminderDescriptionEt.actionIfChanged(currentState.reminderDescription) {
+                                    reminderDescriptionEt.setText(currentState.reminderDescription)
+                                    reminderDescriptionEt.setSelection(currentState.reminderDescription.length)
+                                }
+                                remindSwitch.actionIfChanged(currentState.reminderPeriod!=null || currentState.reminderFirstTime!=null) {
+                                    remindSwitch.isChecked = currentState.reminderPeriod!=null || currentState.reminderFirstTime!=null
+                                }
+                                selectedDateTv.actionIfChanged(currentState.reminderFirstTime) {
+                                    selectedDateTv.text = if(currentState.reminderFirstTime!=null)dateFormat.format(currentState.reminderFirstTime) else requireContext().getString(R.string.not_selected)
+                                }
+                                selectedPeriodSpinner.actionIfChanged(currentState.reminderPeriod) {
+                                    selectedPeriodSpinner.setSelection(periodSpinnerAdapter.getTimePeriodPosition(currentState.reminderPeriod))
+                                }
+                                selectedColorSpinner.actionIfChanged(currentState.reminderColor) {
+                                    selectedColorSpinner.setSelection(colorSpinnerAdapter.getColorPosition(currentState.reminderColor))
+                                }
+                                if (!currentState.groupLoaded){
+                                    groupSpinnerAdapter.submitList(currentState.groupsUiState.data)
+                                    viewModel.onGroupLoadedToSpinner()
+                                }
+                                if (currentState.reminderGroupId!=null){
+                                    selectedListSpinner.actionIfChanged(currentState.reminderGroupId) {
+                                        selectedListSpinner.setSelection(groupSpinnerAdapter.getGroupPosition(currentState.reminderGroupId))
+                                    }
+                                }
+                                else {
+                                    selectedListSpinner.actionIfChanged(currentState.reminderGroupName) {
+                                        selectedListSpinner.setSelection(groupSpinnerAdapter.getGroupPosition(currentState.reminderGroupName))
+                                    }
+                                }
+                            }
                         }
                         is UiState.Loading -> {
-                            binding.contentLayout.visibility = View.GONE
-                            binding.loadingLayout.visibility = View.VISIBLE
+                            binding.contentLayout.isVisible = false
+                            binding.loadingLayout.isVisible = true
                         }
                         is UiState.Error -> {
-                            binding.contentLayout.visibility = View.VISIBLE
-                            binding.loadingLayout.visibility = View.GONE
-                            showSnackbar(it.message, requireActivity().findViewById(R.id.rootView))
+                            binding.contentLayout.isVisible = true
+                            binding.loadingLayout.isVisible = false
+                            showSnackbar(currentState.groupsUiState.message, requireActivity().findViewById(R.id.rootView))
                         }
                         else -> Unit
                     }
@@ -286,56 +335,49 @@ class CreateReminderFragment : Fragment(), MenuProvider, BackActionInterface, Da
             }
         }
     }
-
-    private fun setSpinnerPeriod() {
+    private fun setupSpinnerPeriod() {
         val timeDates = TimeDateUtils(requireContext()).timeDates
-        val repeatTimeSpinnerItems = timeDates.map { timeDate -> timeDate.name }
-        val adapter = ArrayAdapter(requireContext(), R.layout.repeat_time_spinner_item, repeatTimeSpinnerItems)
-        val spinner = binding.selectedPeriodSpinner
-        spinner.adapter = adapter
 
-        if (selectedPeriod!=null){
-            spinner.setSelection(timeDates.indexOfFirst{it.time == selectedPeriod})
-        }
+        periodSpinnerAdapter = PeriodSpinnerAdapter(
+            requireContext(),
+            onNoneSelected = {
+                viewModel.onPeriodChanged(null)
+            },
+            onItemSelected = { period ->
+                viewModel.onPeriodChanged(period.time)
+            }
+        )
+
+        val spinner = binding.selectedPeriodSpinner
+        spinner.adapter = periodSpinnerAdapter
+
         binding.selectedPeriodSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(p0: AdapterView<*>?) {}
 
             override fun onItemSelected(adapterView: AdapterView<*>?, view: View?, pos: Int, id: Long) {
-                selectedPeriod = TimeDateUtils(requireContext()).timeDates[pos].time
-                if (TimeDateUtils(requireContext()).timeDates[pos].time != null) {
-                    taskType=TaskPeriodType.PERIODIC
-                }
+                periodSpinnerAdapter.handleItemSelected(pos)
             }
         }
+        periodSpinnerAdapter.submitList(timeDates)
     }
 
-    private fun setSpinnerGroup(groups: List<Group>) {
+    private fun setSpinnerGroup() {
 
         groupSpinnerAdapter = GroupSpinnerAdapter(
             requireContext(),
-            groups,
             onNoneSelected = {
-                selectedGroup = null
+                viewModel.onGroupIdChanged(null)
             },
             onCreateGroup = {
                 navigateToNewGroupScreen()
             },
             onGroupSelected = { group ->
-                selectedGroup = group.groupId
+                viewModel.onGroupIdChanged(group.groupId)
             }
         )
         val spinner = binding.selectedListSpinner
         spinner.adapter = groupSpinnerAdapter
 
-        if (selectedGroup!=null){
-            val selectedPos = groupSpinnerAdapter.getGroupPosition(selectedGroup!!)
-            if(selectedPos!=-1)spinner.setSelection(selectedPos)
-        }
-        else if(selectedGroupName != null) {
-            val selectedPos = groupSpinnerAdapter.getGroupPosition(selectedGroupName!!)
-            if(selectedPos!=-1)spinner.setSelection(selectedPos)
-        }
-        else spinner.setSelection(0)
         binding.selectedListSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(p0: AdapterView<*>?) {}
 
@@ -345,69 +387,36 @@ class CreateReminderFragment : Fragment(), MenuProvider, BackActionInterface, Da
         }
     }
 
-    private fun setSpinnerColor() {
-        val groupSpinnerItems = ColorsUtils(requireContext()).colors
+    private fun setupSpinnerColor() {
+        val colorItems = ColorsUtils(requireContext()).colors
 
-        val adapter = object: ArrayAdapter<ColorItem>(requireContext(), R.layout.spinner_color_item_layout, groupSpinnerItems) {
-            override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-                val view = convertView ?: LayoutInflater.from(context).inflate(R.layout.spinner_color_item_layout, parent, false)
-                val textView = view.findViewById<TextView>(R.id.colorTv)
-                val colorView = view.findViewById<View>(R.id.colorView)
-                val spinnerItem = groupSpinnerItems[position]
-                textView.text = spinnerItem.name
-                spinnerItem.color?.let { colorView.setBackgroundColor(it) }
-                return view
+        colorSpinnerAdapter = ColorSpinnerAdapter(
+            requireContext(),
+            onItemSelected = { color ->
+                viewModel.onColorChanged(color.color)
             }
+        )
 
-            override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
-                return getView(position, convertView, parent)
-            }
-        }
         val spinner = binding.selectedColorSpinner
-        spinner.adapter = adapter
-
-        if (selectedColor!=null) spinner.setSelection(groupSpinnerItems.indexOfFirst{it.color == selectedColor})
+        spinner.adapter = colorSpinnerAdapter
 
         binding.selectedColorSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(p0: AdapterView<*>?) {}
 
             override fun onItemSelected(adapterView: AdapterView<*>?, view: View?, pos: Int, id: Long) {
-                selectedColor = groupSpinnerItems[pos].color
+                colorSpinnerAdapter.handleItemSelected(pos)
             }
         }
+        colorSpinnerAdapter.submitList(colorItems)
     }
     //TODO переделать
-    private fun saveTask() = with(binding) {
-
-        if (isInputValid() && hasNotificationPermisions && hasScheduleExactAlarmPermisions) {
-            val name = reminderNameEt.text.toString()
-            val description = reminderDescriptionEt.text.toString()
-            if(selectedTime==null && selectedPeriod==null) {
-                taskType = TaskPeriodType.NO_TIME
-            }
-            if(selectedTime==null && selectedPeriod!= null) {
-                selectedTime=Calendar.getInstance().timeInMillis
-                taskType=TaskPeriodType.PERIODIC
-            }
-            if (selectedTime!=null && selectedPeriod==null){
-                taskType=TaskPeriodType.ONE_TIME
-            }
-            viewModel.saveTask(
-                taskId = taskId,
-                taskName = name,
-                taskDesc = description,
-                taskCreationTime = Calendar.getInstance().timeInMillis,
-                taskTime = selectedTime,
-                taskTimePeriod = selectedPeriod,
-                taskType = taskType,
-                isActive = true,
-                isMarkedWithFlag = flagSwitch.isChecked,
-                groupId = selectedGroup!!,
-                taskColor = selectedColor!!
-            )
-            navigateBack()
+    private fun saveTask() {
+        if(hasNotificationPermisions && hasScheduleExactAlarmPermisions) {
+            viewModel.saveTask()
         }
-        else if(!(hasNotificationPermisions && hasScheduleExactAlarmPermisions)) checkPermissions()
+        else {
+            checkPermissions()
+        }
     }
 
     private fun showDateAndTimePickers() {
@@ -429,14 +438,11 @@ class CreateReminderFragment : Fragment(), MenuProvider, BackActionInterface, Da
                         selectedDate.set(Calendar.HOUR_OF_DAY, hourOfDay)
                         selectedDate.set(Calendar.MINUTE, minute)
 
-                        // Format and display the selected date-time
-                        val dateString = dateFormat.format(selectedDate.time)
-                        selectedTime = selectedDate.time.time
-                        binding.selectedDateTv.text = dateString
+                        viewModel.onFirstTimeChanged(selectedDate.time.time)
                     },
                     getDate.get(Calendar.HOUR_OF_DAY),
                     getDate.get(Calendar.MINUTE),
-                    true // set true for 24-hour format
+                    true
                 )
 
                 timePicker.show()
@@ -452,32 +458,6 @@ class CreateReminderFragment : Fragment(), MenuProvider, BackActionInterface, Da
         datePicker.show()
         datePicker.getButton(Dialog.BUTTON_POSITIVE).setTextColor(Color.BLACK)
         datePicker.getButton(Dialog.BUTTON_NEGATIVE).setTextColor(Color.BLACK)
-    }
-
-    private fun isInputValid(): Boolean {
-        with(binding) {
-            val name = reminderNameEt.text.toString()
-
-            if (name.isNullOrEmpty()){
-                reminderNameEt.setFocus(requireContext())
-                reminderNameEt.setError(getString(R.string.name_shouldnt_be_empty))
-                return false
-            }
-//            else if(selectedTime == null && selectedPeriod == null) {
-//                showSnackbar(getString(R.string.date_or_period_should_be_selected), requireActivity().findViewById(R.id.rootView))
-//                return false
-//            }
-            else if(selectedGroup == null) {
-                showSnackbar(getString(R.string.group_should_be_selected), requireActivity().findViewById(R.id.rootView))
-                return false
-            }
-            else if(selectedColor == null) {
-                showSnackbar(getString(R.string.color_should_be_selected), requireActivity().findViewById(R.id.rootView))
-                return false
-            }
-
-        }
-        return true
     }
 
     private fun getContentHeight(linearLayout: LinearLayout): Int {
@@ -611,8 +591,4 @@ class CreateReminderFragment : Fragment(), MenuProvider, BackActionInterface, Da
             hasNotificationPermisions = isGranted
         }
 
-    val requestScheduleExactPermissionLauncher =
-        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
-            hasScheduleExactAlarmPermisions = isGranted
-        }
 }
