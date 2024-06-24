@@ -25,8 +25,8 @@
     <string name="month">Месяц</string>
     <!--    -->
 
-    <string name="reminder_name_et_hint">Название</string>
-    <string name="reminder_desc_et_hint">Описание</string>
+    <string name="reminder_name_et_hint">Введите название напоминания</string>
+    <string name="reminder_desc_et_hint">Введите описание</string>
     <string name="reminder_remind_time_text">Напомнить в день</string>
     <string name="reminder_date_tv_text">Дата</string>
     <string name="reminder_list_text">Список</string>
