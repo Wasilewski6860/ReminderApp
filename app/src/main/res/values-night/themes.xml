@@ -52,7 +52,7 @@
 
     <style name="TextInputLayoutStyle">
         <item name="boxBackgroundColor">#202020</item>
-        <item name="boxStrokeColor">@color/boxStrokeColorNignt</item>
+        <item name="boxStrokeColor">@color/boxStrokeColorNight</item>
         <item name="boxStrokeWidth">2dp</item>
     </style>
 
@@ -70,6 +70,8 @@
     <style name="PickerDialogStyle" parent="Theme.AppCompat.Light.Dialog">
         <item name="colorAccent">@color/black</item>
         <item name="colorControlNormal">@color/black</item>
+        <item name="android:windowBackground">@color/light_grey</item>
+        <item name="android:colorForeground">@color/black</item>
     </style>
 
     <style name="SwitchStyle" parent="Theme.AppCompat"/>

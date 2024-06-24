@@ -17,7 +17,7 @@
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/createToolbar"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"></com.google.android.material.appbar.MaterialToolbar>
+            android:layout_height="match_parent"/>
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -49,45 +49,25 @@
                 android:orientation="vertical"
                 android:padding="@dimen/padding_start_text">
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/reminder_name_tip"
+                <EditText
+                    android:id="@+id/reminder_name_et"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:boxCornerRadiusBottomEnd="8dp"
-                    app:boxCornerRadiusBottomStart="8dp"
-                    app:boxCornerRadiusTopEnd="8dp"
-                    app:boxCornerRadiusTopStart="8dp">
+                    android:background="@android:color/transparent"
+                    android:imeOptions="actionNext"
+                    android:textCursorDrawable="@drawable/edit_text_cursor"
+                    android:hint="@string/reminder_name_et_hint"
+                    android:inputType="textCapSentences"/>
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/reminder_name_et"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/reminder_name_et_hint"
-                        android:imeOptions="actionNext"
-                        android:inputType="textCapSentences"
-                        android:textCursorDrawable="@drawable/edit_text_cursor" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/reminder_description_tip"
+                <EditText
+                    android:id="@+id/reminder_description_et"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:boxCornerRadiusBottomEnd="8dp"
-                    app:boxCornerRadiusBottomStart="8dp"
-                    app:boxCornerRadiusTopEnd="8dp"
-                    app:boxCornerRadiusTopStart="8dp">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/reminder_description_et"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/reminder_desc_et_hint"
-                        android:imeOptions="actionDone"
-                        android:inputType="textCapSentences"
-                        android:textCursorDrawable="@drawable/edit_text_cursor" />
-
-                </com.google.android.material.textfield.TextInputLayout>
+                    android:background="@android:color/transparent"
+                    android:imeOptions="actionDone"
+                    android:textCursorDrawable="@drawable/edit_text_cursor"
+                    android:hint="@string/reminder_desc_et_hint"
+                    android:inputType="textCapSentences"/>
 
             </LinearLayout>
 

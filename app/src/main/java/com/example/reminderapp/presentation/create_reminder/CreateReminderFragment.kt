@@ -470,7 +470,7 @@ class CreateReminderFragment : Fragment(), MenuProvider, BackActionInterface, Da
         return height
     }
 
-    fun setupOnBackPressed() {
+    private fun setupOnBackPressed() {
         callback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 navigateBack()
@@ -478,6 +478,7 @@ class CreateReminderFragment : Fragment(), MenuProvider, BackActionInterface, Da
         }
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
     }
+
     private fun setupToolbar() = with(binding) {
         val activity = (activity as MainActivity)
         activity.setSupportActionBar(createToolbar)
