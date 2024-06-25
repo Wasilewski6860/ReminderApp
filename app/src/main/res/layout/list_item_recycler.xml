@@ -25,7 +25,7 @@
             android:paddingHorizontal="10dp"
             android:visibility="gone"/>
 
-        <com.example.reminderapp.custom_view.CircleCustomView
+        <com.example.reminderapp.ui.CircleCustomView
             android:id="@+id/colorCircleItem"
             android:layout_width="0dp"
             android:layout_height="match_parent"

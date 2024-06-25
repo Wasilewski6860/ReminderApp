@@ -1,4 +1,4 @@
-package com.example.reminderapp.receivers.work
+package com.example.reminderapp.remind.work
 
 import android.content.Context
 import android.util.Log

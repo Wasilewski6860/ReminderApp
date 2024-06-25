@@ -1,9 +1,8 @@
-package com.example.reminderapp.receivers.work
+package com.example.reminderapp.remind.work
 
 import android.content.Context
 import android.util.Log
 import androidx.work.CoroutineWorker
-import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.example.domain.use_case.DeleteTaskUseCase
 import com.example.domain.use_case.GetTaskUseCase
@@ -12,19 +11,15 @@ import com.example.data.reminder.RemindAlarmManager
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-class CancelTaskWorker(val context: Context, val workerParams: WorkerParameters) : CoroutineWorker(context,
+class PostponeTaskWorker(val context: Context, val workerParams: WorkerParameters) : CoroutineWorker(context,
     workerParams), KoinComponent {
 
-    private val remindAlarmManager: RemindAlarmManager by inject()
     val notificationManager : NotificationManager by inject()
 
     override suspend fun doWork(): Result {
-        Log.d("MY LOG","CancelTaskWorker doWork")
+        Log.d("MY LOG","PostponeTaskWorker doWork")
         val id = inputData.getInt("id",-1)
-        val name = inputData.getString("name")
-        val description = inputData.getString("description")
-        if (id != -1 && name != null && description!=null) {
-            remindAlarmManager.clearAlarm(id, name, description)
+        if (id != -1) {
             notificationManager.clearNotification(id)
         }
 

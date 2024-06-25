@@ -43,7 +43,7 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name=".receivers.ReminderBroadcast"
+        <receiver android:name=".remind.receivers.ReminderBroadcast"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.example.reminderapp.ACTION_DISMISS" />
@@ -55,7 +55,7 @@
         </receiver>
 
         <receiver
-            android:name=".receivers.AlarmBroadcastReceiver"
+            android:name=".remind.receivers.AlarmBroadcastReceiver"
             android:directBootAware="true"
             android:exported="false">
             <intent-filter>
@@ -64,7 +64,7 @@
         </receiver>
 
         <receiver
-            android:name=".receivers.DeviceBootReceiver"
+            android:name=".remind.receivers.DeviceBootReceiver"
             android:directBootAware="true"
             android:exported="true">
             <intent-filter>

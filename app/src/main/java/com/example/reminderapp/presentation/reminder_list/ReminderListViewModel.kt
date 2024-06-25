@@ -122,33 +122,12 @@ class ReminderListViewModel(
         }
     }
 
-    fun editTask(
-        taskId: Int,
-        taskName: String,
-        taskDesc: String,
-        taskCreationTime: Long,
-        taskTime: Long?,
-        taskTimePeriod: Long?,
-        taskType: TaskPeriodType,
-        isActive: Boolean,
-        isMarkedWithFlag: Boolean,
-        groupId: Int,
-        taskColor: Int
+    fun editIsActive(
+        task: Task,
+        isActive: Boolean
     ) {
         viewModelScope.launch {
-            val task = Task(
-                id = taskId,
-                name = taskName,
-                description = taskDesc,
-                reminderCreationTime = taskCreationTime,
-                reminderTime = taskTime,
-                reminderTimePeriod = taskTimePeriod,
-                type = taskType,
-                isActive = isActive,
-                isMarkedWithFlag = isMarkedWithFlag,
-                groupId = groupId,
-                color = taskColor
-            )
+            task.isActive=isActive
             editTaskUseCase(
                 task
             )

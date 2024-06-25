@@ -1,4 +1,4 @@
-package com.example.reminderapp.custom_view
+package com.example.reminderapp.ui
 
 import android.content.Context
 import android.graphics.Bitmap

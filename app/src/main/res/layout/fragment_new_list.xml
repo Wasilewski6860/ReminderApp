@@ -22,7 +22,7 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <com.example.reminderapp.custom_view.CircleCustomView
+    <com.example.reminderapp.ui.CircleCustomView
         android:id="@+id/selected_color_iv"
         android:layout_width="50dp"
         android:layout_height="50dp"

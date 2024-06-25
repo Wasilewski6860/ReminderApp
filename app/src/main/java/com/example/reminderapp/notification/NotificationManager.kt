@@ -21,7 +21,7 @@ import com.example.data.reminder.Constants.ACTION_POSTPONE
 import com.example.data.reminder.Constants.ACTION_POSTPONE_PENDING_INTENT_ID
 import com.example.data.reminder.Constants.TASK_ID_EXTRA
 import com.example.reminderapp.presentation.reminder.ReminderActivity
-import com.example.reminderapp.receivers.ReminderBroadcast
+import com.example.reminderapp.remind.receivers.ReminderBroadcast
 import com.example.data.reminder.Constants
 import com.example.data.reminder.Constants.ACTION_DELETE
 import com.example.data.reminder.Constants.TASK_DESCRIPTION_EXTRA

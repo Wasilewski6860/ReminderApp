@@ -9,8 +9,8 @@ import com.example.reminderapp.presentation.mainscreen.MainViewModel
 import com.example.reminderapp.presentation.new_list.NewListViewModel
 import com.example.reminderapp.presentation.reminder_list.ReminderListViewModel
 import com.example.data.reminder.RemindAlarmManager
-import com.example.reminderapp.receivers.AlarmBroadcastReceiver
-import com.example.reminderapp.receivers.work.RemindWorkManager
+import com.example.reminderapp.remind.receivers.AlarmBroadcastReceiver
+import com.example.reminderapp.remind.work.RemindWorkManager
 import com.example.reminderapp.utils.TimeDateUtils
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
