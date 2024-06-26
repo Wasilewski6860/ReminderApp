@@ -16,7 +16,7 @@ import com.example.data.cache.entity.TaskGroupEntity
 )
 abstract class TaskDatabase : RoomDatabase() {
 
-    abstract val dao: TaskDao
+    abstract fun getTaskDao(): TaskDao
 
     companion object {
 

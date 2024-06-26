@@ -62,7 +62,7 @@ interface TaskDao {
     suspend fun getCountOfTasksInGroup(groupId: Int): Int
 
     @Query("DELETE FROM task")
-    suspend fun clearAll()
+    suspend fun clearAllTasks()
 
     @Query("DELETE FROM task_group WHERE groupId = :groupId")
     suspend fun deleteGroup(groupId: Int)

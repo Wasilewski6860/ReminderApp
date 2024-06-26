@@ -4,30 +4,25 @@ package com.example.data.cache.impl
 import com.example.data.cache.GroupCacheMapper
 import com.example.data.cache.GroupWithTasksCacheMapper
 import com.example.data.cache.TaskCacheMapper
-import com.example.data.cache.TaskDatabase
+import com.example.data.cache.TaskDao
 import com.example.data.cache.TaskStorage
 import com.example.domain.model.Group
 import com.example.domain.model.GroupWithTasks
 import com.example.domain.model.Task
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.flatMapConcat
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.zip
-import kotlinx.coroutines.withContext
 
 class TaskStorageImpl(
     val taskCacheMapper: TaskCacheMapper,
     val groupCacheMapper: GroupCacheMapper,
     val groupWithTasksCacheMapper: GroupWithTasksCacheMapper,
-    taskDatabase: TaskDatabase
+    val taskDao: TaskDao
 ) : TaskStorage {
-
-    private val taskDao = taskDatabase.dao
 
     override fun addTask(task: Task): Flow<Task> {
         return flow {
@@ -121,7 +116,7 @@ class TaskStorageImpl(
         }
     }
 
-    override suspend fun clearAll() = taskDao.clearAll()
+    override suspend fun clearAll() = taskDao.clearAllTasks()
 
     override suspend fun deleteGroup(groupId: Int) {
         taskDao.deleteGroup(groupId)
