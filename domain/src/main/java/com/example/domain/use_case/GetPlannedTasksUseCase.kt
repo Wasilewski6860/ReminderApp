@@ -1,6 +1,5 @@
 package com.example.domain.use_case
 
-import com.example.domain.model.GroupWithTasks
 import com.example.domain.model.Task
 import com.example.domain.repository.TaskRepository
 import kotlinx.coroutines.flow.Flow

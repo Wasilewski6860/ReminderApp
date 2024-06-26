@@ -1,6 +1,5 @@
 package com.example.domain.use_case
 
-import com.example.domain.model.Group
 import com.example.domain.model.Task
 import com.example.domain.model.TaskPeriodType
 import com.example.domain.repository.TaskRepository

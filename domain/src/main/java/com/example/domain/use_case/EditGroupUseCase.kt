@@ -8,5 +8,4 @@ typealias EditGroupBaseUseCase = BaseUseCase<Group, Unit>
 
 class EditGroupUseCase(private val taskRepository: TaskRepository) : EditGroupBaseUseCase {
     override suspend fun invoke(group: Group)  = taskRepository.editGroup(group)
-
 }

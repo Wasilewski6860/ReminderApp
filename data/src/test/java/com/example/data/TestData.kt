@@ -9,6 +9,8 @@ import com.example.domain.model.TaskPeriodType
 
 object TestData {
 
+    private val todayTimeInMillis = java.util.Calendar.getInstance().timeInMillis
+
     val firstTask = Task(
         id = 1,
         name = "Task 1",
@@ -65,9 +67,42 @@ object TestData {
         color = 67
     )
 
+    val fourthTask = Task(
+        id = 3,
+        name = "Task 3",
+        description = "Description 3",
+        reminderCreationTime = 430L,
+        reminderTime = 101L,
+        reminderTimePeriod = 5540L,
+        type = TaskPeriodType.ONE_TIME,
+        isActive = false,
+        isMarkedWithFlag = true,
+        groupId = 1,
+        color = 67
+    )
+
+    val todayTask = Task(
+        id = 3,
+        name = "Task 3",
+        description = "Description 3",
+        reminderCreationTime = 430L,
+        reminderTime = todayTimeInMillis,
+        reminderTimePeriod = 5540L,
+        type = TaskPeriodType.ONE_TIME,
+        isActive = false,
+        isMarkedWithFlag = true,
+        groupId = 1,
+        color = 67
+    )
+
     val tasks = listOf(firstTask, secondTask, thirdTask)
     val noTimeTasks = listOf(thirdTask)
     val countOfNoTimeTasks = noTimeTasks.size
+
+    val periodicTimeTasks = listOf(firstTask)
+    val plannedTasks = listOf(fourthTask)
+    val todayTasks = listOf(todayTask)
+    val tasksWithFlag = listOf(fourthTask)
 
     val firstTaskEntity = TaskEntity(
         id = 1,
@@ -151,6 +186,11 @@ object TestData {
         groupColor = 3,
         groupImage = 3,
         tasksCount = 0
+    )
+
+    val groupWithTasks = GroupWithTasks(
+        group = firstGroup,
+        tasks = tasks
     )
 
     val groups = listOf(firstGroup, secondGroup, thirdGroup)
