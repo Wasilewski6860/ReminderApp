@@ -1,7 +1,5 @@
 package com.example.data.cache
 
-import androidx.room.Query
-import com.example.data.cache.entity.TaskEntity
 import com.example.domain.model.Group
 import com.example.domain.model.GroupWithTasks
 import com.example.domain.model.Task

@@ -1,4 +1,3 @@
-
 package com.example.data.cache.impl
 
 import com.example.data.cache.GroupCacheMapper
@@ -77,7 +76,9 @@ class TaskStorageImpl(
 
     override suspend fun editGroup(group: Group) = taskDao.editGroup(groupCacheMapper.mapToEntity(group).first)
 
-    override fun getTask(id: Int): Flow<Task> = taskDao.getTask(id).map { taskEntity -> taskCacheMapper.mapFromEntity(taskEntity) }
+    override fun getTask(id: Int): Flow<Task> = taskDao.getTask(id).map {
+        taskEntity -> taskCacheMapper.mapFromEntity(taskEntity)
+    }
 
 
     override fun getAllGroups(): Flow<List<Group>> {
