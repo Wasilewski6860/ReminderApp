@@ -27,8 +27,8 @@ sealed interface ValidationResult {
 }
 
 class NewListViewModel(
-    val insertGroupUseCase: InsertGroupUseCase,
-    val editGroupUseCase: EditGroupUseCase,
+    private val insertGroupUseCase: InsertGroupUseCase,
+    private val editGroupUseCase: EditGroupUseCase,
 ) : ViewModel() {
 
     private val _screenState = MutableStateFlow(NewListScreenState())

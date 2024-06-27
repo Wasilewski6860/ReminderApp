@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.domain.model.Group
 import com.example.domain.use_case.group.DeleteGroupUseCase
 import com.example.domain.use_case.group.GetAllGroupsUseCase
+import com.example.domain.use_case.reminder.DeleteReminderGroupUseCase
 import com.example.domain.use_case.reminder.DeleteReminderUseCase
 import com.example.reminderapp.presentation.base.UiState
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -13,7 +14,7 @@ import kotlinx.coroutines.launch
 
 class ListsEditorViewModel(
     private val getAllGroupsUseCase: GetAllGroupsUseCase,
-    private val deleteReminderUseCase: DeleteReminderUseCase
+    private val deleteReminderGroupUseCase: DeleteReminderGroupUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow<UiState<List<Group>>>(UiState.Loading)
@@ -40,7 +41,7 @@ class ListsEditorViewModel(
         viewModelScope.launch {
             /** use case execute method here */
             try {
-                deleteReminderUseCase(groupId)
+                deleteReminderGroupUseCase(groupId)
             } catch (e: Exception) {
                 _uiState.value = UiState.Error("Не удалось удалить список")
             }

@@ -45,9 +45,9 @@ sealed interface ValidationResult {
 }
 
 class CreateReminderViewModel(
-    val createReminderUseCase: CreateReminderUseCase,
-    val getAllGroupsUseCase: GetAllGroupsUseCase,
-    val editReminderUseCase: EditReminderUseCase
+    private val createReminderUseCase: CreateReminderUseCase,
+    private val getAllGroupsUseCase: GetAllGroupsUseCase,
+    private val editReminderUseCase: EditReminderUseCase
 ) : ViewModel() {
 
     private val _screenState = MutableStateFlow(CreateReminderScreenState())

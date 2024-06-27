@@ -62,7 +62,7 @@ val appModule = module {
     viewModel<ListsEditorViewModel> {
         ListsEditorViewModel(
             getAllGroupsUseCase = get(),
-            deleteReminderUseCase = get()
+            deleteReminderGroupUseCase = get()
         )
     }
 

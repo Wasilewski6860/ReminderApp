@@ -37,7 +37,7 @@ interface TaskDao {
     fun getCountOfNoTimeTasks(): Flow<Int>
 
     @Query("SELECT * FROM task WHERE id =:id")
-    fun getTask(id: Int): Flow<TaskEntity>
+    suspend fun getTask(id: Int): TaskEntity
 
     @Query("SELECT * FROM task_group")
     fun getAllGroups(): Flow<List<TaskGroupEntity>>

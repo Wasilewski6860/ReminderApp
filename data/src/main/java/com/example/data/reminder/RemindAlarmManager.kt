@@ -7,6 +7,7 @@ import android.content.Intent
 import android.os.Build
 import android.util.Log
 import androidx.core.os.bundleOf
+import com.example.data.reminder.Constants.ACTION_CANCEL_REMINDER
 import com.example.data.reminder.Constants.ACTION_CREATE_REMINDER
 import com.example.data.reminder.Constants.TASK_DESCRIPTION_EXTRA
 import com.example.data.reminder.Constants.TASK_ID_EXTRA
@@ -83,14 +84,12 @@ class RemindAlarmManager(
         Log.d("MY LOG","RemindAlarmManager clearAlarm")
         alarmManager.cancel(createReminderAlarmIntent(id, name, description))
 
-        val intent = Intent(context, receiverClass).putExtra(
-            Constants.TASK_EXTRA,
-            bundleOf(
-                TASK_ID_EXTRA to id,
-                TASK_NAME_EXTRA to name,
-                TASK_DESCRIPTION_EXTRA to description
-            )
-        ).setAction(Constants.ACTION_CANCEL_REMINDER)
+        val intent = Intent(context, receiverClass).apply{
+            putExtra(TASK_ID_EXTRA, id)
+            putExtra(TASK_NAME_EXTRA, name)
+            putExtra(TASK_DESCRIPTION_EXTRA, description)
+            action = ACTION_CANCEL_REMINDER
+        }
         context.sendBroadcast(intent)
     }
 

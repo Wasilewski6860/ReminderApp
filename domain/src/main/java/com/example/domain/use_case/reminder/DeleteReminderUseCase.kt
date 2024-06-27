@@ -13,13 +13,30 @@ class DeleteReminderUseCase(
     private val getTaskUseCase: GetTaskUseCase,
     private val clearAlarmUseCase: ClearAlarmUseCase
 ) {
+//    suspend operator fun invoke(task: Task) {
+//        clearAlarmUseCase(task)
+//        deleteTaskUseCase(task)
+//    }
+//    suspend operator fun invoke(id: Int) {
+//        val result = getTaskUseCase(id).stateIn(GlobalScope).first()
+//        clearAlarmUseCase(result)
+//        deleteTaskUseCase(result)
+//    }
+
     suspend operator fun invoke(task: Task) {
         clearAlarmUseCase(task)
         deleteTaskUseCase(task)
     }
+
     suspend operator fun invoke(id: Int) {
-        val result = getTaskUseCase(id).stateIn(GlobalScope).first()
-        clearAlarmUseCase(result)
-        deleteTaskUseCase(result)
+        runCatching {
+            // Получаем первый элемент из потока
+            val task = getTaskUseCase(id).first()
+            clearAlarmUseCase(task)
+            deleteTaskUseCase(task)
+        }.onFailure { exception ->
+            val a = exception.toString()
+//            Log.e("DeleteReminderUseCase", "Error deleting task", exception)
+        }
     }
 }
