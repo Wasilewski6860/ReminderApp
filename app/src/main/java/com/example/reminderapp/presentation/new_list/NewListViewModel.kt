@@ -4,12 +4,9 @@ import android.text.Editable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.domain.model.Group
-import com.example.domain.model.Task
-import com.example.domain.use_case.EditGroupUseCase
-import com.example.domain.use_case.InsertGroupUseCase
+import com.example.domain.use_case.group.EditGroupUseCase
+import com.example.domain.use_case.group.InsertGroupUseCase
 import com.example.reminderapp.presentation.base.OperationResult
-import com.example.reminderapp.presentation.base.UiState
-import com.example.reminderapp.presentation.create_reminder.CreateReminderScreenState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch

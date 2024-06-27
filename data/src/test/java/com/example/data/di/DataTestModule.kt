@@ -6,13 +6,13 @@ import com.example.data.cache.TaskCacheMapper
 import com.example.data.cache.TaskDao
 import com.example.data.cache.TaskStorage
 import com.example.data.cache.impl.TaskStorageImpl
-import com.example.domain.repository.TaskRepository
+import com.example.domain.repository.ITaskRepository
 import io.mockk.mockk
 import org.koin.dsl.module
 
 val dataTestModule = module {
     single<TaskDao> { mockk() }
-    single<TaskRepository> { mockk() }
+    single<ITaskRepository> { mockk() }
     single<TaskStorage> { TaskStorageImpl(get(),get(), get(), get()) }
 
     single { TaskCacheMapper() }

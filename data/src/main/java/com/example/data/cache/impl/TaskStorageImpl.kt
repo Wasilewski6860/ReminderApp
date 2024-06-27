@@ -1,5 +1,6 @@
 package com.example.data.cache.impl
 
+import android.util.Log
 import com.example.data.cache.GroupCacheMapper
 import com.example.data.cache.GroupWithTasksCacheMapper
 import com.example.data.cache.TaskCacheMapper
@@ -24,6 +25,7 @@ class TaskStorageImpl(
 ) : TaskStorage {
 
     override fun addTask(task: Task): Flow<Task> {
+        Log.d("MY LOG", "TaskStorageImpl addTask"+task.toString())
         return flow {
             // Вставляем запись и получаем её идентификатор
             val taskId = taskDao.addTask(taskCacheMapper.mapToEntity(task))

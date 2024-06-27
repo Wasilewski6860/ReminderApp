@@ -8,9 +8,11 @@ import androidx.lifecycle.viewModelScope
 import com.example.domain.model.Group
 import com.example.domain.model.Task
 import com.example.domain.model.TaskPeriodType
-import com.example.domain.use_case.EditTaskUseCase
-import com.example.domain.use_case.GetAllGroupsUseCase
-import com.example.domain.use_case.SaveTaskUseCase
+import com.example.domain.use_case.task.EditTaskUseCase
+import com.example.domain.use_case.group.GetAllGroupsUseCase
+import com.example.domain.use_case.reminder.CreateReminderUseCase
+import com.example.domain.use_case.reminder.EditReminderUseCase
+import com.example.domain.use_case.task.SaveTaskUseCase
 import com.example.reminderapp.presentation.base.OperationResult
 import com.example.reminderapp.presentation.base.UiState
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -43,9 +45,9 @@ sealed interface ValidationResult {
 }
 
 class CreateReminderViewModel(
-    val createTaskUseCase: SaveTaskUseCase,
+    val createReminderUseCase: CreateReminderUseCase,
     val getAllGroupsUseCase: GetAllGroupsUseCase,
-    val editTaskUseCase: EditTaskUseCase
+    val editReminderUseCase: EditReminderUseCase
 ) : ViewModel() {
 
     private val _screenState = MutableStateFlow(CreateReminderScreenState())
@@ -171,7 +173,7 @@ class CreateReminderViewModel(
 
     fun fetchGroups() {
         viewModelScope.launch {
-            getAllGroupsUseCase(Unit)
+            getAllGroupsUseCase()
                 .onStart {
                     _screenState.value = _screenState.value.copy(groupsUiState = UiState.Loading)
                 }
@@ -230,7 +232,7 @@ class CreateReminderViewModel(
                             groupId = currentState.reminderGroupId!!,
                             color = currentState.reminderColor!!
                         )
-                        createTaskUseCase(
+                        createReminderUseCase(
                             task
                         )
                         .catch {
@@ -255,65 +257,13 @@ class CreateReminderViewModel(
                             groupId = currentState.reminderGroupId!!,
                             color = currentState.reminderColor!!
                         )
-                        editTaskUseCase(
+                        editReminderUseCase(
                             task
                         )
-                        Log.d("SaveTask", "Task created successfully")
+                        Log.d("SaveTask", "Task edited successfully")
                         _saveResult.value = OperationResult.Success(Unit)
                     }
                 }
-            }
-        }
-    }
-
-    fun saveTask(
-       taskId: Int? = null,
-       taskName: String,
-       taskDesc: String,
-       taskCreationTime: Long,
-       taskType: TaskPeriodType,
-       taskTime: Long?,
-       taskTimePeriod: Long?,
-       isActive: Boolean,
-       isMarkedWithFlag: Boolean,
-       groupId: Int,
-       taskColor: Int
-    ) {
-        viewModelScope.launch {
-            if (taskId == null) {
-                createTaskUseCase(
-                    Task(
-                        id = 0,
-                        name = taskName,
-                        description = taskDesc,
-                        reminderCreationTime = taskCreationTime,
-                        reminderTime = taskTime,
-                        reminderTimePeriod = taskTimePeriod,
-                        type = taskType,
-                        isActive = isActive,
-                        isMarkedWithFlag = isMarkedWithFlag,
-                        groupId = groupId,
-                        color = taskColor
-                    )
-                )
-            } else {
-                val task = Task(
-                    id = taskId,
-                    name = taskName,
-                    description = taskDesc,
-                    reminderCreationTime = taskCreationTime,
-                    reminderTime = taskTime,
-                    reminderTimePeriod = taskTimePeriod,
-                    type = taskType,
-                    isActive = isActive,
-                    isMarkedWithFlag = isMarkedWithFlag,
-                    groupId = groupId,
-                    color = taskColor
-                )
-                editTaskUseCase(
-                    task
-                )
-
             }
         }
     }

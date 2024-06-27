@@ -5,8 +5,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.util.Log
-import com.example.domain.use_case.GetAllTasksUseCase
-import com.example.reminderapp.presentation.base.UiState
+import com.example.domain.use_case.task.GetAllTasksUseCase
 import com.example.data.reminder.RemindAlarmManager
 import com.example.domain.model.TaskPeriodType
 import kotlinx.coroutines.CoroutineScope
@@ -32,7 +31,7 @@ class DeviceBootReceiver : BroadcastReceiver(), KoinComponent {
 
     private fun resetAlarm() {
         scope.launch(Dispatchers.Main) {
-            getAllTasksUseCase(Unit)
+            getAllTasksUseCase()
                 .collect { tasks ->
                     tasks.forEach { task ->
                         if(task.isActive && task.type != TaskPeriodType.NO_TIME) remindAlarmManager.createAlarm(task)

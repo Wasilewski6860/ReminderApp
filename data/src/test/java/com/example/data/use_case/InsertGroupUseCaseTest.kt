@@ -1,7 +1,7 @@
 package com.example.data.use_case
 
 import com.example.data.TestData
-import com.example.domain.use_case.InsertGroupUseCase
+import com.example.domain.use_case.group.InsertGroupUseCase
 import io.mockk.coEvery
 import io.mockk.coVerify
 import kotlinx.coroutines.test.runTest

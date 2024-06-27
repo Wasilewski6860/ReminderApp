@@ -1,6 +1,5 @@
 package com.example.reminderapp.di
 
-import android.content.Context
 import com.example.data.cache.GroupCacheMapper
 import com.example.data.cache.GroupWithTasksCacheMapper
 import com.example.data.cache.TaskCacheMapper
@@ -8,18 +7,12 @@ import com.example.data.cache.TaskDao
 import com.example.data.cache.TaskDatabase
 import com.example.data.cache.TaskStorage
 import com.example.data.cache.impl.TaskStorageImpl
+import com.example.data.repositories.GroupRepositoryImpl
 import com.example.data.repositories.TaskRepositoryImpl
-import com.example.domain.model.Group
-import com.example.domain.model.GroupWithTasks
-import com.example.domain.model.Task
-import com.example.domain.model.TaskPeriodType
-import com.example.domain.repository.TaskRepository
-import com.example.reminderapp.R
-import com.example.reminderapp.remind.receivers.ReminderBroadcast
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
+import com.example.domain.repository.IGroupRepository
+import com.example.domain.repository.ITaskRepository
+import com.example.reminderapp.remind.receivers.ReminderNotificationBroadcastReceiver
 import org.koin.dsl.module
-import kotlin.math.sign
 
 val dataModule = module {
 
@@ -41,8 +34,12 @@ val dataModule = module {
         )
     }
 
-    single<TaskRepository> {
-        TaskRepositoryImpl(taskStorage = get(), context = get(), reminderReceiverClass = ReminderBroadcast::class.java)
+    single<ITaskRepository> {
+        TaskRepositoryImpl(taskStorage = get())
+    }
+
+    single<IGroupRepository> {
+        GroupRepositoryImpl(taskStorage = get())
     }
 
     single<TaskCacheMapper> {

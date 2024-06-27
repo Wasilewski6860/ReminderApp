@@ -2,7 +2,7 @@ package com.example.data.use_case
 
 import com.example.data.TestData
 import com.example.domain.model.TaskPeriodType
-import com.example.domain.use_case.GetAllOneTimeTasksUseCase
+import com.example.domain.use_case.task.GetAllOneTimeTasksUseCase
 import io.mockk.coEvery
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf

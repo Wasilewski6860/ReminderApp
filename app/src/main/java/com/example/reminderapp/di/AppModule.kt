@@ -9,6 +9,7 @@ import com.example.reminderapp.presentation.mainscreen.MainViewModel
 import com.example.reminderapp.presentation.new_list.NewListViewModel
 import com.example.reminderapp.presentation.reminder_list.ReminderListViewModel
 import com.example.data.reminder.RemindAlarmManager
+import com.example.domain.alarm.IRemindAlarmManager
 import com.example.reminderapp.remind.receivers.AlarmBroadcastReceiver
 import com.example.reminderapp.remind.work.RemindWorkManager
 import com.example.reminderapp.utils.TimeDateUtils
@@ -22,7 +23,7 @@ val appModule = module {
         RemindWorkManager(androidContext())
     }
 
-    single<RemindAlarmManager> {
+    single<IRemindAlarmManager> {
         RemindAlarmManager(context = androidContext(), receiverClass = AlarmBroadcastReceiver::class.java)
     }
 
@@ -52,16 +53,16 @@ val appModule = module {
 
     viewModel<CreateReminderViewModel> {
         CreateReminderViewModel(
-            createTaskUseCase = get(),
+            createReminderUseCase = get(),
             getAllGroupsUseCase = get(),
-            editTaskUseCase = get()
+            editReminderUseCase = get()
         )
     }
 
     viewModel<ListsEditorViewModel> {
         ListsEditorViewModel(
             getAllGroupsUseCase = get(),
-            deleteGroupUseCase = get()
+            deleteReminderUseCase = get()
         )
     }
 
@@ -73,8 +74,8 @@ val appModule = module {
             getTasksForTodayUseCase = get(),
             getTasksWithFlagUseCase = get(),
             application = get(),
-            editTaskUseCase = get(),
-            deleteTaskUseCase = get(),
+            editReminderUseCase = get(),
+            deleteReminderUseCase = get(),
             getNoTimeTasksUseCase = get()
         )
     }

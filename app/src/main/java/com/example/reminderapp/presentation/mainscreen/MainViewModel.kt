@@ -2,12 +2,12 @@ package com.example.reminderapp.presentation.mainscreen
 
 import androidx.lifecycle.viewModelScope
 import com.example.domain.model.Group
-import com.example.domain.use_case.GetAllGroupsUseCase
-import com.example.domain.use_case.GetAllTasksCountUseCase
-import com.example.domain.use_case.GetNoTimeTasksCountUseCase
-import com.example.domain.use_case.GetTasksForTodayCountUseCase
-import com.example.domain.use_case.GetTasksPlannedCountUseCase
-import com.example.domain.use_case.GetTasksWithFlagCountUseCase
+import com.example.domain.use_case.group.GetAllGroupsUseCase
+import com.example.domain.use_case.task.GetAllTasksCountUseCase
+import com.example.domain.use_case.task.GetNoTimeTasksCountUseCase
+import com.example.domain.use_case.task.GetTasksForTodayCountUseCase
+import com.example.domain.use_case.task.GetTasksPlannedCountUseCase
+import com.example.domain.use_case.task.GetTasksWithFlagCountUseCase
 import com.example.reminderapp.presentation.base.BaseViewModel
 import com.example.reminderapp.presentation.base.UiState
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -40,12 +40,12 @@ class MainViewModel(
 
     override fun fetchData(params: Unit) {
         viewModelScope.launch {
-            val groupsFlow = getAllGroupsUseCase(Unit)
-            val todayCountFlow = getTasksForTodayCountUseCase(Unit)
-            val plannedCountFlow = getTasksPlannedCountUseCase(Unit)
-            val withFlagCountFlow = getTasksWithFlagCountUseCase(Unit)
-            val noTimeCountFlow = getNoTimeTasksCountUseCase(Unit)
-            val allCountFlow = getAllTasksCountUseCase(Unit)
+            val groupsFlow = getAllGroupsUseCase()
+            val todayCountFlow = getTasksForTodayCountUseCase()
+            val plannedCountFlow = getTasksPlannedCountUseCase()
+            val withFlagCountFlow = getTasksWithFlagCountUseCase()
+            val noTimeCountFlow = getNoTimeTasksCountUseCase()
+            val allCountFlow = getAllTasksCountUseCase()
 
             combine(
                 groupsFlow,
