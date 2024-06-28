@@ -3,6 +3,7 @@ package com.example.reminderapp.screen
 import android.view.View
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import com.example.reminderapp.R
+import com.example.reminderapp.presentation.mainscreen.MainFragment
 import com.example.reminderapp.view.KGridItemView
 import com.kaspersky.kaspresso.screens.KScreen
 import io.github.kakaocup.kakao.common.views.KView
@@ -15,9 +16,8 @@ import io.github.kakaocup.kakao.toolbar.KToolbar
 import org.hamcrest.Matcher
 
 object MainScreen : KScreen<MainScreen>() {
-    override val layoutId: Int? = null
-    override val viewClass: Class<*>? = null
-
+    override val layoutId: Int = R.layout.main_screen
+    override val viewClass: Class<*> = MainFragment::class.java
 //    val toolbar = KToolbar { withId(R.id.main_toolbar) }
     val todayGridView = KGridItemView { withId(R.id.currentDayTasksItem) }
     val plannedGridView = KGridItemView { withId(R.id.plannedTasksItem) }

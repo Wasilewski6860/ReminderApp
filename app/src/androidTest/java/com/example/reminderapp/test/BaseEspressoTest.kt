@@ -17,7 +17,11 @@ import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.test.KoinTest
 
-abstract class BaseScreenTest : TestCase(Kaspresso.Builder.simple()), KoinTest {
+@RunWith(AndroidJUnit4::class)
+abstract class BaseEspressoTest : TestCase(Kaspresso.Builder.simple()), KoinTest {
+
+    @get:Rule
+    val activityScenarioRule = activityScenarioRule<MainActivity>()
 
     @Before
     fun setUp() {
@@ -25,9 +29,9 @@ abstract class BaseScreenTest : TestCase(Kaspresso.Builder.simple()), KoinTest {
         startKoin {
             modules(listOf(appTestModule, domainTestModule, dataTestModule))
         }
-//        launchActivity<MainActivity>().onActivity {
-//            it.setTheme(com.example.reminderapp.R.style.Theme_ReminderApp)
-//        }
+        activityScenarioRule.scenario.onActivity { activity ->
+            activity.setTheme(com.example.reminderapp.R.style.Theme_ReminderApp)
+        }
     }
 
     @After

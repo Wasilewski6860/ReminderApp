@@ -29,8 +29,10 @@ class GroupListRecyclerViewAdapter(
 
         with(holder.binding) {
             listNameTextView.text = item.groupName
-            colorCircleItem.circleColor = item.groupColor
-            item.groupImage?.let { colorCircleItem.bitmap = it }
+
+//            colorCircleItem.circleColor = item.groupColor
+//            item.groupImage?.let { colorCircleItem.bitmap = it }
+
             listItemsCounterTextView.text = item.tasksCount.toString()
 
             mainRecyclerViewItemHolder.setOnClickListener {

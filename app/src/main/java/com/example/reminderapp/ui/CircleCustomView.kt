@@ -11,6 +11,7 @@ import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.view.View
 import androidx.core.content.ContextCompat
+import androidx.test.core.app.ApplicationProvider
 import kotlin.math.min
 
 class CircleCustomView @JvmOverloads constructor(
@@ -70,7 +71,9 @@ class CircleCustomView @JvmOverloads constructor(
         get() = null
         set(value) {
             if (value != null) {
-                _drawable = ContextCompat.getDrawable(context, value)
+                val appContext = ApplicationProvider.getApplicationContext<Context>()
+
+                _drawable = ContextCompat.getDrawable(appContext, value)
                 _drawable?.colorFilter = PorterDuffColorFilter(
                     if (isDarkThemeEnabled) Color.WHITE else Color.BLACK,
                     PorterDuff.Mode.SRC_ATOP
