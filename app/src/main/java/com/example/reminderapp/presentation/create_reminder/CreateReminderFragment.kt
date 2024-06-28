@@ -374,9 +374,18 @@ class CreateReminderFragment :  NavigationFragment(), MenuProvider, DataReceiver
     private fun showDateAndTimePickers() {
         val getDate = Calendar.getInstance()
 
+        val isDarkThemeEnabled = when (
+            resources.configuration.uiMode
+                    and
+                    android.content.res.Configuration.UI_MODE_NIGHT_MASK
+        ) {
+            android.content.res.Configuration.UI_MODE_NIGHT_NO -> false
+            else -> true
+        }
+
         // Date Picker
         val datePicker = DatePickerDialog(
-            requireContext(), R.style.PickerDialogStyle,
+            requireContext(), R.style.DatePickerDialogStyle,
             { _, year, monthOfYear, dayOfMonth ->
                 val selectedDate = Calendar.getInstance()
                 selectedDate.set(Calendar.YEAR, year)
@@ -385,7 +394,7 @@ class CreateReminderFragment :  NavigationFragment(), MenuProvider, DataReceiver
 
                 // Time Picker
                 val timePicker = TimePickerDialog(
-                    requireContext(), R.style.PickerDialogStyle,
+                    requireContext(), R.style.TimePickerDialogStyle,
                     { _, hourOfDay, minute ->
                         selectedDate.set(Calendar.HOUR_OF_DAY, hourOfDay)
                         selectedDate.set(Calendar.MINUTE, minute)
@@ -398,8 +407,12 @@ class CreateReminderFragment :  NavigationFragment(), MenuProvider, DataReceiver
                 )
 
                 timePicker.show()
-                timePicker.getButton(Dialog.BUTTON_POSITIVE).setTextColor(Color.BLACK)
-                timePicker.getButton(Dialog.BUTTON_NEGATIVE).setTextColor(Color.BLACK)
+                timePicker.getButton(Dialog.BUTTON_POSITIVE).setTextColor(
+                    if (isDarkThemeEnabled) Color.WHITE else Color.BLACK
+                )
+                timePicker.getButton(Dialog.BUTTON_NEGATIVE).setTextColor(
+                    if (isDarkThemeEnabled) Color.WHITE else Color.BLACK
+                )
             },
             getDate.get(Calendar.YEAR),
             getDate.get(Calendar.MONTH),
@@ -408,8 +421,12 @@ class CreateReminderFragment :  NavigationFragment(), MenuProvider, DataReceiver
         )
 
         datePicker.show()
-        datePicker.getButton(Dialog.BUTTON_POSITIVE).setTextColor(Color.BLACK)
-        datePicker.getButton(Dialog.BUTTON_NEGATIVE).setTextColor(Color.BLACK)
+        datePicker.getButton(Dialog.BUTTON_POSITIVE).setTextColor(
+            if (isDarkThemeEnabled) Color.WHITE else Color.BLACK
+        )
+        datePicker.getButton(Dialog.BUTTON_NEGATIVE).setTextColor(
+            if (isDarkThemeEnabled) Color.WHITE else Color.BLACK
+        )
     }
 
     private fun getContentHeight(linearLayout: LinearLayout): Int {
