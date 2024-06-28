@@ -43,14 +43,11 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name=".remind.receivers.ReminderBroadcast"
+        <receiver android:name=".remind.receivers.ReminderNotificationBroadcastReceiver"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.example.reminderapp.ACTION_DISMISS" />
-                <action android:name="com.example.reminderapp.ACTION_DELETE" />
                 <action android:name="com.example.reminderapp.ACTION_POSTPONE" />
-                <action android:name="com.example.reminderapp.ACTION_SET_INACTIVE" />
-                <action android:name="com.example.reminderapp.ACTION_CANCEL_ALL" />
             </intent-filter>
         </receiver>
 
@@ -60,6 +57,7 @@
             android:exported="false">
             <intent-filter>
                 <action android:name="com.example.reminderapp.ACTION_CREATE_REMINDER" />
+                <action android:name="com.example.reminderapp.ACTION_CANCEL_REMINDER" />
             </intent-filter>
         </receiver>
 

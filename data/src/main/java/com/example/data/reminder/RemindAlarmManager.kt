@@ -6,21 +6,24 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.util.Log
+import androidx.core.os.bundleOf
+import com.example.data.reminder.Constants.ACTION_CANCEL_REMINDER
 import com.example.data.reminder.Constants.ACTION_CREATE_REMINDER
 import com.example.data.reminder.Constants.TASK_DESCRIPTION_EXTRA
 import com.example.data.reminder.Constants.TASK_ID_EXTRA
 import com.example.data.reminder.Constants.TASK_NAME_EXTRA
+import com.example.domain.alarm.IRemindAlarmManager
 import com.example.domain.model.Task
 import com.example.domain.model.TaskPeriodType
 
 class RemindAlarmManager(
     private val context: Context,
     private val receiverClass: Class<*>
-) {
+): IRemindAlarmManager {
 
     private val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
-    fun createAlarm(task: Task) {
+    override fun createAlarm(task: Task) {
         Log.d("MY LOG","RemindAlarmManager createAlarm")
         when(task.type) {
             TaskPeriodType.PERIODIC -> createAlarmPeriodic(
@@ -72,7 +75,7 @@ class RemindAlarmManager(
         )
     }
 
-    fun clearAlarm(id: Int, name: String, description: String){
+    override fun clearAlarm(id: Int, name: String, description: String){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             if (!alarmManager.canScheduleExactAlarms()) {
                 return
@@ -80,9 +83,17 @@ class RemindAlarmManager(
         }
         Log.d("MY LOG","RemindAlarmManager clearAlarm")
         alarmManager.cancel(createReminderAlarmIntent(id, name, description))
+
+        val intent = Intent(context, receiverClass).apply{
+            putExtra(TASK_ID_EXTRA, id)
+            putExtra(TASK_NAME_EXTRA, name)
+            putExtra(TASK_DESCRIPTION_EXTRA, description)
+            action = ACTION_CANCEL_REMINDER
+        }
+        context.sendBroadcast(intent)
     }
 
-    fun clearAlarm(task: Task) = clearAlarm(task.id, task.name, task.description)
+    override fun clearAlarm(task: Task) = clearAlarm(task.id, task.name, task.description)
 
     private fun createReminderAlarmIntent(taskId: Int, name: String, text: String): PendingIntent {
         val intent = Intent(context, receiverClass).apply {

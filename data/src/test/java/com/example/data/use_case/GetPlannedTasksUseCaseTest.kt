@@ -1,7 +1,7 @@
 package com.example.data.use_case
 
 import com.example.data.TestData
-import com.example.domain.use_case.GetPlannedTasksUseCase
+import com.example.domain.use_case.task.GetPlannedTasksUseCase
 import io.mockk.coEvery
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf

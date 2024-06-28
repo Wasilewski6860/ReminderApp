@@ -5,8 +5,7 @@ import android.util.Log
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.example.data.reminder.RemindAlarmManager
-import com.example.domain.use_case.DeleteTaskUseCase
-import com.example.domain.use_case.GetTaskUseCase
+import com.example.domain.use_case.task.GetTaskUseCase
 import com.example.reminderapp.notification.NotificationManager
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject

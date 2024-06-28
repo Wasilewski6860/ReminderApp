@@ -1,6 +1,6 @@
 package com.example.data.use_case
 
-import com.example.domain.use_case.ClearAllTasksUseCase
+import com.example.domain.use_case.task.ClearAllTasksUseCase
 import io.mockk.coEvery
 import io.mockk.coVerify
 import kotlinx.coroutines.test.runTest

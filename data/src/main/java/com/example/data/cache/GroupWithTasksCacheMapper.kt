@@ -1,5 +1,6 @@
 package com.example.data.cache
 
+import android.util.Log
 import com.example.data.Mapper
 import com.example.data.cache.entity.TaskEntity
 import com.example.data.cache.relation.GroupWithTasks
@@ -16,7 +17,11 @@ class GroupWithTasksCacheMapper(
             val tasks = type.tasks
             val result = DomainGroupWithTasks(
                 group = groupCacheMapper.mapFromEntity(Pair(group, tasks.size) ),
-                tasks = if(tasks != null) tasks.map { taskEntity: TaskEntity ->  taskCacheMapper.mapFromEntity(taskEntity)} else listOf()
+                tasks = if(tasks != null) tasks.map {
+                    taskEntity: TaskEntity ->
+                    Log.d("MY LOG", "GroupWithTasksCacheMapper mapFromEntity taskCacheMapper.mapFromEntity")
+                    taskCacheMapper.mapFromEntity(taskEntity)
+                } else listOf()
             )
             return result
         }

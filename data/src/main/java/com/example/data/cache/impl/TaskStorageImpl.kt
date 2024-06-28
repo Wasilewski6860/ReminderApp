@@ -1,5 +1,6 @@
 package com.example.data.cache.impl
 
+import android.util.Log
 import com.example.data.cache.GroupCacheMapper
 import com.example.data.cache.GroupWithTasksCacheMapper
 import com.example.data.cache.TaskCacheMapper
@@ -14,6 +15,7 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.zip
 
 class TaskStorageImpl(
@@ -23,16 +25,12 @@ class TaskStorageImpl(
     val taskDao: TaskDao
 ) : TaskStorage {
 
-    override fun addTask(task: Task): Flow<Task> {
+    override suspend fun addTask(task: Task): Flow<Task> {
+        Log.d("MY LOG", "TaskStorageImpl addTask"+task.toString())
         return flow {
             // Вставляем запись и получаем её идентификатор
             val taskId = taskDao.addTask(taskCacheMapper.mapToEntity(task))
-            emit(taskId)
-        }.flatMapLatest { id ->
-            // Получаем Flow<TaskEntity> по идентификатору
-            taskDao.getTask(id.toInt()).map {
-                taskCacheMapper.mapFromEntity(it)
-            }
+            emit(taskCacheMapper.mapFromEntity(taskDao.getTask(taskId.toInt())))
         }
     }
 
@@ -47,6 +45,7 @@ class TaskStorageImpl(
     override fun getAllTasks(): Flow<List<Task>> {
         return taskDao.getAllTasks().map { list ->
             list.map {  taskEntity ->
+                Log.d("MY LOG", "TaskStorageImpl getAllTasks mapFromEntity")
                 taskCacheMapper.mapFromEntity(taskEntity)
             }
         }
@@ -55,6 +54,7 @@ class TaskStorageImpl(
     override fun getNoTimeTasks(): Flow<List<Task>> {
         return taskDao.getNoTimeTasks().map { list ->
             list.map {  taskEntity ->
+                Log.d("MY LOG", "TaskStorageImpl getNoTimeTasks mapFromEntity")
                 taskCacheMapper.mapFromEntity(taskEntity)
             }
         }
@@ -65,6 +65,7 @@ class TaskStorageImpl(
     override fun getAllTasksByPeriodType(period: String): Flow<List<Task>> {
         return taskDao.getAllTasksByPeriodType(period).map { list ->
             list.map {  taskEntity ->
+                Log.d("MY LOG", "TaskStorageImpl getAllTasksByPeriodType mapFromEntity")
                 taskCacheMapper.mapFromEntity(taskEntity)
             }
         }
@@ -76,8 +77,10 @@ class TaskStorageImpl(
 
     override suspend fun editGroup(group: Group) = taskDao.editGroup(groupCacheMapper.mapToEntity(group).first)
 
-    override fun getTask(id: Int): Flow<Task> = taskDao.getTask(id).map {
-        taskEntity -> taskCacheMapper.mapFromEntity(taskEntity)
+    override fun getTask(id: Int): Flow<Task> {
+        return flow {
+            emit(taskCacheMapper.mapFromEntity(taskDao.getTask(id)))
+        }
     }
 
 

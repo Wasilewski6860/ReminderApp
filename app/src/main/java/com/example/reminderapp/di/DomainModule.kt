@@ -1,29 +1,35 @@
 package com.example.reminderapp.di
 
-import com.example.domain.use_case.ClearAllTasksUseCase
-import com.example.domain.use_case.DeleteGroupUseCase
-import com.example.domain.use_case.DeleteTaskUseCase
-import com.example.domain.use_case.EditGroupUseCase
-import com.example.domain.use_case.EditTaskUseCase
-import com.example.domain.use_case.GetAllGroupsUseCase
-import com.example.domain.use_case.GetAllOneTimeTasksUseCase
-import com.example.domain.use_case.GetAllPeriodicTasksUseCase
-import com.example.domain.use_case.GetAllTasksCountUseCase
-import com.example.domain.use_case.GetAllTasksUseCase
-import com.example.domain.use_case.GetGroupUseCase
-import com.example.domain.use_case.GetGroupWithTasksUseCase
-import com.example.domain.use_case.GetNoTimeTasksCountUseCase
-import com.example.domain.use_case.GetNoTimeTasksUseCase
-import com.example.domain.use_case.GetPlannedTasksBaseUseCase
-import com.example.domain.use_case.GetPlannedTasksUseCase
-import com.example.domain.use_case.GetTaskUseCase
-import com.example.domain.use_case.GetTasksForTodayCountUseCase
-import com.example.domain.use_case.GetTasksForTodayUseCase
-import com.example.domain.use_case.GetTasksPlannedCountUseCase
-import com.example.domain.use_case.GetTasksWithFlagCountUseCase
-import com.example.domain.use_case.GetTasksWithFlagUseCase
-import com.example.domain.use_case.InsertGroupUseCase
-import com.example.domain.use_case.SaveTaskUseCase
+import com.example.domain.use_case.alarm.ChangeAlarmUseCase
+import com.example.domain.use_case.alarm.ClearAlarmUseCase
+import com.example.domain.use_case.alarm.CreateAlarmUseCase
+import com.example.domain.use_case.task.ClearAllTasksUseCase
+import com.example.domain.use_case.group.DeleteGroupUseCase
+import com.example.domain.use_case.task.DeleteTaskUseCase
+import com.example.domain.use_case.group.EditGroupUseCase
+import com.example.domain.use_case.task.EditTaskUseCase
+import com.example.domain.use_case.group.GetAllGroupsUseCase
+import com.example.domain.use_case.task.GetAllOneTimeTasksUseCase
+import com.example.domain.use_case.task.GetAllPeriodicTasksUseCase
+import com.example.domain.use_case.task.GetAllTasksCountUseCase
+import com.example.domain.use_case.task.GetAllTasksUseCase
+import com.example.domain.use_case.group.GetGroupUseCase
+import com.example.domain.use_case.group.GetGroupWithTasksUseCase
+import com.example.domain.use_case.task.GetNoTimeTasksCountUseCase
+import com.example.domain.use_case.task.GetNoTimeTasksUseCase
+import com.example.domain.use_case.task.GetPlannedTasksUseCase
+import com.example.domain.use_case.task.GetTaskUseCase
+import com.example.domain.use_case.task.GetTasksForTodayCountUseCase
+import com.example.domain.use_case.task.GetTasksForTodayUseCase
+import com.example.domain.use_case.task.GetTasksPlannedCountUseCase
+import com.example.domain.use_case.task.GetTasksWithFlagCountUseCase
+import com.example.domain.use_case.task.GetTasksWithFlagUseCase
+import com.example.domain.use_case.group.InsertGroupUseCase
+import com.example.domain.use_case.reminder.CreateReminderUseCase
+import com.example.domain.use_case.reminder.DeleteReminderGroupUseCase
+import com.example.domain.use_case.reminder.DeleteReminderUseCase
+import com.example.domain.use_case.reminder.EditReminderUseCase
+import com.example.domain.use_case.task.SaveTaskUseCase
 import org.koin.dsl.module
 
 val domainModule = module {
@@ -61,19 +67,19 @@ val domainModule = module {
     }
 
     factory<GetAllGroupsUseCase> {
-        GetAllGroupsUseCase(taskRepository = get())
+        GetAllGroupsUseCase(groupRepository = get())
     }
 
     factory<GetGroupUseCase> {
-        GetGroupUseCase(taskRepository = get())
+        GetGroupUseCase(groupRepository = get())
     }
 
     factory<GetGroupWithTasksUseCase> {
-        GetGroupWithTasksUseCase(taskRepository = get())
+        GetGroupWithTasksUseCase(groupRepository = get())
     }
 
     factory<DeleteGroupUseCase> {
-        DeleteGroupUseCase(taskRepository = get())
+        DeleteGroupUseCase(groupRepository = get())
     }
 
     factory<GetPlannedTasksUseCase> {
@@ -101,7 +107,7 @@ val domainModule = module {
     }
 
     factory<InsertGroupUseCase> {
-        InsertGroupUseCase(taskRepository = get())
+        InsertGroupUseCase(groupRepository = get())
     }
 
     factory<GetAllTasksCountUseCase> {
@@ -109,7 +115,7 @@ val domainModule = module {
     }
 
     factory<EditGroupUseCase> {
-        EditGroupUseCase(taskRepository = get())
+        EditGroupUseCase(groupRepository = get())
     }
 
     factory<GetNoTimeTasksCountUseCase> {
@@ -120,4 +126,31 @@ val domainModule = module {
         GetNoTimeTasksUseCase(taskRepository = get())
     }
 
+    factory<CreateReminderUseCase> {
+        CreateReminderUseCase(saveTaskUseCase = get(), createAlarmUseCase = get())
+    }
+
+    factory<EditReminderUseCase> {
+        EditReminderUseCase(editTaskUseCase = get(), changeAlarmUseCase = get())
+    }
+
+    factory<DeleteReminderUseCase> {
+        DeleteReminderUseCase(deleteTaskUseCase = get(), getTaskUseCase = get(), clearAlarmUseCase = get())
+    }
+
+    factory<DeleteReminderGroupUseCase> {
+        DeleteReminderGroupUseCase(getGroupWithTasksUseCase = get(), deleteReminderUseCase = get(), deleteGroupUseCase = get())
+    }
+
+    factory<CreateAlarmUseCase> {
+        CreateAlarmUseCase(alarmManager = get())
+    }
+
+    factory<ClearAlarmUseCase> {
+        ClearAlarmUseCase(alarmManager = get())
+    }
+
+    factory<ChangeAlarmUseCase> {
+        ChangeAlarmUseCase(createAlarmUseCase = get(), clearAlarmUseCase = get())
+    }
 }

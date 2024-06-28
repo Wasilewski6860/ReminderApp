@@ -8,29 +8,12 @@ import androidx.work.workDataOf
 
 class RemindWorkManager(val context: Context) {
 
-    fun createCancelWorkRequest(id: Int, name: String, description: String) {
-        val workRequest = OneTimeWorkRequestBuilder<CancelTaskWorker>()
-            .addTag(id.toString())
-            .setInputData(
-                workDataOf(
-                    "id" to id,
-                    "name" to name,
-                    "description" to description,
-                )
-            )
-            .build()
-        WorkManager.getInstance(context).enqueueUniqueWork(id.toString(),
-            ExistingWorkPolicy.REPLACE, workRequest)
-    }
-
-    fun createDeleteWorkRequest(id: Int, name: String, description: String) {
+    fun createDismissWorkRequest(id: Int) {
         val workRequest = OneTimeWorkRequestBuilder<DeleteTaskWorker>()
             .addTag(id.toString())
             .setInputData(
                 workDataOf(
-                    "id" to id,
-                    "name" to name,
-                    "description" to description,
+                    "id" to id
                 )
             )
             .build()
@@ -60,14 +43,12 @@ class RemindWorkManager(val context: Context) {
             ExistingWorkPolicy.REPLACE, workRequest)
     }
 
-    fun createPostponeWorkRequest(id: Int, name: String, description: String) {
+    fun createPostponeWorkRequest(id: Int) {
         val workRequest = OneTimeWorkRequestBuilder<PostponeTaskWorker>()
             .addTag(id.toString())
             .setInputData(
                 workDataOf(
-                    "id" to id,
-                    "name" to name,
-                    "description" to description,
+                    "id" to id
                 )
             )
             .build()

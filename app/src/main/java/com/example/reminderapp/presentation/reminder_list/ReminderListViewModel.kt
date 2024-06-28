@@ -5,15 +5,16 @@ import android.content.Context
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.domain.model.Task
-import com.example.domain.model.TaskPeriodType
-import com.example.domain.use_case.DeleteTaskUseCase
-import com.example.domain.use_case.EditTaskUseCase
-import com.example.domain.use_case.GetAllTasksUseCase
-import com.example.domain.use_case.GetGroupWithTasksUseCase
-import com.example.domain.use_case.GetNoTimeTasksUseCase
-import com.example.domain.use_case.GetPlannedTasksUseCase
-import com.example.domain.use_case.GetTasksForTodayUseCase
-import com.example.domain.use_case.GetTasksWithFlagUseCase
+import com.example.domain.use_case.task.DeleteTaskUseCase
+import com.example.domain.use_case.task.EditTaskUseCase
+import com.example.domain.use_case.task.GetAllTasksUseCase
+import com.example.domain.use_case.group.GetGroupWithTasksUseCase
+import com.example.domain.use_case.reminder.DeleteReminderUseCase
+import com.example.domain.use_case.reminder.EditReminderUseCase
+import com.example.domain.use_case.task.GetNoTimeTasksUseCase
+import com.example.domain.use_case.task.GetPlannedTasksUseCase
+import com.example.domain.use_case.task.GetTasksForTodayUseCase
+import com.example.domain.use_case.task.GetTasksWithFlagUseCase
 import com.example.reminderapp.R
 import com.example.reminderapp.app.App
 import com.example.reminderapp.presentation.base.OperationResult
@@ -37,8 +38,8 @@ class ReminderListViewModel(
     private val getTasksWithFlagUseCase: GetTasksWithFlagUseCase,
     private val getAllTasksUseCase: GetAllTasksUseCase,
     private val getNoTimeTasksUseCase: GetNoTimeTasksUseCase,
-    private val editTaskUseCase: EditTaskUseCase,
-    private val deleteTaskUseCase: DeleteTaskUseCase,
+    private val editReminderUseCase: EditReminderUseCase,
+    private val deleteReminderUseCase: DeleteReminderUseCase,
 ) : AndroidViewModel(application) {
     // TODO: Implement the ViewModel
 
@@ -62,7 +63,7 @@ class ReminderListViewModel(
                         }
                 }
                 TasksListTypeCase.PlannedTasks -> {
-                    getPlannedTasksUseCase(Unit)
+                    getPlannedTasksUseCase()
                         .catch { e ->
                             _uiState.value = UiState.Error(e.toString())
                         }
@@ -73,7 +74,7 @@ class ReminderListViewModel(
                         }
                 }
                 TasksListTypeCase.TasksWithFlag -> {
-                    getTasksWithFlagUseCase(Unit)
+                    getTasksWithFlagUseCase()
                         .catch { e ->
                             _uiState.value = UiState.Error(e.toString())
                         }
@@ -84,7 +85,7 @@ class ReminderListViewModel(
                         }
                 }
                 TasksListTypeCase.TodayTasks -> {
-                    getTasksForTodayUseCase(Unit)
+                    getTasksForTodayUseCase()
                         .catch { e ->
                             _uiState.value = UiState.Error(e.toString())
                         }
@@ -96,7 +97,7 @@ class ReminderListViewModel(
                 }
 
                 TasksListTypeCase.AllTasks -> {
-                    getAllTasksUseCase(Unit)
+                    getAllTasksUseCase()
                         .catch { e ->
                             _uiState.value = UiState.Error(e.toString())
                         }
@@ -108,7 +109,7 @@ class ReminderListViewModel(
                 }
 
                 TasksListTypeCase.TasksNoTime -> {
-                    getNoTimeTasksUseCase(Unit)
+                    getNoTimeTasksUseCase()
                         .catch { e ->
                             _uiState.value = UiState.Error(e.toString())
                         }
@@ -128,7 +129,7 @@ class ReminderListViewModel(
     ) {
         viewModelScope.launch {
             task.isActive=isActive
-            editTaskUseCase(
+            editReminderUseCase(
                 task
             )
         }
@@ -140,7 +141,7 @@ class ReminderListViewModel(
         _operationResult.value = OperationResult.Loading
         viewModelScope.launch {
             try {
-                deleteTaskUseCase(task.id)
+                deleteReminderUseCase(task.id)
                 _operationResult.value = OperationResult.Success(Unit)
             }
             catch (e: Exception) {

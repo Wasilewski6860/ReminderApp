@@ -2,6 +2,7 @@ package com.example.data.reminder
 
 object Constants {
     const val ACTION_CREATE_REMINDER = "com.example.reminderapp.ACTION_CREATE_REMINDER"
+    const val ACTION_CANCEL_REMINDER = "com.example.reminderapp.ACTION_CANCEL_REMINDER"
     const val ACTION_SHOW_TASK = "ACTION_SHOW_TASK"
     const val ACTION_DISMISS = "com.example.reminderapp.ACTION_DISMISS"
     const val ACTION_DELETE = "com.example.reminderapp.ACTION_DELETE"
