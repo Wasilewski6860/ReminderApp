@@ -186,21 +186,22 @@ class CreateReminderViewModel(
         }
     }
 
-    fun validate(state: CreateReminderScreenState): Boolean {
-        if(state.reminderName.isEmpty()){
+    private fun validate(state: CreateReminderScreenState): Boolean {
+        if(state.reminderName.isEmpty()) {
             _validationResult.value = ValidationResult.IncorrectName
             return false
         }
-        if(state.reminderGroupId==null){
+        if(state.reminderGroupId==null) {
             _validationResult.value = ValidationResult.IncorrectGroup
             return false
         }
-        if(state.reminderColor==null){
+        if(state.reminderColor==null) {
             _validationResult.value = ValidationResult.IncorrectColor
             return false
         }
         return true
     }
+
     fun saveTask() {
         viewModelScope.launch {
             val currentState: CreateReminderScreenState = _screenState.value

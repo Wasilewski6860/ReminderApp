@@ -49,6 +49,9 @@ class ReminderListViewModel(
     private val _operationResult = MutableStateFlow<OperationResult<Unit>>(OperationResult.NotStarted)
     val operationResult: StateFlow<OperationResult<Unit>> = _operationResult
 
+    private var _floatingActionButtonVisibility = MutableStateFlow(false)
+    val floatingActionButtonVisibility get() = _floatingActionButtonVisibility
+
     fun fetchData(taskListType: TasksListTypeCase) {
         val context: Context = getApplication<App>().applicationContext
         viewModelScope.launch {
@@ -60,6 +63,7 @@ class ReminderListViewModel(
                         }
                         .collect {
                             _uiState.value = UiState.Success(RemindersListUiState(it.tasks, it.group.groupName))
+                            _floatingActionButtonVisibility.value = true
                         }
                 }
                 TasksListTypeCase.PlannedTasks -> {
@@ -71,6 +75,7 @@ class ReminderListViewModel(
                             _uiState.value = UiState.Success(
                                 RemindersListUiState(it, context.getString(R.string.planned))
                             )
+                            _floatingActionButtonVisibility.value = false
                         }
                 }
                 TasksListTypeCase.TasksWithFlag -> {
@@ -82,6 +87,7 @@ class ReminderListViewModel(
                             _uiState.value = UiState.Success(
                                 RemindersListUiState(it, context.getString(R.string.with_flag))
                             )
+                            _floatingActionButtonVisibility.value = false
                         }
                 }
                 TasksListTypeCase.TodayTasks -> {
@@ -93,6 +99,7 @@ class ReminderListViewModel(
                             _uiState.value = UiState.Success(
                                 RemindersListUiState(it, context.getString(R.string.current_day))
                             )
+                            _floatingActionButtonVisibility.value = false
                         }
                 }
 
@@ -105,6 +112,7 @@ class ReminderListViewModel(
                             _uiState.value = UiState.Success(
                                 RemindersListUiState(it, context.getString(R.string.all))
                             )
+                            _floatingActionButtonVisibility.value = false
                         }
                 }
 
@@ -117,6 +125,7 @@ class ReminderListViewModel(
                             _uiState.value = UiState.Success(
                                 RemindersListUiState(it, context.getString(R.string.no_time))
                             )
+                            _floatingActionButtonVisibility.value = false
                         }
                 }
             }
