@@ -70,7 +70,7 @@ class ReminderListFragment : NavigationFragment(), DataReceiver, MenuProvider {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        requireActivity().addMenuProvider(this, viewLifecycleOwner , Lifecycle.State.RESUMED)
+        requireActivity().addMenuProvider(this, viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
 
 
@@ -99,7 +99,7 @@ class ReminderListFragment : NavigationFragment(), DataReceiver, MenuProvider {
                     groupName
                 )
             }
-            navigateTo(NavigationDestinations.ToCreateReminderFragment,bundle)
+            navigateTo(NavigationDestinations.ToCreateReminderFragment, bundle)
         }
     }
 
@@ -109,24 +109,49 @@ class ReminderListFragment : NavigationFragment(), DataReceiver, MenuProvider {
                 viewModel.uiState.collect {
                     when (it) {
                         is UiState.Success -> {
-                            binding.contentLayout.isVisible = true
-                            binding.loadingLayout.isVisible = false
-                            binding.nothingFindLayout.isVisible = false
+                            if (it.data.tasks.isEmpty()) {
+                                binding.contentLayout.isVisible = false
+                                binding.loadingLayout.isVisible = false
+                                binding.nothingFindLayout.isVisible = true
+                            } else {
+                                binding.contentLayout.isVisible = true
+                                binding.loadingLayout.isVisible = false
+                                binding.nothingFindLayout.isVisible = false
 
-                            reminderAdapter.submitList(it.data.tasks)
-                            groupName = it.data.groupName
-                            binding.reminderListToolbar.title = it.data.groupName
+                                reminderAdapter.submitList(it.data.tasks)
+                                groupName = it.data.groupName
+                                binding.reminderListToolbar.title = it.data.groupName
+                            }
                         }
+
                         is UiState.Loading -> {
                             binding.contentLayout.isVisible = false
                             binding.loadingLayout.isVisible = true
                             binding.nothingFindLayout.isVisible = false
                         }
+
                         is UiState.Error -> {
                             binding.contentLayout.isVisible = false
                             binding.loadingLayout.isVisible = false
                             binding.nothingFindLayout.isVisible = true
                         }
+                    }
+                }
+            }
+        }
+
+        lifecycleScope.launch {
+            viewModel.floatingActionButtonVisibility.collect {
+                when (it) {
+                    true -> {
+                        binding.addFloatingActionButton.visibility = View.VISIBLE
+                        binding.contentLayout.isVisible = true
+                        binding.nothingFindLayout.isVisible = false
+                    }
+                    false -> {
+                        binding.addFloatingActionButton.visibility = View.GONE
+                        binding.contentLayout.isVisible = false
+                        binding.nothingFindLayout.isVisible = true
                     }
                 }
             }
@@ -141,12 +166,14 @@ class ReminderListFragment : NavigationFragment(), DataReceiver, MenuProvider {
                         binding.loadingLayout.isVisible = true
                         binding.nothingFindLayout.isVisible = false
                     }
+
                     OperationResult.NotStarted -> Unit
                     is OperationResult.Success -> {
                         binding.contentLayout.isVisible = true
                         binding.loadingLayout.isVisible = false
                         binding.nothingFindLayout.isVisible = false
                     }
+
                     else -> Unit
                 }
             }
@@ -163,8 +190,9 @@ class ReminderListFragment : NavigationFragment(), DataReceiver, MenuProvider {
                             task
                         )
                     }
-                    navigateTo(NavigationDestinations.ToCreateReminderFragment ,bundle)
+                    navigateTo(NavigationDestinations.ToCreateReminderFragment, bundle)
                 }
+
                 override fun onSwitchClick(task: Task, isChecked: Boolean) {
                     viewModel.editIsActive(
                         task = task,
@@ -184,13 +212,14 @@ class ReminderListFragment : NavigationFragment(), DataReceiver, MenuProvider {
 
     override fun receiveData() {
         arguments?.let {
-            val taskTypeSerialized: TasksListTypeCase? = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                it.getSerializable(
-                    FragmentNavigationConstants.LIST_TYPE, TasksListTypeCase::class.java
-                )
-            } else {
-                it.getSerializable(FragmentNavigationConstants.LIST_TYPE) as TasksListTypeCase?
-            }
+            val taskTypeSerialized: TasksListTypeCase? =
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    it.getSerializable(
+                        FragmentNavigationConstants.LIST_TYPE, TasksListTypeCase::class.java
+                    )
+                } else {
+                    it.getSerializable(FragmentNavigationConstants.LIST_TYPE) as TasksListTypeCase?
+                }
             taskTypeSerialized?.let { data ->
                 viewModel.fetchData(data)
             }

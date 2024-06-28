@@ -24,7 +24,6 @@ data class TaskEntity(
     @ColumnInfo(name = "start_time") val startTime: Long?,
     @ColumnInfo(name = "time_period") val timePeriod: Long?,
     @ColumnInfo(name = "periodic_type") val periodicType: String,
-    @ColumnInfo(name = "color") val color: Int,
     @ColumnInfo(name = "is_active") val isActive: Boolean,
     @ColumnInfo(name = "flag") val flag: Boolean,
     val groupId: Int,

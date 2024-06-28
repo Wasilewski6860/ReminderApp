@@ -57,7 +57,7 @@ class ColorsUtils(context: Context) {
     )
 
     val onlyColors: List<ColorItem>
-        get() = colors.filter { it.color != null  }
+        get() = colors.filter { true }
 
     val colorsListSize get() = colors.size
 }
