@@ -27,7 +27,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".presentation.reminder.ReminderActivity"
             android:configChanges="orientation|screenSize|screenLayout"
@@ -43,14 +42,14 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name=".remind.receivers.ReminderNotificationBroadcastReceiver"
+        <receiver
+            android:name=".remind.receivers.ReminderNotificationBroadcastReceiver"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.example.reminderapp.ACTION_DISMISS" />
                 <action android:name="com.example.reminderapp.ACTION_POSTPONE" />
             </intent-filter>
         </receiver>
-
         <receiver
             android:name=".remind.receivers.AlarmBroadcastReceiver"
             android:directBootAware="true"
@@ -60,7 +59,6 @@
                 <action android:name="com.example.reminderapp.ACTION_CANCEL_REMINDER" />
             </intent-filter>
         </receiver>
-
         <receiver
             android:name=".remind.receivers.DeviceBootReceiver"
             android:directBootAware="true"
@@ -71,8 +69,6 @@
                 <action android:name="android.intent.action.LOCKED_BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
-
-
     </application>
 
 </manifest>

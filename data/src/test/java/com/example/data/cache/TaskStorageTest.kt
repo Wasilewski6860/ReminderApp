@@ -25,7 +25,7 @@ class TaskStorageTest: BaseDataTest() {
         val taskEntity = TestData.firstTaskEntity
 
         coEvery { taskDao.addTask(any()) } returns 1L
-        every { taskDao.getTask(1) } returns flowOf(taskEntity)
+        coEvery { taskDao.getTask(1) } returns taskEntity
 
         val result = taskStorage.addTask(task)
 
@@ -55,7 +55,7 @@ class TaskStorageTest: BaseDataTest() {
         assertEquals(updatedTask.name, capturedTaskEntity.name)
         assertEquals(updatedTask.type.toString(), capturedTaskEntity.periodicType)
 
-        coEvery { taskDao.getTask(updatedTask.id) } returns flowOf(capturedTaskEntity)
+        coEvery { taskDao.getTask(updatedTask.id) } returns capturedTaskEntity
 
         val editedTask = taskStorage.getTask(updatedTask.id).first()
 
@@ -92,7 +92,7 @@ class TaskStorageTest: BaseDataTest() {
     fun test_getTask() = runBlocking {
         val taskId = 1
         val task = TestData.firstTask
-        every { taskDao.getTask(taskId) } returns flowOf(TestData.firstTaskEntity)
+        coEvery { taskDao.getTask(taskId) } returns TestData.firstTaskEntity
 
         val result = taskStorage.getTask(taskId).first()
 

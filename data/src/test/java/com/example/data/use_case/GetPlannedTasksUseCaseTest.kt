@@ -16,9 +16,9 @@ class GetPlannedTasksUseCaseTest : UseCaseBaseTest() {
 
     @Test
     fun `getting planned tasks process test`() = runTest {
-        coEvery { repository.getTasksPlanned() } returns flowOf(TestData.plannedTasks)
+        coEvery { taskRepository.getTasksPlanned() } returns flowOf(TestData.plannedTasks)
         val expected = TestData.plannedTasks
-        val actual = useCase(Unit).first()
+        val actual = useCase().first()
         assertEquals(expected, actual)
     }
 

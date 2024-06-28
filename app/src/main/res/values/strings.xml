@@ -13,7 +13,7 @@
     <string name="dismiss">Dismiss</string>
     <string name="swipe_right_to_dismiss" translatable="false">Swipe right to Dismiss, or left to Snooze.</string>
 
-    <string name="notification_permission_required" >Notification Permission required</string>
+    <string name="notification_permission_required">Notification Permission required</string>
     <string name="go_to_settings">Go to settings</string>
     <!--  Time here  -->
     <string name="min_15">15 Min</string>

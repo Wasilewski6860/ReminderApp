@@ -40,7 +40,7 @@ class TaskDaoTest {
         val taskEntity = TestData.firstTaskEntity
         taskDao.addGroup(TestData.firstGroupEntity)
         taskDao.addTask(taskEntity)
-        val retrievedTask = taskDao.getTask(1).first()
+        val retrievedTask = taskDao.getTask(1)
         assertEquals(taskEntity,retrievedTask)
     }
 

@@ -14,9 +14,9 @@ class InsertGroupUseCaseTest : UseCaseBaseTest() {
 
     @Test
     fun `inserting group process test`() = runTest {
-        coEvery { repository.addGroup(group = any()) } returns 1L
+        coEvery { groupRepository.addGroup(group = any()) } returns 1L
         useCase(group = TestData.firstGroup)
-        coVerify { repository.addGroup(group = TestData.firstGroup) }
+        coVerify { groupRepository.addGroup(group = TestData.firstGroup) }
     }
 
 }

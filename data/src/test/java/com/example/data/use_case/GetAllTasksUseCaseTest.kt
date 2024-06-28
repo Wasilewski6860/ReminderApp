@@ -16,9 +16,9 @@ class GetAllTasksUseCaseTest : UseCaseBaseTest() {
 
     @Test
     fun `getting all tasks process test`() = runTest {
-        coEvery { repository.getAllTasks() } returns flowOf(TestData.tasks)
+        coEvery { taskRepository.getAllTasks() } returns flowOf(TestData.tasks)
         val expected = TestData.tasks
-        val actual = useCase(Unit).first()
+        val actual = useCase().first()
         assertEquals(expected, actual)
     }
 

@@ -17,11 +17,11 @@ class GetAllPeriodicTasksUseCaseTest : UseCaseBaseTest() {
 
     @Test
     fun `getting all periodic tasks process test`() = runTest {
-        coEvery { repository.getAllTasksByPeriodType(period = TaskPeriodType.PERIODIC) } returns flowOf(
+        coEvery { taskRepository.getAllTasksByPeriodType(period = TaskPeriodType.PERIODIC) } returns flowOf(
             TestData.periodicTimeTasks
         )
         val expected = TestData.periodicTimeTasks
-        val actual = useCase(Unit).first()
+        val actual = useCase().first()
         assertEquals(expected, actual)
     }
 

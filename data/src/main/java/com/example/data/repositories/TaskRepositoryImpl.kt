@@ -16,7 +16,6 @@ class TaskRepositoryImpl(
 ) : ITaskRepository {
 
     override suspend fun addTask(task: Task): Flow<Task> {
-        Log.d("MY LOG", "TaskRepositoryImpl addTask$task")
         return taskStorage.addTask(task)
     }
 
@@ -96,6 +95,7 @@ class TaskRepositoryImpl(
         return now.get(Calendar.YEAR) == target.get(Calendar.YEAR) &&
                 now.get(Calendar.DAY_OF_YEAR) == target.get(Calendar.DAY_OF_YEAR)
     }
+
 
 
 }

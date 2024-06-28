@@ -56,7 +56,7 @@ class MainFragment : NavigationFragment() {
 
         edgeToEdge()
         setupToolbar(
-            activity = activity as AppCompatActivity,
+//            activity = activity as AppCompatActivity,
             toolbar = binding.mainToolbar,
             backEnable = false
         )

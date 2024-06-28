@@ -16,9 +16,9 @@ class GetNoTimeTasksCountUseCaseTest : UseCaseBaseTest() {
 
     @Test
     fun `getting tasks with no time count process`() = runTest {
-        coEvery { repository.getCountOfNoTimeTasks() } returns flowOf(TestData.noTimeTasks.size)
+        coEvery { taskRepository.getCountOfNoTimeTasks() } returns flowOf(TestData.noTimeTasks.size)
         val expected = TestData.noTimeTasks.size
-        val actual = useCase(Unit).first()
+        val actual = useCase().first()
         assertEquals(expected, actual)
     }
 

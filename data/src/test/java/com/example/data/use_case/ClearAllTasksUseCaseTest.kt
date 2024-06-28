@@ -13,9 +13,9 @@ class ClearAllTasksUseCaseTest : UseCaseBaseTest() {
 
     @Test
     fun `deleting all tasks process test`() = runTest {
-        coEvery { repository.deleteAll() } returns Unit
-        useCase(Unit)
-        coVerify { repository.deleteAll() }
+        coEvery { taskRepository.deleteAll() } returns Unit
+        useCase()
+        coVerify { taskRepository.deleteAll() }
     }
 
 }

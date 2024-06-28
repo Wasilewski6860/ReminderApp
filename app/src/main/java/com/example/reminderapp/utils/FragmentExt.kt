@@ -18,3 +18,17 @@ fun Fragment.setupToolbar(
     }
     if(title!=null) toolbar.title = title
 }
+
+fun Fragment.setupToolbar(toolbar: MaterialToolbar, title: String? = null, backEnable: Boolean) {
+    val activity = requireActivity()
+    if (activity is AppCompatActivity) {
+        activity.setSupportActionBar(toolbar)
+        activity.supportActionBar?.apply {
+            setDisplayHomeAsUpEnabled(backEnable)
+            setDisplayShowTitleEnabled(title != null)
+            if (title != null) {
+                toolbar.title = title
+            }
+        }
+    }
+}

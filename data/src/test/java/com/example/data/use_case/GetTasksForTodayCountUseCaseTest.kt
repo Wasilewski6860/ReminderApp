@@ -16,9 +16,9 @@ class GetTasksForTodayCountUseCaseTest : UseCaseBaseTest() {
 
     @Test
     fun `getting tasks for today count process`() = runTest {
-        coEvery { repository.getTasksForTodayCount() } returns flowOf(TestData.todayTasks.size)
+        coEvery { taskRepository.getTasksForTodayCount() } returns flowOf(TestData.todayTasks.size)
         val expected = TestData.todayTasks.size
-        val actual = useCase(Unit).first()
+        val actual = useCase().first()
         assertEquals(expected, actual)
     }
 

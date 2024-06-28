@@ -1,6 +1,7 @@
 package com.example.data.use_case
 
 import com.example.data.di.useCaseModule
+import com.example.domain.repository.IGroupRepository
 import com.example.domain.repository.ITaskRepository
 import org.junit.Before
 import org.koin.core.context.startKoin
@@ -10,7 +11,8 @@ import org.koin.test.inject
 
 open class UseCaseBaseTest : AutoCloseKoinTest() {
 
-    val repository: ITaskRepository by inject()
+    val taskRepository: ITaskRepository by inject()
+    val groupRepository: IGroupRepository by inject()
 
     @Before
     fun before() {

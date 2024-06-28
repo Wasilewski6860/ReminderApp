@@ -5,6 +5,8 @@ import com.example.data.TestData
 import com.example.data.cache.TaskStorage
 import com.example.data.repositories.TaskRepositoryImpl
 import com.example.domain.repository.ITaskRepository
+import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -31,7 +33,7 @@ class ITaskRepositoryTest: AutoCloseKoinTest() {
             modules(
                 module {
                     single<TaskStorage> { mockk() }
-                    single<ITaskRepository> { TaskRepositoryImpl(get(), context, mockk()) }
+                    single<ITaskRepository> { TaskRepositoryImpl(get()) }
                 }
             )
         }
@@ -43,7 +45,7 @@ class ITaskRepositoryTest: AutoCloseKoinTest() {
         val task = TestData.firstTask
 
         // Mock behavior of taskStorage.addTask
-        every { taskStorage.addTask(task) } returns flow { emit(task) }
+        coEvery { taskStorage.addTask(task) } returns flow { emit(task) }
 
         // Collect the result from repository.addTask
         repository.addTask(task).collect { result ->
@@ -51,7 +53,7 @@ class ITaskRepositoryTest: AutoCloseKoinTest() {
         }
 
         // Verify that taskStorage.addTask was called with the correct task
-        verify { taskStorage.addTask(task) }
+        coVerify { taskStorage.addTask(task) }
     }
 
 }
