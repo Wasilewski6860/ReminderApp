@@ -21,8 +21,7 @@ object TestData {
         type = TaskPeriodType.PERIODIC,
         isActive = false,
         isMarkedWithFlag = true,
-        groupId = 1,
-        color = 0
+        groupId = 1
     )
 
     val firstTaskEdited = Task(
@@ -35,8 +34,7 @@ object TestData {
         type = TaskPeriodType.NO_TIME,
         isActive = false,
         isMarkedWithFlag = true,
-        groupId = 1,
-        color = 6
+        groupId = 1
     )
 
     val secondTask = Task(
@@ -49,8 +47,7 @@ object TestData {
         type = TaskPeriodType.ONE_TIME,
         isActive = true,
         isMarkedWithFlag = true,
-        groupId = 2,
-        color = 54
+        groupId = 2
     )
 
     val thirdTask = Task(
@@ -63,8 +60,7 @@ object TestData {
         type = TaskPeriodType.NO_TIME,
         isActive = false,
         isMarkedWithFlag = true,
-        groupId = 1,
-        color = 67
+        groupId = 1
     )
 
     val fourthTask = Task(
@@ -77,8 +73,7 @@ object TestData {
         type = TaskPeriodType.ONE_TIME,
         isActive = false,
         isMarkedWithFlag = true,
-        groupId = 1,
-        color = 67
+        groupId = 1
     )
 
     val todayTask = Task(
@@ -91,8 +86,7 @@ object TestData {
         type = TaskPeriodType.ONE_TIME,
         isActive = false,
         isMarkedWithFlag = true,
-        groupId = 1,
-        color = 67
+        groupId = 1
     )
 
     val tasks = listOf(firstTask, secondTask, thirdTask)
@@ -114,8 +108,7 @@ object TestData {
         periodicType = TaskPeriodType.PERIODIC.toString(),
         isActive = false,
         flag = true,
-        groupId = 1,
-        color = 0
+        groupId = 1
     )
 
     val firstTaskEntityEdited = TaskEntity(
@@ -128,8 +121,7 @@ object TestData {
         periodicType = TaskPeriodType.NO_TIME.toString(),
         isActive = false,
         flag = true,
-        groupId = 1,
-        color = 6
+        groupId = 1
     )
 
     val secondTaskEntity = TaskEntity(
@@ -142,8 +134,7 @@ object TestData {
         periodicType = TaskPeriodType.ONE_TIME.toString(),
         isActive = true,
         flag = true,
-        groupId = 2,
-        color = 54
+        groupId = 2
     )
 
     val thirdTaskEntity = TaskEntity(
@@ -156,8 +147,7 @@ object TestData {
         periodicType = TaskPeriodType.NO_TIME.toString(),
         isActive = false,
         flag = true,
-        groupId = 1,
-        color = 67
+        groupId = 1
     )
 
     val taskEntities = listOf(firstTaskEntity, secondTaskEntity, thirdTaskEntity)
@@ -195,7 +185,7 @@ object TestData {
 
     val groups = listOf(firstGroup, secondGroup, thirdGroup)
 
-    val firstGroupEntity = TaskGroupEntity(
+    val firstGroupEntity = TaskGrorunBlockingupEntity(
         groupId = 1,
         groupName = "Group 1",
         groupColor = 1,
