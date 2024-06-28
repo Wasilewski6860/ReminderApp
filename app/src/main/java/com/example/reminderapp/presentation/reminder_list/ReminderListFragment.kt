@@ -142,9 +142,17 @@ class ReminderListFragment : NavigationFragment(), DataReceiver, MenuProvider {
 
         lifecycleScope.launch {
             viewModel.floatingActionButtonVisibility.collect {
-                binding.addFloatingActionButton.visibility = when (it) {
-                    true -> View.VISIBLE
-                    false -> View.GONE
+                when (it) {
+                    true -> {
+                        binding.addFloatingActionButton.visibility = View.VISIBLE
+                        binding.contentLayout.isVisible = true
+                        binding.nothingFindLayout.isVisible = false
+                    }
+                    false -> {
+                        binding.addFloatingActionButton.visibility = View.GONE
+                        binding.contentLayout.isVisible = false
+                        binding.nothingFindLayout.isVisible = true
+                    }
                 }
             }
         }

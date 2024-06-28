@@ -105,7 +105,6 @@ class CreateReminderFragment :  NavigationFragment(), MenuProvider, DataReceiver
 
         initListeners()
         setupSwitches()
-        setupSpinnerColor()
         setupSpinnerPeriod()
         setSpinnerGroup()
         setupObservers()
@@ -142,7 +141,6 @@ class CreateReminderFragment :  NavigationFragment(), MenuProvider, DataReceiver
                 viewModel.onTaskIdChanged(taskSerialized.id)
                 viewModel.onFirstTimeChanged(taskSerialized.reminderTime)
                 viewModel.onPeriodChanged(taskSerialized.reminderTimePeriod)
-                viewModel.onColorChanged(taskSerialized.color)
                 viewModel.onGroupIdChanged(taskSerialized.groupId)
                 viewModel.onNameTextChanged(taskSerialized.name)
                 viewModel.onDescriptionTextChanged(taskSerialized.description)
@@ -249,12 +247,6 @@ class CreateReminderFragment :  NavigationFragment(), MenuProvider, DataReceiver
                     }
 
                     ValidationResult.NotStarted -> Unit
-                    ValidationResult.IncorrectColor -> {
-                        showSnackbar(
-                            getString(R.string.color_should_be_selected),
-                            requireActivity().findViewById(R.id.rootView)
-                        )
-                    }
                 }
             }
         }
@@ -287,9 +279,6 @@ class CreateReminderFragment :  NavigationFragment(), MenuProvider, DataReceiver
                                 selectedPeriodSpinner.actionIfChanged(currentState.reminderPeriod) {
                                     selectedPeriodSpinner.setSelection(periodSpinnerAdapter.getTimePeriodPosition(currentState.reminderPeriod))
                                 }
-                                selectedColorSpinner.actionIfChanged(currentState.reminderColor) {
-                                    selectedColorSpinner.setSelection(colorSpinnerAdapter.getColorPosition(currentState.reminderColor))
-                                }
                                 if (!currentState.groupLoaded){
                                     groupSpinnerAdapter.submitList(currentState.groupsUiState.data)
                                     viewModel.onGroupLoadedToSpinner()
@@ -315,7 +304,6 @@ class CreateReminderFragment :  NavigationFragment(), MenuProvider, DataReceiver
                             binding.loadingLayout.isVisible = false
                             showSnackbar(currentState.groupsUiState.message, requireActivity().findViewById(R.id.rootView))
                         }
-                        else -> Unit
                     }
                 }
             }
@@ -373,28 +361,6 @@ class CreateReminderFragment :  NavigationFragment(), MenuProvider, DataReceiver
         }
     }
 
-    private fun setupSpinnerColor() {
-        val colorItems = ColorsUtils(requireContext()).colors
-
-        colorSpinnerAdapter = ColorSpinnerAdapter(
-            requireContext(),
-            onItemSelected = { color ->
-                viewModel.onColorChanged(color.color)
-            }
-        )
-
-        val spinner = binding.selectedColorSpinner
-        spinner.adapter = colorSpinnerAdapter
-
-        binding.selectedColorSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onNothingSelected(p0: AdapterView<*>?) {}
-
-            override fun onItemSelected(adapterView: AdapterView<*>?, view: View?, pos: Int, id: Long) {
-                colorSpinnerAdapter.handleItemSelected(pos)
-            }
-        }
-        colorSpinnerAdapter.submitList(colorItems)
-    }
     //TODO переделать
     private fun saveTask() {
         if(hasNotificationPermisions && hasScheduleExactAlarmPermisions) {
@@ -481,7 +447,7 @@ class CreateReminderFragment :  NavigationFragment(), MenuProvider, DataReceiver
         return true
     }
 
-    fun checkPermissions() {
+    private fun checkPermissions() {
         checkNotificationPermission()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             checkScheduleExactPermission()
@@ -533,7 +499,7 @@ class CreateReminderFragment :  NavigationFragment(), MenuProvider, DataReceiver
         else hasScheduleExactAlarmPermisions = true
     }
 
-    val requestNotificationPermissionLauncher =
+    private val requestNotificationPermissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
             hasNotificationPermisions = isGranted
         }

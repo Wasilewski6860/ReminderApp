@@ -8,11 +8,9 @@ import androidx.lifecycle.viewModelScope
 import com.example.domain.model.Group
 import com.example.domain.model.Task
 import com.example.domain.model.TaskPeriodType
-import com.example.domain.use_case.task.EditTaskUseCase
 import com.example.domain.use_case.group.GetAllGroupsUseCase
 import com.example.domain.use_case.reminder.CreateReminderUseCase
 import com.example.domain.use_case.reminder.EditReminderUseCase
-import com.example.domain.use_case.task.SaveTaskUseCase
 import com.example.reminderapp.presentation.base.OperationResult
 import com.example.reminderapp.presentation.base.UiState
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -30,7 +28,6 @@ data class CreateReminderScreenState(
     val reminderFirstTime: Long? = null,
     val reminderPeriod: Long? = null,
     val reminderFlag: Boolean= false,
-    val reminderColor: Int? = null,
     val groupsUiState: UiState<List<Group>> = UiState.Loading,
     val groupLoaded: Boolean = false,
     val reminderGroupId: Int? = null,
@@ -41,7 +38,6 @@ sealed interface ValidationResult {
     object NotStarted: ValidationResult
     object IncorrectName: ValidationResult
     object IncorrectGroup: ValidationResult
-    object IncorrectColor: ValidationResult
 }
 
 class CreateReminderViewModel(
@@ -138,15 +134,6 @@ class CreateReminderViewModel(
         }
     }
 
-    fun onColorChanged(input: Int?) {
-        currentState = screenState.value
-        if (currentState.reminderColor != input) {
-            _screenState.value = _screenState.value.copy(
-                reminderColor = input
-            )
-        }
-    }
-
     fun onGroupIdChanged(input: Int?) {
         currentState = screenState.value
         if (currentState.reminderGroupId != input) {
@@ -195,10 +182,6 @@ class CreateReminderViewModel(
             _validationResult.value = ValidationResult.IncorrectGroup
             return false
         }
-        if(state.reminderColor==null) {
-            _validationResult.value = ValidationResult.IncorrectColor
-            return false
-        }
         return true
     }
 
@@ -230,8 +213,7 @@ class CreateReminderViewModel(
                             type = taskType,
                             isActive = true,
                             isMarkedWithFlag = currentState.reminderFlag,
-                            groupId = currentState.reminderGroupId!!,
-                            color = currentState.reminderColor!!
+                            groupId = currentState.reminderGroupId!!
                         )
                         createReminderUseCase(
                             task
@@ -255,8 +237,7 @@ class CreateReminderViewModel(
                             type = taskType,
                             isActive = true,
                             isMarkedWithFlag = currentState.reminderFlag,
-                            groupId = currentState.reminderGroupId!!,
-                            color = currentState.reminderColor!!
+                            groupId = currentState.reminderGroupId!!
                         )
                         editReminderUseCase(
                             task
