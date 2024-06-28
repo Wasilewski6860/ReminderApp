@@ -28,6 +28,7 @@ import com.example.reminderapp.view.KGridItemView
 import com.kaspersky.kaspresso.testcases.api.testcase.TestCase
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.whenever
+import io.github.kakaocup.kakao.screen.Screen.Companion.onScreen
 import io.mockk.coEvery
 import io.mockk.every
 import kotlinx.coroutines.flow.flowOf
@@ -49,8 +50,9 @@ class MainScreenTest : BaseScreenTest() {
     private val groupRepository: IGroupRepository by inject()
     private val viewModel: MainViewModel by inject()
 
-    @Test
-    fun screen_content_test() {
+    @Before
+    fun before() {
+        setUp()
         coEvery {taskRepository.getTasksForToday()} returns flowOf(TestData.todayTasks)
         coEvery {taskRepository.getTasksForTodayCount()}returns flowOf(TestData.todayTasks.size)
         coEvery {taskRepository.getTasksPlanned()}returns flowOf(TestData.plannedTasks)
@@ -63,12 +65,12 @@ class MainScreenTest : BaseScreenTest() {
         launchFragmentInContainer<MainFragment>(
             themeResId = R.style.Theme_ReminderApp
         )
-//        viewModel.fetchData(Unit)
-
-        run {
+    }
+    @Test
+    fun screen_content_test() = run {
             step("Screen content check") {
-                flakySafely(timeoutMs = 3000) {
-                    MainScreen {
+                MainScreen {
+                    flakySafely(timeoutMs = 3000) {
                         step("Check toolbar content") {
 //                            toolbar {
 //                                isVisible()
@@ -114,8 +116,9 @@ class MainScreenTest : BaseScreenTest() {
                             }
                         }
                     }
+
                 }
             }
-        }
     }
+
 }
