@@ -71,9 +71,7 @@ class CircleCustomView @JvmOverloads constructor(
         get() = null
         set(value) {
             if (value != null) {
-                val appContext = ApplicationProvider.getApplicationContext<Context>()
-
-                _drawable = ContextCompat.getDrawable(appContext, value)
+                _drawable = ContextCompat.getDrawable(context, value)
                 _drawable?.colorFilter = PorterDuffColorFilter(
                     if (isDarkThemeEnabled) Color.WHITE else Color.BLACK,
                     PorterDuff.Mode.SRC_ATOP

@@ -17,21 +17,23 @@ import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.test.KoinTest
 
-abstract class BaseScreenTest : TestCase(Kaspresso.Builder.simple()), KoinTest {
+abstract class BaseScreenTest : TestCase(Kaspresso.Builder.simple())
+    , KoinTest
+{
 
-    @Before
-    fun setUp() {
-        stopKoin()
-        startKoin {
-            modules(listOf(appTestModule, domainTestModule, dataTestModule))
-        }
-//        launchActivity<MainActivity>().onActivity {
-//            it.setTheme(com.example.reminderapp.R.style.Theme_ReminderApp)
+//    @Before
+//    fun setUp() {
+//        stopKoin()
+//        startKoin {
+//            modules(listOf(appTestModule, domainTestModule, dataTestModule))
 //        }
-    }
-
-    @After
-    fun stop() {
-        stopKoin()
-    }
+////        launchActivity<MainActivity>().onActivity {
+////            it.setTheme(com.example.reminderapp.R.style.Theme_ReminderApp)
+////        }
+//    }
+//
+//    @After
+//    fun stop() {
+//        stopKoin()
+//    }
 }

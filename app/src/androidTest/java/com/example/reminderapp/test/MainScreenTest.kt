@@ -17,6 +17,7 @@ import com.example.domain.use_case.task.GetTasksPlannedCountUseCase
 import com.example.domain.use_case.task.GetTasksWithFlagCountUseCase
 import com.example.reminderapp.MainActivity
 import com.example.reminderapp.R
+import com.example.reminderapp.app.TestAppRunner
 import com.example.reminderapp.di.TestData
 import com.example.reminderapp.di.appTestModule
 import com.example.reminderapp.di.dataTestModule
@@ -44,6 +45,7 @@ import org.koin.test.inject
 import org.mockito.Mockito.mock
 
 
+//@RunWith(AndroidJUnit4::class)
 class MainScreenTest : BaseScreenTest() {
 
     private val taskRepository: ITaskRepository by inject()
@@ -52,7 +54,7 @@ class MainScreenTest : BaseScreenTest() {
 
     @Before
     fun before() {
-        setUp()
+//        setUp()
         coEvery {taskRepository.getTasksForToday()} returns flowOf(TestData.todayTasks)
         coEvery {taskRepository.getTasksForTodayCount()}returns flowOf(TestData.todayTasks.size)
         coEvery {taskRepository.getTasksPlanned()}returns flowOf(TestData.plannedTasks)
