@@ -150,7 +150,7 @@ class ReminderListViewModel(
         _operationResult.value = OperationResult.Loading
         viewModelScope.launch {
             try {
-                deleteReminderUseCase(task.id)
+                deleteReminderUseCase(task)
                 _operationResult.value = OperationResult.Success(Unit)
             }
             catch (e: Exception) {
@@ -158,6 +158,5 @@ class ReminderListViewModel(
             }
         }
     }
-
 
 }

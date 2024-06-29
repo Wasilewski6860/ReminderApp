@@ -1,5 +1,7 @@
 package com.example.reminderapp.di
 
+import android.app.Application
+import androidx.test.core.app.ApplicationProvider
 import com.example.reminderapp.presentation.base.CalendarProvider
 import com.example.reminderapp.presentation.base.ICalendarProvider
 import com.example.reminderapp.presentation.create_reminder.CreateReminderViewModel
@@ -10,11 +12,7 @@ import com.example.reminderapp.presentation.reminder_list.ReminderListViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
-val appTestModule = module {
-
-    single<ICalendarProvider> {
-        CalendarProvider()
-    }
+val presentationTestModule = module {
     viewModel<MainViewModel> {
         MainViewModel(
             getAllGroupsUseCase = get(),
@@ -25,6 +23,8 @@ val appTestModule = module {
             getNoTimeTasksCountUseCase = get()
         )
     }
+
+    single<ICalendarProvider> { CalendarProvider() }
 
     viewModel<CreateReminderViewModel> {
         CreateReminderViewModel(

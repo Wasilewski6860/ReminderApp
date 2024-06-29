@@ -117,6 +117,8 @@ class NewListViewModel(
         return true
     }
 
+    fun validate(): Boolean = validate(screenState.value)
+
     fun saveList() {
         viewModelScope.launch {
             currentState = screenState.value

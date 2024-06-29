@@ -10,6 +10,8 @@ import com.example.reminderapp.presentation.new_list.NewListViewModel
 import com.example.reminderapp.presentation.reminder_list.ReminderListViewModel
 import com.example.data.reminder.RemindAlarmManager
 import com.example.domain.alarm.IRemindAlarmManager
+import com.example.reminderapp.presentation.base.CalendarProvider
+import com.example.reminderapp.presentation.base.ICalendarProvider
 import com.example.reminderapp.remind.receivers.AlarmBroadcastReceiver
 import com.example.reminderapp.remind.work.RemindWorkManager
 import com.example.reminderapp.utils.TimeDateUtils
@@ -40,6 +42,7 @@ val appModule = module {
         TimeDateUtils(get())
     }
 
+    single<ICalendarProvider> { CalendarProvider() }
     viewModel<MainViewModel> {
         MainViewModel(
             getAllGroupsUseCase = get(),
@@ -55,7 +58,8 @@ val appModule = module {
         CreateReminderViewModel(
             createReminderUseCase = get(),
             getAllGroupsUseCase = get(),
-            editReminderUseCase = get()
+            editReminderUseCase = get(),
+            calendarProvider = get()
         )
     }
 

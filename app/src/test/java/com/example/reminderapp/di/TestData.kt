@@ -1,5 +1,6 @@
 package com.example.reminderapp.di
 
+import android.icu.util.Calendar
 import com.example.data.cache.entity.TaskEntity
 import com.example.data.cache.entity.TaskGroupEntity
 import com.example.domain.model.Group
@@ -9,7 +10,7 @@ import com.example.domain.model.TaskPeriodType
 
 object TestData {
 
-    private val todayTimeInMillis = System.currentTimeMillis()
+    private val todayTimeInMillis = java.util.Calendar.getInstance().timeInMillis
 
     val firstTask = Task(
         id = 1,
@@ -81,8 +82,8 @@ object TestData {
         name = "Task today",
         description = "Description 3",
         reminderCreationTime = 430L,
-        reminderTime = 5540L,
-        reminderTimePeriod = todayTimeInMillis,
+        reminderTime = System.currentTimeMillis(),
+        reminderTimePeriod = 5540L,
         type = TaskPeriodType.ONE_TIME,
         isActive = false,
         isMarkedWithFlag = true,
