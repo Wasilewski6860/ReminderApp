@@ -11,6 +11,7 @@ import com.example.domain.model.TaskPeriodType
 import com.example.domain.use_case.group.GetAllGroupsUseCase
 import com.example.domain.use_case.reminder.CreateReminderUseCase
 import com.example.domain.use_case.reminder.EditReminderUseCase
+import com.example.reminderapp.presentation.base.ICalendarProvider
 import com.example.reminderapp.presentation.base.OperationResult
 import com.example.reminderapp.presentation.base.UiState
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -43,7 +44,8 @@ sealed interface ValidationResult {
 class CreateReminderViewModel(
     private val createReminderUseCase: CreateReminderUseCase,
     private val getAllGroupsUseCase: GetAllGroupsUseCase,
-    private val editReminderUseCase: EditReminderUseCase
+    private val editReminderUseCase: EditReminderUseCase,
+    private val calendarProvider: ICalendarProvider
 ) : ViewModel() {
 
     private val _screenState = MutableStateFlow(CreateReminderScreenState())
@@ -185,6 +187,8 @@ class CreateReminderViewModel(
         return true
     }
 
+    fun validate(): Boolean = validate(screenState.value)
+
     fun saveTask() {
         viewModelScope.launch {
             val currentState: CreateReminderScreenState = _screenState.value
@@ -196,7 +200,7 @@ class CreateReminderViewModel(
                         taskType = TaskPeriodType.NO_TIME
                     }
                     if(currentState.reminderFirstTime==null && currentState.reminderPeriod!= null) {
-                        selectedTime=Calendar.getInstance().timeInMillis
+                        selectedTime=calendarProvider.getInstance().timeInMillis
                         taskType=TaskPeriodType.PERIODIC
                     }
                     if (currentState.reminderFirstTime!=null && currentState.reminderPeriod==null){
@@ -207,7 +211,7 @@ class CreateReminderViewModel(
                             id = 0,
                             name = currentState.reminderName,
                             description = currentState.reminderDescription,
-                            reminderCreationTime = Calendar.getInstance().timeInMillis,
+                            reminderCreationTime = calendarProvider.getInstance().timeInMillis,
                             reminderTime = selectedTime,
                             reminderTimePeriod = currentState.reminderPeriod,
                             type = taskType,
@@ -218,12 +222,12 @@ class CreateReminderViewModel(
                         createReminderUseCase(
                             task
                         )
-                        .catch {
-                            _saveResult.value = OperationResult.Error(it.toString())
-                        }
-                        .collect{
-                            _saveResult.value = OperationResult.Success(Unit)
-                        }
+                            .catch {
+                                _saveResult.value = OperationResult.Error(it.toString())
+                            }
+                            .collect{
+                                _saveResult.value = OperationResult.Success(Unit)
+                            }
                         Log.d("SaveTask", "Task created successfully")
 
                     } else {
@@ -231,7 +235,7 @@ class CreateReminderViewModel(
                             id = taskId,
                             name = currentState.reminderName,
                             description = currentState.reminderDescription,
-                            reminderCreationTime = Calendar.getInstance().timeInMillis,
+                            reminderCreationTime = calendarProvider.getInstance().timeInMillis,
                             reminderTime = selectedTime,
                             reminderTimePeriod = currentState.reminderPeriod,
                             type = taskType,
