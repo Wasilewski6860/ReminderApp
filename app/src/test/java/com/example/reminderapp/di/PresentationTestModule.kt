@@ -1,48 +1,18 @@
 package com.example.reminderapp.di
 
-import android.app.AlarmManager
-import android.content.Context
-import com.example.reminderapp.notification.NotificationManager
+import android.app.Application
+import androidx.test.core.app.ApplicationProvider
+import com.example.reminderapp.presentation.base.CalendarProvider
+import com.example.reminderapp.presentation.base.ICalendarProvider
 import com.example.reminderapp.presentation.create_reminder.CreateReminderViewModel
 import com.example.reminderapp.presentation.editorlistsscreen.ListsEditorViewModel
 import com.example.reminderapp.presentation.mainscreen.MainViewModel
 import com.example.reminderapp.presentation.new_list.NewListViewModel
 import com.example.reminderapp.presentation.reminder_list.ReminderListViewModel
-import com.example.data.reminder.RemindAlarmManager
-import com.example.domain.alarm.IRemindAlarmManager
-import com.example.reminderapp.presentation.base.CalendarProvider
-import com.example.reminderapp.presentation.base.ICalendarProvider
-import com.example.reminderapp.remind.receivers.AlarmBroadcastReceiver
-import com.example.reminderapp.remind.work.RemindWorkManager
-import com.example.reminderapp.utils.TimeDateUtils
-import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
-val appModule = module {
-
-    single<RemindWorkManager> {
-        RemindWorkManager(androidContext())
-    }
-
-    single<IRemindAlarmManager> {
-        RemindAlarmManager(context = androidContext(), receiverClass = AlarmBroadcastReceiver::class.java)
-    }
-
-    single<AlarmManager> {
-        val context: Context = get()
-        context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-    }
-
-    single<NotificationManager> {
-        NotificationManager(androidContext())
-    }
-
-    single<TimeDateUtils> {
-        TimeDateUtils(get())
-    }
-
-    single<ICalendarProvider> { CalendarProvider() }
+val presentationTestModule = module {
     viewModel<MainViewModel> {
         MainViewModel(
             getAllGroupsUseCase = get(),
@@ -53,6 +23,8 @@ val appModule = module {
             getNoTimeTasksCountUseCase = get()
         )
     }
+
+    single<ICalendarProvider> { CalendarProvider() }
 
     viewModel<CreateReminderViewModel> {
         CreateReminderViewModel(

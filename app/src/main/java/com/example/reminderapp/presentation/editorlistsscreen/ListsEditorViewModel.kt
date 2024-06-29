@@ -43,7 +43,7 @@ class ListsEditorViewModel(
             try {
                 deleteReminderGroupUseCase(groupId)
             } catch (e: Exception) {
-                _uiState.value = UiState.Error("Не удалось удалить список")
+                _uiState.value = UiState.Error(e.toString())
             }
         }
     }
