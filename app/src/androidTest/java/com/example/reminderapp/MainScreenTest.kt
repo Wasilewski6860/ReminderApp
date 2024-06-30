@@ -1,28 +1,15 @@
 package com.example.reminderapp
 
 import android.os.Bundle
-import androidx.fragment.app.testing.launchFragmentInContainer
-import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.rule.ActivityTestRule
 import com.example.domain.repository.IGroupRepository
 import com.example.domain.repository.ITaskRepository
-import com.example.domain.use_case.group.GetAllGroupsUseCase
-import com.example.domain.use_case.task.GetAllTasksCountUseCase
-import com.example.domain.use_case.task.GetNoTimeTasksCountUseCase
-import com.example.domain.use_case.task.GetTasksForTodayCountUseCase
-import com.example.domain.use_case.task.GetTasksPlannedCountUseCase
-import com.example.domain.use_case.task.GetTasksWithFlagCountUseCase
 import com.example.reminderapp.di.TestData
 import com.example.reminderapp.presentation.mainscreen.MainFragment
 import com.example.reminderapp.presentation.mainscreen.MainViewModel
 import com.example.reminderapp.screen.MainScreen
-import com.kaspersky.kaspresso.kaspresso.Kaspresso
-import com.kaspersky.kaspresso.testcases.api.testcase.BaseTestCase
-import com.kaspersky.kaspresso.testcases.api.testcase.TestCase
-import io.github.kakaocup.kakao.screen.Screen
-import io.github.kakaocup.kakao.text.KTextView
+import com.example.reminderapp.test.base.BaseScreenTest
 import io.mockk.coEvery
-import io.mockk.mockk
 import kotlinx.coroutines.flow.flowOf
 import org.junit.Before
 import org.junit.Rule
@@ -72,18 +59,31 @@ class MainScreenTest: BaseScreenTest() {
 
             step("Verify UI elements") {
                 MainScreen {
-                    todayGridView { isVisible() }
+                    todayGridView {
+                        isVisible()
+                    }
                     plannedGridView { isVisible() }
                     allGridView { isVisible() }
                     withFlagGridView { isVisible() }
                     noTimeGridView { isVisible() }
 
-//                    mainRecycler {
-//                        isVisible()
-//                        firstChild<MainScreen.GroupItem> {
-//                            titleTv { hasText("Mocked Title") }
-//                        }
-//                    }
+                    mainRecycler {
+                        isVisible()
+                        hasSize(3)
+                        firstChild<MainScreen.GroupItem> {
+                            titleTv { hasText("Group 1") }
+                            taskCountTv { hasText("2") }
+                        }
+                        childAt<MainScreen.GroupItem>(1) {
+                            titleTv { hasText("Group 2") }
+                            taskCountTv { hasText("1") }
+                        }
+
+                        childAt<MainScreen.GroupItem>(2) {
+                            titleTv { hasText("Group 3") }
+                            taskCountTv { hasText("0") }
+                        }
+                    }
 
                     editListsTv { isVisible() }
                     addListTv { isVisible() }

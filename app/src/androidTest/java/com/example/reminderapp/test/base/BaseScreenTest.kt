@@ -1,4 +1,4 @@
-package com.example.reminderapp
+package com.example.reminderapp.test.base
 
 import androidx.test.platform.app.InstrumentationRegistry
 import com.example.reminderapp.di.dataTestModule
