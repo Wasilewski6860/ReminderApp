@@ -1,43 +1,40 @@
 package com.example.reminderapp.test
 
 import android.content.Context
-import android.os.Bundle
 import androidx.appcompat.widget.AppCompatImageButton
+import androidx.test.espresso.Espresso
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.matcher.ViewMatchers.withContentDescription
+import androidx.test.espresso.action.ViewActions
+import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.withId
-import androidx.test.espresso.matcher.ViewMatchers.withParent
 import androidx.test.rule.ActivityTestRule
 import com.example.domain.repository.IGroupRepository
 import com.example.domain.repository.ITaskRepository
 import com.example.reminderapp.MainActivity
 import com.example.reminderapp.R
 import com.example.reminderapp.di.TestData
-import com.example.reminderapp.presentation.mainscreen.MainFragment
 import com.example.reminderapp.presentation.mainscreen.MainViewModel
 import com.example.reminderapp.scenarios.CheckMainScreenDisplayedScenario
 import com.example.reminderapp.scenarios.ToEditListsScenario
-import com.example.reminderapp.scenarios.ToMainScreenScenario
+import com.example.reminderapp.scenarios.ToNewListScreenScenario
 import com.example.reminderapp.screen.GroupListScreen
 import com.example.reminderapp.screen.MainScreen
+import com.example.reminderapp.screen.NewListScreen
 import com.example.reminderapp.test.base.BaseScreenTest
 import io.mockk.coEvery
 import kotlinx.coroutines.flow.flowOf
-import org.hamcrest.Matchers.allOf
-import org.hamcrest.Matchers.instanceOf
+import org.hamcrest.Matchers
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.koin.test.inject
 
-class EditListsScreenTest: BaseScreenTest()  {
+class NewListScreenTest: BaseScreenTest()  {
     @get:Rule
     val activityTestRule = ActivityTestRule(MainActivity::class.java, true, false)
 
     private val taskRepository: ITaskRepository by inject()
     private val groupRepository: IGroupRepository by inject()
-    private val viewModel: MainViewModel by inject()
     private val context: Context by inject()
 
     @Before
@@ -54,68 +51,54 @@ class EditListsScreenTest: BaseScreenTest()  {
     }
 
     @Test
-    fun  editListsScreenContent() = run() {
+    fun  newListScreenContent() = run() {
         scenario(
-            ToEditListsScenario(
+            ToNewListScreenScenario(
                 activityTestRule = activityTestRule
             )
         )
-        step("Checking screen content") {
-            GroupListScreen {
-                myListsTextView {
-                    isDisplayed()
-                    hasText(context.getString(R.string.my_lists))
+        step("Checking screen displayed") {
+            NewListScreen {
+                flakySafely {
+                    selectedColor.isDisplayed()
+                    newListEditText{
+                        isDisplayed()
+                        hasEmptyText()
+                    }
+                    colorsRecycler {
+                        isDisplayed()
+                    }
                 }
-                groupsRecycler {
-                    isDisplayed()
-                    hasSize(TestData.groups.size)
-                }
+
             }
         }
     }
 
     @Test
-    fun  testOfDeletion() = run() {
+    fun  testOfSaving() = run() {
         scenario(
-            ToEditListsScenario(
+            ToNewListScreenScenario(
                 activityTestRule = activityTestRule
             )
         )
-        step("Testing of deletion") {
-            GroupListScreen {
-                groupsRecycler {
-                    isDisplayed()
-                    hasSize(TestData.groups.size)
-                    childAt<MainScreen.GroupItem>(0) {
-                        trashButton.click()
-                    }
-                    flakySafely {
-                        hasSize(TestData.groups.size -1)
+        step("Testing of saving") {
+            NewListScreen {
+                newListEditText{
+                    typeText("Test text")
+                }
+                colorsRecycler {
+                    childAt<NewListScreen.ColorItem>(1){
+                        click()
                     }
                 }
+                onView(withId(R.id.action_save)).perform(ViewActions.click())
             }
         }
-    }
-
-    @Test
-    fun  testOfPressingBack() = run() {
-        scenario(
-            ToEditListsScenario(
-                activityTestRule = activityTestRule
-            )
-        )
-        step("Pressing back") {
-            onView(allOf(
-                instanceOf(AppCompatImageButton::class.java), withParent(withId(R.id.editListToolbar))
-            ))
-                .perform(click())
-        }
-        step("Checking is navigated back") {
+        step("Checking of navigating back") {
             scenario(
                 CheckMainScreenDisplayedScenario()
             )
         }
-
     }
 
 }

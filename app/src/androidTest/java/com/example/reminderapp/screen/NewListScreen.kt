@@ -11,6 +11,7 @@ import io.github.kakaocup.kakao.image.KImageView
 import io.github.kakaocup.kakao.recycler.KRecyclerItem
 import io.github.kakaocup.kakao.recycler.KRecyclerView
 import io.github.kakaocup.kakao.text.KTextView
+import io.github.kakaocup.kakao.toolbar.KToolbar
 import org.hamcrest.Matcher
 
 object NewListScreen : KScreen<NewListScreen>() {
@@ -28,4 +29,6 @@ object NewListScreen : KScreen<NewListScreen>() {
 
     val selectedColor = KView { withId(R.id.selected_color_iv) }
     val newListEditText = KEditText { withId(R.id.new_list_et) }
+
+    val toolbar = KToolbar { withId(R.id.createListToolbar) }
 }
