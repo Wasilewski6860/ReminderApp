@@ -11,6 +11,7 @@ import io.github.kakaocup.kakao.image.KImageView
 import io.github.kakaocup.kakao.recycler.KRecyclerItem
 import io.github.kakaocup.kakao.recycler.KRecyclerView
 import io.github.kakaocup.kakao.text.KTextView
+import io.github.kakaocup.kakao.toolbar.KToolbar
 import org.hamcrest.Matcher
 
 object GroupListScreen : KScreen<GroupListScreen>() {
@@ -22,4 +23,6 @@ object GroupListScreen : KScreen<GroupListScreen>() {
         itemTypeBuilder = { itemType(MainScreen::GroupItem) }
     )
     val myListsTextView = KTextView { withId(R.id.myListsTextView) }
+
+    val toolbar = KToolbar { withId(R.id.editListToolbar) }
 }
