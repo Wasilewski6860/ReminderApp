@@ -94,6 +94,7 @@ class CreateReminderFragment :  NavigationFragment(), MenuProvider, DataReceiver
         setFragmentResultListener(GROUP_KEY) { key, bundle ->
             viewModel.onGroupIdChanged(bundle.getLong(key).toInt())
         }
+
         checkPermissions()
 
         edgeToEdge()
