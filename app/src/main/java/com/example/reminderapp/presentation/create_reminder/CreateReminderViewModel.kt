@@ -180,10 +180,10 @@ class CreateReminderViewModel(
             _validationResult.value = ValidationResult.IncorrectName
             return false
         }
-        if(state.reminderGroupId==null) {
-            _validationResult.value = ValidationResult.IncorrectGroup
-            return false
-        }
+//        if(state.reminderGroupId==null) {
+//            _validationResult.value = ValidationResult.IncorrectGroup
+//            return false
+//        }
         return true
     }
 
@@ -217,11 +217,9 @@ class CreateReminderViewModel(
                             type = taskType,
                             isActive = true,
                             isMarkedWithFlag = currentState.reminderFlag,
-                            groupId = currentState.reminderGroupId!!
+                            groupId = currentState.reminderGroupId
                         )
-                        createReminderUseCase(
-                            task
-                        )
+                        createReminderUseCase(task)
                             .catch {
                                 _saveResult.value = OperationResult.Error(it.toString())
                             }
@@ -229,7 +227,6 @@ class CreateReminderViewModel(
                                 _saveResult.value = OperationResult.Success(Unit)
                             }
                         Log.d("SaveTask", "Task created successfully")
-
                     } else {
                         val task = Task(
                             id = taskId,
@@ -241,11 +238,9 @@ class CreateReminderViewModel(
                             type = taskType,
                             isActive = true,
                             isMarkedWithFlag = currentState.reminderFlag,
-                            groupId = currentState.reminderGroupId!!
+                            groupId = currentState.reminderGroupId
                         )
-                        editReminderUseCase(
-                            task
-                        )
+                        editReminderUseCase(task)
                         Log.d("SaveTask", "Task edited successfully")
                         _saveResult.value = OperationResult.Success(Unit)
                     }

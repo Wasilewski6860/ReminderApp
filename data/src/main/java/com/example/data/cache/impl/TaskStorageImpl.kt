@@ -11,11 +11,9 @@ import com.example.domain.model.GroupWithTasks
 import com.example.domain.model.Task
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.zip
 
 class TaskStorageImpl(
@@ -125,5 +123,15 @@ class TaskStorageImpl(
     override suspend fun deleteGroup(groupId: Int) {
         taskDao.deleteGroup(groupId)
     }
+
+    override suspend fun getTasksWithoutGroup(): Flow<List<Task>> {
+        return taskDao.getTasksWithoutGroup().map { list ->
+            list.map { taskEntity ->
+                taskCacheMapper.mapFromEntity(taskEntity)
+            }
+        }
+    }
+
+    override suspend fun getTasksWithoutGroupCount(): Flow<Int> = taskDao.getCountOfNoTimeTasks()
 
 }

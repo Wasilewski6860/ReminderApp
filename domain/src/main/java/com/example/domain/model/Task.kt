@@ -13,5 +13,5 @@ data class Task(
     val type: TaskPeriodType,
     var isActive: Boolean,
     var isMarkedWithFlag: Boolean,
-    var groupId: Int
+    var groupId: Int?
 ): Serializable

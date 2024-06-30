@@ -23,6 +23,8 @@ import com.example.domain.use_case.task.GetTasksPlannedCountUseCase
 import com.example.domain.use_case.task.GetTasksWithFlagCountUseCase
 import com.example.domain.use_case.task.GetTasksWithFlagUseCase
 import com.example.domain.use_case.group.InsertGroupUseCase
+import com.example.domain.use_case.task.GetTasksWithoutGroupCountUseCase
+import com.example.domain.use_case.task.GetTasksWithoutGroupUseCase
 import com.example.domain.use_case.task.SaveTaskUseCase
 import io.mockk.mockk
 import org.koin.dsl.module
@@ -53,4 +55,6 @@ val useCaseModule = module {
     single { GetTaskUseCase(get()) }
     single { InsertGroupUseCase(get()) }
     single { SaveTaskUseCase(get()) }
+    single { GetTasksWithoutGroupUseCase(get()) }
+    single { GetTasksWithoutGroupCountUseCase(get()) }
 }

@@ -24,6 +24,7 @@ interface TaskStorage {
     fun getAllTasksByPeriodType(period: String): Flow<List<Task>>
 
     suspend fun addGroup(group: Group): Long
+
     suspend fun editGroup(group: Group)
 
     fun getTask(id: Int): Flow<Task>
@@ -33,10 +34,15 @@ interface TaskStorage {
     fun getGroup(id: Int): Flow<Group>
 
     fun getGroupWithTasks(id: Int): Flow<GroupWithTasks>
+
     fun getCountOfTasksInGroup(id: Int): Flow<Int>
 
     suspend fun clearAll()
 
     suspend fun deleteGroup(groupId: Int)
+
+    suspend fun getTasksWithoutGroup(): Flow<List<Task>>
+
+    suspend fun getTasksWithoutGroupCount() : Flow<Int>
 
 }

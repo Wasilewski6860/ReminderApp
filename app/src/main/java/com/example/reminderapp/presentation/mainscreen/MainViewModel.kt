@@ -8,6 +8,7 @@ import com.example.domain.use_case.task.GetNoTimeTasksCountUseCase
 import com.example.domain.use_case.task.GetTasksForTodayCountUseCase
 import com.example.domain.use_case.task.GetTasksPlannedCountUseCase
 import com.example.domain.use_case.task.GetTasksWithFlagCountUseCase
+import com.example.domain.use_case.task.GetTasksWithoutGroupCountUseCase
 import com.example.reminderapp.presentation.base.BaseViewModel
 import com.example.reminderapp.presentation.base.UiState
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -23,7 +24,8 @@ data class MainUiState(
     val plannedCount: Int,
     val withFlagCount: Int,
     val noTimeCount: Int,
-    val allCount: Int
+    val allCount: Int,
+    val withoutGroupCount: Int
 )
 
 class MainViewModel(
@@ -33,6 +35,7 @@ class MainViewModel(
     private val getTasksWithFlagCountUseCase: GetTasksWithFlagCountUseCase,
     private val getAllTasksCountUseCase: GetAllTasksCountUseCase,
     private val getNoTimeTasksCountUseCase: GetNoTimeTasksCountUseCase,
+    private val getTasksWithoutGroupCountUseCase: GetTasksWithoutGroupCountUseCase
 ) : BaseViewModel<Unit, MainUiState>() {
 
     private val _uiState = MutableStateFlow<UiState<MainUiState>>(UiState.Loading)
@@ -46,18 +49,21 @@ class MainViewModel(
             val withFlagCountFlow = getTasksWithFlagCountUseCase()
             val noTimeCountFlow = getNoTimeTasksCountUseCase()
             val allCountFlow = getAllTasksCountUseCase()
+            val withoutGroupCountFlow = getTasksWithoutGroupCountUseCase()
 
             combine(
                 groupsFlow,
                 todayCountFlow,
                 plannedCountFlow,
-                withFlagCountFlow
-            ) { allGroups, todayCount, plannedCount, withFlagCount ->
+                withFlagCountFlow,
+                withoutGroupCountFlow
+            ) { allGroups, todayCount, plannedCount, withFlagCount, withoutGroupCount ->
                 CombinedResult(
                     groups = allGroups,
                     todayCount = todayCount,
                     plannedCount = plannedCount,
-                    withFlagCount = withFlagCount
+                    withFlagCount = withFlagCount,
+                    withoutGroupCount = withoutGroupCount
                 )
             }.flatMapLatest { combinedResult ->
                 combine(
@@ -70,7 +76,8 @@ class MainViewModel(
                         plannedCount = combinedResult.plannedCount,
                         withFlagCount = combinedResult.withFlagCount,
                         noTimeCount = noTimeCount,
-                        allCount = allCount
+                        allCount = allCount,
+                        withoutGroupCount = combinedResult.withoutGroupCount
                     )
                 }
             }.catch { e ->
@@ -85,6 +92,7 @@ class MainViewModel(
         val groups: List<Group>,
         val todayCount: Int,
         val plannedCount: Int,
-        val withFlagCount: Int
+        val withFlagCount: Int,
+        val withoutGroupCount: Int
     )
 }

@@ -15,6 +15,7 @@ import com.example.domain.use_case.task.GetNoTimeTasksUseCase
 import com.example.domain.use_case.task.GetPlannedTasksUseCase
 import com.example.domain.use_case.task.GetTasksForTodayUseCase
 import com.example.domain.use_case.task.GetTasksWithFlagUseCase
+import com.example.domain.use_case.task.GetTasksWithoutGroupUseCase
 import com.example.reminderapp.R
 import com.example.reminderapp.app.App
 import com.example.reminderapp.presentation.base.OperationResult
@@ -40,13 +41,15 @@ class ReminderListViewModel(
     private val getNoTimeTasksUseCase: GetNoTimeTasksUseCase,
     private val editReminderUseCase: EditReminderUseCase,
     private val deleteReminderUseCase: DeleteReminderUseCase,
+    private val getTasksWithoutGroupUseCase: GetTasksWithoutGroupUseCase
 ) : AndroidViewModel(application) {
     // TODO: Implement the ViewModel
 
     private val _uiState = MutableStateFlow<UiState<RemindersListUiState>>(UiState.Loading)
     val uiState: StateFlow<UiState<RemindersListUiState>> = _uiState
 
-    private val _operationResult = MutableStateFlow<OperationResult<Unit>>(OperationResult.NotStarted)
+    private val _operationResult =
+        MutableStateFlow<OperationResult<Unit>>(OperationResult.NotStarted)
     val operationResult: StateFlow<OperationResult<Unit>> = _operationResult
 
     private var _floatingActionButtonVisibility = MutableStateFlow(false)
@@ -55,17 +58,19 @@ class ReminderListViewModel(
     fun fetchData(taskListType: TasksListTypeCase) {
         val context: Context = getApplication<App>().applicationContext
         viewModelScope.launch {
-            when(taskListType) {
+            when (taskListType) {
                 is TasksListTypeCase.GroupTasks -> {
                     getGroupWithTasksUseCase(taskListType.groupId)
                         .catch { e ->
                             _uiState.value = UiState.Error(e.toString())
                         }
                         .collect {
-                            _uiState.value = UiState.Success(RemindersListUiState(it.tasks, it.group.groupName))
+                            _uiState.value =
+                                UiState.Success(RemindersListUiState(it.tasks, it.group.groupName))
                             _floatingActionButtonVisibility.value = true
                         }
                 }
+
                 TasksListTypeCase.PlannedTasks -> {
                     getPlannedTasksUseCase()
                         .catch { e ->
@@ -78,6 +83,7 @@ class ReminderListViewModel(
                             _floatingActionButtonVisibility.value = false
                         }
                 }
+
                 TasksListTypeCase.TasksWithFlag -> {
                     getTasksWithFlagUseCase()
                         .catch { e ->
@@ -90,6 +96,7 @@ class ReminderListViewModel(
                             _floatingActionButtonVisibility.value = false
                         }
                 }
+
                 TasksListTypeCase.TodayTasks -> {
                     getTasksForTodayUseCase()
                         .catch { e ->
@@ -128,6 +135,19 @@ class ReminderListViewModel(
                             _floatingActionButtonVisibility.value = false
                         }
                 }
+
+                TasksListTypeCase.TaskWithoutGroup -> {
+                    getTasksWithoutGroupUseCase()
+                        .catch { e ->
+                            _uiState.value = UiState.Error(e.toString())
+                        }
+                        .collect {
+                            _uiState.value = UiState.Success(
+                                RemindersListUiState(it, context.getString(R.string.without_group))
+                            )
+                            _floatingActionButtonVisibility.value = false
+                        }
+                }
             }
         }
     }
@@ -137,7 +157,7 @@ class ReminderListViewModel(
         isActive: Boolean
     ) {
         viewModelScope.launch {
-            task.isActive=isActive
+            task.isActive = isActive
             editReminderUseCase(
                 task
             )
@@ -152,8 +172,7 @@ class ReminderListViewModel(
             try {
                 deleteReminderUseCase(task)
                 _operationResult.value = OperationResult.Success(Unit)
-            }
-            catch (e: Exception) {
+            } catch (e: Exception) {
                 _operationResult.value = OperationResult.Error(e.toString())
             }
         }

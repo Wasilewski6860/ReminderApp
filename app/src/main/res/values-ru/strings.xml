@@ -66,6 +66,7 @@
     <string name="all">Все</string>
     <string name="with_flag">С флагом</string>
     <string name="no_time">Без времени</string>
+    <string name="without_group">Без списка</string>
 
     <string name="my_lists">Мои списки</string>
     <string name="add_list">Добавить список</string>
