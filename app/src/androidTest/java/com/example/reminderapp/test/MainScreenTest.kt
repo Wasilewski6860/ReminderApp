@@ -13,64 +13,62 @@ import org.junit.Test
 
 class MainScreenTest: BaseScreenTest() {
 
-    @Before
-    override fun setUp() {
-        super.setUp()
-        coEvery {taskRepository.getTasksForToday()} returns flowOf(TestData.todayTasks)
-        coEvery {taskRepository.getTasksForTodayCount()} returns flowOf(TestData.todayTasks.size)
-        coEvery {taskRepository.getTasksPlanned()} returns flowOf(TestData.plannedTasks)
-        coEvery {taskRepository.getTasksPlannedCount()} returns flowOf(TestData.plannedTasks.size)
-        coEvery {taskRepository.getTasksWithFlagCount()} returns flowOf(TestData.tasksWithFlag.size)
-        coEvery{taskRepository.getCountOfNoTimeTasks()} returns flowOf(TestData.noTimeTasks.size)
-        coEvery{taskRepository.getAllTasksCount()} returns flowOf(TestData.tasks.size)
-        coEvery{groupRepository.getAllGroups()} returns flowOf(TestData.groups)
-    }
-
     @Test
-    fun myFragmentTest() = run {
+    fun main_screen_content_test() = run {
         scenario(
             ToMainScreenScenario(
                 activityTestRule = activityTestRule
             )
         )
-        step("Verify UI elements") {
+        step("Check for screen content") {
             MainScreen {
-                todayGridView {
-                    isDisplayed()
+                step("Categories displayed") {
+                    todayGridView {
+                        isDisplayed()
+//                        imageView.hasDrawable(com.example.reminderapp.R.drawable.sand_clock_icon)
+                    }
+                    plannedGridView { isDisplayed() }
+                    allGridView { isDisplayed() }
+                    withFlagGridView { isDisplayed() }
+                    noTimeGridView { isDisplayed() }
                 }
-                plannedGridView { isVisible() }
-                allGridView { isVisible() }
-                withFlagGridView { isVisible() }
-                noTimeGridView { isVisible() }
+                step("Group list displayed") {
+                    mainRecycler {
+                        isVisible()
+                        hasSize(3)
+                        firstChild<MainScreen.GroupItem> {
+                            titleTv { hasText(TestData.firstGroup.groupName) }
+                            taskCountTv { hasText(TestData.firstGroup.tasksCount.toString()) }
+                        }
+                        childAt<MainScreen.GroupItem>(1) {
+                            titleTv { hasText(TestData.secondGroup.groupName) }
+                            taskCountTv { hasText(TestData.secondGroup.tasksCount.toString()) }
+                        }
 
-                mainRecycler {
-                    isVisible()
-                    hasSize(3)
-                    firstChild<MainScreen.GroupItem> {
-                        titleTv { hasText(TestData.firstGroup.groupName) }
-                        taskCountTv { hasText(TestData.firstGroup.tasksCount.toString()) }
-                    }
-                    childAt<MainScreen.GroupItem>(1) {
-                        titleTv { hasText(TestData.secondGroup.groupName) }
-                        taskCountTv { hasText(TestData.secondGroup.tasksCount.toString()) }
-                    }
-
-                    childAt<MainScreen.GroupItem>(2) {
-                        titleTv { hasText(TestData.thirdGroup.groupName) }
-                        taskCountTv { hasText(TestData.thirdGroup.tasksCount.toString()) }
+                        childAt<MainScreen.GroupItem>(2) {
+                            titleTv { hasText(TestData.thirdGroup.groupName) }
+                            taskCountTv { hasText(TestData.thirdGroup.tasksCount.toString()) }
+                        }
                     }
                 }
-
-                editListsTv { isVisible() }
-                addListTv { isVisible() }
-                fab { isVisible() }
+                step("Bottom buttons displayed") {
+                    step("Edit lists button displayed") {
+                        editListsTv { isVisible() }
+                    }
+                    step("Add list button displayed") {
+                        addListTv { isVisible() }
+                    }
+                    step("Add reminder button displayed") {
+                        fab { isVisible() }
+                    }
+                }
             }
         }
     }
 
 
     @Test
-    fun  editListsScreenOpensOnEditListsClick() = run() {
+    fun  edit_lists_screen_opens_on_edit_lists_click() = run() {
         scenario(
             ToMainScreenScenario(
                 activityTestRule = activityTestRule
@@ -97,7 +95,7 @@ class MainScreenTest: BaseScreenTest() {
     }
 
     @Test
-    fun  newListScreenOpensOnNewListClick() = run() {
+    fun  new_list_screen_opens_on_new_list_click() = run() {
         scenario(
             ToMainScreenScenario(
                 activityTestRule = activityTestRule
