@@ -30,12 +30,6 @@ import org.junit.Test
 import org.koin.test.inject
 
 class NewListScreenTest: BaseScreenTest()  {
-    @get:Rule
-    val activityTestRule = ActivityTestRule(MainActivity::class.java, true, false)
-
-    private val taskRepository: ITaskRepository by inject()
-    private val groupRepository: IGroupRepository by inject()
-    private val context: Context by inject()
 
     @Before
     override fun setUp() {

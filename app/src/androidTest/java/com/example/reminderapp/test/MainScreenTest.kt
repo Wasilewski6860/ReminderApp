@@ -24,14 +24,6 @@ import org.koin.test.inject
 
 class MainScreenTest: BaseScreenTest() {
 
-    @get:Rule
-    val activityTestRule = ActivityTestRule(MainActivity::class.java, true, false)
-
-    private val taskRepository: ITaskRepository by inject()
-    private val groupRepository: IGroupRepository by inject()
-    private val viewModel: MainViewModel by inject()
-    private val context: Context by inject()
-
     @Before
     override fun setUp() {
         super.setUp()

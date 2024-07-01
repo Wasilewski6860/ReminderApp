@@ -46,18 +46,7 @@ import org.junit.Assert.assertTrue
 import java.util.Locale
 
 class ReminderListScreenTest: BaseScreenTest()  {
-    @get:Rule
-    val activityTestRule = ActivityTestRule(MainActivity::class.java, true, false)
 
-//    @get:Rule
-//    val grantPermissionRule: GrantPermissionRule = GrantPermissionRule.grant(
-//        android.Manifest.permission.POST_NOTIFICATIONS,
-//        android.Manifest.permission.SCHEDULE_EXACT_ALARM
-//    )
-
-    private val taskRepository: ITaskRepository by inject()
-    private val groupRepository: IGroupRepository by inject()
-    private val context: Context by inject()
     private val timeDateUtils: TimeDateUtils by inject()
     val dateFormat = SimpleDateFormat("E, dd.MM.yyyy 'г.' HH:mm", Locale.getDefault())
     @Before
