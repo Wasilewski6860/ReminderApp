@@ -1,9 +1,22 @@
 # Reminder App
 Reminder App is a simple and easy-to-use app for scheduling tasks and creating reminders with an alarm to notify you of events. It allows you to view different categories of tasks such as "Today", "Scheduled", "With flag" and others, as well as create your own reminder groups
 <p align="center">
-  <img src="screenshots/gif/main.gif" width="30%" />
-  <img src="screenshots/gif/creating_reminder.gif" width="30%" />
-  <img src="screenshots/gif/notifications.gif" width="30%" />
+  <table>
+    <tr>
+      <td align="center">
+        <b>Main</b><br>
+        <img src="screenshots/gif/main.gif" width="90%">
+      </td>
+      <td align="center">
+        <b>Create reminder</b><br>
+        <img src="screenshots/gif/creating_reminder.gif" width="90%">
+      </td>
+      <td align="center">
+        <b>Working with notifications</b><br>
+        <img src="screenshots/gif/notifications.gif" width="90%">
+      </td>
+    </tr>
+  </table>
 </p>
 
 ## [Technical specification](https://docs.google.com/document/d/19XhJmlF7N2XAbsMtn6GcUCHimHzeerOJBmJD9-WybGM/edit)
