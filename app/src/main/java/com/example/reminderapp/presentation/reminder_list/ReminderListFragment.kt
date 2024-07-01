@@ -122,36 +122,22 @@ class ReminderListFragment : NavigationFragment(), DataReceiver, MenuProvider {
                                 groupName = it.data.groupName
                                 binding.reminderListToolbar.title = it.data.groupName
                             }
+                            binding.addFloatingActionButton.isVisible = it.data.fabVisibility
                         }
 
                         is UiState.Loading -> {
                             binding.contentLayout.isVisible = false
                             binding.loadingLayout.isVisible = true
                             binding.nothingFindLayout.isVisible = false
+                            binding.addFloatingActionButton.isVisible = false
                         }
 
                         is UiState.Error -> {
                             binding.contentLayout.isVisible = false
                             binding.loadingLayout.isVisible = false
                             binding.nothingFindLayout.isVisible = true
+                            binding.addFloatingActionButton.isVisible = false
                         }
-                    }
-                }
-            }
-        }
-
-        lifecycleScope.launch {
-            viewModel.floatingActionButtonVisibility.collect {
-                when (it) {
-                    true -> {
-                        binding.addFloatingActionButton.visibility = View.VISIBLE
-                        binding.contentLayout.isVisible = true
-                        binding.nothingFindLayout.isVisible = false
-                    }
-                    false -> {
-                        binding.addFloatingActionButton.visibility = View.GONE
-                        binding.contentLayout.isVisible = false
-                        binding.nothingFindLayout.isVisible = true
                     }
                 }
             }

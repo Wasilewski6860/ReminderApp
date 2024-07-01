@@ -40,13 +40,6 @@
             android:paddingVertical="@dimen/item_vertical_padding"
             tools:listitem="@layout/reminder_item" />
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/addFloatingActionButton"
-            style="@style/MainFabStyle"
-            android:layout_margin="@dimen/big_margin"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -103,5 +96,12 @@
             app:layout_constraintStart_toStartOf="@+id/imageView" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/addFloatingActionButton"
+        style="@style/MainFabStyle"
+        android:layout_margin="@dimen/big_margin"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
