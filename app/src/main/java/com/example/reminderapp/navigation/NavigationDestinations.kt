@@ -2,7 +2,7 @@ package com.example.reminderapp.navigation
 
 import androidx.fragment.app.Fragment
 import com.example.reminderapp.presentation.create_reminder.CreateReminderFragment
-import com.example.reminderapp.presentation.editorlistsscreen.EditListsFragment
+import com.example.reminderapp.presentation.edit_lists.EditListsFragment
 import com.example.reminderapp.presentation.new_list.NewListFragment
 import com.example.reminderapp.presentation.reminder_list.ReminderListFragment
 import kotlin.reflect.KClass

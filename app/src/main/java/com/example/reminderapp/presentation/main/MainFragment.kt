@@ -16,10 +16,10 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.domain.model.Group
 import com.example.reminderapp.R
+import com.example.reminderapp.databinding.FragmentMainBinding
 import com.example.reminderapp.ui.animations.animateImageViewRotation
 import com.example.reminderapp.ui.animations.hideRecyclerAnimation
 import com.example.reminderapp.ui.animations.showRecyclerAnimation
-import com.example.reminderapp.databinding.MainScreenBinding
 import com.example.reminderapp.presentation.base.NavigationFragment
 import com.example.reminderapp.presentation.base.UiState
 import com.example.reminderapp.navigation.FragmentNavigationConstants
@@ -35,7 +35,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class MainFragment : NavigationFragment() {
 
     override val backstackTag: String = FragmentNavigationConstants.TO_MAIN_FRAGMENT_BACKSTACK
-    private lateinit var binding: MainScreenBinding
+    private lateinit var binding: FragmentMainBinding
     private lateinit var adapter: GroupListRecyclerViewAdapter
     private val viewModel by viewModel<MainViewModel>()
 
@@ -46,7 +46,7 @@ class MainFragment : NavigationFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = MainScreenBinding.inflate(inflater, container, false)
+        binding = FragmentMainBinding.inflate(inflater, container, false)
 
         edgeToEdge()
         setupToolbar(

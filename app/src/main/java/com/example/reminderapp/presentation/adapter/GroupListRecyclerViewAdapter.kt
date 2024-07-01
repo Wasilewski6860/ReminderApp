@@ -6,8 +6,8 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.domain.model.Group
+import com.example.reminderapp.databinding.GroupItemBinding
 import com.example.reminderapp.ui.animations.playRecyclerItemDeletingAnimation
-import com.example.reminderapp.databinding.ListItemRecyclerBinding
 import org.koin.core.component.KoinComponent
 
 class GroupListRecyclerViewAdapter(
@@ -15,12 +15,12 @@ class GroupListRecyclerViewAdapter(
     private val isDeleteIconVisible: Boolean = false
 ) : ListAdapter<Group, GroupListRecyclerViewAdapter.GroupViewHolder>(DiffCallBack), KoinComponent {
 
-    class GroupViewHolder(val binding: ListItemRecyclerBinding) :
+    class GroupViewHolder(val binding: GroupItemBinding) :
         RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GroupViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        val binding = ListItemRecyclerBinding.inflate(inflater, parent, false)
+        val binding = GroupItemBinding.inflate(inflater, parent, false)
         return GroupViewHolder(binding)
     }
 

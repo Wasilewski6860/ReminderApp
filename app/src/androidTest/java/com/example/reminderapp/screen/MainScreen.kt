@@ -13,7 +13,7 @@ import io.github.kakaocup.kakao.text.KTextView
 import org.hamcrest.Matcher
 
 object MainScreen : KScreen<MainScreen>() {
-    override val layoutId: Int = R.layout.main_screen
+    override val layoutId: Int = R.layout.fragment_main
     override val viewClass: Class<*> = MainFragment::class.java
     //    val toolbar = KToolbar { withId(R.id.main_toolbar) }
     val todayGridView = KGridItemView { withId(R.id.currentDayTasksItem) }

@@ -4,7 +4,7 @@ import android.app.AlarmManager
 import android.content.Context
 import com.example.reminderapp.notification.NotificationManager
 import com.example.reminderapp.presentation.create_reminder.CreateReminderViewModel
-import com.example.reminderapp.presentation.editorlistsscreen.EditListsViewModel
+import com.example.reminderapp.presentation.edit_lists.EditListsViewModel
 import com.example.reminderapp.presentation.main.MainViewModel
 import com.example.reminderapp.presentation.new_list.NewListViewModel
 import com.example.reminderapp.presentation.reminder_list.ReminderListViewModel
