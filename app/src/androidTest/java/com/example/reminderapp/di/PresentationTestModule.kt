@@ -21,7 +21,8 @@ val presentationTestModule = module {
             getTasksForTodayCountUseCase = get(),
             getTasksWithFlagCountUseCase = get(),
             getAllTasksCountUseCase = get(),
-            getNoTimeTasksCountUseCase = get()
+            getNoTimeTasksCountUseCase = get(),
+            getTasksWithoutGroupCountUseCase = get()
         )
     }
 
@@ -57,7 +58,8 @@ val presentationTestModule = module {
             application = get(),
             editReminderUseCase = get(),
             deleteReminderUseCase = get(),
-            getNoTimeTasksUseCase = get()
+            getNoTimeTasksUseCase = get(),
+            getTasksWithoutGroupUseCase = get()
         )
     }
 

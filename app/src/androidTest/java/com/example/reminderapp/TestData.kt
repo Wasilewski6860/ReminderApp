@@ -79,6 +79,18 @@ object TestData {
         isMarkedWithFlag = true,
         groupId = 1
     )
+    val taskWithoutGroup = Task(
+        id = 6,
+        name = "Task without group",
+        description = "Description 4",
+        reminderCreationTime = 430L,
+        reminderTime = 101L,
+        reminderTimePeriod = 5540L,
+        type = TaskPeriodType.ONE_TIME,
+        isActive = false,
+        isMarkedWithFlag = true,
+        groupId = null
+    )
 
     val todayTask = Task(
         id = 4,
@@ -93,8 +105,9 @@ object TestData {
         groupId = 1
     )
 
-    val tasks = listOf(firstTask, secondTask, thirdTask, fourthTask, todayTask)
+    val tasks = listOf(firstTask, secondTask, thirdTask, fourthTask, todayTask, taskWithoutGroup)
     val noTimeTasks = tasks.filter { it.type == TaskPeriodType.NO_TIME }
+    val tasksWithoutGroup = tasks.filter { it.groupId == null }
     val countOfNoTimeTasks = noTimeTasks.size
 
     val periodicTimeTasks = listOf(firstTask)
