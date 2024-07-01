@@ -6,9 +6,7 @@ import com.example.reminderapp.di.TestData
 import com.example.reminderapp.presentation.base.BaseViewModelTest
 import com.example.reminderapp.presentation.base.OperationResult
 import com.example.reminderapp.presentation.base.UiState
-import com.example.reminderapp.presentation.mainscreen.MainUiState
-import com.example.reminderapp.presentation.navigation.TasksListTypeCase
-import com.example.reminderapp.presentation.new_list.NewListViewModel
+import com.example.reminderapp.navigation.TasksListTypeCase
 import com.example.reminderapp.presentation.reminder_list.ReminderListViewModel
 import com.example.reminderapp.presentation.reminder_list.RemindersListUiState
 import io.mockk.coEvery
@@ -17,12 +15,10 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.runBlocking
-import org.junit.Before
 import org.junit.Test
 import org.koin.test.inject
 import java.lang.Exception
 import kotlin.test.assertEquals
-import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 @ExperimentalCoroutinesApi

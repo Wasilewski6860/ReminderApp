@@ -37,7 +37,7 @@ import com.example.domain.model.Task
 import com.example.reminderapp.R
 import com.example.reminderapp.databinding.FragmentCreateReminderBinding
 import com.example.reminderapp.presentation.base.UiState
-import com.example.reminderapp.presentation.navigation.FragmentNavigationConstants
+import com.example.reminderapp.navigation.FragmentNavigationConstants
 import com.example.reminderapp.utils.ColorsUtils
 import com.example.reminderapp.utils.TimeDateUtils
 import com.example.reminderapp.utils.setFocus
@@ -56,8 +56,8 @@ import com.example.reminderapp.presentation.create_reminder.adapter.ColorSpinner
 import com.example.reminderapp.presentation.create_reminder.adapter.GroupSpinnerAdapter
 import com.example.reminderapp.presentation.create_reminder.adapter.PeriodSpinnerAdapter
 import com.example.reminderapp.presentation.base.DataReceiver
-import com.example.reminderapp.presentation.navigation.FragmentNavigationConstants.GROUP_KEY
-import com.example.reminderapp.presentation.navigation.NavigationDestinations
+import com.example.reminderapp.navigation.FragmentNavigationConstants.GROUP_KEY
+import com.example.reminderapp.navigation.NavigationDestinations
 import com.example.reminderapp.utils.actionIfChanged
 import com.example.reminderapp.utils.setupToolbar
 import java.util.Locale

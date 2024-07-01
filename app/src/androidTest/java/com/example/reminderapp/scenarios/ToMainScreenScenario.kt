@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.test.rule.ActivityTestRule
 import com.example.reminderapp.MainActivity
 import com.example.reminderapp.R
-import com.example.reminderapp.presentation.mainscreen.MainFragment
+import com.example.reminderapp.presentation.main.MainFragment
 import com.kaspersky.kaspresso.testcases.api.scenario.Scenario
 import com.kaspersky.kaspresso.testcases.core.testcontext.TestContext
 

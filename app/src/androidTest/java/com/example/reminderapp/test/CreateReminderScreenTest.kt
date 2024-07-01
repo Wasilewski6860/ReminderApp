@@ -89,7 +89,7 @@ class CreateReminderScreenTest: BaseScreenTest()  {
         }
     }
 
-    @SdkSuppress(maxSdkVersion = Build.VERSION_CODES.S)
+    @SdkSuppress(minSdkVersion = Build.VERSION_CODES.S)
     @Test
     fun  openNewListFromCreateReminderScreen() = run() {
         scenario(
@@ -142,7 +142,7 @@ class CreateReminderScreenTest: BaseScreenTest()  {
         }
     }
 
-    @SdkSuppress(maxSdkVersion = Build.VERSION_CODES.S)
+    @SdkSuppress(minSdkVersion = Build.VERSION_CODES.S)
     @Test
     fun  testOfSaving() = run() {
         scenario(

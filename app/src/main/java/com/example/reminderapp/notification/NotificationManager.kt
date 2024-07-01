@@ -19,7 +19,6 @@ import com.example.data.reminder.Constants.ACTION_CANCEL_PENDING_INTENT_ID
 import com.example.data.reminder.Constants.ACTION_POSTPONE
 import com.example.data.reminder.Constants.ACTION_POSTPONE_PENDING_INTENT_ID
 import com.example.data.reminder.Constants.TASK_ID_EXTRA
-import com.example.reminderapp.presentation.reminder.ReminderActivity
 import com.example.reminderapp.remind.receivers.ReminderNotificationBroadcastReceiver
 import com.example.data.reminder.Constants
 import com.example.data.reminder.Constants.ACTION_DELETE
@@ -70,7 +69,7 @@ class NotificationManager(val context: Context) : KoinComponent {
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setCategory(NotificationCompat.CATEGORY_ALARM)
             .setFullScreenIntent(
-                PendingIntent.getActivity(context, 0, Intent(context, ReminderActivity::class.java).apply {
+                PendingIntent.getActivity(context, 0, Intent(context, MainActivity::class.java).apply {
                     addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                     putExtra(TASK_ID_EXTRA, taskId)
                 }, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE),

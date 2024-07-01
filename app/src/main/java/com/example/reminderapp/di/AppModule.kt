@@ -4,8 +4,8 @@ import android.app.AlarmManager
 import android.content.Context
 import com.example.reminderapp.notification.NotificationManager
 import com.example.reminderapp.presentation.create_reminder.CreateReminderViewModel
-import com.example.reminderapp.presentation.editorlistsscreen.ListsEditorViewModel
-import com.example.reminderapp.presentation.mainscreen.MainViewModel
+import com.example.reminderapp.presentation.editorlistsscreen.EditListsViewModel
+import com.example.reminderapp.presentation.main.MainViewModel
 import com.example.reminderapp.presentation.new_list.NewListViewModel
 import com.example.reminderapp.presentation.reminder_list.ReminderListViewModel
 import com.example.data.reminder.RemindAlarmManager
@@ -65,8 +65,8 @@ val appModule = module {
         )
     }
 
-    viewModel<ListsEditorViewModel> {
-        ListsEditorViewModel(
+    viewModel<EditListsViewModel> {
+        EditListsViewModel(
             getAllGroupsUseCase = get(),
             deleteReminderGroupUseCase = get()
         )

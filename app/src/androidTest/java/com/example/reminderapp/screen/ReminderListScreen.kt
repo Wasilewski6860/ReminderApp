@@ -2,9 +2,7 @@ package com.example.reminderapp.screen
 
 import android.view.View
 import com.example.reminderapp.R
-import com.example.reminderapp.presentation.mainscreen.MainFragment
 import com.example.reminderapp.presentation.reminder_list.ReminderListFragment
-import com.example.reminderapp.view.KGridItemView
 import com.kaspersky.kaspresso.screens.KScreen
 import io.github.kakaocup.kakao.common.views.KView
 import io.github.kakaocup.kakao.image.KImageView

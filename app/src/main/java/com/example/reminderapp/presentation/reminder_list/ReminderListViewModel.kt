@@ -20,7 +20,7 @@ import com.example.reminderapp.R
 import com.example.reminderapp.app.App
 import com.example.reminderapp.presentation.base.OperationResult
 import com.example.reminderapp.presentation.base.UiState
-import com.example.reminderapp.presentation.navigation.TasksListTypeCase
+import com.example.reminderapp.navigation.TasksListTypeCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch

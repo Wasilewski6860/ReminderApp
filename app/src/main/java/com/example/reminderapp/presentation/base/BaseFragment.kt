@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
-import com.example.reminderapp.presentation.navigation.NavigationManager
+import com.example.reminderapp.navigation.NavigationManager
 
 abstract class BaseFragment: Fragment(), BackActionHandler {
 

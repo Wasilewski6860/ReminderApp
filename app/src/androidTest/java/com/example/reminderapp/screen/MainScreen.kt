@@ -1,18 +1,15 @@
 package com.example.reminderapp.screen
 
 import android.view.View
-import androidx.test.espresso.matcher.ViewMatchers.withId
 import com.example.reminderapp.R
-import com.example.reminderapp.presentation.mainscreen.MainFragment
+import com.example.reminderapp.presentation.main.MainFragment
 import com.example.reminderapp.view.KGridItemView
 import com.kaspersky.kaspresso.screens.KScreen
 import io.github.kakaocup.kakao.common.views.KView
 import io.github.kakaocup.kakao.image.KImageView
-import io.github.kakaocup.kakao.progress.KProgressBar
 import io.github.kakaocup.kakao.recycler.KRecyclerItem
 import io.github.kakaocup.kakao.recycler.KRecyclerView
 import io.github.kakaocup.kakao.text.KTextView
-import io.github.kakaocup.kakao.toolbar.KToolbar
 import org.hamcrest.Matcher
 
 object MainScreen : KScreen<MainScreen>() {

@@ -32,8 +32,8 @@ import com.example.reminderapp.databinding.FragmentNewListBinding
 import com.example.reminderapp.presentation.base.BaseDataReceiveFragment
 import com.example.reminderapp.presentation.base.OperationResult
 import com.example.reminderapp.presentation.base.UiState
-import com.example.reminderapp.presentation.navigation.FragmentNavigationConstants
-import com.example.reminderapp.presentation.navigation.FragmentNavigationConstants.GROUP_KEY
+import com.example.reminderapp.navigation.FragmentNavigationConstants
+import com.example.reminderapp.navigation.FragmentNavigationConstants.GROUP_KEY
 import com.example.reminderapp.presentation.new_list.adapter.ListItemDecoration
 import com.example.reminderapp.presentation.new_list.adapter.NewListAdapter
 import com.example.reminderapp.utils.ColorsUtils

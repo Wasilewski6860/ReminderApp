@@ -1,33 +1,18 @@
 package com.example.reminderapp.test
 
-import android.content.Context
-import androidx.appcompat.widget.AppCompatImageButton
-import androidx.test.espresso.Espresso
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions
-import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.withId
-import androidx.test.rule.ActivityTestRule
-import com.example.domain.repository.IGroupRepository
-import com.example.domain.repository.ITaskRepository
-import com.example.reminderapp.MainActivity
 import com.example.reminderapp.R
 import com.example.reminderapp.di.TestData
-import com.example.reminderapp.presentation.mainscreen.MainViewModel
 import com.example.reminderapp.scenarios.CheckMainScreenDisplayedScenario
-import com.example.reminderapp.scenarios.ToEditListsScenario
 import com.example.reminderapp.scenarios.ToNewListScreenScenario
-import com.example.reminderapp.screen.GroupListScreen
-import com.example.reminderapp.screen.MainScreen
 import com.example.reminderapp.screen.NewListScreen
 import com.example.reminderapp.test.base.BaseScreenTest
 import io.mockk.coEvery
 import kotlinx.coroutines.flow.flowOf
-import org.hamcrest.Matchers
 import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
-import org.koin.test.inject
 
 class NewListScreenTest: BaseScreenTest()  {
 

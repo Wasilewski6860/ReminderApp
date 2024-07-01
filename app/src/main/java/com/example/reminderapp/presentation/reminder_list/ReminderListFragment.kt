@@ -23,9 +23,9 @@ import com.example.reminderapp.presentation.base.OperationResult
 import com.example.reminderapp.presentation.base.UiState
 import com.example.reminderapp.presentation.base.DataReceiver
 import com.example.reminderapp.presentation.base.NavigationFragment
-import com.example.reminderapp.presentation.navigation.FragmentNavigationConstants
-import com.example.reminderapp.presentation.navigation.NavigationDestinations
-import com.example.reminderapp.presentation.navigation.TasksListTypeCase
+import com.example.reminderapp.navigation.FragmentNavigationConstants
+import com.example.reminderapp.navigation.NavigationDestinations
+import com.example.reminderapp.navigation.TasksListTypeCase
 import com.example.reminderapp.presentation.reminder_list.adapter.ReminderItemDivider
 import com.example.reminderapp.presentation.reminder_list.adapter.ReminderListAdapter
 import com.example.reminderapp.utils.setPaddingToInset

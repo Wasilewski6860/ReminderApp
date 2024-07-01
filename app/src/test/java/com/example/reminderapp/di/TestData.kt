@@ -1,16 +1,20 @@
 package com.example.reminderapp.di
 
 import android.icu.util.Calendar
+import androidx.test.platform.app.InstrumentationRegistry
 import com.example.data.cache.entity.TaskEntity
 import com.example.data.cache.entity.TaskGroupEntity
 import com.example.domain.model.Group
 import com.example.domain.model.GroupWithTasks
 import com.example.domain.model.Task
 import com.example.domain.model.TaskPeriodType
+import com.example.reminderapp.utils.ColorsUtils
+import com.example.reminderapp.utils.ImageUtils
 
 object TestData {
 
-    private val todayTimeInMillis = java.util.Calendar.getInstance().timeInMillis
+    private val todayTimeInMillis = System.currentTimeMillis()
+    val context = InstrumentationRegistry.getInstrumentation().targetContext
 
     val firstTask = Task(
         id = 1,
@@ -18,7 +22,7 @@ object TestData {
         description = "Description",
         reminderCreationTime = 0L,
         reminderTime = 0L,
-        reminderTimePeriod = 0L,
+        reminderTimePeriod = 300000L,
         type = TaskPeriodType.PERIODIC,
         isActive = false,
         isMarkedWithFlag = true,
@@ -31,7 +35,7 @@ object TestData {
         description = "Description edited",
         reminderCreationTime = 0L,
         reminderTime = 0L,
-        reminderTimePeriod = 0L,
+        reminderTimePeriod = 300000L,
         type = TaskPeriodType.NO_TIME,
         isActive = false,
         isMarkedWithFlag = true,
@@ -76,22 +80,35 @@ object TestData {
         isMarkedWithFlag = true,
         groupId = 1
     )
+    val taskWithoutGroup = Task(
+        id = 6,
+        name = "Task without group",
+        description = "Description 4",
+        reminderCreationTime = 430L,
+        reminderTime = 101L,
+        reminderTimePeriod = 5540L,
+        type = TaskPeriodType.ONE_TIME,
+        isActive = false,
+        isMarkedWithFlag = true,
+        groupId = null
+    )
 
     val todayTask = Task(
         id = 4,
         name = "Task today",
         description = "Description 3",
         reminderCreationTime = 430L,
-        reminderTime = System.currentTimeMillis(),
-        reminderTimePeriod = 5540L,
+        reminderTime = 5540L,
+        reminderTimePeriod = todayTimeInMillis,
         type = TaskPeriodType.ONE_TIME,
         isActive = false,
         isMarkedWithFlag = true,
         groupId = 1
     )
 
-    val tasks = listOf(firstTask, secondTask, thirdTask, fourthTask, todayTask)
+    val tasks = listOf(firstTask, secondTask, thirdTask, fourthTask, todayTask, taskWithoutGroup)
     val noTimeTasks = tasks.filter { it.type == TaskPeriodType.NO_TIME }
+    val tasksWithoutGroup = tasks.filter { it.groupId == null }
     val countOfNoTimeTasks = noTimeTasks.size
 
     val periodicTimeTasks = listOf(firstTask)
@@ -105,7 +122,7 @@ object TestData {
         description = "Description",
         timestamp = 0L,
         startTime = 0L,
-        timePeriod = 0L,
+        timePeriod = 300000L,
         periodicType = TaskPeriodType.PERIODIC.toString(),
         isActive = false,
         flag = true,
@@ -158,30 +175,30 @@ object TestData {
     val firstGroup = Group(
         groupId = 1,
         groupName = "Group 1",
-        groupColor = 1,
-        groupImage = 1,
+        groupColor = ColorsUtils(context).colors[0].color,
+        groupImage = ImageUtils(context).onlyImages[0].image,
         tasksCount = 2
     )
 
     val secondGroup = Group(
         groupId = 2,
         groupName = "Group 2",
-        groupColor = 2,
-        groupImage = 2,
+        groupColor = ColorsUtils(context).colors[1].color,
+        groupImage = ImageUtils(context).onlyImages[1].image,
         tasksCount = 1
     )
 
     val thirdGroup = Group(
         groupId = 3,
         groupName = "Group 3",
-        groupColor = 3,
-        groupImage = 3,
+        groupColor = ColorsUtils(context).colors[2].color,
+        groupImage = ImageUtils(context).onlyImages[2].image,
         tasksCount = 0
     )
 
     val groupWithTasks = GroupWithTasks(
         group = firstGroup,
-        tasks = tasks
+        tasks = tasks.filter { it.groupId == firstGroup.groupId }
     )
 
     val groups = listOf(firstGroup, secondGroup, thirdGroup)
