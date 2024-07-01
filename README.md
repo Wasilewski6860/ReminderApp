@@ -32,3 +32,6 @@ Reminder App is a simple and easy-to-use app for scheduling tasks and creating r
 * [WorkManager](https://developer.android.com/reference/androidx/work/WorkManager) for scheduled works
 * [Kaspresso](https://github.com/KasperskyLab/Kaspresso) for realization page-object pattern in UI tests
 * [Mockk](https://mockk.io/ANDROID.html) for mocking in tests
+
+## Releases
+[Download the latest version](releases/reminder-app.apk)
