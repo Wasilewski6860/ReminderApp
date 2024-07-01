@@ -121,16 +121,16 @@ class CreateReminderScreenTest: BaseScreenTest()  {
                         click()
                     }
                 }
-                Espresso.onView(ViewMatchers.withId(R.id.action_save)).perform(click())
+                onView(withId(R.id.action_save)).perform(click())
             }
         }
         step("Checking of navigating back and correct selected value in spinner") {
             CreateReminderScreen {
                 groupSpinner {
                     isDisplayed()
-                    Espresso.onView(ViewMatchers.withId(R.id.selected_list_spinner))
+                    onView(withId(R.id.selected_list_spinner))
                         .check(
-                            ViewAssertions.matches(
+                            matches(
                                 ViewMatchers.withSpinnerText(
                                     CoreMatchers.containsString(TestData.firstGroup.groupName)
                                 )

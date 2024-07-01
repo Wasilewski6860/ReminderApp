@@ -50,5 +50,7 @@ abstract class BaseScreenTest : SetupDITest() {
         coEvery { taskRepository.getAllTasks() } returns flowOf(TestData.tasks)
         coEvery { taskRepository.getNoTimeTasks() } returns flowOf(TestData.noTimeTasks)
         coEvery { groupRepository.getAllGroups() } returns flowOf(TestData.groups)
+        coEvery { taskRepository.getTasksWithoutGroupCount() } returns flowOf(TestData.tasksWithoutGroup.size)
+        coEvery { taskRepository.getTasksWithoutGroup() } returns flowOf(TestData.tasksWithoutGroup)
     }
 }
