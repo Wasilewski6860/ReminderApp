@@ -51,6 +51,8 @@ class GroupSpinnerAdapter(
         val view = super.getDropDownView(position, convertView, parent)
         val textView = view.findViewById<TextView>(android.R.id.text1)
         textView.text = getItem(position)
+        val padding = context.resources.getDimensionPixelSize(R.dimen.tiny_margin)
+        textView.setPadding(padding, padding, padding, padding)
         return view
     }
 
