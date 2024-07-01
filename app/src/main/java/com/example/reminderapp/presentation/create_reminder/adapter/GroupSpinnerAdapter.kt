@@ -13,7 +13,11 @@ class GroupSpinnerAdapter(
     private val onNoneSelected: () -> Unit,
     private val onCreateGroup: () -> Unit,
     private val onGroupSelected: (Group) -> Unit
-) : ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, listOf(context.getString(R.string.not_selected))  + context.getString(R.string.create)) {
+) : ArrayAdapter<String>(
+    context,
+    android.R.layout.simple_spinner_item,
+    listOf(context.getString(R.string.not_selected))  + context.getString(R.string.create)
+) {
 
     private var groupItems = mutableListOf<Group>()
 

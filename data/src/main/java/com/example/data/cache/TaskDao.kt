@@ -67,4 +67,10 @@ interface TaskDao {
     @Query("DELETE FROM task_group WHERE groupId = :groupId")
     suspend fun deleteGroup(groupId: Int)
 
+    @Query("SELECT * FROM task WHERE groupId IS NULL")
+    fun getTasksWithoutGroup(): Flow<List<TaskEntity>>
+
+    @Query("SELECT COUNT(*) FROM task WHERE groupId IS NULL")
+    suspend fun getTasksWithoutGroupCount(): Int
+
 }

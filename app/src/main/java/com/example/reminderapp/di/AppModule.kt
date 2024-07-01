@@ -43,6 +43,7 @@ val appModule = module {
     }
 
     single<ICalendarProvider> { CalendarProvider() }
+
     viewModel<MainViewModel> {
         MainViewModel(
             getAllGroupsUseCase = get(),
@@ -50,7 +51,8 @@ val appModule = module {
             getTasksForTodayCountUseCase = get(),
             getTasksWithFlagCountUseCase = get(),
             getAllTasksCountUseCase = get(),
-            getNoTimeTasksCountUseCase = get()
+            getNoTimeTasksCountUseCase = get(),
+            getTasksWithoutGroupCountUseCase = get()
         )
     }
 
@@ -80,7 +82,8 @@ val appModule = module {
             application = get(),
             editReminderUseCase = get(),
             deleteReminderUseCase = get(),
-            getNoTimeTasksUseCase = get()
+            getNoTimeTasksUseCase = get(),
+            getTasksWithoutGroupUseCase = get()
         )
     }
 

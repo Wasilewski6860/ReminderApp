@@ -26,5 +26,5 @@ data class TaskEntity(
     @ColumnInfo(name = "periodic_type") val periodicType: String,
     @ColumnInfo(name = "is_active") val isActive: Boolean,
     @ColumnInfo(name = "flag") val flag: Boolean,
-    val groupId: Int,
+    val groupId: Int?,
 )

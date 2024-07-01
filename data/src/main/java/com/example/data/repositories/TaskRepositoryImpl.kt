@@ -85,7 +85,17 @@ class TaskRepositoryImpl(
         return getTasksWithFlag().map { list -> list.size }
     }
 
-    fun isToday(timeInMillis: Long?): Boolean {
+    override fun getTasksWithoutGroup(): Flow<List<Task>> {
+        return getAllTasks().map { list ->
+            list.filter { it.groupId == null }
+        }
+    }
+
+    override fun getTasksWithoutGroupCount(): Flow<Int> {
+        return getTasksWithoutGroup().map { list -> list.size }
+    }
+
+    private fun isToday(timeInMillis: Long?): Boolean {
         if (timeInMillis == null) {
             return false
         }
@@ -96,6 +106,8 @@ class TaskRepositoryImpl(
         return now.get(Calendar.YEAR) == target.get(Calendar.YEAR) &&
                 now.get(Calendar.DAY_OF_YEAR) == target.get(Calendar.DAY_OF_YEAR)
     }
+
+
 
 
 }

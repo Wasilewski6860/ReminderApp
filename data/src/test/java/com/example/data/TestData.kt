@@ -89,6 +89,19 @@ object TestData {
         groupId = 1
     )
 
+    val taskWithoutGroup = Task(
+        id = 3,
+        name = "Task 3",
+        description = "Description 3",
+        reminderCreationTime = 430L,
+        reminderTime = todayTimeInMillis,
+        reminderTimePeriod = 5540L,
+        type = TaskPeriodType.ONE_TIME,
+        isActive = false,
+        isMarkedWithFlag = true,
+        groupId = null
+    )
+
     val tasks = listOf(firstTask, secondTask, thirdTask)
     val noTimeTasks = listOf(thirdTask)
     val countOfNoTimeTasks = noTimeTasks.size
@@ -97,6 +110,7 @@ object TestData {
     val plannedTasks = listOf(fourthTask)
     val todayTasks = listOf(todayTask)
     val tasksWithFlag = listOf(fourthTask)
+    val tasksWithoutGroup = listOf(taskWithoutGroup)
 
     val firstTaskEntity = TaskEntity(
         id = 1,
@@ -185,12 +199,12 @@ object TestData {
 
     val groups = listOf(firstGroup, secondGroup, thirdGroup)
 
-    val firstGroupEntity = TaskGrorunBlockingupEntity(
-        groupId = 1,
-        groupName = "Group 1",
-        groupColor = 1,
-        groupImage = 1
-    )
+//    val firstGroupEntity = TaskGrorunBlockingupEntity(
+//        groupId = 1,
+//        groupName = "Group 1",
+//        groupColor = 1,
+//        groupImage = 1
+//    )
 
     val secondGroupEntity = TaskGroupEntity(
         groupId = 2,
@@ -206,17 +220,17 @@ object TestData {
         groupImage = 3
     )
 
-    val groupEntities = listOf(firstGroupEntity, secondGroupEntity, thirdGroupEntity)
+    // val groupEntities = listOf(firstGroupEntity, secondGroupEntity, thirdGroupEntity)
 
     val firstGroupWithTasks = GroupWithTasks(
         firstGroup,
         listOf(firstTask, thirdTask)
     )
 
-    val firstGroupWithTasksEntity = com.example.data.cache.relation.GroupWithTasks(
-        firstGroupEntity,
-        listOf(firstTaskEntity, thirdTaskEntity)
-    )
+//    val firstGroupWithTasksEntity = com.example.data.cache.relation.GroupWithTasks(
+//        firstGroupEntity,
+//        listOf(firstTaskEntity, thirdTaskEntity)
+//    )
 
     val secondGroupWithTasks = GroupWithTasks(
         secondGroup,

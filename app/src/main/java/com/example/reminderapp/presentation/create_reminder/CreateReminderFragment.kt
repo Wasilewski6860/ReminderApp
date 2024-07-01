@@ -63,7 +63,7 @@ import com.example.reminderapp.utils.setupToolbar
 import java.util.Locale
 
 
-class CreateReminderFragment :  NavigationFragment(), MenuProvider, DataReceiver {
+class CreateReminderFragment : NavigationFragment(), MenuProvider, DataReceiver {
 
     override var backstackTag: String = FragmentNavigationConstants.TASK_KEY
 
@@ -80,7 +80,6 @@ class CreateReminderFragment :  NavigationFragment(), MenuProvider, DataReceiver
 
     var hasNotificationPermisions = false
     var hasScheduleExactAlarmPermisions = false
-
 
 
     override fun onCreateView(
@@ -146,7 +145,7 @@ class CreateReminderFragment :  NavigationFragment(), MenuProvider, DataReceiver
                 viewModel.onNameTextChanged(taskSerialized.name)
                 viewModel.onDescriptionTextChanged(taskSerialized.description)
                 viewModel.onFlagChanged(taskSerialized.isMarkedWithFlag)
-                if(taskSerialized.reminderTime!=null || taskSerialized.reminderTimePeriod!=null) {
+                if (taskSerialized.reminderTime != null || taskSerialized.reminderTimePeriod != null) {
                     viewModel.onRemindSwitchChecked(true)
                 }
             }
@@ -157,6 +156,7 @@ class CreateReminderFragment :  NavigationFragment(), MenuProvider, DataReceiver
         binding.reminderNameEt.doAfterTextChanged(viewModel::onNameTextChanged)
         binding.reminderDescriptionEt.doAfterTextChanged(viewModel::onDescriptionTextChanged)
     }
+
     private fun setupSwitches() {
         binding.remindSwitch.setOnCheckedChangeListener { _, isChecked ->
             viewModel.onRemindSwitchChecked(isChecked)
@@ -166,38 +166,41 @@ class CreateReminderFragment :  NavigationFragment(), MenuProvider, DataReceiver
                 val layoutParams = linearLayout.layoutParams as ConstraintLayout.LayoutParams
                 layoutParams.height = 0
                 linearLayout.layoutParams = layoutParams
-                val animator = ValueAnimator.ofInt(0, getContentHeight(binding.dateAndPeriodLl)).apply {
-                    duration = 500
-                    addUpdateListener { animation ->
-                        val value = animation.animatedValue as Int
-                        layoutParams.height = value
-                        linearLayout.layoutParams = layoutParams
-                        val y: Float = constraintLayout.height.toFloat() - linearLayout.height.toFloat()
-                        linearLayout.y = y
+                val animator =
+                    ValueAnimator.ofInt(0, getContentHeight(binding.dateAndPeriodLl)).apply {
+                        duration = 500
+                        addUpdateListener { animation ->
+                            val value = animation.animatedValue as Int
+                            layoutParams.height = value
+                            linearLayout.layoutParams = layoutParams
+                            val y: Float =
+                                constraintLayout.height.toFloat() - linearLayout.height.toFloat()
+                            linearLayout.y = y
+                        }
                     }
-                }
                 animator.start()
-            }
-            else {
+            } else {
                 val layoutParams = linearLayout.layoutParams as ConstraintLayout.LayoutParams
                 layoutParams.height = getContentHeight(binding.dateAndPeriodLl)
                 linearLayout.layoutParams = layoutParams
-                val animator = ValueAnimator.ofInt(getContentHeight(binding.dateAndPeriodLl), 0).apply {
-                    duration = 500 // длительность анимации в миллисекундах
-                    addUpdateListener { animation ->
-                        val value = animation.animatedValue as Int
-                        layoutParams.height = value
-                        linearLayout.layoutParams = layoutParams
-                        val y: Float = constraintLayout.height.toFloat() - linearLayout.height.toFloat()
-                        linearLayout.y = y
+                val animator =
+                    ValueAnimator.ofInt(getContentHeight(binding.dateAndPeriodLl), 0).apply {
+                        duration = 500 // длительность анимации в миллисекундах
+                        addUpdateListener { animation ->
+                            val value = animation.animatedValue as Int
+                            layoutParams.height = value
+                            linearLayout.layoutParams = layoutParams
+                            val y: Float =
+                                constraintLayout.height.toFloat() - linearLayout.height.toFloat()
+                            linearLayout.y = y
+                        }
                     }
-                }
 
                 animator.start()
             }
         }
 
-        binding.flagSwitch.setOnCheckedChangeListener {  _, isChecked ->
+        binding.flagSwitch.setOnCheckedChangeListener { _, isChecked ->
             viewModel.onFlagChanged(isChecked)
         }
     }
@@ -291,28 +294,70 @@ class CreateReminderFragment :  NavigationFragment(), MenuProvider, DataReceiver
                                     selectedListSpinner.actionIfChanged(currentState.reminderGroupId) {
                                         selectedListSpinner.setSelection(groupSpinnerAdapter.getGroupPosition(currentState.reminderGroupId))
                                     }
-                                }
-                                else {
-                                    selectedListSpinner.actionIfChanged(currentState.reminderGroupName) {
-                                        selectedListSpinner.setSelection(groupSpinnerAdapter.getGroupPosition(currentState.reminderGroupName))
+                                    reminderDescriptionEt.actionIfChanged(currentState.reminderDescription) {
+                                        reminderDescriptionEt.setText(currentState.reminderDescription)
+                                        reminderDescriptionEt.setSelection(currentState.reminderDescription.length)
+                                    }
+                                    remindSwitch.actionIfChanged(currentState.reminderPeriod != null || currentState.reminderFirstTime != null) {
+                                        remindSwitch.isChecked =
+                                            currentState.reminderPeriod != null || currentState.reminderFirstTime != null
+                                    }
+                                    selectedDateTv.actionIfChanged(currentState.reminderFirstTime) {
+                                        selectedDateTv.text =
+                                            if (currentState.reminderFirstTime != null) dateFormat.format(
+                                                currentState.reminderFirstTime
+                                            ) else requireContext().getString(R.string.not_selected)
+                                    }
+                                    selectedPeriodSpinner.actionIfChanged(currentState.reminderPeriod) {
+                                        selectedPeriodSpinner.setSelection(
+                                            periodSpinnerAdapter.getTimePeriodPosition(
+                                                currentState.reminderPeriod
+                                            )
+                                        )
+                                    }
+                                    if (!currentState.groupLoaded) {
+                                        groupSpinnerAdapter.submitList(currentState.groupsUiState.data)
+                                        viewModel.onGroupLoadedToSpinner()
+                                    }
+                                    if (currentState.reminderGroupId != null) {
+                                        selectedListSpinner.actionIfChanged(currentState.reminderGroupId) {
+                                            selectedListSpinner.setSelection(
+                                                groupSpinnerAdapter.getGroupPosition(
+                                                    currentState.reminderGroupId
+                                                )
+                                            )
+                                        }
+                                    } else {
+                                        selectedListSpinner.actionIfChanged(currentState.reminderGroupName) {
+                                            selectedListSpinner.setSelection(
+                                                groupSpinnerAdapter.getGroupPosition(
+                                                    currentState.reminderGroupName
+                                                )
+                                            )
+                                        }
                                     }
                                 }
                             }
-                        }
-                        is UiState.Loading -> {
-                            binding.contentLayout.isVisible = false
-                            binding.loadingLayout.isVisible = true
-                        }
-                        is UiState.Error -> {
-                            binding.contentLayout.isVisible = true
-                            binding.loadingLayout.isVisible = false
-                            showSnackbar(currentState.groupsUiState.message, requireActivity().findViewById(R.id.rootView))
+
+                            is UiState.Loading -> {
+                                binding.contentLayout.isVisible = false
+                                binding.loadingLayout.isVisible = true
+                            }
+
+                            is UiState.Error -> {
+                                binding.contentLayout.isVisible = true
+                                binding.loadingLayout.isVisible = false
+                                showSnackbar(
+                                    currentState.groupsUiState.message,
+                                    requireActivity().findViewById(R.id.rootView)
+                                )
+                            }
                         }
                     }
-                }
             }
         }
     }
+
     private fun setupSpinnerPeriod() {
         val timeDates = TimeDateUtils(requireContext()).timeDates
 
@@ -329,13 +374,19 @@ class CreateReminderFragment :  NavigationFragment(), MenuProvider, DataReceiver
         val spinner = binding.selectedPeriodSpinner
         spinner.adapter = periodSpinnerAdapter
 
-        binding.selectedPeriodSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onNothingSelected(p0: AdapterView<*>?) {}
+        binding.selectedPeriodSpinner.onItemSelectedListener =
+            object : AdapterView.OnItemSelectedListener {
+                override fun onNothingSelected(p0: AdapterView<*>?) {}
 
-            override fun onItemSelected(adapterView: AdapterView<*>?, view: View?, pos: Int, id: Long) {
-                periodSpinnerAdapter.handleItemSelected(pos)
+                override fun onItemSelected(
+                    adapterView: AdapterView<*>?,
+                    view: View?,
+                    pos: Int,
+                    id: Long
+                ) {
+                    periodSpinnerAdapter.handleItemSelected(pos)
+                }
             }
-        }
         periodSpinnerAdapter.submitList(timeDates)
     }
 
@@ -356,21 +407,26 @@ class CreateReminderFragment :  NavigationFragment(), MenuProvider, DataReceiver
         val spinner = binding.selectedListSpinner
         spinner.adapter = groupSpinnerAdapter
 
-        binding.selectedListSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onNothingSelected(p0: AdapterView<*>?) {}
+        binding.selectedListSpinner.onItemSelectedListener =
+            object : AdapterView.OnItemSelectedListener {
+                override fun onNothingSelected(p0: AdapterView<*>?) {}
 
-            override fun onItemSelected(adapterView: AdapterView<*>?, view: View?, pos: Int, id: Long) {
-                groupSpinnerAdapter.handleItemSelected(pos)
+                override fun onItemSelected(
+                    adapterView: AdapterView<*>?,
+                    view: View?,
+                    pos: Int,
+                    id: Long
+                ) {
+                    groupSpinnerAdapter.handleItemSelected(pos)
+                }
             }
-        }
     }
 
     //TODO переделать
     private fun saveTask() {
-        if(hasNotificationPermisions && hasScheduleExactAlarmPermisions) {
+        if (hasNotificationPermisions && hasScheduleExactAlarmPermisions) {
             viewModel.saveTask()
-        }
-        else {
+        } else {
             checkPermissions()
         }
     }
@@ -455,11 +511,12 @@ class CreateReminderFragment :  NavigationFragment(), MenuProvider, DataReceiver
     }
 
     override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-        when(menuItem.itemId){
+        when (menuItem.itemId) {
             android.R.id.home -> {
                 navigateBack()
                 return true
             }
+
             R.id.action_save -> {
                 saveTask()
                 return true
@@ -472,12 +529,10 @@ class CreateReminderFragment :  NavigationFragment(), MenuProvider, DataReceiver
         checkNotificationPermission()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             checkScheduleExactPermission()
-        }
-        else hasScheduleExactAlarmPermisions = true
+        } else hasScheduleExactAlarmPermisions = true
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             checkNotificationPermission()
-        }
-        else hasNotificationPermisions = true
+        } else hasNotificationPermisions = true
     }
 
 
@@ -489,6 +544,7 @@ class CreateReminderFragment :  NavigationFragment(), MenuProvider, DataReceiver
             ) == PackageManager.PERMISSION_GRANTED -> {
                 hasNotificationPermisions = true
             }
+
             shouldShowRequestPermissionRationale(permission) -> {
                 Snackbar.make(
                     requireActivity().findViewById(R.id.rootView),
@@ -503,6 +559,7 @@ class CreateReminderFragment :  NavigationFragment(), MenuProvider, DataReceiver
                     }
                 }.show()
             }
+
             else -> {
                 requestNotificationPermissionLauncher.launch(permission)
             }
@@ -516,8 +573,7 @@ class CreateReminderFragment :  NavigationFragment(), MenuProvider, DataReceiver
             val intent = Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM)
             intent.setData(Uri.fromParts("package", requireContext().getPackageName(), null))
             startActivity(intent)
-        }
-        else hasScheduleExactAlarmPermisions = true
+        } else hasScheduleExactAlarmPermisions = true
     }
 
     private val requestNotificationPermissionLauncher =

@@ -40,6 +40,8 @@ interface ITaskRepository {
 
     fun getTasksWithFlagCount(): Flow<Int>
 
+    fun getTasksWithoutGroup(): Flow<List<Task>>
 
+    fun getTasksWithoutGroupCount(): Flow<Int>
 
 }

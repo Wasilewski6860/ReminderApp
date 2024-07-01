@@ -29,6 +29,8 @@ import com.example.domain.use_case.reminder.CreateReminderUseCase
 import com.example.domain.use_case.reminder.DeleteReminderGroupUseCase
 import com.example.domain.use_case.reminder.DeleteReminderUseCase
 import com.example.domain.use_case.reminder.EditReminderUseCase
+import com.example.domain.use_case.task.GetTasksWithoutGroupCountUseCase
+import com.example.domain.use_case.task.GetTasksWithoutGroupUseCase
 import com.example.domain.use_case.task.SaveTaskUseCase
 import org.koin.dsl.module
 
@@ -153,4 +155,13 @@ val domainModule = module {
     factory<ChangeAlarmUseCase> {
         ChangeAlarmUseCase(createAlarmUseCase = get(), clearAlarmUseCase = get())
     }
+
+    factory<GetTasksWithoutGroupUseCase> {
+        GetTasksWithoutGroupUseCase(taskRepository = get())
+    }
+
+    factory<GetTasksWithoutGroupCountUseCase> {
+        GetTasksWithoutGroupCountUseCase(taskRepository = get())
+    }
+
 }

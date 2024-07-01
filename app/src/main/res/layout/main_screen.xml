@@ -99,6 +99,17 @@
                     app:gridImage="@drawable/ic_no_time"
                     app:gridTitleText="@string/no_time" />
 
+                <com.example.reminderapp.ui.GridItemCustomView
+                    android:id="@+id/tasksWithoutGroup"
+                    android:layout_width="0dp"
+                    android:layout_margin="0dp"
+                    android:layout_row="2"
+                    android:layout_column="1"
+                    android:layout_columnWeight="1"
+                    app:gridCounterText="@string/count_stub"
+                    app:gridImage="@drawable/no_group"
+                    app:gridTitleText="@string/without_group" />
+
             </GridLayout>
 
         </ScrollView>

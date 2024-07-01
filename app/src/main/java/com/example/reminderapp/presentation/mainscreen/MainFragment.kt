@@ -109,7 +109,8 @@ class MainFragment : NavigationFragment() {
         plannedCount: Int,
         withFlagCount: Int,
         noTimeCount: Int,
-        allCount: Int
+        allCount: Int,
+        withoutGroupCount: Int
     ) = with(binding) {
         topGridLayout.apply {
             currentDayTasksItem.apply {
@@ -172,6 +173,18 @@ class MainFragment : NavigationFragment() {
                     navigateTo(NavigationDestinations.ToReminderListFragment, bundle)
                 }
             }
+            tasksWithoutGroup.apply {
+                counterTitle = withoutGroupCount.toString()
+                setOnClickListener {
+                    val bundle = Bundle().apply {
+                        putSerializable(
+                            FragmentNavigationConstants.LIST_TYPE,
+                            TasksListTypeCase.TaskWithoutGroup
+                        )
+                    }
+                    navigateTo(NavigationDestinations.ToReminderListFragment, bundle)
+                }
+            }
         }
     }
 
@@ -223,7 +236,8 @@ class MainFragment : NavigationFragment() {
                                     plannedCount = this.plannedCount,
                                     withFlagCount = this.withFlagCount,
                                     allCount = this.allCount,
-                                    noTimeCount = this.noTimeCount
+                                    noTimeCount = this.noTimeCount,
+                                    withoutGroupCount = this.withoutGroupCount
                                 )
                             }
 
