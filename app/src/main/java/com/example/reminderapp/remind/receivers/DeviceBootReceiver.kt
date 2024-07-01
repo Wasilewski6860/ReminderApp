@@ -7,6 +7,7 @@ import android.content.Intent
 import android.util.Log
 import com.example.domain.use_case.task.GetAllTasksUseCase
 import com.example.data.reminder.RemindAlarmManager
+import com.example.domain.alarm.IRemindAlarmManager
 import com.example.domain.model.TaskPeriodType
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -17,7 +18,7 @@ import org.koin.core.component.inject
 
 class DeviceBootReceiver : BroadcastReceiver(), KoinComponent {
 
-    private val remindAlarmManager: RemindAlarmManager by inject()
+    private val remindAlarmManager: IRemindAlarmManager by inject()
     private val getAllTasksUseCase: GetAllTasksUseCase by inject()
     private val scope = CoroutineScope(SupervisorJob())
 
