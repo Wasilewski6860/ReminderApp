@@ -20,7 +20,7 @@ class GridItemCustomView @JvmOverloads constructor(
     private var titleTextView: TextView
 
     init {
-        inflate(context, R.layout.grid_item, this)
+        inflate(context, R.layout.category_item, this)
         imageView = findViewById(R.id.imageGridItem)
         counterTextView = findViewById(R.id.textCounterGridItem)
         titleTextView = findViewById(R.id.nameTextGridItem)

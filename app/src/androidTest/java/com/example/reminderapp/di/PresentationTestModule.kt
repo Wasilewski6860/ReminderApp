@@ -3,7 +3,7 @@ package com.example.reminderapp.di
 import com.example.reminderapp.presentation.base.CalendarProvider
 import com.example.reminderapp.presentation.base.ICalendarProvider
 import com.example.reminderapp.presentation.create_reminder.CreateReminderViewModel
-import com.example.reminderapp.presentation.editorlistsscreen.EditListsViewModel
+import com.example.reminderapp.presentation.edit_lists.EditListsViewModel
 import com.example.reminderapp.presentation.main.MainViewModel
 import com.example.reminderapp.presentation.new_list.NewListViewModel
 import com.example.reminderapp.presentation.reminder_list.ReminderListViewModel

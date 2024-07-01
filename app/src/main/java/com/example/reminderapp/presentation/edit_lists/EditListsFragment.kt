@@ -1,4 +1,4 @@
-package com.example.reminderapp.presentation.editorlistsscreen
+package com.example.reminderapp.presentation.edit_lists
 
 import android.os.Build
 import android.os.Bundle
@@ -19,7 +19,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.domain.model.Group
 import com.example.reminderapp.R
-import com.example.reminderapp.databinding.ListEditorScreenBinding
+import com.example.reminderapp.databinding.FragmentEditListsBinding
 import com.example.reminderapp.presentation.base.NavigationFragment
 import com.example.reminderapp.presentation.base.UiState
 import com.example.reminderapp.navigation.FragmentNavigationConstants
@@ -35,7 +35,7 @@ class EditListsFragment : NavigationFragment(), MenuProvider {
 
     override var backstackTag: String = FragmentNavigationConstants.TO_EDIT_LISTS_FRAGMENT
 
-    private lateinit var binding: ListEditorScreenBinding
+    private lateinit var binding: FragmentEditListsBinding
     private lateinit var adapter: GroupListRecyclerViewAdapter
     private val viewModel by viewModel<EditListsViewModel>()
 
@@ -44,7 +44,7 @@ class EditListsFragment : NavigationFragment(), MenuProvider {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = ListEditorScreenBinding.inflate(inflater, container, false)
+        binding = FragmentEditListsBinding.inflate(inflater, container, false)
 
         edgeToEdge()
         setupToolbar(

@@ -5,7 +5,7 @@ import com.example.domain.repository.IGroupRepository
 import com.example.reminderapp.di.TestData
 import com.example.reminderapp.presentation.base.BaseViewModelTest
 import com.example.reminderapp.presentation.base.UiState
-import com.example.reminderapp.presentation.editorlistsscreen.EditListsViewModel
+import com.example.reminderapp.presentation.edit_lists.EditListsViewModel
 import io.mockk.coEvery
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first

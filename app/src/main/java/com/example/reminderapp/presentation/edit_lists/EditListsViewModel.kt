@@ -1,4 +1,4 @@
-package com.example.reminderapp.presentation.editorlistsscreen
+package com.example.reminderapp.presentation.edit_lists
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
