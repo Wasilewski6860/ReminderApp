@@ -14,9 +14,9 @@ class DeleteGroupUseCaseTest : UseCaseBaseTest() {
 
     @Test
     fun `group deleting process test`() = runTest {
-        coEvery { repository.deleteGroup(groupId = any()) } returns Unit
+        coEvery { groupRepository.deleteGroup(groupId = any()) } returns Unit
         useCase(groupId = TestData.firstGroup.groupId)
-        coVerify { repository.deleteGroup(groupId = TestData.firstGroup.groupId) }
+        coVerify { groupRepository.deleteGroup(groupId = TestData.firstGroup.groupId) }
     }
 
 }

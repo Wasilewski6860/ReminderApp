@@ -15,9 +15,9 @@ class SaveTaskUseCaseTest : UseCaseBaseTest() {
 
     @Test
     fun `saving task process test`() = runTest {
-        coEvery { repository.addTask(task = any()) } returns flowOf(TestData.firstTask)
+        coEvery { taskRepository.addTask(task = any()) } returns flowOf(TestData.firstTask)
         useCase(task = TestData.firstTask)
-        coVerify { repository.addTask(task = TestData.firstTask) }
+        coVerify { taskRepository.addTask(task = TestData.firstTask) }
     }
 
 }

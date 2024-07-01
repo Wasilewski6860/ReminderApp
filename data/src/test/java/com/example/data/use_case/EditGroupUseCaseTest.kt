@@ -14,9 +14,9 @@ class EditGroupUseCaseTest : UseCaseBaseTest() {
 
     @Test
     fun `editing group process test`() = runTest {
-        coEvery { repository.editGroup(group = any()) } returns Unit
+        coEvery { groupRepository.editGroup(group = any()) } returns Unit
         useCase(group = TestData.firstGroup)
-        coVerify { repository.editGroup(group = TestData.firstGroup) }
+        coVerify { groupRepository.editGroup(group = TestData.firstGroup) }
     }
 
 }

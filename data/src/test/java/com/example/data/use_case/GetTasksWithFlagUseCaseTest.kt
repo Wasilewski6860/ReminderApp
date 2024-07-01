@@ -16,7 +16,7 @@ class GetTasksWithFlagUseCaseTest : UseCaseBaseTest() {
 
     @Test
     fun `getting tasks with flag process test`() = runTest {
-        coEvery { repository.getTasksWithFlag() } returns flowOf(TestData.tasksWithFlag)
+        coEvery { taskRepository.getTasksWithFlag() } returns flowOf(TestData.tasksWithFlag)
         val expected = TestData.tasksWithFlag
         val actual = useCase().first()
         assertEquals(expected, actual)

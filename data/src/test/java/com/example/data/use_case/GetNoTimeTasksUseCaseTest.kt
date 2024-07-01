@@ -16,9 +16,9 @@ class GetNoTimeTasksUseCaseTest : UseCaseBaseTest() {
 
     @Test
     fun `getting tasks with no time process test`() = runTest {
-        coEvery { repository.getNoTimeTasks() } returns flowOf(TestData.noTimeTasks)
+        coEvery { taskRepository.getNoTimeTasks() } returns flowOf(TestData.noTimeTasks)
         val expected = TestData.noTimeTasks
-        val actual = useCase(Unit).first()
+        val actual = useCase().first()
         assertEquals(expected, actual)
     }
 

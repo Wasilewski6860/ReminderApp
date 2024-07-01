@@ -14,9 +14,9 @@ class EditTaskUseCaseTest : UseCaseBaseTest() {
 
     @Test
     fun `editing task process test`() = runTest {
-        coEvery { repository.editTask(task = any()) } returns Unit
+        coEvery { taskRepository.editTask(task = any()) } returns Unit
         useCase(task = TestData.firstTask)
-        coVerify { repository.editTask(task = TestData.firstTask) }
+        coVerify { taskRepository.editTask(task = TestData.firstTask) }
     }
 
 }

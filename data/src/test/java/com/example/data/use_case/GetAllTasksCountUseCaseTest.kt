@@ -16,9 +16,9 @@ class GetAllTasksCountUseCaseTest : UseCaseBaseTest() {
 
     @Test
     fun `getting all tasks count process test`() = runTest {
-        coEvery { repository.getAllTasksCount() } returns flowOf(TestData.tasks.size)
+        coEvery { taskRepository.getAllTasksCount() } returns flowOf(TestData.tasks.size)
         val expected = TestData.tasks.size
-        val actual = useCase(Unit).first()
+        val actual = useCase().first()
         assertEquals(expected, actual)
     }
 

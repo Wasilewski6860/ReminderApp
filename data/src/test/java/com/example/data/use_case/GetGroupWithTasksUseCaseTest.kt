@@ -16,7 +16,7 @@ class GetGroupWithTasksUseCaseTest : UseCaseBaseTest() {
 
     @Test
     fun `getting group with tasks process test`() = runTest {
-        coEvery { repository.getGroupWithTasks(id = any()) } returns flowOf(TestData.groupWithTasks)
+        coEvery { groupRepository.getGroupWithTasks(id = any()) } returns flowOf(TestData.groupWithTasks)
         val expected = TestData.groupWithTasks
         val actual = useCase(TestData.firstGroup.groupId).first()
         assertEquals(expected, actual)

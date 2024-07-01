@@ -19,7 +19,6 @@ class GroupWithTasksCacheMapper(
                 group = groupCacheMapper.mapFromEntity(Pair(group, tasks.size) ),
                 tasks = if(tasks != null) tasks.map {
                     taskEntity: TaskEntity ->
-                    Log.d("MY LOG", "GroupWithTasksCacheMapper mapFromEntity taskCacheMapper.mapFromEntity")
                     taskCacheMapper.mapFromEntity(taskEntity)
                 } else listOf()
             )
