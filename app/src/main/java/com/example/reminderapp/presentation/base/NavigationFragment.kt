@@ -1,7 +1,7 @@
 package com.example.reminderapp.presentation.base
 
 import android.os.Bundle
-import com.example.reminderapp.presentation.navigation.NavigationDestinations
+import com.example.reminderapp.navigation.NavigationDestinations
 
 abstract class NavigationFragment: BaseFragment() {
 

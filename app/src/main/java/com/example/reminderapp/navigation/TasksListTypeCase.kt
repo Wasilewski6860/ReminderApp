@@ -1,4 +1,4 @@
-package com.example.reminderapp.presentation.navigation
+package com.example.reminderapp.navigation
 
 import java.io.Serializable
 

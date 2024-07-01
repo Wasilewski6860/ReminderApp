@@ -1,4 +1,4 @@
-package com.example.reminderapp.presentation.mainscreen
+package com.example.reminderapp.presentation.main
 
 import androidx.lifecycle.viewModelScope
 import com.example.domain.model.Group

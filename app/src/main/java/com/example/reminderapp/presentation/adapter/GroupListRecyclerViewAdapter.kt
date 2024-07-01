@@ -1,4 +1,4 @@
-package com.example.reminderapp.presentation.recycleradapter
+package com.example.reminderapp.presentation.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.domain.model.Group
-import com.example.reminderapp.animations.playRecyclerItemDeletingAnimation
+import com.example.reminderapp.ui.animations.playRecyclerItemDeletingAnimation
 import com.example.reminderapp.databinding.ListItemRecyclerBinding
 import org.koin.core.component.KoinComponent
 

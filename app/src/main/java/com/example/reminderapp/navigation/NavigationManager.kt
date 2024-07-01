@@ -1,4 +1,4 @@
-package com.example.reminderapp.presentation.navigation
+package com.example.reminderapp.navigation
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

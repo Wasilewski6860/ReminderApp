@@ -1,4 +1,4 @@
-package com.example.reminderapp.presentation.navigation
+package com.example.reminderapp.navigation
 
 object FragmentNavigationConstants {
     const val TO_MAIN_FRAGMENT_BACKSTACK = "to_main"

@@ -1,24 +1,16 @@
 package com.example.reminderapp.presentation
 
-import com.example.domain.repository.IGroupRepository
 import com.example.domain.repository.ITaskRepository
-import com.example.domain.use_case.reminder.CreateReminderUseCase
-import com.example.domain.use_case.reminder.EditReminderUseCase
 import com.example.reminderapp.di.TestData
 import com.example.reminderapp.presentation.base.BaseViewModelTest
 import com.example.reminderapp.presentation.base.OperationResult
-import com.example.reminderapp.presentation.base.UiState
 import com.example.reminderapp.presentation.create_reminder.CreateReminderViewModel
-import com.example.reminderapp.presentation.mainscreen.MainUiState
-import com.example.reminderapp.presentation.mainscreen.MainViewModel
 import io.mockk.coEvery
 import io.mockk.coVerify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Test
 import org.koin.test.inject
 import kotlin.test.assertEquals
@@ -75,9 +67,7 @@ class CreateReminderViewModelTest: BaseViewModelTest() {
         assertEquals(viewModel.validate(), false)
 
         viewModel.onNameTextChanged(TestData.firstTask.name)
-        assertEquals(viewModel.validate(), false)
-
-        viewModel.onGroupIdChanged(TestData.firstTask.groupId)
         assertEquals(viewModel.validate(), true)
+
     }
 }

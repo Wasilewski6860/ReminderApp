@@ -1,24 +1,14 @@
 package com.example.reminderapp.test
 
-import android.content.Context
-import android.os.Bundle
 import androidx.appcompat.widget.AppCompatImageButton
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.matcher.ViewMatchers.withContentDescription
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withParent
-import androidx.test.rule.ActivityTestRule
-import com.example.domain.repository.IGroupRepository
-import com.example.domain.repository.ITaskRepository
-import com.example.reminderapp.MainActivity
 import com.example.reminderapp.R
 import com.example.reminderapp.di.TestData
-import com.example.reminderapp.presentation.mainscreen.MainFragment
-import com.example.reminderapp.presentation.mainscreen.MainViewModel
 import com.example.reminderapp.scenarios.CheckMainScreenDisplayedScenario
 import com.example.reminderapp.scenarios.ToEditListsScenario
-import com.example.reminderapp.scenarios.ToMainScreenScenario
 import com.example.reminderapp.screen.GroupListScreen
 import com.example.reminderapp.screen.MainScreen
 import com.example.reminderapp.test.base.BaseScreenTest
@@ -27,9 +17,7 @@ import kotlinx.coroutines.flow.flowOf
 import org.hamcrest.Matchers.allOf
 import org.hamcrest.Matchers.instanceOf
 import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
-import org.koin.test.inject
 
 class EditListsScreenTest: BaseScreenTest()  {
 

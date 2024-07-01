@@ -1,4 +1,4 @@
-package com.example.reminderapp.animations
+package com.example.reminderapp.ui.animations
 
 import android.animation.ObjectAnimator
 import android.view.animation.DecelerateInterpolator

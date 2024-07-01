@@ -1,16 +1,7 @@
 package com.example.reminderapp.test
 
-import android.content.Context
-import android.os.Bundle
-import androidx.test.rule.ActivityTestRule
-import com.example.domain.repository.IGroupRepository
-import com.example.domain.repository.ITaskRepository
 import com.example.reminderapp.test.base.BaseScreenTest
-import com.example.reminderapp.MainActivity
-import com.example.reminderapp.R
 import com.example.reminderapp.di.TestData
-import com.example.reminderapp.presentation.mainscreen.MainFragment
-import com.example.reminderapp.presentation.mainscreen.MainViewModel
 import com.example.reminderapp.scenarios.ToMainScreenScenario
 import com.example.reminderapp.screen.GroupListScreen
 import com.example.reminderapp.screen.MainScreen
@@ -18,9 +9,7 @@ import com.example.reminderapp.screen.NewListScreen
 import io.mockk.coEvery
 import kotlinx.coroutines.flow.flowOf
 import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
-import org.koin.test.inject
 
 class MainScreenTest: BaseScreenTest() {
 

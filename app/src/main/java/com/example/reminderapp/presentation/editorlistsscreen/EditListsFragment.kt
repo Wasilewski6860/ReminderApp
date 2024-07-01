@@ -22,22 +22,22 @@ import com.example.reminderapp.R
 import com.example.reminderapp.databinding.ListEditorScreenBinding
 import com.example.reminderapp.presentation.base.NavigationFragment
 import com.example.reminderapp.presentation.base.UiState
-import com.example.reminderapp.presentation.navigation.FragmentNavigationConstants
-import com.example.reminderapp.presentation.navigation.NavigationDestinations
-import com.example.reminderapp.presentation.recycleradapter.GroupListRecyclerViewAdapter
+import com.example.reminderapp.navigation.FragmentNavigationConstants
+import com.example.reminderapp.navigation.NavigationDestinations
+import com.example.reminderapp.presentation.adapter.GroupListRecyclerViewAdapter
 import com.example.reminderapp.utils.setPaddingToInset
 import com.example.reminderapp.utils.setupToolbar
 import com.example.reminderapp.utils.showSnackbar
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class EditListsScreenFragment : NavigationFragment(), MenuProvider {
+class EditListsFragment : NavigationFragment(), MenuProvider {
 
     override var backstackTag: String = FragmentNavigationConstants.TO_EDIT_LISTS_FRAGMENT
 
     private lateinit var binding: ListEditorScreenBinding
     private lateinit var adapter: GroupListRecyclerViewAdapter
-    private val viewModel by viewModel<ListsEditorViewModel>()
+    private val viewModel by viewModel<EditListsViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,

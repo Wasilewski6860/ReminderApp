@@ -2,20 +2,16 @@ package com.example.reminderapp.presentation
 
 import com.example.domain.model.Group
 import com.example.domain.repository.IGroupRepository
-import com.example.domain.repository.ITaskRepository
 import com.example.reminderapp.di.TestData
 import com.example.reminderapp.presentation.base.BaseViewModelTest
 import com.example.reminderapp.presentation.base.UiState
-import com.example.reminderapp.presentation.editorlistsscreen.ListsEditorViewModel
-import com.example.reminderapp.presentation.mainscreen.MainUiState
-import com.example.reminderapp.presentation.mainscreen.MainViewModel
+import com.example.reminderapp.presentation.editorlistsscreen.EditListsViewModel
 import io.mockk.coEvery
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Test
 import org.koin.test.inject
 import kotlin.test.assertEquals
@@ -23,10 +19,10 @@ import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 @ExperimentalCoroutinesApi
-class ListsEditorViewModelTest: BaseViewModelTest() {
+class EditListsViewModelTest: BaseViewModelTest() {
 
     private val groupRepository: IGroupRepository by inject()
-    private val viewModel: ListsEditorViewModel by inject()
+    private val viewModel: EditListsViewModel by inject()
 
     @Test
     fun test_fetch_data_success() = runBlocking {
