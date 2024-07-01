@@ -63,23 +63,16 @@ class ReminderListScreenTest: BaseScreenTest()  {
         coEvery { taskRepository.getAllTasks() } returns flowOf(TestData.tasks)
         coEvery { taskRepository.getNoTimeTasks() } returns flowOf(TestData.noTimeTasks)
         coEvery { groupRepository.getAllGroups() } returns flowOf(TestData.groups)
-
-        // Слот для отслеживания вызова deleteTask
         val taskSlot = slot<Task>()
-
-        // Изначальное поведение getGroupWithTasks
         coEvery { groupRepository.getGroupWithTasks(any()) } returns flowOf(TestData.groupWithTasks)
-
-        // Настраиваем deleteTask чтобы изменить поведение getGroupWithTasks
         coEvery { taskRepository.deleteTask(capture(taskSlot)) } answers {
             val deletedTask = taskSlot.captured
-            // Настраиваем getGroupWithTasks для возврата другого списка после удаления задачи
             coEvery { groupRepository.getGroupWithTasks(any()) } returns flowOf(TestData.groupWithTasks.copy(tasks = TestData.groupWithTasks.tasks.filter {  it != deletedTask  }))
         }
     }
 
     @Test
-    fun  reminderListScreenContent() = run() {
+    fun  reminder_list_screen_content() = run() {
         scenario(
             ToMainScreenScenario(
                 activityTestRule = activityTestRule
@@ -142,7 +135,7 @@ class ReminderListScreenTest: BaseScreenTest()  {
     }
 
     @Test
-    fun  testOfDeletion() = run() {
+    fun  test_of_deletion() = run() {
         scenario(
             ToMainScreenScenario(
                 activityTestRule = activityTestRule
@@ -187,7 +180,7 @@ class ReminderListScreenTest: BaseScreenTest()  {
 
     @SdkSuppress(maxSdkVersion = Build.VERSION_CODES.S)
     @Test
-    fun createReminderClickScreenOpenTest() = run(){
+    fun create_reminder_click_screen_open_test() = run(){
         scenario(
             ToMainScreenScenario(
                 activityTestRule = activityTestRule

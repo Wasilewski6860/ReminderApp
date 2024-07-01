@@ -16,21 +16,8 @@ import org.junit.Test
 
 class NewListScreenTest: BaseScreenTest()  {
 
-    @Before
-    override fun setUp() {
-        super.setUp()
-        coEvery {taskRepository.getTasksForToday()} returns flowOf(TestData.todayTasks)
-        coEvery {taskRepository.getTasksForTodayCount()} returns flowOf(TestData.todayTasks.size)
-        coEvery {taskRepository.getTasksPlanned()} returns flowOf(TestData.plannedTasks)
-        coEvery {taskRepository.getTasksPlannedCount()} returns flowOf(TestData.plannedTasks.size)
-        coEvery {taskRepository.getTasksWithFlagCount()} returns flowOf(TestData.tasksWithFlag.size)
-        coEvery{taskRepository.getCountOfNoTimeTasks()} returns flowOf(TestData.noTimeTasks.size)
-        coEvery{taskRepository.getAllTasksCount()} returns flowOf(TestData.tasks.size)
-        coEvery{groupRepository.getAllGroups()} returns flowOf(TestData.groups)
-    }
-
     @Test
-    fun  newListScreenContent() = run() {
+    fun  new_list_screen_content() = run() {
         scenario(
             ToNewListScreenScenario(
                 activityTestRule = activityTestRule
@@ -54,7 +41,7 @@ class NewListScreenTest: BaseScreenTest()  {
     }
 
     @Test
-    fun  testOfSaving() = run() {
+    fun  saving_list_test() = run() {
         scenario(
             ToNewListScreenScenario(
                 activityTestRule = activityTestRule

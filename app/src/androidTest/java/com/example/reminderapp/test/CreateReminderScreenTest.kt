@@ -49,7 +49,7 @@ class CreateReminderScreenTest: BaseScreenTest()  {
 
     @SdkSuppress(maxSdkVersion = Build.VERSION_CODES.S)
     @Test
-    fun  createReminderScreenContent() = run() {
+    fun  create_reminder_screen_content() = run() {
         scenario(
             ToMainScreenScenario(
                 activityTestRule = activityTestRule
@@ -91,7 +91,7 @@ class CreateReminderScreenTest: BaseScreenTest()  {
 
     @SdkSuppress(minSdkVersion = Build.VERSION_CODES.S)
     @Test
-    fun  openNewListFromCreateReminderScreen() = run() {
+    fun  open_new_list_from_create_reminder_screen() = run() {
         scenario(
             ToMainScreenScenario(
                 activityTestRule = activityTestRule
@@ -144,7 +144,7 @@ class CreateReminderScreenTest: BaseScreenTest()  {
 
     @SdkSuppress(minSdkVersion = Build.VERSION_CODES.S)
     @Test
-    fun  testOfSaving() = run() {
+    fun  saving_reminder_test() = run() {
         scenario(
             ToMainScreenScenario(
                 activityTestRule = activityTestRule
@@ -155,9 +155,9 @@ class CreateReminderScreenTest: BaseScreenTest()  {
                 fab.click()
             }
         }
-        step("Clicking on save button in toolbar") {
+        step("Trying to save reminder") {
             CreateReminderScreen {
-                Espresso.onView(ViewMatchers.withId(R.id.action_save)).perform(ViewActions.click())
+                onView(withId(R.id.action_save)).perform(click())
 
                 step("Save unsuccessful, showing error") {
                     onView(withId(R.id.reminder_name_et))
@@ -171,7 +171,7 @@ class CreateReminderScreenTest: BaseScreenTest()  {
                     }
                 }
                 step("Another try of saving") {
-                    Espresso.onView(ViewMatchers.withId(R.id.action_save)).perform(ViewActions.click())
+                    onView(withId(R.id.action_save)).perform(click())
                 }
             }
         }
@@ -185,7 +185,7 @@ class CreateReminderScreenTest: BaseScreenTest()  {
                         click()
                     }
                 }
-                Espresso.onView(ViewMatchers.withId(R.id.action_save)).perform(click())
+                onView(withId(R.id.action_save)).perform(click())
             }
         }
         step("Checking of navigating back and correct selected value in spinner") {
