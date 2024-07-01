@@ -28,7 +28,8 @@ import kotlinx.coroutines.launch
 
 data class RemindersListUiState(
     val tasks: List<Task>,
-    val groupName: String
+    val groupName: String,
+    val fabVisibility: Boolean = false
 )
 
 class ReminderListViewModel(
@@ -65,8 +66,7 @@ class ReminderListViewModel(
                         }
                         .collect {
                             _uiState.value =
-                                UiState.Success(RemindersListUiState(it.tasks, it.group.groupName))
-                            _floatingActionButtonVisibility.value = true
+                                UiState.Success(RemindersListUiState(it.tasks, it.group.groupName, true))
                         }
                 }
 
@@ -77,9 +77,8 @@ class ReminderListViewModel(
                         }
                         .collect {
                             _uiState.value = UiState.Success(
-                                RemindersListUiState(it, context.getString(R.string.planned))
+                                RemindersListUiState(it, context.getString(R.string.planned), false)
                             )
-                            _floatingActionButtonVisibility.value = false
                         }
                 }
 
@@ -90,9 +89,8 @@ class ReminderListViewModel(
                         }
                         .collect {
                             _uiState.value = UiState.Success(
-                                RemindersListUiState(it, context.getString(R.string.with_flag))
+                                RemindersListUiState(it, context.getString(R.string.with_flag), false)
                             )
-                            _floatingActionButtonVisibility.value = false
                         }
                 }
 
@@ -103,9 +101,8 @@ class ReminderListViewModel(
                         }
                         .collect {
                             _uiState.value = UiState.Success(
-                                RemindersListUiState(it, context.getString(R.string.current_day))
+                                RemindersListUiState(it, context.getString(R.string.current_day), false)
                             )
-                            _floatingActionButtonVisibility.value = false
                         }
                 }
 
@@ -116,9 +113,8 @@ class ReminderListViewModel(
                         }
                         .collect {
                             _uiState.value = UiState.Success(
-                                RemindersListUiState(it, context.getString(R.string.all))
+                                RemindersListUiState(it, context.getString(R.string.all), false)
                             )
-                            _floatingActionButtonVisibility.value = false
                         }
                 }
 
@@ -129,9 +125,12 @@ class ReminderListViewModel(
                         }
                         .collect {
                             _uiState.value = UiState.Success(
-                                RemindersListUiState(it, context.getString(R.string.no_time))
+                                RemindersListUiState(
+                                    it,
+                                    context.getString(R.string.no_time),
+                                    false
+                                )
                             )
-                            _floatingActionButtonVisibility.value = false
                         }
                 }
 
@@ -142,9 +141,8 @@ class ReminderListViewModel(
                         }
                         .collect {
                             _uiState.value = UiState.Success(
-                                RemindersListUiState(it, context.getString(R.string.without_group))
+                                RemindersListUiState(it, context.getString(R.string.without_group), false)
                             )
-                            _floatingActionButtonVisibility.value = false
                         }
                 }
             }
