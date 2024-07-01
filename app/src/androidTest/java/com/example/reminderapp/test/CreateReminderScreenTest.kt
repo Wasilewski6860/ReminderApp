@@ -5,8 +5,16 @@ import android.icu.text.SimpleDateFormat
 import android.os.Build
 import android.widget.TextView
 import androidx.test.espresso.Espresso
+import androidx.test.espresso.Espresso.onData
+import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.action.ViewActions
+import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions
+import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers
+import androidx.test.espresso.matcher.ViewMatchers.hasErrorText
+import androidx.test.espresso.matcher.ViewMatchers.isFocused
+import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.filters.SdkSuppress
 import androidx.test.rule.ActivityTestRule
 import com.example.domain.model.Task
@@ -15,16 +23,22 @@ import com.example.domain.repository.ITaskRepository
 import com.example.reminderapp.MainActivity
 import com.example.reminderapp.R
 import com.example.reminderapp.di.TestData
+import com.example.reminderapp.scenarios.CheckMainScreenDisplayedScenario
 import com.example.reminderapp.scenarios.ToMainScreenScenario
 import com.example.reminderapp.screen.CreateReminderScreen
 import com.example.reminderapp.screen.MainScreen
+import com.example.reminderapp.screen.NewListScreen
 import com.example.reminderapp.screen.ReminderListScreen
 import com.example.reminderapp.test.base.BaseScreenTest
 import com.example.reminderapp.utils.TimeDateUtils
 import io.mockk.coEvery
 import io.mockk.slot
 import kotlinx.coroutines.flow.flowOf
+import org.hamcrest.CoreMatchers
 import org.hamcrest.Matchers
+import org.hamcrest.Matchers.allOf
+import org.hamcrest.Matchers.instanceOf
+import org.hamcrest.Matchers.`is`
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -75,4 +89,109 @@ class CreateReminderScreenTest: BaseScreenTest()  {
         }
     }
 
+    @SdkSuppress(maxSdkVersion = Build.VERSION_CODES.S)
+    @Test
+    fun  openNewListFromCreateReminderScreen() = run() {
+        scenario(
+            ToMainScreenScenario(
+                activityTestRule = activityTestRule
+            )
+        )
+        step("Click on fab") {
+            MainScreen {
+                fab.click()
+            }
+        }
+        step("Clicking on create option in group spinner") {
+            CreateReminderScreen {
+                groupSpinner {
+                    isDisplayed()
+                    open()
+                    onData(allOf(`is`(instanceOf(String::class.java)), `is`(context.getString(R.string.create)))).perform(click())
+                }
+            }
+        }
+        step("Creating a new group") {
+            NewListScreen {
+                newListEditText{
+                    typeText(TestData.firstGroup.groupName)
+                }
+                colorsRecycler {
+                    childAt<NewListScreen.ColorItem>(1){
+                        click()
+                    }
+                }
+                Espresso.onView(ViewMatchers.withId(R.id.action_save)).perform(click())
+            }
+        }
+        step("Checking of navigating back and correct selected value in spinner") {
+            CreateReminderScreen {
+                groupSpinner {
+                    isDisplayed()
+                    Espresso.onView(ViewMatchers.withId(R.id.selected_list_spinner))
+                        .check(
+                            ViewAssertions.matches(
+                                ViewMatchers.withSpinnerText(
+                                    CoreMatchers.containsString(TestData.firstGroup.groupName)
+                                )
+                            )
+                        )
+
+                }
+            }
+        }
+    }
+
+    @SdkSuppress(maxSdkVersion = Build.VERSION_CODES.S)
+    @Test
+    fun  testOfSaving() = run() {
+        scenario(
+            ToMainScreenScenario(
+                activityTestRule = activityTestRule
+            )
+        )
+        step("Click on fab") {
+            MainScreen {
+                fab.click()
+            }
+        }
+        step("Clicking on save button in toolbar") {
+            CreateReminderScreen {
+                Espresso.onView(ViewMatchers.withId(R.id.action_save)).perform(ViewActions.click())
+
+                step("Save unsuccessful, showing error") {
+                    onView(withId(R.id.reminder_name_et))
+                        .check(matches(isFocused()))
+                    onView(withId(R.id.reminder_name_et))
+                        .check(matches(hasErrorText(context.getString(R.string.name_shouldnt_be_empty))))
+                }
+                step("Input name") {
+                    nameEt {
+                        typeText("Test text")
+                    }
+                }
+                step("Another try of saving") {
+                    Espresso.onView(ViewMatchers.withId(R.id.action_save)).perform(ViewActions.click())
+                }
+            }
+        }
+        step("Saving successful, check for navigation successful") {
+            NewListScreen {
+                newListEditText{
+                    typeText(TestData.firstGroup.groupName)
+                }
+                colorsRecycler {
+                    childAt<NewListScreen.ColorItem>(1){
+                        click()
+                    }
+                }
+                Espresso.onView(ViewMatchers.withId(R.id.action_save)).perform(click())
+            }
+        }
+        step("Checking of navigating back and correct selected value in spinner") {
+            scenario(
+                CheckMainScreenDisplayedScenario()
+            )
+        }
+    }
 }
