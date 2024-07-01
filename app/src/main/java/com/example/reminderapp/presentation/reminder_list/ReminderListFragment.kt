@@ -201,7 +201,7 @@ class ReminderListFragment : NavigationFragment(), DataReceiver, MenuProvider {
                 }
 
                 override fun onDeleteClick(task: Task) {
-                    viewModel.deleteTask(task) // TODO check this method in viewModel
+                    viewModel.deleteTask(task)
                 }
             }
         )

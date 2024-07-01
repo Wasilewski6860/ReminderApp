@@ -177,7 +177,7 @@ class NewListFragment : BaseDataReceiveFragment(), MenuProvider {
         lifecycleScope.launch {
             viewModel.saveResult.collect {
                 when (it) {
-                    is OperationResult.Error -> Unit //TODO Добавить обработку ошибок
+                    is OperationResult.Error -> Unit
                     OperationResult.Loading -> Unit
                     OperationResult.NotStarted -> Unit
                     is OperationResult.Success -> {

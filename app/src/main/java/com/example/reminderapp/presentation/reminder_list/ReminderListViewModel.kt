@@ -43,7 +43,6 @@ class ReminderListViewModel(
     private val deleteReminderUseCase: DeleteReminderUseCase,
     private val getTasksWithoutGroupUseCase: GetTasksWithoutGroupUseCase
 ) : AndroidViewModel(application) {
-    // TODO: Implement the ViewModel
 
     private val _uiState = MutableStateFlow<UiState<RemindersListUiState>>(UiState.Loading)
     val uiState: StateFlow<UiState<RemindersListUiState>> = _uiState

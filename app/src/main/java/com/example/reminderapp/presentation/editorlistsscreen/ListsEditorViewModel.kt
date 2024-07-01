@@ -22,11 +22,6 @@ class ListsEditorViewModel(
 
     fun fetchData() {
         viewModelScope.launch {
-//            _uiState.value = UiState.Success(
-//                TestData().getTestList()
-//            )
-
-//            TODO делать так
             getAllGroupsUseCase()
                 .catch { e ->
                     _uiState.value = UiState.Error(e.toString())

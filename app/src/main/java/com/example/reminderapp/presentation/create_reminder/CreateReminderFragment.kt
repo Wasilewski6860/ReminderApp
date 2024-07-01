@@ -261,38 +261,14 @@ class CreateReminderFragment : NavigationFragment(), MenuProvider, DataReceiver 
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.screenState
                     .collect { currentState ->
-                    when (currentState.groupsUiState) {
-                        is UiState.Success -> {
-                            binding.contentLayout.isVisible = true
-                            binding.loadingLayout.isVisible = false
-                            with(binding) {
-                                reminderNameEt.actionIfChanged(currentState.reminderName) {
-                                    reminderNameEt.setText(currentState.reminderName)
-                                    reminderNameEt.setSelection(currentState.reminderName.length)
-                                }
-                                reminderDescriptionEt.actionIfChanged(currentState.reminderDescription) {
-                                    reminderDescriptionEt.setText(currentState.reminderDescription)
-                                    reminderDescriptionEt.setSelection(currentState.reminderDescription.length)
-                                }
-                                remindSwitch.actionIfChanged(currentState.reminderPeriod!=null || currentState.reminderFirstTime!=null) {
-                                    remindSwitch.isChecked = currentState.reminderPeriod!=null || currentState.reminderFirstTime!=null
-                                }
-                                flagSwitch.actionIfChanged(currentState.reminderFlag) {
-                                    flagSwitch.isChecked = currentState.reminderFlag
-                                }
-                                selectedDateTv.actionIfChanged(currentState.reminderFirstTime) {
-                                    selectedDateTv.text = if(currentState.reminderFirstTime!=null)dateFormat.format(currentState.reminderFirstTime) else requireContext().getString(R.string.not_selected)
-                                }
-                                selectedPeriodSpinner.actionIfChanged(currentState.reminderPeriod) {
-                                    selectedPeriodSpinner.setSelection(periodSpinnerAdapter.getTimePeriodPosition(currentState.reminderPeriod))
-                                }
-                                if (!currentState.groupLoaded){
-                                    groupSpinnerAdapter.submitList(currentState.groupsUiState.data)
-                                    viewModel.onGroupLoadedToSpinner()
-                                }
-                                if (currentState.reminderGroupId!=null){
-                                    selectedListSpinner.actionIfChanged(currentState.reminderGroupId) {
-                                        selectedListSpinner.setSelection(groupSpinnerAdapter.getGroupPosition(currentState.reminderGroupId))
+                        when (currentState.groupsUiState) {
+                            is UiState.Success -> {
+                                binding.contentLayout.isVisible = true
+                                binding.loadingLayout.isVisible = false
+                                with(binding) {
+                                    reminderNameEt.actionIfChanged(currentState.reminderName) {
+                                        reminderNameEt.setText(currentState.reminderName)
+                                        reminderNameEt.setSelection(currentState.reminderName.length)
                                     }
                                     reminderDescriptionEt.actionIfChanged(currentState.reminderDescription) {
                                         reminderDescriptionEt.setText(currentState.reminderDescription)
@@ -301,6 +277,9 @@ class CreateReminderFragment : NavigationFragment(), MenuProvider, DataReceiver 
                                     remindSwitch.actionIfChanged(currentState.reminderPeriod != null || currentState.reminderFirstTime != null) {
                                         remindSwitch.isChecked =
                                             currentState.reminderPeriod != null || currentState.reminderFirstTime != null
+                                    }
+                                    flagSwitch.actionIfChanged(currentState.reminderFlag) {
+                                        flagSwitch.isChecked = currentState.reminderFlag
                                     }
                                     selectedDateTv.actionIfChanged(currentState.reminderFirstTime) {
                                         selectedDateTv.text =
@@ -327,13 +306,47 @@ class CreateReminderFragment : NavigationFragment(), MenuProvider, DataReceiver 
                                                 )
                                             )
                                         }
-                                    } else {
-                                        selectedListSpinner.actionIfChanged(currentState.reminderGroupName) {
-                                            selectedListSpinner.setSelection(
-                                                groupSpinnerAdapter.getGroupPosition(
-                                                    currentState.reminderGroupName
+                                        reminderDescriptionEt.actionIfChanged(currentState.reminderDescription) {
+                                            reminderDescriptionEt.setText(currentState.reminderDescription)
+                                            reminderDescriptionEt.setSelection(currentState.reminderDescription.length)
+                                        }
+                                        remindSwitch.actionIfChanged(currentState.reminderPeriod != null || currentState.reminderFirstTime != null) {
+                                            remindSwitch.isChecked =
+                                                currentState.reminderPeriod != null || currentState.reminderFirstTime != null
+                                        }
+                                        selectedDateTv.actionIfChanged(currentState.reminderFirstTime) {
+                                            selectedDateTv.text =
+                                                if (currentState.reminderFirstTime != null) dateFormat.format(
+                                                    currentState.reminderFirstTime
+                                                ) else requireContext().getString(R.string.not_selected)
+                                        }
+                                        selectedPeriodSpinner.actionIfChanged(currentState.reminderPeriod) {
+                                            selectedPeriodSpinner.setSelection(
+                                                periodSpinnerAdapter.getTimePeriodPosition(
+                                                    currentState.reminderPeriod
                                                 )
                                             )
+                                        }
+                                        if (!currentState.groupLoaded) {
+                                            groupSpinnerAdapter.submitList(currentState.groupsUiState.data)
+                                            viewModel.onGroupLoadedToSpinner()
+                                        }
+                                        if (currentState.reminderGroupId != null) {
+                                            selectedListSpinner.actionIfChanged(currentState.reminderGroupId) {
+                                                selectedListSpinner.setSelection(
+                                                    groupSpinnerAdapter.getGroupPosition(
+                                                        currentState.reminderGroupId
+                                                    )
+                                                )
+                                            }
+                                        } else {
+                                            selectedListSpinner.actionIfChanged(currentState.reminderGroupName) {
+                                                selectedListSpinner.setSelection(
+                                                    groupSpinnerAdapter.getGroupPosition(
+                                                        currentState.reminderGroupName
+                                                    )
+                                                )
+                                            }
                                         }
                                     }
                                 }
@@ -422,7 +435,6 @@ class CreateReminderFragment : NavigationFragment(), MenuProvider, DataReceiver 
             }
     }
 
-    //TODO переделать
     private fun saveTask() {
         if (hasNotificationPermisions && hasScheduleExactAlarmPermisions) {
             viewModel.saveTask()
