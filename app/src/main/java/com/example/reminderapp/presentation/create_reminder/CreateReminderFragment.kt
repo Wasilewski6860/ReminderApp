@@ -274,6 +274,9 @@ class CreateReminderFragment :  NavigationFragment(), MenuProvider, DataReceiver
                                 remindSwitch.actionIfChanged(currentState.reminderPeriod!=null || currentState.reminderFirstTime!=null) {
                                     remindSwitch.isChecked = currentState.reminderPeriod!=null || currentState.reminderFirstTime!=null
                                 }
+                                flagSwitch.actionIfChanged(currentState.reminderFlag) {
+                                    flagSwitch.isChecked = currentState.reminderFlag
+                                }
                                 selectedDateTv.actionIfChanged(currentState.reminderFirstTime) {
                                     selectedDateTv.text = if(currentState.reminderFirstTime!=null)dateFormat.format(currentState.reminderFirstTime) else requireContext().getString(R.string.not_selected)
                                 }

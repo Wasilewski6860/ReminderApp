@@ -1,5 +1,8 @@
 package com.example.reminderapp.test.base
 
+import android.app.Application
+import android.content.Context
+import androidx.test.core.app.ApplicationProvider
 import androidx.test.platform.app.InstrumentationRegistry
 import com.example.reminderapp.di.dataTestModule
 import com.example.reminderapp.di.domainTestModule
@@ -13,6 +16,7 @@ import org.junit.runner.RunWith
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
+import org.koin.dsl.module
 import org.koin.test.KoinTest
 
 abstract class BaseScreenTest : KoinTest, TestCase() {
@@ -22,7 +26,18 @@ abstract class BaseScreenTest : KoinTest, TestCase() {
         stopKoin()
         startKoin {
             androidContext(InstrumentationRegistry.getInstrumentation().targetContext)
-            modules(listOf(presentationTestModule, domainTestModule, dataTestModule))
+            modules(
+                listOf(
+                    module {
+                        single<Application> {
+                            ApplicationProvider.getApplicationContext<Application>()
+                        }
+                    },
+                    presentationTestModule,
+                    domainTestModule,
+                    dataTestModule
+                )
+            )
         }
 //        launchActivity<MainActivity>().onActivity {
 //            it.setTheme(com.example.reminderapp.R.style.Theme_ReminderApp)

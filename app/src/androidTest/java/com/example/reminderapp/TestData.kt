@@ -21,7 +21,7 @@ object TestData {
         description = "Description",
         reminderCreationTime = 0L,
         reminderTime = 0L,
-        reminderTimePeriod = 0L,
+        reminderTimePeriod = 300000L,
         type = TaskPeriodType.PERIODIC,
         isActive = false,
         isMarkedWithFlag = true,
@@ -34,7 +34,7 @@ object TestData {
         description = "Description edited",
         reminderCreationTime = 0L,
         reminderTime = 0L,
-        reminderTimePeriod = 0L,
+        reminderTimePeriod = 300000L,
         type = TaskPeriodType.NO_TIME,
         isActive = false,
         isMarkedWithFlag = true,
@@ -108,7 +108,7 @@ object TestData {
         description = "Description",
         timestamp = 0L,
         startTime = 0L,
-        timePeriod = 0L,
+        timePeriod = 300000L,
         periodicType = TaskPeriodType.PERIODIC.toString(),
         isActive = false,
         flag = true,
@@ -184,7 +184,7 @@ object TestData {
 
     val groupWithTasks = GroupWithTasks(
         group = firstGroup,
-        tasks = tasks
+        tasks = tasks.filter { it.groupId == firstGroup.groupId }
     )
 
     val groups = listOf(firstGroup, secondGroup, thirdGroup)

@@ -9,6 +9,7 @@ import com.example.reminderapp.presentation.editorlistsscreen.ListsEditorViewMod
 import com.example.reminderapp.presentation.mainscreen.MainViewModel
 import com.example.reminderapp.presentation.new_list.NewListViewModel
 import com.example.reminderapp.presentation.reminder_list.ReminderListViewModel
+import com.example.reminderapp.utils.TimeDateUtils
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
@@ -25,6 +26,10 @@ val presentationTestModule = module {
     }
 
     single<ICalendarProvider> { CalendarProvider() }
+
+    single<TimeDateUtils> {
+        TimeDateUtils(get())
+    }
 
     viewModel<CreateReminderViewModel> {
         CreateReminderViewModel(

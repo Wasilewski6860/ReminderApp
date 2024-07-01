@@ -31,6 +31,7 @@ data class CreateReminderScreenState(
     val reminderFlag: Boolean= false,
     val groupsUiState: UiState<List<Group>> = UiState.Loading,
     val groupLoaded: Boolean = false,
+    val periodsLoaded: Boolean = false,
     val reminderGroupId: Int? = null,
     val reminderGroupName: String? = null
 )
@@ -120,6 +121,12 @@ class CreateReminderViewModel(
 
     fun onPeriodChanged(input: Long?) {
         currentState = screenState.value
+        if(input==null && !currentState.periodsLoaded){
+            _screenState.value = _screenState.value.copy(
+                periodsLoaded = true
+            )
+        }
+        else
         if (currentState.reminderPeriod != input) {
             _screenState.value = _screenState.value.copy(
                 reminderPeriod = input
