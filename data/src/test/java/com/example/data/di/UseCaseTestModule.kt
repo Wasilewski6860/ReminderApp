@@ -1,5 +1,6 @@
 package com.example.data.di
 
+import com.example.domain.repository.IGroupRepository
 import com.example.domain.repository.ITaskRepository
 import com.example.domain.use_case.task.ClearAllTasksUseCase
 import com.example.domain.use_case.group.DeleteGroupUseCase
@@ -31,6 +32,7 @@ import org.koin.dsl.module
 
 val useCaseModule = module {
     single<ITaskRepository> { mockk() }
+    single<IGroupRepository> { mockk() }
 
     single { ClearAllTasksUseCase(get()) }
     single { DeleteGroupUseCase(get()) }

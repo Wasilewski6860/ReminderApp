@@ -24,7 +24,6 @@ class TaskStorageImpl(
 ) : TaskStorage {
 
     override suspend fun addTask(task: Task): Flow<Task> {
-        Log.d("MY LOG", "TaskStorageImpl addTask"+task.toString())
         return flow {
             // Вставляем запись и получаем её идентификатор
             val taskId = taskDao.addTask(taskCacheMapper.mapToEntity(task))
@@ -43,7 +42,6 @@ class TaskStorageImpl(
     override fun getAllTasks(): Flow<List<Task>> {
         return taskDao.getAllTasks().map { list ->
             list.map {  taskEntity ->
-                Log.d("MY LOG", "TaskStorageImpl getAllTasks mapFromEntity")
                 taskCacheMapper.mapFromEntity(taskEntity)
             }
         }
@@ -52,7 +50,6 @@ class TaskStorageImpl(
     override fun getNoTimeTasks(): Flow<List<Task>> {
         return taskDao.getNoTimeTasks().map { list ->
             list.map {  taskEntity ->
-                Log.d("MY LOG", "TaskStorageImpl getNoTimeTasks mapFromEntity")
                 taskCacheMapper.mapFromEntity(taskEntity)
             }
         }
@@ -63,7 +60,6 @@ class TaskStorageImpl(
     override fun getAllTasksByPeriodType(period: String): Flow<List<Task>> {
         return taskDao.getAllTasksByPeriodType(period).map { list ->
             list.map {  taskEntity ->
-                Log.d("MY LOG", "TaskStorageImpl getAllTasksByPeriodType mapFromEntity")
                 taskCacheMapper.mapFromEntity(taskEntity)
             }
         }

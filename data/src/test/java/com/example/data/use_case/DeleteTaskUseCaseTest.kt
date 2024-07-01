@@ -14,16 +14,16 @@ class DeleteTaskUseCaseTest : UseCaseBaseTest() {
 
     @Test
     fun `deleting task by id process test`() = runTest {
-        coEvery { repository.deleteTask(id = any()) } returns Unit
+        coEvery { taskRepository.deleteTask(id = any()) } returns Unit
         useCase(id = 0)
-        coVerify { repository.deleteTask(id = 0) }
+        coVerify { taskRepository.deleteTask(id = 0) }
     }
 
     @Test
     fun `deleting task by data process test`() = runTest {
-        coEvery { repository.deleteTask(task = any()) } returns Unit
-        useCase.execute(task = TestData.firstTask)
-        coVerify { repository.deleteTask(TestData.firstTask) }
+        coEvery { taskRepository.deleteTask(task = any()) } returns Unit
+        useCase(task = TestData.firstTask)
+        coVerify { taskRepository.deleteTask(TestData.firstTask) }
     }
 
 }

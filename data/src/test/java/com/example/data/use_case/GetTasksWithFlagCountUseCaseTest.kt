@@ -16,9 +16,9 @@ class GetTasksWithFlagCountUseCaseTest : UseCaseBaseTest() {
 
     @Test
     fun `getting tasks with flag count process test`() = runTest {
-        coEvery { repository.getTasksWithFlagCount() } returns flowOf(TestData.tasksWithFlag.size)
+        coEvery { taskRepository.getTasksWithFlagCount() } returns flowOf(TestData.tasksWithFlag.size)
         val expected = TestData.tasksWithFlag.size
-        val actual = useCase(Unit).first()
+        val actual = useCase().first()
         assertEquals(expected, actual)
     }
 

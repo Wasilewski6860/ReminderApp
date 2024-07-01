@@ -101,32 +101,32 @@ class TaskStorageTest: BaseDataTest() {
 
     @Test
     fun test_getAllGroups() = runBlocking {
-//        val groups = TestData.groups
-//        every { taskDao.getAllGroups() } returns flowOf(TestData.groupEntities)
-//        groups.forEach {
-//            coEvery  { taskDao.getCountOfTasksInGroup(it.groupId) } returns it.tasksCount
-//        }
-//        val result = taskStorage.getAllGroups().first()
-//        assertEquals(groups, result)
+        val groups = TestData.groups
+        every { taskDao.getAllGroups() } returns flowOf(TestData.groupEntities)
+        groups.forEach {
+            coEvery  { taskDao.getCountOfTasksInGroup(it.groupId) } returns it.tasksCount
+        }
+        val result = taskStorage.getAllGroups().first()
+        assertEquals(groups, result)
     }
 
     @Test
     fun test_getGroup() = runBlocking {
-//        val groupId = 1
-//        val group = TestData.firstGroup
-//        every { taskDao.getGroup(groupId) } returns flowOf(TestData.firstGroupEntity)
-//        coEvery  { taskDao.getCountOfTasksInGroup(groupId) } returns TestData.tasks.count { it.groupId == groupId }
-//        val result = taskStorage.getGroup(groupId).first()
-//        assertEquals(group, result)
+        val groupId = 1
+        val group = TestData.firstGroup
+        every { taskDao.getGroup(groupId) } returns flowOf(TestData.firstGroupEntity)
+        coEvery  { taskDao.getCountOfTasksInGroup(groupId) } returns TestData.tasks.count { it.groupId == groupId }
+        val result = taskStorage.getGroup(groupId).first()
+        assertEquals(group, result)
     }
 
     @Test
     fun test_getGroupWithTasks() = runBlocking {
-//        val groupId = 1
-//        val groupWithTask = TestData.firstGroupWithTasks
-//        every { taskDao.getGroupWithTasks(groupId) } returns flowOf(TestData.firstGroupWithTasksEntity)
-//        val result = taskStorage.getGroupWithTasks(groupId).first()
-//        assertEquals(groupWithTask, result)
+        val groupId = 1
+        val groupWithTask = TestData.firstGroupWithTasks
+        every { taskDao.getGroupWithTasks(groupId) } returns flowOf(TestData.firstGroupWithTasksEntity)
+        val result = taskStorage.getGroupWithTasks(groupId).first()
+        assertEquals(groupWithTask, result)
     }
 
     @Test

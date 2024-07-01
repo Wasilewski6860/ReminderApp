@@ -16,7 +16,6 @@ class TaskRepositoryImpl(
 ) : ITaskRepository {
 
     override suspend fun addTask(task: Task): Flow<Task> {
-        Log.d("MY LOG", "TaskRepositoryImpl addTask$task")
         return taskStorage.addTask(task)
     }
 

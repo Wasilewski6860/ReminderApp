@@ -16,7 +16,7 @@ class GetTasksWithoutGroupUseCaseTest : UseCaseBaseTest() {
 
     @Test
     fun `get tasks without group process test`() = runTest {
-        coEvery { repository.getTasksWithoutGroup() } returns flowOf(TestData.tasksWithoutGroup)
+        coEvery { taskRepository.getTasksWithoutGroup() } returns flowOf(TestData.tasksWithoutGroup)
         val expected = TestData.tasksWithoutGroup
         val actual = useCase().first()
         assertEquals(expected, actual)

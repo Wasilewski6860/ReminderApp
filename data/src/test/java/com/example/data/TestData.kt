@@ -199,12 +199,12 @@ object TestData {
 
     val groups = listOf(firstGroup, secondGroup, thirdGroup)
 
-//    val firstGroupEntity = TaskGrorunBlockingupEntity(
-//        groupId = 1,
-//        groupName = "Group 1",
-//        groupColor = 1,
-//        groupImage = 1
-//    )
+    val firstGroupEntity = TaskGroupEntity(
+        groupId = 1,
+        groupName = "Group 1",
+        groupColor = 1,
+        groupImage = 1
+    )
 
     val secondGroupEntity = TaskGroupEntity(
         groupId = 2,
@@ -220,17 +220,17 @@ object TestData {
         groupImage = 3
     )
 
-    // val groupEntities = listOf(firstGroupEntity, secondGroupEntity, thirdGroupEntity)
+     val groupEntities = listOf(firstGroupEntity, secondGroupEntity, thirdGroupEntity)
 
     val firstGroupWithTasks = GroupWithTasks(
         firstGroup,
         listOf(firstTask, thirdTask)
     )
 
-//    val firstGroupWithTasksEntity = com.example.data.cache.relation.GroupWithTasks(
-//        firstGroupEntity,
-//        listOf(firstTaskEntity, thirdTaskEntity)
-//    )
+    val firstGroupWithTasksEntity = com.example.data.cache.relation.GroupWithTasks(
+        firstGroupEntity,
+        listOf(firstTaskEntity, thirdTaskEntity)
+    )
 
     val secondGroupWithTasks = GroupWithTasks(
         secondGroup,
