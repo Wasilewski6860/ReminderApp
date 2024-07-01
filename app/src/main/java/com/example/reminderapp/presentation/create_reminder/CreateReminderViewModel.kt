@@ -210,6 +210,7 @@ class CreateReminderViewModel(
                         selectedTime=calendarProvider.getInstance().timeInMillis
                         taskType=TaskPeriodType.PERIODIC
                     }
+                    if(currentState.reminderPeriod!= null ) taskType=TaskPeriodType.PERIODIC
                     if (currentState.reminderFirstTime!=null && currentState.reminderPeriod==null){
                         taskType=TaskPeriodType.ONE_TIME
                     }
