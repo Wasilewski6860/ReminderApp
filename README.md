@@ -6,6 +6,8 @@ Reminder App is a simple and easy-to-use app for scheduling tasks and creating r
   <img src="screenshots/gif/notifications.gif" width="30%" />
 </p>
 
+## [Technical specification](https://docs.google.com/document/d/19XhJmlF7N2XAbsMtn6GcUCHimHzeerOJBmJD9-WybGM/edit)
+
 ## Features
 
 * Creating periodic or one-time reminders
