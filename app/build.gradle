@@ -16,7 +16,7 @@ android {
         targetSdk 34
         versionCode 1
         versionName "1.0"
-        testInstrumentationRunner "com.example.reminderapp.app.TestAppRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
         release {
@@ -59,6 +59,12 @@ android {
             exclude 'META-INF/LICENSE.md'
             exclude 'META-INF/LICENSE-notice.md'
             exclude 'META-INF/DEPENDENCIES'
+        }
+    }
+
+    configurations.all {
+        resolutionStrategy {
+            force 'androidx.test:core:1.6.1'
         }
     }
 
@@ -131,5 +137,12 @@ dependencies {
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.8.1"
 
     testImplementation "org.robolectric:robolectric:4.8"
+
+
+
+
+    androidTestImplementation "androidx.test:core:1.6.1"
+    androidTestImplementation "androidx.test:runner:1.6.1"
+    androidTestImplementation "androidx.test:rules:1.6.1"
 
 }
