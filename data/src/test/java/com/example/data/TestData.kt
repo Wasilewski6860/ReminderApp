@@ -1,16 +1,12 @@
 package com.example.data
-
 import com.example.data.cache.entity.TaskEntity
 import com.example.data.cache.entity.TaskGroupEntity
 import com.example.domain.model.Group
 import com.example.domain.model.GroupWithTasks
 import com.example.domain.model.Task
 import com.example.domain.model.TaskPeriodType
-
 object TestData {
-
     private val todayTimeInMillis = java.util.Calendar.getInstance().timeInMillis
-
     val firstTask = Task(
         id = 1,
         name = "Task 1",
@@ -23,7 +19,6 @@ object TestData {
         isMarkedWithFlag = true,
         groupId = 1
     )
-
     val firstTaskEdited = Task(
         id = 1,
         name = "Task 1 edited",
@@ -36,7 +31,6 @@ object TestData {
         isMarkedWithFlag = true,
         groupId = 1
     )
-
     val secondTask = Task(
         id = 2,
         name = "Task 2",
@@ -49,7 +43,6 @@ object TestData {
         isMarkedWithFlag = true,
         groupId = 2
     )
-
     val thirdTask = Task(
         id = 3,
         name = "Task 3",
@@ -62,7 +55,6 @@ object TestData {
         isMarkedWithFlag = true,
         groupId = 1
     )
-
     val fourthTask = Task(
         id = 3,
         name = "Task 3",
@@ -75,7 +67,6 @@ object TestData {
         isMarkedWithFlag = true,
         groupId = 1
     )
-
     val todayTask = Task(
         id = 3,
         name = "Task 3",
@@ -88,7 +79,6 @@ object TestData {
         isMarkedWithFlag = true,
         groupId = 1
     )
-
     val taskWithoutGroup = Task(
         id = 3,
         name = "Task 3",
@@ -101,17 +91,14 @@ object TestData {
         isMarkedWithFlag = true,
         groupId = null
     )
-
     val tasks = listOf(firstTask, secondTask, thirdTask)
     val noTimeTasks = listOf(thirdTask)
     val countOfNoTimeTasks = noTimeTasks.size
-
     val periodicTimeTasks = listOf(firstTask)
     val plannedTasks = listOf(fourthTask)
     val todayTasks = listOf(todayTask)
     val tasksWithFlag = listOf(fourthTask)
     val tasksWithoutGroup = listOf(taskWithoutGroup)
-
     val firstTaskEntity = TaskEntity(
         id = 1,
         name = "Task 1",
@@ -124,7 +111,6 @@ object TestData {
         flag = true,
         groupId = 1
     )
-
     val firstTaskEntityEdited = TaskEntity(
         id = 1,
         name = "Task 1 edited",
@@ -137,7 +123,6 @@ object TestData {
         flag = true,
         groupId = 1
     )
-
     val secondTaskEntity = TaskEntity(
         id = 2,
         name = "Task 2",
@@ -150,7 +135,6 @@ object TestData {
         flag = true,
         groupId = 2
     )
-
     val thirdTaskEntity = TaskEntity(
         id = 3,
         name = "Task 3",
@@ -163,11 +147,8 @@ object TestData {
         flag = true,
         groupId = 1
     )
-
     val taskEntities = listOf(firstTaskEntity, secondTaskEntity, thirdTaskEntity)
     val noTimeTaskEntities = listOf(thirdTaskEntity)
-
-
     val firstGroup = Group(
         groupId = 1,
         groupName = "Group 1",
@@ -175,7 +156,6 @@ object TestData {
         groupImage = 1,
         tasksCount = 2
     )
-
     val secondGroup = Group(
         groupId = 2,
         groupName = "Group 2",
@@ -183,7 +163,6 @@ object TestData {
         groupImage = 2,
         tasksCount = 1
     )
-
     val thirdGroup = Group(
         groupId = 3,
         groupName = "Group 3",
@@ -191,7 +170,6 @@ object TestData {
         groupImage = 3,
         tasksCount = 0
     )
-
     val groupWithTasks = GroupWithTasks(
         group = firstGroup,
         tasks = tasks
@@ -211,44 +189,40 @@ object TestData {
         groupName = "Group 2",
         groupColor = 2,
         groupImage = 2
-    )
+        )
+        val thirdGroupEntity = TaskGroupEntity(
+            groupId = 3,
+            groupName = "Group 3",
+            groupColor = 3,
+            groupImage = 3
+        )
 
-    val thirdGroupEntity = TaskGroupEntity(
-        groupId = 3,
-        groupName = "Group 3",
-        groupColor = 3,
-        groupImage = 3
-    )
+        val groupEntities = listOf(firstGroupEntity, secondGroupEntity, thirdGroupEntity)
 
-     val groupEntities = listOf(firstGroupEntity, secondGroupEntity, thirdGroupEntity)
+        val firstGroupWithTasks = GroupWithTasks(
+            firstGroup,
+            listOf(firstTask, thirdTask)
+        )
 
-    val firstGroupWithTasks = GroupWithTasks(
-        firstGroup,
-        listOf(firstTask, thirdTask)
-    )
+        val firstGroupWithTasksEntity = com.example.data.cache.relation.GroupWithTasks(
+            firstGroupEntity,
+            listOf(firstTaskEntity, thirdTaskEntity)
+        )
 
-    val firstGroupWithTasksEntity = com.example.data.cache.relation.GroupWithTasks(
-        firstGroupEntity,
-        listOf(firstTaskEntity, thirdTaskEntity)
-    )
-
-    val secondGroupWithTasks = GroupWithTasks(
-        secondGroup,
-        listOf(secondTask)
-    )
-
-    val secondGroupWithTasksEntity = com.example.data.cache.relation.GroupWithTasks(
-        secondGroupEntity,
-        listOf(secondTaskEntity)
-    )
-
-    val thirdGroupWithTasks = GroupWithTasks(
-        thirdGroup,
-        listOf()
-    )
-
-    val thirdGroupWithTasksEntity = com.example.data.cache.relation.GroupWithTasks(
-        thirdGroupEntity,
-        listOf()
-    )
+        val secondGroupWithTasks = GroupWithTasks(
+            secondGroup,
+            listOf(secondTask)
+        )
+        val secondGroupWithTasksEntity = com.example.data.cache.relation.GroupWithTasks(
+            secondGroupEntity,
+            listOf(secondTaskEntity)
+        )
+        val thirdGroupWithTasks = GroupWithTasks(
+            thirdGroup,
+            listOf()
+        )
+        val thirdGroupWithTasksEntity = com.example.data.cache.relation.GroupWithTasks(
+            thirdGroupEntity,
+            listOf()
+        )
 }

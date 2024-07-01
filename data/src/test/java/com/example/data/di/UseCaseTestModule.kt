@@ -4,6 +4,8 @@ import com.example.domain.repository.IGroupRepository
 import com.example.domain.repository.ITaskRepository
 import com.example.domain.use_case.task.ClearAllTasksUseCase
 import com.example.domain.use_case.group.DeleteGroupUseCase
+import org.koin.dsl.module
+
 import com.example.domain.use_case.task.DeleteTaskUseCase
 import com.example.domain.use_case.group.EditGroupUseCase
 import com.example.domain.use_case.task.EditTaskUseCase
@@ -28,7 +30,6 @@ import com.example.domain.use_case.task.GetTasksWithoutGroupCountUseCase
 import com.example.domain.use_case.task.GetTasksWithoutGroupUseCase
 import com.example.domain.use_case.task.SaveTaskUseCase
 import io.mockk.mockk
-import org.koin.dsl.module
 
 val useCaseModule = module {
     single<ITaskRepository> { mockk() }
