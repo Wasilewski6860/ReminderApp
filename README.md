@@ -15,6 +15,7 @@ Reminder App is a simple and easy-to-use app for scheduling tasks and creating r
 * Create custom reminder groups
 * Edge-to-edge
 * Light and Dark themes
+* UI and Unit testing
 
 ## Tech Stack
 
@@ -29,3 +30,5 @@ Reminder App is a simple and easy-to-use app for scheduling tasks and creating r
 * [Room](https://developer.android.com/jetpack/androidx/releases/room) for local database
 * [AlarmManager](https://developer.android.com/reference/android/app/AlarmManager) for schedule alarms
 * [WorkManager](https://developer.android.com/reference/androidx/work/WorkManager) for scheduled works
+* [Kaspresso](https://github.com/KasperskyLab/Kaspresso) for realization page-object pattern in UI tests
+* [Mockk](https://mockk.io/ANDROID.html) for mocking in tests
